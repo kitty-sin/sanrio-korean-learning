@@ -279,7 +279,9 @@
             const [speechTranscript, setSpeechTranscript] = useState('');
             const [speechScore, setSpeechScore] = useState(null);
             const [speechFeedback, setSpeechFeedback] = useState('');
+            const [highlightSyllableIdx, setHighlightSyllableIdx] = useState(-1);
             const recognitionRef = useRef(null);
+            const slowTimerRef = useRef(null);
 
             // Initialize Firebase Real-time listener for Custom Word Bank
             useEffect(() => {
@@ -310,10 +312,22 @@
                 };
             }, []);
 
-            // Play Korean Audio with customizable speed rate
-            const playSoundWithRate = (text, rate = 0.85) => {
+            // Cancel all ongoing speech and slow timer
+            const stopAllAudio = () => {
+                if (slowTimerRef.current) {
+                    clearTimeout(slowTimerRef.current);
+                    slowTimerRef.current = null;
+                }
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
+                }
+                setHighlightSyllableIdx(-1);
+            };
+
+            // Play Korean Audio with customizable speed rate
+            const playSoundWithRate = (text, rate = 0.85) => {
+                stopAllAudio();
+                if ('speechSynthesis' in window) {
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.lang = 'ko-KR';
                     utterance.rate = rate;
@@ -324,6 +338,66 @@
             };
 
             const playSound = (text) => playSoundWithRate(text, 0.85);
+
+            // Ultra slow syllable-by-syllable pronunciation (0.3x feel with clean pauses & dynamic highlighting)
+            const playUltraSlowSyllables = (text) => {
+                stopAllAudio();
+                if (!('speechSynthesis' in window)) {
+                    alert("您的瀏覽器暫時不支援語音朗讀！");
+                    return;
+                }
+
+                const chars = Array.from(text);
+                const syllables = [];
+                for (let i = 0; i < chars.length; i++) {
+                    const code = chars[i].charCodeAt(0);
+                    if (code >= 44032 && code <= 55203) {
+                        syllables.push({ char: chars[i], index: i });
+                    }
+                }
+
+                if (syllables.length === 0) {
+                    playSoundWithRate(text, 0.5);
+                    return;
+                }
+
+                let currentIdx = 0;
+
+                const speakNext = () => {
+                    if (currentIdx >= syllables.length) {
+                        setHighlightSyllableIdx(-1);
+                        return;
+                    }
+
+                    const item = syllables[currentIdx];
+                    setHighlightSyllableIdx(item.index);
+
+                    const utterance = new SpeechSynthesisUtterance(item.char);
+                    utterance.lang = 'ko-KR';
+                    utterance.rate = 0.55; // ultra clear pronunciation for a single syllable
+
+                    utterance.onend = () => {
+                        currentIdx++;
+                        if (currentIdx < syllables.length) {
+                            slowTimerRef.current = setTimeout(() => {
+                                speakNext();
+                            }, 450); // 450ms breath pause between syllables
+                        } else {
+                            slowTimerRef.current = setTimeout(() => {
+                                setHighlightSyllableIdx(-1);
+                            }, 400);
+                        }
+                    };
+
+                    utterance.onerror = () => {
+                        setHighlightSyllableIdx(-1);
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                };
+
+                speakNext();
+            };
 
             // Speech Recognition for Korean pronunciation comparison
             const startListening = () => {
@@ -792,15 +866,19 @@
 
                                             {/* Word Header Card */}
                                             <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-sky-50 p-5 rounded-2xl border border-emerald-200 text-center mb-6 shadow-xs">
-                                                <div className="flex items-center justify-center gap-3 mb-1">
-                                                    <span className="kr-font text-4xl font-bold text-gray-800">{selectedWordForModal.kr}</span>
-                                                    <button
-                                                        onClick={() => playSound(selectedWordForModal.kr)}
-                                                        className="w-10 h-10 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center text-base shadow-xs transition-transform active:scale-90"
-                                                        title="點擊聽發音"
-                                                    >
-                                                        🔊
-                                                    </button>
+                                                <div className="flex justify-center items-center gap-2 mb-2 flex-wrap">
+                                                    {Array.from(selectedWordForModal.kr).map((char, cIdx) => (
+                                                        <span
+                                                            key={cIdx}
+                                                            className={`kr-font text-4xl font-bold px-3 py-1 rounded-2xl transition-all duration-300 ${
+                                                                highlightSyllableIdx === cIdx
+                                                                ? 'bg-emerald-500 text-white scale-125 shadow-md animate-pulse'
+                                                                : 'text-gray-800 bg-white shadow-2xs'
+                                                            }`}
+                                                        >
+                                                            {char}
+                                                        </span>
+                                                    ))}
                                                 </div>
                                                 <div className="flex justify-center items-center gap-3 text-sm mt-2 flex-wrap">
                                                     <span className="px-3 py-1 bg-white rounded-full font-bold text-emerald-600 border border-emerald-100 shadow-2xs">
@@ -809,6 +887,31 @@
                                                     <span className="px-3 py-1 bg-white rounded-full text-gray-600 font-medium border border-gray-100 shadow-2xs">
                                                         {selectedWordForModal.meaning}
                                                     </span>
+                                                </div>
+
+                                                {/* 3-Speed Audio Controls */}
+                                                <div className="flex justify-center gap-2 mt-4 flex-wrap">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => playSoundWithRate(selectedWordForModal.kr, 0.85)}
+                                                        className="px-3 py-1.5 bg-white hover:bg-emerald-500 hover:text-white text-emerald-600 font-bold rounded-xl text-xs border border-emerald-200 transition-all flex items-center gap-1 shadow-2xs"
+                                                    >
+                                                        <span>🔊</span> 標準 (1.0x)
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => playSoundWithRate(selectedWordForModal.kr, 0.65)}
+                                                        className="px-3 py-1.5 bg-white hover:bg-amber-500 hover:text-white text-amber-600 font-bold rounded-xl text-xs border border-amber-200 transition-all flex items-center gap-1 shadow-2xs"
+                                                    >
+                                                        <span>🐢</span> 慢速 (0.7x)
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => playUltraSlowSyllables(selectedWordForModal.kr)}
+                                                        className="px-3.5 py-1.5 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold rounded-xl text-xs border border-purple-300 transition-all flex items-center gap-1 shadow-xs active:scale-95"
+                                                    >
+                                                        <span>🦥</span> 極慢速口型 (0.3x)
+                                                    </button>
                                                 </div>
                                             </div>
 
@@ -909,7 +1012,10 @@
                                                     <span>🎤</span> 挑戰開口跟讀此單字
                                                 </button>
                                                 <button
-                                                    onClick={() => setSelectedWordForModal(null)}
+                                                    onClick={() => {
+                                                        stopAllAudio();
+                                                        setSelectedWordForModal(null);
+                                                    }}
                                                     className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold rounded-2xl text-xs transition-colors"
                                                 >
                                                     關閉 ✕
@@ -925,6 +1031,7 @@
                                         className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
                                         onClick={() => {
                                             stopListening();
+                                            stopAllAudio();
                                             setSpeechPracticeWord(null);
                                         }}
                                     >
@@ -936,6 +1043,7 @@
                                             <button 
                                                 onClick={() => {
                                                     stopListening();
+                                                    stopAllAudio();
                                                     setSpeechPracticeWord(null);
                                                 }}
                                                 className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center text-sm font-bold z-10 transition-colors"
@@ -954,8 +1062,19 @@
                                                 <span className="text-xs text-rose-500 font-bold bg-white px-3 py-1 rounded-full border border-rose-100 shadow-2xs">
                                                     請跟讀以下目標單字
                                                 </span>
-                                                <div className="my-3">
-                                                    <h2 className="kr-font text-4xl md:text-5xl font-bold text-gray-800">{speechPracticeWord.kr}</h2>
+                                                <div className="flex justify-center items-center gap-2 my-4 flex-wrap">
+                                                    {Array.from(speechPracticeWord.kr).map((char, cIdx) => (
+                                                        <span
+                                                            key={cIdx}
+                                                            className={`kr-font text-4xl md:text-5xl font-bold px-3 py-1.5 rounded-2xl transition-all duration-300 ${
+                                                                highlightSyllableIdx === cIdx
+                                                                ? 'bg-rose-500 text-white scale-125 shadow-lg animate-pulse'
+                                                                : 'text-gray-800 bg-white/80 shadow-xs'
+                                                            }`}
+                                                        >
+                                                            {char}
+                                                        </span>
+                                                    ))}
                                                 </div>
                                                 <div className="flex justify-center items-center gap-2 text-xs md:text-sm text-gray-600 flex-wrap">
                                                     <span className="px-2.5 py-1 bg-white rounded-lg font-semibold text-rose-600 border border-rose-100">
@@ -967,20 +1086,27 @@
                                                 </div>
 
                                                 {/* Demonstration Audio Controls */}
-                                                <div className="flex justify-center gap-2 mt-4">
+                                                <div className="flex justify-center gap-2 mt-4 flex-wrap">
                                                     <button
                                                         type="button"
                                                         onClick={() => playSoundWithRate(speechPracticeWord.kr, 0.85)}
-                                                        className="px-3.5 py-1.5 bg-white hover:bg-rose-500 hover:text-white text-rose-600 font-bold rounded-xl text-xs border border-rose-200 transition-all flex items-center gap-1.5 shadow-2xs"
+                                                        className="px-3 py-1.5 bg-white hover:bg-rose-500 hover:text-white text-rose-600 font-bold rounded-xl text-xs border border-rose-200 transition-all flex items-center gap-1 shadow-2xs"
                                                     >
                                                         <span>🔊</span> 標準示範 (1.0x)
                                                     </button>
                                                     <button
                                                         type="button"
-                                                        onClick={() => playSoundWithRate(speechPracticeWord.kr, 0.6)}
-                                                        className="px-3.5 py-1.5 bg-white hover:bg-amber-500 hover:text-white text-amber-600 font-bold rounded-xl text-xs border border-amber-200 transition-all flex items-center gap-1.5 shadow-2xs"
+                                                        onClick={() => playSoundWithRate(speechPracticeWord.kr, 0.65)}
+                                                        className="px-3 py-1.5 bg-white hover:bg-amber-500 hover:text-white text-amber-600 font-bold rounded-xl text-xs border border-amber-200 transition-all flex items-center gap-1 shadow-2xs"
                                                     >
-                                                        <span>🐢</span> 慢速口型 (0.6x)
+                                                        <span>🐢</span> 慢速口型 (0.7x)
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => playUltraSlowSyllables(speechPracticeWord.kr)}
+                                                        className="px-3.5 py-1.5 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold rounded-xl text-xs border border-purple-300 transition-all flex items-center gap-1 shadow-xs active:scale-95"
+                                                    >
+                                                        <span>🦥</span> 極慢速口型 (0.3x)
                                                     </button>
                                                 </div>
                                             </div>
