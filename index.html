@@ -333,12 +333,17 @@
                         setNewKr('');
                         setNewSound('');
                         setNewMeaning('');
+                        alert(`🎉「${wordObj.kr}」已成功儲存並同步至 Firebase 雲端！`);
                     } catch (err) {
                         console.error("Add word error:", err);
-                        setCustomWords(prev => [wordObj, ...prev]);
+                        alert(`⚠️ 儲存至 Firebase 失敗：\n${err.message}\n\n【排查提示】：請至 Firebase 控制台 -> Cloud Firestore ->「規則 (Rules)」頁面，確認是否已開放讀寫權限（allow read, write: if true;）！`);
                     }
                 } else {
                     setCustomWords(prev => [wordObj, ...prev]);
+                    setNewKr('');
+                    setNewSound('');
+                    setNewMeaning('');
+                    alert(`ℹ️ 目前處於本機離線模式，單字已暫存於本機畫面中。`);
                 }
                 setIsAddingWord(false);
             };
