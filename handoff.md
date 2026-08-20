@@ -29,17 +29,12 @@
 
 ### 雲端與後端 (Firebase Integration)
 - **SDK 版本**：Firebase v10.8.0 (Compat 模組：`firebase-app`, `firebase-auth`, `firebase-firestore`)
-- **專案 ID**：`stages-webpages-ai-sensebar`
+- **專案 ID**：`korean-learning-1ec2a`
 - **身份驗證 (Auth)**：啟用 `signInAnonymously()` 匿名驗證，免登入即可存取雲端功能。
 - **Firestore 集合架構**：
-  1. `korean_app_stats/cheers`：
-     - 欄位：`count (number)`（透過 `FieldValue.increment(1)` 進行原子累加）
-  2. `korean_quiz_leaderboard`：
-     - 欄位：`name (string)`, `score (number)`, `createdAt (timestamp)`, `dateStr (string)`
-     - 查詢方式：`orderBy('score', 'desc').limit(10)`
-  3. `korean_custom_words`：
+  1. `korean_custom_words`：
      - 欄位：`kr (string)`, `sound (string)`, `meaning (string)`, `createdAt (timestamp)`
-     - 查詢方式：`orderBy('createdAt', 'desc').limit(20)`
+     - 查詢方式：`orderBy('createdAt', 'desc').limit(50)`
 - **容錯設計**：具備本機離線 Fallback 機制，當 Firebase 離線或無網路時，會自動切換為本地模式運行，介面右上角具備連線狀態燈號。
 
 ---
@@ -64,14 +59,12 @@ const combineSyllable = (c, v) => {
 
 ## ✅ 4. 已完成功能清單 (Completed Features)
 
-1. [x] **🐱 6 大基礎母音教學**（Hello Kitty `ㅏ`、布甸狗 `ㅓ`、美樂蒂 `ㅗ`、玉桂狗 `ㅜ`、Kuromi `ㅡ`、雙子星 `ㅣ`）
+1. [x] **🐱 6 大基礎母音教學**（Hello Kitty `ㅏ`、布甸狗 `ㅓ`、美樂蒂 `ㅗ`、玉桂狗 `ㅜ`、Kuromi `ㅡ`、雙子星 `ㅣ`，支援海報大圖預覽）
 2. [x] **🐶 基礎子音積木**（`ㅇ`, `ㄱ`, `ㄴ`, `ㄷ`, `ㅁ`）
 3. [x] **🧩 拼音積木屋**（聲母韻母任意切換、實時拼出韓文字並發音）
-4. [x] **☁️ Firebase 雲端自學單字庫**（支援學員新增單字並即時同步）
+4. [x] **☁️ Firebase 雲端自學單字庫（獨立分頁）**（支援即時搜尋、卡片語音朗讀、學員新增單字並即時同步）
 5. [x] **⭐ Sanrio 星級挑戰測驗**（5 題隨堂測驗評量學習成效）
-6. [x] **🏆 Firebase 即時星級榮譽榜**（測驗成績上傳與前 10 名即時排行）
-7. [x] **💖 即時集氣加油互動按鈕**（實時跳動累加）
-8. [x] **📦 GitHub 託管與 GitHub Pages 自動部署上線**
+6. [x] **📦 GitHub 託管與 GitHub Pages 自動部署上線**
 
 ---
 
