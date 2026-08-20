@@ -166,6 +166,37 @@
             return list;
         }
 
+        function getAutoRomanization(text) {
+            if (!text) return '';
+            const parts = [];
+            for (let i = 0; i < text.length; i++) {
+                const code = text.charCodeAt(i);
+                if (code >= 44032 && code <= 55203) {
+                    const diff = code - 44032;
+                    const finIdx = diff % 28;
+                    const medIdx = Math.floor((diff - finIdx) / 28) % 21;
+                    const initIdx = Math.floor(Math.floor((diff - finIdx) / 28) / 21);
+
+                    const initChar = initialList[initIdx];
+                    const medChar = medialList[medIdx];
+                    const finChar = finalList[finIdx];
+
+                    const initSound = initialRoman[initChar] || '';
+                    const medSound = medialRoman[medChar] || '';
+                    const finSound = finChar ? (finalRoman[finChar] || '') : '';
+
+                    const cleanInit = initChar === 'ㅇ' ? '' : (initChar === 'ㄱ' ? 'g' : (initChar === 'ㄷ' ? 'd' : (initChar === 'ㅂ' ? 'b' : (initChar === 'ㄹ' ? 'r' : (initChar === 'ㅋ' ? 'k' : initSound.split(' ')[0])))));
+                    const cleanFin = finChar ? (finChar === 'ㄹ' ? 'l' : (finChar === 'ㅇ' ? 'ng' : finSound.split(' ')[0])) : '';
+                    parts.push(cleanInit + medSound + cleanFin);
+                } else if (text[i] === ' ') {
+                    parts.push(' ');
+                } else {
+                    parts.push(text[i]);
+                }
+            }
+            return parts.join('-').replace(/- -/g, ' ').replace(/-\s+/g, ' ').replace(/\s+-/g, ' ');
+        }
+
         function App() {
             const [activeTab, setActiveTab] = useState('vowels');
             const [selectedC, setSelectedC] = useState('ㅇ');
@@ -288,9 +319,10 @@
                 e.preventDefault();
                 if (!newKr.trim()) return;
                 setIsAddingWord(true);
+                const autoSound = (newSound.trim() || getAutoRomanization(newKr.trim())) || '自訂發音';
                 const wordObj = {
                     kr: newKr.trim(),
-                    sound: newSound.trim() || '自訂發音',
+                    sound: autoSound,
                     meaning: newMeaning.trim() || '自學單字',
                     createdAt: firebase.firestore.FieldValue ? firebase.firestore.FieldValue.serverTimestamp() : new Date()
                 };
@@ -802,36 +834,43 @@
 
                                 {/* Add Custom Word Form */}
                                 <div className="bg-gradient-to-r from-emerald-50/70 to-teal-50/70 p-5 rounded-2xl border border-emerald-100">
-                                    <h4 className="text-xs md:text-sm font-bold text-emerald-700 mb-3 flex items-center gap-1.5">
-                                        <span>➕</span> 新增自學單字到 Firebase 雲端：
-                                    </h4>
+                                    <div className="flex justify-between items-center mb-3 flex-wrap gap-2">
+                                        <h4 className="text-xs md:text-sm font-bold text-emerald-700 flex items-center gap-1.5">
+                                            <span>➕</span> 新增自學單字到 Firebase 雲端：
+                                        </h4>
+                                        <span className="text-[11px] text-emerald-600 bg-emerald-100/60 px-2.5 py-0.5 rounded-full font-medium">
+                                            ✨ 輸入韓文即自動生成拼音
+                                        </span>
+                                    </div>
                                     <form onSubmit={handleAddCustomWord} className="flex flex-wrap gap-2.5 items-center">
                                         <input 
                                             type="text" 
-                                            placeholder="韓文 (例: 우유)" 
+                                            placeholder="韓文 (例: 우유, 콜라, 사랑)" 
                                             value={newKr}
-                                            onChange={e => setNewKr(e.target.value)}
-                                            className="px-3.5 py-2 rounded-xl border border-gray-200 text-xs md:text-sm flex-1 min-w-[110px] focus:outline-emerald-400 bg-white"
+                                            onChange={e => {
+                                                const val = e.target.value;
+                                                setNewKr(val);
+                                                setNewSound(getAutoRomanization(val));
+                                            }}
+                                            className="px-3.5 py-2 rounded-xl border border-gray-200 text-xs md:text-sm flex-1 min-w-[130px] focus:outline-emerald-400 bg-white"
                                             required
                                         />
+                                        <div className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-emerald-200 text-xs md:text-sm text-emerald-700 min-w-[120px] shadow-2xs">
+                                            <span className="text-[11px] text-gray-400 font-medium">拼音:</span>
+                                            <strong className="text-emerald-600">{newSound || (newKr ? getAutoRomanization(newKr) : '自動生成')}</strong>
+                                        </div>
                                         <input 
                                             type="text" 
-                                            placeholder="拼音 (例: u-yu)" 
-                                            value={newSound}
-                                            onChange={e => setNewSound(e.target.value)}
-                                            className="px-3.5 py-2 rounded-xl border border-gray-200 text-xs md:text-sm flex-1 min-w-[100px] focus:outline-emerald-400 bg-white"
-                                        />
-                                        <input 
-                                            type="text" 
-                                            placeholder="意思 (例: 牛奶 🥛)" 
+                                            placeholder="中文意思 (例: 牛奶 🥛)" 
                                             value={newMeaning}
                                             onChange={e => setNewMeaning(e.target.value)}
-                                            className="px-3.5 py-2 rounded-xl border border-gray-200 text-xs md:text-sm flex-1 min-w-[120px] focus:outline-emerald-400 bg-white"
+                                            className="px-3.5 py-2 rounded-xl border border-gray-200 text-xs md:text-sm flex-1 min-w-[130px] focus:outline-emerald-400 bg-white"
+                                            required
                                         />
                                         <button
                                             type="submit"
                                             disabled={isAddingWord}
-                                            className="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs md:text-sm shadow-xs transition-all disabled:opacity-50 active:scale-95"
+                                            className="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs md:text-sm shadow-xs transition-all disabled:opacity-50 active:scale-95 whitespace-nowrap"
                                         >
                                             {isAddingWord ? '同步中...' : '儲存至 Firebase ☁️'}
                                         </button>
