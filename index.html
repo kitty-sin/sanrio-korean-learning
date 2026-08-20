@@ -129,6 +129,7 @@
             const [newSound, setNewSound] = useState('');
             const [newMeaning, setNewMeaning] = useState('');
             const [isAddingWord, setIsAddingWord] = useState(false);
+            const [showPoster, setShowPoster] = useState(false);
 
             // Initialize Firebase Real-time listeners
             useEffect(() => {
@@ -372,7 +373,54 @@
 
                     {/* Tab 1: Vowels Flashcards */}
                     {activeTab === 'vowels' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-6">
+                            {/* Visual Poster Banner */}
+                            <div className="bg-gradient-to-r from-rose-100 via-pink-50 to-purple-100 border border-rose-200 rounded-3xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
+                                <div className="flex items-center gap-3 text-center sm:text-left">
+                                    <span className="text-3xl">🖼️</span>
+                                    <div>
+                                        <h3 className="font-bold text-gray-800 text-sm md:text-base">6 大基礎母音視覺記憶海報</h3>
+                                        <p className="text-xs text-gray-500">Sanrio 人氣角色插畫 + 廣東話諧音口訣總整理</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowPoster(true)}
+                                    className="bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold px-4 py-2 rounded-2xl shadow-xs transition-all flex items-center gap-1.5 whitespace-nowrap active:scale-95"
+                                >
+                                    <span>🔍</span>
+                                    <span>查看大圖</span>
+                                </button>
+                            </div>
+
+                            {/* Modal for Full Poster */}
+                            {showPoster && (
+                                <div 
+                                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+                                    onClick={() => setShowPoster(false)}
+                                >
+                                    <div 
+                                        className="bg-white rounded-3xl p-4 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-2xl animate-fade-in"
+                                        onClick={e => e.stopPropagation()}
+                                    >
+                                        <button 
+                                            onClick={() => setShowPoster(false)}
+                                            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center text-sm font-bold z-10 transition-colors"
+                                        >
+                                            ✕
+                                        </button>
+                                        <div className="text-center mb-2">
+                                            <h4 className="font-bold text-gray-800 text-sm">🌸 6 大基礎母音視覺記憶卡 (Sanrio 風格)</h4>
+                                        </div>
+                                        <img 
+                                            src="assets/sanrio_vowels_flashcard.jpg" 
+                                            alt="Sanrio 6 大基礎母音視覺記憶卡" 
+                                            className="w-full rounded-2xl border border-rose-100 shadow-sm"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {vowels.map((item, idx) => (
                                 <div 
                                     key={idx}
@@ -407,6 +455,7 @@
                                     </p>
                                 </div>
                             ))}
+                            </div>
                         </div>
                     )}
 
