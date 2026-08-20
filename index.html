@@ -109,6 +109,63 @@
             { id: '5', kr: '나무', sound: 'na-mu', meaning: '樹木 🌳' },
         ];
 
+        // Hangul Jamo Decomposition Data
+        const initialList = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+        const medialList = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
+        const finalList = ['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+
+        const initialRoman = {
+            'ㄱ':'g / k (鬆音)','ㄲ':'kk (硬音)','ㄴ':'n','ㄷ':'d / t (鬆音)','ㄸ':'tt (硬音)','ㄹ':'r / l',
+            'ㅁ':'m','ㅂ':'b / p (鬆音)','ㅃ':'pp (硬音)','ㅅ':'s','ㅆ':'ss (硬音)','ㅇ':'不發音 (無音)',
+            'ㅈ':'j','ㅉ':'jj (硬音)','ㅊ':'ch (激音)','ㅋ':'k (激音)','ㅌ':'t (激音)','ㅍ':'p (激音)','ㅎ':'h'
+        };
+
+        const medialRoman = {
+            'ㅏ':'a','ㅐ':'ae','ㅑ':'ya','ㅒ':'yae','ㅓ':'eo','ㅔ':'e','ㅕ':'yeo','ㅖ':'ye',
+            'ㅗ':'o','ㅘ':'wa','ㅙ':'wae','ㅚ':'oe','ㅛ':'yo','ㅜ':'u','ㅝ':'wo','ㅞ':'we',
+            'ㅟ':'wi','ㅠ':'yu','ㅡ':'eu','ㅢ':'ui','ㅣ':'i'
+        };
+
+        const finalRoman = {
+            'ㄱ':'k','ㄲ':'k','ㄳ':'k','ㄴ':'n','ㄵ':'n','ㄶ':'n','ㄷ':'t','ㄹ':'l (作為字尾收音時表記為 l)',
+            'ㄺ':'k','ㄻ':'m','ㄼ':'p','ㄽ':'l','ㄾ':'t','ㄿ':'p','ㅀ':'l','ㅁ':'m','ㅂ':'p',
+            'ㅄ':'p','ㅅ':'t','ㅆ':'t','ㅇ':'ng (字尾鼻音)','ㅈ':'t','ㅊ':'t','ㅋ':'k','ㅌ':'t','ㅍ':'p','ㅎ':'t'
+        };
+
+        function decomposeHangulWord(word) {
+            const list = [];
+            for (let i = 0; i < word.length; i++) {
+                const code = word.charCodeAt(i);
+                if (code >= 44032 && code <= 55203) {
+                    const diff = code - 44032;
+                    const finIdx = diff % 28;
+                    const medIdx = Math.floor((diff - finIdx) / 28) % 21;
+                    const initIdx = Math.floor(Math.floor((diff - finIdx) / 28) / 21);
+
+                    const initChar = initialList[initIdx];
+                    const medChar = medialList[medIdx];
+                    const finChar = finalList[finIdx];
+
+                    const initSound = initialRoman[initChar] || '';
+                    const medSound = medialRoman[medChar] || '';
+                    const finSound = finChar ? (finalRoman[finChar] || '') : '';
+
+                    const cleanInit = initChar === 'ㅇ' ? '' : (initChar === 'ㄱ' ? 'g' : (initChar === 'ㄷ' ? 'd' : (initChar === 'ㅂ' ? 'b' : (initChar === 'ㄹ' ? 'r' : (initChar === 'ㅋ' ? 'k' : initSound.split(' ')[0])))));
+                    const cleanFin = finChar ? (finChar === 'ㄹ' ? 'l' : (finChar === 'ㅇ' ? 'ng' : finSound.split(' ')[0])) : '';
+                    const romanSyllable = cleanInit + medSound + cleanFin;
+
+                    list.push({
+                        syllable: word[i],
+                        roman: romanSyllable,
+                        initial: { char: initChar, sound: initSound },
+                        medial: { char: medChar, sound: medSound },
+                        final: finChar ? { char: finChar, sound: finSound } : null
+                    });
+                }
+            }
+            return list;
+        }
+
         function App() {
             const [activeTab, setActiveTab] = useState('vowels');
             const [selectedC, setSelectedC] = useState('ㅇ');
@@ -128,6 +185,7 @@
             const [isAddingWord, setIsAddingWord] = useState(false);
             const [showPoster, setShowPoster] = useState(false);
             const [searchTerm, setSearchTerm] = useState('');
+            const [selectedWordForModal, setSelectedWordForModal] = useState(null);
 
             // Initialize Firebase Real-time listener for Custom Word Bank
             useEffect(() => {
@@ -510,8 +568,8 @@
                                         <h2 className="text-xl md:text-2xl font-bold text-emerald-600 flex items-center gap-2">
                                             <span>☁️</span> Firebase 雲端自學單字庫
                                         </h2>
-                                        <p className="text-xs text-gray-400 mt-1">
-                                            即時連線雲端資料庫，點擊卡片聽取標準發音，全體學員共享自學單字
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            點擊任意單字卡片即可彈出<strong>「韓文字母拼音拆解」</strong>並朗讀發音 🔊
                                         </p>
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -520,6 +578,149 @@
                                         </span>
                                     </div>
                                 </div>
+
+                                {/* Modal for Hangul Jamo Decomposition */}
+                                {selectedWordForModal && (
+                                    <div 
+                                        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+                                        onClick={() => setSelectedWordForModal(null)}
+                                    >
+                                        <div 
+                                            className="bg-white rounded-3xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-2xl animate-fade-in border-2 border-emerald-100"
+                                            onClick={e => e.stopPropagation()}
+                                        >
+                                            {/* Close button */}
+                                            <button 
+                                                onClick={() => setSelectedWordForModal(null)}
+                                                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center text-sm font-bold z-10 transition-colors"
+                                            >
+                                                ✕
+                                            </button>
+
+                                            {/* Modal Title */}
+                                            <div className="flex items-center gap-2 mb-4 text-emerald-600">
+                                                <span className="text-2xl">🧩</span>
+                                                <h3 className="font-bold text-lg">韓文字母發音拆解分析</h3>
+                                            </div>
+
+                                            {/* Word Header Card */}
+                                            <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-sky-50 p-5 rounded-2xl border border-emerald-200 text-center mb-6 shadow-xs">
+                                                <div className="flex items-center justify-center gap-3 mb-1">
+                                                    <span className="kr-font text-4xl font-bold text-gray-800">{selectedWordForModal.kr}</span>
+                                                    <button
+                                                        onClick={() => playSound(selectedWordForModal.kr)}
+                                                        className="w-10 h-10 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center text-base shadow-xs transition-transform active:scale-90"
+                                                        title="點擊聽發音"
+                                                    >
+                                                        🔊
+                                                    </button>
+                                                </div>
+                                                <div className="flex justify-center items-center gap-3 text-sm mt-2 flex-wrap">
+                                                    <span className="px-3 py-1 bg-white rounded-full font-bold text-emerald-600 border border-emerald-100 shadow-2xs">
+                                                        官方羅馬拼音：[{selectedWordForModal.sound}]
+                                                    </span>
+                                                    <span className="px-3 py-1 bg-white rounded-full text-gray-600 font-medium border border-gray-100 shadow-2xs">
+                                                        {selectedWordForModal.meaning}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Syllable-by-syllable Breakdown */}
+                                            <div className="space-y-4">
+                                                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                                    <span>🔍</span> 發音積木拆解步驟：
+                                                </h4>
+
+                                                {(() => {
+                                                    const deconstructed = decomposeHangulWord(selectedWordForModal.kr);
+                                                    if (deconstructed.length === 0) {
+                                                        return (
+                                                            <p className="text-xs text-gray-400 text-center py-4">此單字非標準組合韓文字</p>
+                                                        );
+                                                    }
+
+                                                    return deconstructed.map((item, sIdx) => (
+                                                        <div key={sIdx} className="bg-gray-50/80 p-4 rounded-2xl border border-gray-200 space-y-3">
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="font-bold text-emerald-700 text-sm flex items-center gap-2">
+                                                                    <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-bold">
+                                                                        {sIdx + 1}
+                                                                    </span>
+                                                                    音節「<span className="kr-font text-xl text-gray-800 font-bold">{item.syllable}</span>」
+                                                                </span>
+                                                                <span className="text-xs bg-white px-2.5 py-1 rounded-lg border border-gray-200 text-gray-600 font-semibold">
+                                                                    拼音：{item.roman}
+                                                                </span>
+                                                            </div>
+
+                                                            {/* Jamo Blocks list */}
+                                                            <div className="grid grid-cols-1 gap-2 text-xs md:text-sm">
+                                                                {/* Initial */}
+                                                                <div className="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-amber-100">
+                                                                    <span className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold kr-font text-lg shrink-0">
+                                                                        {item.initial.char}
+                                                                    </span>
+                                                                    <div className="flex-1">
+                                                                        <span className="font-bold text-amber-800 text-xs">初聲 (聲母 / 子音)</span>
+                                                                        <p className="text-gray-600 text-xs mt-0.5">
+                                                                            <strong>{item.initial.char}</strong> ＝ <span className="text-amber-600 font-bold">{item.initial.sound}</span>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* Medial */}
+                                                                <div className="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-rose-100">
+                                                                    <span className="w-8 h-8 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-bold kr-font text-lg shrink-0">
+                                                                        {item.medial.char}
+                                                                    </span>
+                                                                    <div className="flex-1">
+                                                                        <span className="font-bold text-rose-800 text-xs">中聲 (韻母 / 母音)</span>
+                                                                        <p className="text-gray-600 text-xs mt-0.5">
+                                                                            <strong>{item.medial.char}</strong> ＝ <span className="text-rose-600 font-bold">{item.medial.sound}</span>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* Final if exists */}
+                                                                {item.final && (
+                                                                    <div className="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-sky-100">
+                                                                        <span className="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center font-bold kr-font text-lg shrink-0">
+                                                                            {item.final.char}
+                                                                        </span>
+                                                                        <div className="flex-1">
+                                                                            <span className="font-bold text-sky-800 text-xs">終聲 (字尾收音 / 尾音 받침)</span>
+                                                                            <p className="text-gray-600 text-xs mt-0.5">
+                                                                                <strong>{item.final.char}</strong> ＝ <span className="text-sky-600 font-bold">{item.final.sound}</span>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+
+                                                            {/* Syllable Formula */}
+                                                            <div className="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 text-xs text-emerald-800">
+                                                                <p className="font-bold mb-1">✨ 組合拆解：</p>
+                                                                <p className="text-gray-700 leading-relaxed">
+                                                                    {item.initial.char} ({item.initial.sound.split(' ')[0]}) ＋ {item.medial.char} ({item.medial.sound}) {item.final ? `＋ ${item.final.char} (${item.final.sound.split(' ')[0]})` : ''} ＝ <strong className="kr-font text-emerald-700 font-bold">{item.syllable}</strong> ({item.roman})
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    ));
+                                                })()}
+                                            </div>
+
+                                            {/* Bottom Button */}
+                                            <div className="mt-6 text-center">
+                                                <button
+                                                    onClick={() => setSelectedWordForModal(null)}
+                                                    className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl text-xs transition-colors"
+                                                >
+                                                    關閉 ✕
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* Search Bar */}
                                 <div className="mb-6">
@@ -560,20 +761,31 @@
                                             {filteredWords.map((word, index) => (
                                                 <div
                                                     key={word.id || index}
-                                                    onClick={() => playSound(word.kr)}
+                                                    onClick={() => {
+                                                        playSound(word.kr);
+                                                        setSelectedWordForModal(word);
+                                                    }}
                                                     className="sanrio-card bg-emerald-50/40 hover:bg-emerald-50 border border-emerald-200/80 p-4 rounded-2xl flex items-center justify-between cursor-pointer transition-all shadow-xs group"
-                                                    title="點擊朗讀發音"
+                                                    title="點擊查看字母拆解與朗讀發音"
                                                 >
                                                     <div>
                                                         <div className="flex items-center gap-2">
                                                             <span className="kr-font font-bold text-emerald-700 text-xl">{word.kr}</span>
                                                             <span className="text-xs text-gray-400">[{word.sound}]</span>
+                                                            <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-white border border-emerald-200 text-emerald-600 font-semibold group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                                                                🧩 拆解
+                                                            </span>
                                                         </div>
                                                         <p className="text-xs text-gray-600 font-medium mt-1">{word.meaning}</p>
                                                     </div>
                                                     <button
                                                         type="button"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            playSound(word.kr);
+                                                        }}
                                                         className="w-9 h-9 rounded-xl bg-white text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white flex items-center justify-center text-sm shadow-xs transition-colors"
+                                                        title="純聽發音"
                                                     >
                                                         🔊
                                                     </button>
