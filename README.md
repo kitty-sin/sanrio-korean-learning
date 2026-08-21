@@ -31,6 +31,11 @@
 
 ## 📚 附屬教材資源
 - **📖 Sanrio 韓語發音教學簡報 (20頁完整版 PDF)**：[hangul_sanrio_deck_20p.pdf](hangul_sanrio_deck_20p.pdf)
+- **📊 韓語字母拼音總表 (Hangul Syllable Chart)**：[assets/hangul_alphabet_chart.jpg](assets/hangul_alphabet_chart.jpg)
+
+<div align="center" style="margin-top: 16px;">
+  <img src="assets/hangul_alphabet_chart.jpg" alt="韓語字母拼音總表" width="560" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
+</div>
 
 ## 🚀 線上即時體驗
 - **GitHub Pages**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
