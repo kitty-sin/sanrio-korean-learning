@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanrio 韓語發音積木樂園 (Firebase 雲端互動版)</title>
+    <title>Sanrio 韓語發音積木樂園 (3層收音與全套字母庫升級版)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -32,14 +32,7 @@
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .sanrio-card:hover {
-            transform: translateY(-6px) scale(1.02);
-        }
-        .bounce-gentle {
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            transform: translateY(-5px) scale(1.015);
         }
         .pulse-heart {
             animation: pulse-heart 1.2s ease-in-out infinite;
@@ -48,22 +41,29 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.18); }
         }
+        .block-shadow {
+            box-shadow: 0 6px 0 rgba(0,0,0,0.08), 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .active-block-shadow {
+            box-shadow: 0 4px 0 rgba(0,0,0,0.15), 0 8px 16px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
-<body class="text-gray-700 min-h-screen pb-16">
+<body class="text-gray-700 min-h-screen pb-20">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect } = React;
 
         // Firebase Configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyBSp64Qj6zzKsAq50x2wCmGIEl0qOQihW8",
-            authDomain: "stages-webpages-ai-sensebar.firebaseapp.com",
-            projectId: "stages-webpages-ai-sensebar",
-            storageBucket: "stages-webpages-ai-sensebar.firebasestorage.app",
-            messagingSenderId: "506971950207",
-            appId: "1:506971950207:web:9a0f54d11641fd7dc5834a"
+            apiKey: "AIzaSyDOSnvade56LP3J2zNrMV9TDGkEKaVys70",
+            authDomain: "korean-learning-1ec2a.firebaseapp.com",
+            projectId: "korean-learning-1ec2a",
+            storageBucket: "korean-learning-1ec2a.firebasestorage.app",
+            messagingSenderId: "592980499099",
+            appId: "1:592980499099:web:40928f5d35f642b308043e",
+            measurementId: "G-E7XMQPNX8Y"
         };
 
         // Initialize Firebase
@@ -80,50 +80,122 @@
             console.warn("Firebase Init fallback:", err);
         }
 
-        // Vowel Data
-        const vowels = [
-            { char: 'ㅏ', name: 'a', cantonese: '呀 (aa)', character: 'Hello Kitty 🐱', color: 'bg-rose-100 border-rose-300 text-rose-600', icon: '🎀', desc: 'Hello Kitty 伸手向右打招呼（小手向右伸）' },
-            { char: 'ㅓ', name: 'eo', cantonese: '柯 (o)', character: '布甸狗 🐶', color: 'bg-amber-100 border-amber-300 text-amber-600', icon: '🍮', desc: '布甸狗摸摸左邊肚仔（小手向左縮）' },
-            { char: 'ㅗ', name: 'o', cantonese: '噢 (嘟嘴)', character: '美樂蒂 🐰', color: 'bg-pink-100 border-pink-300 text-pink-600', icon: '🌸', desc: '美樂蒂雙耳朝天（短線向上發 O）' },
-            { char: 'ㅜ', name: 'u', cantonese: '屋 (u)', character: '玉桂狗 ☁️', color: 'bg-sky-100 border-sky-300 text-sky-600', icon: '☁️', desc: '玉桂狗耷耷大耳朵（短線向下垂）' },
-            { char: 'ㅡ', name: 'eu', cantonese: '𠮾 (拉平嘴)', character: 'Kuromi 😈', color: 'bg-purple-100 border-purple-300 text-purple-600', icon: '🖤', desc: 'Kuromi 傲嬌一字嘴（咬牙左右拉開）' },
-            { char: 'ㅣ', name: 'i', cantonese: '衣 (微笑)', character: '雙子星 ⭐', color: 'bg-indigo-100 border-indigo-300 text-indigo-600', icon: '✨', desc: '雙子星筆直仙女棒（牙齒露出微笑）' },
+        // ==================== 1. 字母數據庫 ====================
+
+        // 1.1 基礎母音 (10 個)
+        const basicVowels = [
+            { char: 'ㅏ', name: 'a', cantonese: '呀 (aa)', character: 'Hello Kitty 🐱', color: 'border-rose-300 bg-rose-50 text-rose-600', icon: '🎀', desc: 'Hello Kitty 伸手向右打招呼（小手向右伸）' },
+            { char: 'ㅑ', name: 'ya', cantonese: '野 (yaa)', character: 'Hello Kitty 雙手 🐱', color: 'border-rose-300 bg-rose-50 text-rose-600', icon: '✨', desc: 'Hello Kitty 兩隻小手向右揮揮，發出 Ya 音' },
+            { char: 'ㅓ', name: 'eo', cantonese: '柯 (o)', character: '布甸狗 🐶', color: 'border-amber-300 bg-amber-50 text-amber-600', icon: '🍮', desc: '布甸狗摸摸左邊肚仔（小手向左縮）' },
+            { char: 'ㅕ', name: 'yeo', cantonese: '腰 (yeo)', character: '布甸狗搖腰 🐶', color: 'border-amber-300 bg-amber-50 text-amber-600', icon: '🌟', desc: '布甸狗向左伸出雙手伸懶腰，發 Yeo 音' },
+            { char: 'ㅗ', name: 'o', cantonese: '噢 (嘟嘴)', character: '美樂蒂 🐰', color: 'border-pink-300 bg-pink-50 text-pink-600', icon: '🌸', desc: '美樂蒂雙耳朝天（短線向上發 O）' },
+            { char: 'ㅛ', name: 'yo', cantonese: '唷 (yo)', character: '美樂蒂小雨傘 🐰', color: 'border-pink-300 bg-pink-50 text-pink-600', icon: '🌂', desc: '兩根短線向上撐起小傘，發 Yo 音' },
+            { char: 'ㅜ', name: 'u', cantonese: '屋 (u)', character: '玉桂狗 ☁️', color: 'border-sky-300 bg-sky-50 text-sky-600', icon: '☁️', desc: '玉桂狗耷耷大耳朵（短線向下垂）' },
+            { char: 'ㅠ', name: 'yu', cantonese: '乳 (yu)', character: '玉桂狗流眼淚 ☁️', color: 'border-sky-300 bg-sky-50 text-sky-600', icon: '💧', desc: '兩道淚珠向下流淌，像哭泣發 Yu 音' },
+            { char: 'ㅡ', name: 'eu', cantonese: '𠮾 (拉平嘴)', character: 'Kuromi 😈', color: 'border-purple-300 bg-purple-50 text-purple-600', icon: '🖤', desc: 'Kuromi 傲嬌一字嘴（咬牙左右拉開）' },
+            { char: 'ㅣ', name: 'i', cantonese: '衣 (微笑)', character: '雙子星 ⭐', color: 'border-indigo-300 bg-indigo-50 text-indigo-600', icon: '🪄', desc: '雙子星筆直仙女棒（牙齒露出微笑）' },
         ];
 
-        // Consonant Data
-        const consonants = [
-            { char: 'ㅇ', name: '無音/ng', cantonese: '圓圈 (不發音)', character: '波波珍珠 ⚪', color: 'bg-pink-50 border-pink-200 text-pink-500', desc: '圓滾滾無聲積木，放在母音前只讀母音聲音' },
-            { char: 'ㄱ', name: 'g / k', cantonese: '哥 (g)', character: 'Hello Kitty 手臂 🐱', color: 'bg-red-100 border-red-300 text-red-600', desc: '像直角鐮刀或曲折的小臂彎' },
-            { char: 'ㄴ', name: 'n', cantonese: '呢 (n)', character: '玉桂狗小腳丫 ☁️', color: 'bg-blue-100 border-blue-300 text-blue-600', desc: 'L 型腳丫貼著地面行走' },
-            { char: 'ㄷ', name: 'd', cantonese: '多 (d)', character: '布甸狗小屋門 🐶', color: 'bg-amber-100 border-amber-300 text-amber-700', desc: '像方方正正的小門口' },
-            { char: 'ㅁ', name: 'm', cantonese: '嗎 (m)', character: '美樂蒂禮物盒 🎁', color: 'bg-rose-100 border-rose-300 text-rose-600', desc: '四四方方可愛的包裝盒' },
+        // 1.2 複合母音 (11 個)
+        const compoundVowels = [
+            { char: 'ㅐ', name: 'ae', cantonese: '愛 (ai / 矮)', character: 'Hello Kitty 調色盤 🎨', color: 'border-rose-300 bg-rose-50 text-rose-600', formula: 'ㅏ + ㅣ', desc: 'ㅏ 結合 ㅣ，嘴巴微張發「愛/哎」音' },
+            { char: 'ㅔ', name: 'e', cantonese: '欸 (e / 禮)', character: '美樂蒂小木門 🚪', color: 'border-pink-300 bg-pink-50 text-pink-600', formula: 'ㅓ + ㅣ', desc: 'ㅓ 結合 ㅣ，嘴角輕輕向兩邊放鬆發「欸」' },
+            { char: 'ㅒ', name: 'yae', cantonese: '野 (yae)', character: '雙手插腰 Kitty 🐱', color: 'border-rose-300 bg-rose-50 text-rose-600', formula: 'ㅑ + ㅣ', desc: '雙短線向右加上直線，發「Yae / 爺」' },
+            { char: 'ㅖ', name: 'ye', cantonese: '耶 (ye / 謝)', character: '雙子星雙仙棒 ⭐', color: 'border-indigo-300 bg-indigo-50 text-indigo-600', formula: 'ㅕ + ㅣ', desc: '雙短線向左加上直線，發「Ye / 耶」' },
+            { char: 'ㅘ', name: 'wa', cantonese: '嘩 (wa)', character: '玉桂狗滑滑梯 ☁️', color: 'border-sky-300 bg-sky-50 text-sky-600', formula: 'ㅗ + ㅏ', desc: '從 O 滑向 A，快速連讀發「Wa / 嘩」' },
+            { char: 'ㅙ', name: 'wae', cantonese: '搵 / 歪 (wae)', character: '布甸狗驚喜叫 🐶', color: 'border-amber-300 bg-amber-50 text-amber-600', formula: 'ㅗ + ㅐ', desc: '從 O 滑向 AE，發出「Wae / 歪」' },
+            { char: 'ㅚ', name: 'oe / we', cantonese: '外 (we)', character: 'Kuromi 歪頭笑 😈', color: 'border-purple-300 bg-purple-50 text-purple-600', formula: 'ㅗ + ㅣ', desc: '現代韓語通常讀作「We / 外」' },
+            { char: 'ㅝ', name: 'wo', cantonese: '禾 / 鍋 (wo)', character: '雙子星抱星星 ⭐', color: 'border-indigo-300 bg-indigo-50 text-indigo-600', formula: 'ㅜ + ㅓ', desc: '從 U 滑向 EO，快速連讀發「Wo / 禾」' },
+            { char: 'ㅞ', name: 'we', cantonese: '韋 (we)', character: '美樂蒂轉圈圈 🐰', color: 'border-pink-300 bg-pink-50 text-pink-600', formula: 'ㅜ + ㅔ', desc: '從 U 滑向 E，發出「We / 韋」' },
+            { char: 'ㅟ', name: 'wi', cantonese: '為 (wi)', character: '帕恰狗吹口哨 🐾', color: 'border-emerald-300 bg-emerald-50 text-emerald-600', formula: 'ㅜ + ㅣ', desc: '圓唇迅速滑向 I，發出「Wi / 為」' },
+            { char: 'ㅢ', name: 'ui', cantonese: '醫 (ui)', character: '大眼蛙露齒笑 🐸', color: 'border-teal-300 bg-teal-50 text-teal-600', formula: 'ㅡ + ㅣ', desc: '咬牙 Eu 迅速過渡至 I，發出「Ui」' },
         ];
 
-        // Default Vocabulary
+        // 1.3 基礎平音子音 (10 個)
+        const plainConsonants = [
+            { char: 'ㄱ', name: 'g / k', cantonese: '哥 (g)', character: 'Kitty 手臂 🐱', color: 'border-rose-300 bg-rose-50 text-rose-600', desc: '直角鐮刀手臂彎彎，發輕聲 G/K' },
+            { char: 'ㄴ', name: 'n', cantonese: '呢 (n)', character: '玉桂狗腳丫 ☁️', color: 'border-sky-300 bg-sky-50 text-sky-600', desc: 'L 型腳丫貼在地面，發鼻音 N' },
+            { char: 'ㄷ', name: 'd / t', cantonese: '多 (d)', character: '布甸狗小屋門 🐶', color: 'border-amber-300 bg-amber-50 text-amber-600', desc: '方正的小門口，發輕聲 D/T' },
+            { char: 'ㄹ', name: 'r / l', cantonese: '啦 (l/r)', character: '雙子星銀河帶 ⭐', color: 'border-indigo-300 bg-indigo-50 text-indigo-600', desc: '蜿蜒如蛇或銀河彩帶，發彈舌 R 或 L' },
+            { char: 'ㅁ', name: 'm', cantonese: '嗎 (m)', character: '美樂蒂禮物盒 🎁', color: 'border-pink-300 bg-pink-50 text-pink-600', desc: '四四方方包裝盒，閉唇發鼻音 M' },
+            { char: 'ㅂ', name: 'b / p', cantonese: '巴 (b)', character: 'Kuromi 裝水小水杯 🥛', color: 'border-purple-300 bg-purple-50 text-purple-600', desc: '開口向上的小杯子，發輕聲 B/P' },
+            { char: 'ㅅ', name: 's', cantonese: '沙 (s)', character: '帕恰狗露營帳篷 ⛺', color: 'border-emerald-300 bg-emerald-50 text-emerald-600', desc: '人字形小尖頂帳篷，發摩擦音 S' },
+            { char: 'ㅇ', name: '無聲 / ng', cantonese: '圓圈 (不發音/ng)', character: '波波珍珠 ⚪', color: 'border-gray-300 bg-gray-50 text-gray-600', desc: '放在初聲不發音，放在收音時發 ng 鼻音' },
+            { char: 'ㅈ', name: 'j / z', cantonese: '知 (j)', character: '戴平帽的小朋友 🧢', color: 'border-amber-300 bg-amber-50 text-amber-600', desc: '頂上帶橫線的小帽子，發清脆 J/Z 音' },
+            { char: 'ㅎ', name: 'h', cantonese: '哈 (h)', character: '戴紳士禮帽紳士 🎩', color: 'border-red-300 bg-red-50 text-red-600', desc: '圓圈上頂著雙層禮帽，發喉部送氣 H' },
+        ];
+
+        // 1.4 激音 / 送氣音 (4 個)
+        const aspiratedConsonants = [
+            { char: 'ㅊ', name: 'ch', cantonese: '叉 / 七 (cha)', character: '酷企鵝尖角帽 🐧', color: 'border-cyan-300 bg-cyan-50 text-cyan-700', base: 'ㅈ + 一點', desc: '比 ㅈ 多了一根天線，發強力噴氣 Ch 音' },
+            { char: 'ㅋ', name: 'k', cantonese: '卡 (ka)', character: '水怪笑呵呵 🐟', color: 'border-teal-300 bg-teal-50 text-teal-700', base: 'ㄱ + 一橫', desc: '比 ㄱ 多了一道噴氣橫槓，發喉部噴氣 K 音' },
+            { char: 'ㅌ', name: 't', cantonese: '他 (ta)', character: '梯子排排坐 🪜', color: 'border-orange-300 bg-orange-50 text-orange-700', base: 'ㄷ + 一橫', desc: '比 ㄷ 多了一層階梯，發舌尖強噴氣 T 音' },
+            { char: 'ㅍ', name: 'p', cantonese: '爬 / 趴 (pa)', character: '羅馬宮殿大門 🏛️', color: 'border-rose-300 bg-rose-50 text-rose-700', base: 'ㅂ 變形', desc: '雙柱門樓，雙唇爆破強力噴氣發 P 音' },
+        ];
+
+        // 1.5 硬音 / 雙子音 (5 個)
+        const tenseConsonants = [
+            { char: 'ㄲ', name: 'kk', cantonese: '嫁 (緊喉 g)', character: '雙倍 Kitty 臂 🐱🐱', color: 'border-red-400 bg-red-50 text-red-700', desc: '兩個 ㄱ 合體，喉嚨收緊不送氣，發結實硬音 Kk' },
+            { char: 'ㄸ', name: 'tt', cantonese: '帶 (緊喉 d)', character: '雙倍小屋門 🚪🚪', color: 'border-amber-400 bg-amber-50 text-amber-700', desc: '兩個 ㄷ 合體，舌尖用力收緊，發結實硬音 Tt' },
+            { char: 'ㅃ', name: 'pp', cantonese: '霸 (緊喉 b)', character: '雙倍水杯 🥛🥛', color: 'border-pink-400 bg-pink-50 text-pink-700', desc: '兩個 ㅂ 合體，雙唇緊繃發力，發結實硬音 Pp' },
+            { char: 'ㅆ', name: 'ss', cantonese: '思 (緊喉 s)', character: '雙層大帳篷 ⛺⛺', color: 'border-emerald-400 bg-emerald-50 text-emerald-700', desc: '兩個 ㅅ 合體，摩擦氣流短促用力，發硬音 Ss' },
+            { char: 'ㅉ', name: 'jj', cantonese: '煮 (緊喉 j)', character: '雙倍紳士帽子 🎩🎩', color: 'border-purple-400 bg-purple-50 text-purple-700', desc: '兩個 ㅈ 合體，聲帶緊繃發清脆硬音 Jj' },
+        ];
+
+        // 1.6 7 大代表收音 (Batchim 받침) 教學數據
+        const batchimGuide = [
+            { rep: 'ㅇ', sound: '[ng]', cantonese: '唔 / 後鼻音', members: ['ㅇ'], example: '강 (gang / 江)', meaning: '大江大河 🌊', desc: '圓圈收音最圓潤，舌根後縮，發出飽滿的鼻音 [ng]' },
+            { rep: 'ㅁ', sound: '[m]', cantonese: '閉唇音 / 嗎', members: ['ㅁ'], example: '봄 (bom / 春天)', meaning: '春暖花開 🌸', desc: '方盒收音要閉唇！發音結束時雙唇完全閉合收氣' },
+            { rep: 'ㄴ', sound: '[n]', cantonese: '前鼻音 / 呢', members: ['ㄴ'], example: '손 (son / 手)', meaning: '溫暖手心 ✋', desc: 'L 型腳丫收音，舌尖輕輕頂住上牙齦，發出前鼻音 [n]' },
+            { rep: 'ㄹ', sound: '[l]', cantonese: '捲舌音 / 啦', members: ['ㄹ'], example: '달 (dal / 月亮)', meaning: '夜空月亮 🌙', desc: '銀河帶收音，舌尖往上捲貼住上顎，發出清脆邊音 [l]' },
+            { rep: 'ㅂ', sound: '[p]', cantonese: '閉唇急止 / 鴨', members: ['ㅂ', 'ㅍ', 'ㅄ', 'ㄿ'], example: '밥 (bap / 飯)', meaning: '香噴噴米飯 🍚', desc: '雙唇快速閉合鎖住氣流，不爆破，類似廣東話入聲 [p]' },
+            { rep: 'ㄱ', sound: '[k]', cantonese: '喉部急止 / 屋', members: ['ㄱ', 'ㅋ', 'ㄲ', 'ㄳ', 'ㄺ'], example: '책 (chaek / 書)', meaning: '知識書本 📖', desc: '舌根頂住軟顎瞬間截斷氣流，類似廣東話入聲 [k]' },
+            { rep: 'ㄷ', sound: '[t]', cantonese: '齒齦急止 / 八', members: ['ㄷ', 'ㅅ', 'ㅈ', 'ㅊ', 'ㅌ', 'ㅎ', 'ㅆ'], example: '옷 (ot / 衣服)', meaning: '漂亮衣服 👗', desc: '韓語收音最多成員的一族！舌尖抵住門牙齒齦立刻停止送氣' },
+        ];
+
+        // 1.7 預設豐富雲端自學單字庫
         const defaultWords = [
-            { id: '1', kr: '아', sound: 'a', meaning: '呀！（驚嘆聲）' },
-            { id: '2', kr: '아이', sound: 'a-i', meaning: '小孩子 👶' },
-            { id: '3', kr: '오이', sound: 'o-i', meaning: '黃瓜 / 青瓜 🥒' },
-            { id: '4', kr: '가구', sound: 'ga-gu', meaning: '傢俬 / 傢俱 🛋️' },
-            { id: '5', kr: '나무', sound: 'na-mu', meaning: '樹木 🌳' },
+            { id: '1', kr: '사랑', sound: 'sa-rang', meaning: '愛情 / 喜愛 💖' },
+            { id: '2', kr: '감사', sound: 'gam-sa', meaning: '感謝 / 謝謝 🙏' },
+            { id: '3', kr: '김밥', sound: 'gim-bap', meaning: '紫菜飯卷 🍙' },
+            { id: '4', kr: '한국', sound: 'han-guk', meaning: '韓國 🇰🇷' },
+            { id: '5', kr: '안녕', sound: 'an-nyeong', meaning: '你好 / 再見 👋' },
+            { id: '6', kr: '우유', sound: 'u-yu', meaning: '牛奶 🥛' },
+            { id: '7', kr: '친구', sound: 'chin-gu', meaning: '好朋友 👫' },
+            { id: '8', kr: '행복', sound: 'haeng-bok', meaning: '幸福快樂 🍀' },
         ];
 
-        function App() {
-            const [activeTab, setActiveTab] = useState('vowels');
-            const [selectedC, setSelectedC] = useState('ㅇ');
-            const [selectedV, setSelectedV] = useState('ㅏ');
-            const [quizIndex, setQuizIndex] = useState(0);
-            const [score, setScore] = useState(0);
-            const [quizAnswered, setQuizAnswered] = useState(false);
-            const [feedback, setFeedback] = useState('');
-            const [quizFinished, setQuizFinished] = useState(false);
-            const [playerName, setPlayerName] = useState('');
-            const [scoreSubmitted, setScoreSubmitted] = useState(false);
+        // ==================== 2. Unicode 韓文拼音算式 ====================
+        const CHOSEONG = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+        const JUNGSEONG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
+        const JONGSEONG = ['', 'ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
 
-            // Firebase Live State
+        const combineHangul = (c, v, t = '') => {
+            const cIdx = CHOSEONG.indexOf(c);
+            const vIdx = JUNGSEONG.indexOf(v);
+            const tIdx = JONGSEONG.indexOf(t);
+            
+            if (cIdx === -1 || vIdx === -1) return c + v + t;
+            
+            const code = 44032 + (cIdx * 588) + (vIdx * 28) + (tIdx !== -1 ? tIdx : 0);
+            return String.fromCharCode(code);
+        };
+
+        // ==================== 3. 主應用程式組件 ====================
+        function App() {
+            // Navigation tab: 'basic-vowels' | 'compound-vowels' | 'plain-consonants' | 'aspirated-consonants' | 'tense-consonants' | 'batchim-guide' | 'builder' | 'wordbank' | 'quiz'
+            const [activeTab, setActiveTab] = useState('basic-vowels');
+
+            // 拼音積木屋狀態
+            const [selectedC, setSelectedC] = useState('ㅂ');
+            const [selectedV, setSelectedV] = useState('ㅏ');
+            const [selectedT, setSelectedT] = useState('ㅂ'); // 預設 밥 (bap)
+            const [builderConsonantFilter, setBuilderConsonantFilter] = useState('all');
+            const [builderVowelFilter, setBuilderVowelFilter] = useState('all');
+
+            // 雲端與狀態
             const [firebaseConnected, setFirebaseConnected] = useState(false);
-            const [heartCount, setHeartCount] = useState(128);
-            const [leaderboard, setLeaderboard] = useState([]);
+            const [heartCount, setHeartCount] = useState(168);
             const [customWords, setCustomWords] = useState(defaultWords);
             const [newKr, setNewKr] = useState('');
             const [newSound, setNewSound] = useState('');
@@ -131,39 +203,36 @@
             const [isAddingWord, setIsAddingWord] = useState(false);
             const [showPoster, setShowPoster] = useState(false);
 
-            // Initialize Firebase Real-time listeners
+            // 隨堂測驗狀態 (純自我評量，無榮譽榜)
+            const [quizIndex, setQuizIndex] = useState(0);
+            const [score, setScore] = useState(0);
+            const [quizAnswered, setQuizAnswered] = useState(false);
+            const [selectedOption, setSelectedOption] = useState(null);
+            const [feedback, setFeedback] = useState('');
+            const [quizFinished, setQuizFinished] = useState(false);
+
+            // Firebase 實時監聽
             useEffect(() => {
                 if (!db) return;
 
-                // 1. Connection check & Cheers count
+                // 1. 集氣加油讚數
                 const unsubscribeCheers = db.collection('korean_app_stats').doc('cheers')
                     .onSnapshot(doc => {
                         setFirebaseConnected(true);
                         if (doc.exists && doc.data().count !== undefined) {
                             setHeartCount(doc.data().count);
                         } else {
-                            db.collection('korean_app_stats').doc('cheers').set({ count: 128 }, { merge: true });
+                            db.collection('korean_app_stats').doc('cheers').set({ count: 168 }, { merge: true });
                         }
                     }, err => {
                         console.log("Firestore cheers status:", err);
                         setFirebaseConnected(false);
                     });
 
-                // 2. Leaderboard Real-time sync
-                const unsubscribeLeaderboard = db.collection('korean_quiz_leaderboard')
-                    .orderBy('score', 'desc')
-                    .limit(10)
-                    .onSnapshot(snapshot => {
-                        if (snapshot && !snapshot.empty) {
-                            const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                            setLeaderboard(list);
-                        }
-                    }, err => console.log("Leaderboard error:", err));
-
-                // 3. Custom Word Bank Real-time sync
+                // 2. 雲端自學單字庫實時同步
                 const unsubscribeWords = db.collection('korean_custom_words')
                     .orderBy('createdAt', 'desc')
-                    .limit(20)
+                    .limit(30)
                     .onSnapshot(snapshot => {
                         if (snapshot && !snapshot.empty) {
                             const cloudWords = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -179,80 +248,24 @@
 
                 return () => {
                     unsubscribeCheers();
-                    unsubscribeLeaderboard();
                     unsubscribeWords();
                 };
             }, []);
 
-            // Play Korean Audio using Web Speech API
+            // 語音朗讀
             const playSound = (text) => {
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.lang = 'ko-KR';
-                    utterance.rate = 0.85; // slightly slower for clear hearing
+                    utterance.rate = 0.85;
                     window.speechSynthesis.speak(utterance);
                 } else {
                     alert("您的瀏覽器暫時不支援語音朗讀，建議使用 Chrome / Safari 瀏覽！");
                 }
             };
 
-            // Combine consonant and vowel into a block
-            const combineSyllable = (c, v) => {
-                const cMap = { 'ㄱ': 0, 'ㄴ': 2, 'ㄷ': 3, 'ㅁ': 6, 'ㅇ': 11 };
-                const vMap = { 'ㅏ': 0, 'ㅓ': 4, 'ㅗ': 8, 'ㅜ': 13, 'ㅡ': 18, 'ㅣ': 20 };
-                
-                const cIdx = cMap[c] !== undefined ? cMap[c] : 11;
-                const vIdx = vMap[v] !== undefined ? vMap[v] : 0;
-                
-                // Unicode Hangul Syllables calculation formula
-                const code = 44032 + (cIdx * 588) + (vIdx * 28);
-                return String.fromCharCode(code);
-            };
-
-            const currentSyllable = combineSyllable(selectedC, selectedV);
-
-            // Quiz questions generator
-            const quizQuestions = [
-                { q: 'Hello Kitty 伸手向右打招呼（ㅏ），發音是什麼？', options: ['呀 (a)', '柯 (eo)', '屋 (u)', '衣 (i)'], correct: 0 },
-                { q: '美樂蒂 🐰 雙耳朝天的字母是哪一個？', options: ['ㅜ', 'ㅗ', 'ㅡ', 'ㅣ'], correct: 1 },
-                { q: 'Kuromi 😈 的傲嬌一字嘴（ㅡ），發音口型是？', options: ['嘴巴嘟圓', '牙齒咬合拉平', '嘴巴大張', '吐舌頭'], correct: 1 },
-                { q: '無聲的珍珠圓圈子音「ㅇ」加上「ㅏ」，會拼出什麼音？', options: ['O', 'A (呀)', 'U', 'I'], correct: 1 },
-                { q: '「오이 (O-i)」在韓文中是什麼意思？', options: ['小孩子', '黃瓜/青瓜', '牛奶', '樹木'], correct: 1 },
-            ];
-
-            const handleQuizOption = (index) => {
-                if (quizAnswered) return;
-                setQuizAnswered(true);
-                if (index === quizQuestions[quizIndex].correct) {
-                    setScore(prev => prev + 20);
-                    setFeedback('🎉 答對了！Kitty 讚你太棒了！');
-                    playSound('참 잘했어요'); // Good job in Korean
-                } else {
-                    setFeedback('💖 沒關係，再試一次！加油！');
-                }
-            };
-
-            const nextQuestion = () => {
-                setQuizAnswered(false);
-                setFeedback('');
-                if (quizIndex < quizQuestions.length - 1) {
-                    setQuizIndex(quizIndex + 1);
-                } else {
-                    setQuizFinished(true);
-                }
-            };
-
-            const restartQuiz = () => {
-                setQuizIndex(0);
-                setScore(0);
-                setQuizAnswered(false);
-                setFeedback('');
-                setQuizFinished(false);
-                setScoreSubmitted(false);
-            };
-
-            // Firebase: Send Cheers Like
+            // Firebase 集氣按讚
             const handleAddHeart = async () => {
                 setHeartCount(prev => prev + 1);
                 if (db) {
@@ -267,29 +280,7 @@
                 }
             };
 
-            // Firebase: Submit Quiz Score to Leaderboard
-            const submitScore = async (e) => {
-                e.preventDefault();
-                const name = playerName.trim() || '可愛小萌友';
-                if (db) {
-                    try {
-                        await db.collection('korean_quiz_leaderboard').add({
-                            name: name,
-                            score: score,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            dateStr: new Date().toLocaleDateString('zh-TW')
-                        });
-                        setScoreSubmitted(true);
-                    } catch (err) {
-                        console.error("Score submit error:", err);
-                        setScoreSubmitted(true);
-                    }
-                } else {
-                    setScoreSubmitted(true);
-                }
-            };
-
-            // Firebase: Add Custom Vocabulary to Cloud
+            // 新增自學單字
             const handleAddCustomWord = async (e) => {
                 e.preventDefault();
                 if (!newKr.trim()) return;
@@ -317,11 +308,71 @@
                 setIsAddingWord(false);
             };
 
+            // 隨堂測驗題目
+            const quizQuestions = [
+                { q: 'Hello Kitty 伸手向右打招呼（ㅏ），發音是什麼？', options: ['呀 (a)', '柯 (eo)', '屋 (u)', '衣 (i)'], correct: 0 },
+                { q: '美樂蒂 🐰 雙耳朝天的母音是哪一個？', options: ['ㅜ', 'ㅗ', 'ㅡ', 'ㅣ'], correct: 1 },
+                { q: '複合母音「ㅘ」是由哪兩個母音組合而成的？', options: ['ㅗ + ㅏ', 'ㅜ + ㅓ', 'ㅡ + ㅣ', 'ㅏ + ㅣ'], correct: 0 },
+                { q: '帶有送氣噴氣效果的激音子音是哪一個？', options: ['ㄱ', 'ㄴ', 'ㅋ', 'ㅁ'], correct: 2 },
+                { q: '收音「밥 (bap - 飯)」底部的尾音「ㅂ」，發音口型技巧是？', options: ['大張嘴巴', '雙唇緊閉收氣不爆破', '伸出舌頭', '用力發出鼻音'], correct: 1 },
+                { q: '「사랑 (sa-rang)」在韓文中是什麼意思？', options: ['牛奶 🥛', '朋友 👫', '愛情 / 喜愛 💖', '紫菜飯卷 🍙'], correct: 2 },
+            ];
+
+            const handleQuizOption = (index) => {
+                if (quizAnswered) return;
+                setSelectedOption(index);
+                setQuizAnswered(true);
+                if (index === quizQuestions[quizIndex].correct) {
+                    setScore(prev => prev + 20);
+                    setFeedback('🎉 太棒了！答對了！');
+                    playSound('참 잘했어요');
+                } else {
+                    setFeedback('💖 沒關係！再看看口訣加深印象！');
+                }
+            };
+
+            const nextQuestion = () => {
+                setQuizAnswered(false);
+                setSelectedOption(null);
+                setFeedback('');
+                if (quizIndex < quizQuestions.length - 1) {
+                    setQuizIndex(quizIndex + 1);
+                } else {
+                    setQuizFinished(true);
+                }
+            };
+
+            const restartQuiz = () => {
+                setQuizIndex(0);
+                setScore(0);
+                setQuizAnswered(false);
+                setSelectedOption(null);
+                setFeedback('');
+                setQuizFinished(false);
+            };
+
+            // 當前拼音積木屋合成文字
+            const currentSyllable = combineHangul(selectedC, selectedV, selectedT);
+            const withoutBatchim = combineHangul(selectedC, selectedV, '');
+
+            // 導覽標籤清單
+            const navTabs = [
+                { id: 'basic-vowels', label: '🐱 基礎母音', color: 'bg-rose-400' },
+                { id: 'compound-vowels', label: '🐰 複合母音', color: 'bg-pink-400' },
+                { id: 'plain-consonants', label: '🐶 基礎平音', color: 'bg-amber-400' },
+                { id: 'aspirated-consonants', label: '⚡ 激音 (送氣)', color: 'bg-cyan-500' },
+                { id: 'tense-consonants', label: '💥 硬音 (雙子音)', color: 'bg-red-400' },
+                { id: 'batchim-guide', label: '🧱 7大收音教學', color: 'bg-emerald-500' },
+                { id: 'builder', label: '🧩 3層拼音積木屋', color: 'bg-sky-500' },
+                { id: 'wordbank', label: '☁️ 雲端自學單字庫', color: 'bg-indigo-500' },
+                { id: 'quiz', label: '⭐ 隨堂星級挑戰', color: 'bg-purple-400' },
+            ];
+
             return (
-                <div className="max-w-4xl mx-auto px-4 pt-6">
+                <div className="max-w-5xl mx-auto px-4 pt-6">
                     {/* Header */}
-                    <header className="text-center mb-6 bg-white/90 backdrop-blur rounded-3xl p-6 shadow-sm border border-rose-100 relative">
-                        {/* Firebase Cloud Connection Badge */}
+                    <header className="text-center mb-6 bg-white/95 backdrop-blur rounded-3xl p-6 shadow-sm border border-rose-100 relative">
+                        {/* Firebase 狀態徽章 */}
                         <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full text-xs text-rose-600 shadow-xs">
                             <span className={`w-2.5 h-2.5 rounded-full ${firebaseConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`}></span>
                             <span>{firebaseConnected ? 'Firebase 雲端已連線' : '本機模式'}</span>
@@ -334,9 +385,9 @@
                             </h1>
                             <span className="text-3xl">🎀</span>
                         </div>
-                        <p className="text-gray-500 text-sm">圖像聯想 + 輕鬆發音 + 積木拼音 + Firebase 即時互動 ＝ 快樂學韓文</p>
+                        <p className="text-gray-500 text-sm">全套字母庫 + 3層收音 (Batchim) 積木 + 廣東話口訣 + Firebase 雲端自學</p>
 
-                        {/* Real-time Cheer Bar */}
+                        {/* 集氣加油按鈕 */}
                         <div className="mt-4 flex justify-center items-center gap-3">
                             <button
                                 onClick={handleAddHeart}
@@ -348,21 +399,15 @@
                         </div>
                     </header>
 
-                    {/* Navigation Tabs */}
-                    <nav className="flex justify-center gap-2 md:gap-4 mb-8 flex-wrap">
-                        {[
-                            { id: 'vowels', label: '🐱 6大基礎母音', color: 'bg-rose-400' },
-                            { id: 'consonants', label: '🐶 基礎子音積木', color: 'bg-amber-400' },
-                            { id: 'builder', label: '🧩 拼音積木屋', color: 'bg-sky-400' },
-                            { id: 'quiz', label: '⭐ Sanrio 星級挑戰', color: 'bg-purple-400' },
-                            { id: 'leaderboard', label: '🏆 雲端榮譽榜', color: 'bg-emerald-400' },
-                        ].map(tab => (
+                    {/* 獨立分類 Navigation Tabs */}
+                    <nav className="flex justify-center gap-1.5 md:gap-2.5 mb-8 flex-wrap">
+                        {navTabs.map(tab => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`px-4 py-2.5 rounded-2xl text-sm font-semibold transition-all duration-200 shadow-sm ${
+                                className={`px-3.5 py-2 rounded-2xl text-xs md:text-sm font-semibold transition-all duration-200 shadow-xs ${
                                     activeTab === tab.id 
-                                    ? `${tab.color} text-white scale-105 shadow-md` 
+                                    ? `${tab.color} text-white scale-105 shadow-md font-bold` 
                                     : 'bg-white text-gray-600 hover:bg-rose-50'
                                 }`}
                             >
@@ -371,10 +416,10 @@
                         ))}
                     </nav>
 
-                    {/* Tab 1: Vowels Flashcards */}
-                    {activeTab === 'vowels' && (
+                    {/* ==================== 頁面 1: 🐱 基礎母音 ==================== */}
+                    {activeTab === 'basic-vowels' && (
                         <div className="space-y-6">
-                            {/* Visual Poster Banner */}
+                            {/* 海報提示條 */}
                             <div className="bg-gradient-to-r from-rose-100 via-pink-50 to-purple-100 border border-rose-200 rounded-3xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
                                 <div className="flex items-center gap-3 text-center sm:text-left">
                                     <span className="text-3xl">🖼️</span>
@@ -392,19 +437,19 @@
                                 </button>
                             </div>
 
-                            {/* Modal for Full Poster */}
+                            {/* 海報彈窗 */}
                             {showPoster && (
                                 <div 
                                     className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
                                     onClick={() => setShowPoster(false)}
                                 >
                                     <div 
-                                        className="bg-white rounded-3xl p-4 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-2xl animate-fade-in"
+                                        className="bg-white rounded-3xl p-4 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-2xl"
                                         onClick={e => e.stopPropagation()}
                                     >
                                         <button 
                                             onClick={() => setShowPoster(false)}
-                                            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center text-sm font-bold z-10 transition-colors"
+                                            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center text-sm font-bold z-10"
                                         >
                                             ✕
                                         </button>
@@ -420,400 +465,671 @@
                                 </div>
                             )}
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {vowels.map((item, idx) => (
-                                <div 
-                                    key={idx}
-                                    className={`sanrio-card bg-white p-6 rounded-3xl border-2 ${item.color.split(' ')[1]} shadow-sm flex flex-col justify-between relative overflow-hidden`}
-                                >
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div>
-                                            <span className="text-xs font-bold px-3 py-1 rounded-full bg-white/80 shadow-xs border border-gray-100 text-gray-500">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                                {basicVowels.map((item, idx) => (
+                                    <div 
+                                        key={idx}
+                                        className={`sanrio-card bg-white p-5 rounded-3xl border-2 ${item.color.split(' ')[0]} shadow-xs flex flex-col justify-between`}
+                                    >
+                                        <div className="flex justify-between items-start mb-3">
+                                            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-white/90 shadow-xs border border-gray-100 text-gray-600">
                                                 {item.character}
                                             </span>
-                                            <p className="text-xs text-gray-400 mt-2">廣東話近似音：{item.cantonese}</p>
+                                            <button 
+                                                onClick={() => playSound(item.char)}
+                                                className="w-10 h-10 rounded-2xl bg-rose-50 text-rose-500 hover:bg-rose-100 flex items-center justify-center text-lg transition-all shadow-xs active:scale-95"
+                                                title="點擊聽發音"
+                                            >
+                                                🔊
+                                            </button>
                                         </div>
-                                        <button 
-                                            onClick={() => playSound(item.char)}
-                                            className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 hover:bg-rose-100 flex items-center justify-center text-xl transition-all shadow-xs active:scale-95"
-                                            title="點擊聽發音"
-                                        >
-                                            🔊
-                                        </button>
-                                    </div>
 
-                                    <div className="flex items-center justify-center my-2 gap-4">
-                                        <span className="kr-font text-6xl font-bold text-gray-800">{item.char}</span>
-                                        <div className="text-left">
-                                            <span className="text-2xl font-bold text-rose-400">/{item.name}/</span>
-                                            <p className="text-xs text-gray-500 mt-1">{item.icon} 可愛視覺記法</p>
+                                        <div className="flex items-center justify-center my-2 gap-3">
+                                            <span className="kr-font text-5xl font-bold text-gray-800">{item.char}</span>
+                                            <div className="text-left">
+                                                <span className="text-xl font-bold text-rose-400">/{item.name}/</span>
+                                                <p className="text-xs text-gray-500 mt-0.5">口訣：{item.cantonese}</p>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <p className="text-sm text-gray-600 bg-rose-50/50 p-3 rounded-2xl mt-3 text-center border border-rose-100">
-                                        {item.desc}
-                                    </p>
-                                </div>
-                            ))}
+                                        <p className="text-xs text-gray-600 bg-rose-50/50 p-2.5 rounded-2xl mt-2 text-center border border-rose-100">
+                                            {item.desc}
+                                        </p>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}
 
-                    {/* Tab 2: Consonants */}
-                    {activeTab === 'consonants' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {consonants.map((item, idx) => (
-                                <div 
-                                    key={idx}
-                                    className="sanrio-card bg-white p-6 rounded-3xl border-2 border-amber-200 shadow-sm flex flex-col justify-between"
-                                >
-                                    <div className="flex justify-between items-start mb-4">
-                                        <span className="text-xs font-bold px-3 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-100">
-                                            {item.character}
-                                        </span>
-                                        <button 
-                                            onClick={() => playSound(item.char === 'ㅇ' ? '아' : item.char)}
-                                            className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 hover:bg-amber-100 flex items-center justify-center text-xl transition-all shadow-xs active:scale-95"
-                                            title="點擊聽發音"
-                                        >
-                                            🔊
-                                        </button>
-                                    </div>
+                    {/* ==================== 頁面 2: 🐰 複合母音 ==================== */}
+                    {activeTab === 'compound-vowels' && (
+                        <div className="space-y-6">
+                            <div className="bg-pink-50 border border-pink-200 rounded-3xl p-4 text-center">
+                                <h3 className="font-bold text-pink-600 text-base mb-1">🎨 11 大複合母音（雙母音調色盤）</h3>
+                                <p className="text-xs text-gray-600">由基礎母音融合調配而成，掌握「滑音」與「口型過渡」口訣，發音超輕鬆！</p>
+                            </div>
 
-                                    <div className="flex items-center justify-center my-2 gap-4">
-                                        <span className="kr-font text-6xl font-bold text-gray-800">{item.char}</span>
-                                        <div className="text-left">
-                                            <span className="text-2xl font-bold text-amber-500">[{item.name}]</span>
-                                            <p className="text-xs text-gray-400 mt-1">{item.cantonese}</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                                {compoundVowels.map((item, idx) => (
+                                    <div 
+                                        key={idx}
+                                        className={`sanrio-card bg-white p-5 rounded-3xl border-2 ${item.color.split(' ')[0]} shadow-xs flex flex-col justify-between`}
+                                    >
+                                        <div className="flex justify-between items-start mb-3">
+                                            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-pink-50 text-pink-600 border border-pink-100">
+                                                {item.character}
+                                            </span>
+                                            <button 
+                                                onClick={() => playSound(item.char)}
+                                                className="w-10 h-10 rounded-2xl bg-pink-50 text-pink-500 hover:bg-pink-100 flex items-center justify-center text-lg transition-all shadow-xs active:scale-95"
+                                                title="點擊聽發音"
+                                            >
+                                                🔊
+                                            </button>
                                         </div>
-                                    </div>
 
-                                    <p className="text-sm text-gray-600 bg-amber-50/50 p-3 rounded-2xl mt-3 text-center border border-amber-100">
-                                        {item.desc}
-                                    </p>
-                                </div>
-                            ))}
+                                        <div className="flex items-center justify-center my-2 gap-3">
+                                            <span className="kr-font text-5xl font-bold text-gray-800">{item.char}</span>
+                                            <div className="text-left">
+                                                <span className="text-xl font-bold text-pink-500">/{item.name}/</span>
+                                                <span className="inline-block text-[11px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-md font-mono mt-0.5">{item.formula}</span>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-xs text-gray-600 bg-pink-50/50 p-2.5 rounded-2xl mt-2 text-center border border-pink-100">
+                                            廣東話：<strong>{item.cantonese}</strong><br/>{item.desc}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
-                    {/* Tab 3: Interactive Syllable Builder & Word Bank */}
+                    {/* ==================== 頁面 3: 🐶 基礎平音 ==================== */}
+                    {activeTab === 'plain-consonants' && (
+                        <div className="space-y-6">
+                            <div className="bg-amber-50 border border-amber-200 rounded-3xl p-4 text-center">
+                                <h3 className="font-bold text-amber-700 text-base mb-1">🐶 10 大基礎平音子音積木</h3>
+                                <p className="text-xs text-gray-600">韓文拼音的基石聲母，發音自然放鬆，結合日常生活形狀與 Sanrio 形象記憶！</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                                {plainConsonants.map((item, idx) => (
+                                    <div 
+                                        key={idx}
+                                        className={`sanrio-card bg-white p-5 rounded-3xl border-2 ${item.color.split(' ')[0]} shadow-xs flex flex-col justify-between`}
+                                    >
+                                        <div className="flex justify-between items-start mb-3">
+                                            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100">
+                                                {item.character}
+                                            </span>
+                                            <button 
+                                                onClick={() => playSound(item.char === 'ㅇ' ? '아' : item.char)}
+                                                className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 hover:bg-amber-100 flex items-center justify-center text-lg transition-all shadow-xs active:scale-95"
+                                                title="點擊聽發音"
+                                            >
+                                                🔊
+                                            </button>
+                                        </div>
+
+                                        <div className="flex items-center justify-center my-2 gap-3">
+                                            <span className="kr-font text-5xl font-bold text-gray-800">{item.char}</span>
+                                            <div className="text-left">
+                                                <span className="text-xl font-bold text-amber-600">[{item.name}]</span>
+                                                <p className="text-xs text-gray-500 mt-0.5">口訣：{item.cantonese}</p>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-xs text-gray-600 bg-amber-50/50 p-2.5 rounded-2xl mt-2 text-center border border-amber-100">
+                                            {item.desc}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ==================== 頁面 4: ⚡ 激音 (送氣音) ==================== */}
+                    {activeTab === 'aspirated-consonants' && (
+                        <div className="space-y-6">
+                            <div className="bg-cyan-50 border border-cyan-200 rounded-3xl p-4 text-center">
+                                <h3 className="font-bold text-cyan-800 text-base mb-1">⚡ 4 大激音（送氣音・噴氣爆破）</h3>
+                                <p className="text-xs text-cyan-700">拿出一張薄紙放在嘴前，發出激音時紙張會被強烈氣流吹動！</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
+                                {aspiratedConsonants.map((item, idx) => (
+                                    <div 
+                                        key={idx}
+                                        className={`sanrio-card bg-white p-6 rounded-3xl border-2 ${item.color.split(' ')[0]} shadow-xs flex flex-col justify-between`}
+                                    >
+                                        <div className="flex justify-between items-start mb-3">
+                                            <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-100 text-cyan-800 border border-cyan-200">
+                                                {item.character}
+                                            </span>
+                                            <button 
+                                                onClick={() => playSound(item.char)}
+                                                className="w-11 h-11 rounded-2xl bg-cyan-50 text-cyan-600 hover:bg-cyan-100 flex items-center justify-center text-xl transition-all shadow-xs active:scale-95"
+                                                title="點擊聽發音"
+                                            >
+                                                🔊
+                                            </button>
+                                        </div>
+
+                                        <div className="flex items-center justify-center my-3 gap-4">
+                                            <span className="kr-font text-6xl font-bold text-gray-800">{item.char}</span>
+                                            <div className="text-left">
+                                                <span className="text-2xl font-bold text-cyan-600">[{item.name}]</span>
+                                                <span className="block text-xs bg-cyan-50 text-cyan-700 px-2 py-0.5 rounded font-mono mt-1">{item.base}</span>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-xs text-gray-600 bg-cyan-50/50 p-3 rounded-2xl mt-2 text-center border border-cyan-100">
+                                            廣東話諧音：<strong>{item.cantonese}</strong><br/>{item.desc}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ==================== 頁面 5: 💥 硬音 (雙子音) ==================== */}
+                    {activeTab === 'tense-consonants' && (
+                        <div className="space-y-6">
+                            <div className="bg-red-50 border border-red-200 rounded-3xl p-4 text-center">
+                                <h3 className="font-bold text-red-700 text-base mb-1">💥 5 大硬音（雙子音・緊喉不送氣）</h3>
+                                <p className="text-xs text-red-600">喉嚨肌肉收緊、不送出氣流，發出結實短促的音調！</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                                {tenseConsonants.map((item, idx) => (
+                                    <div 
+                                        key={idx}
+                                        className={`sanrio-card bg-white p-5 rounded-3xl border-2 ${item.color.split(' ')[0]} shadow-xs flex flex-col justify-between`}
+                                    >
+                                        <div className="flex justify-between items-start mb-3">
+                                            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-red-100 text-red-700 border border-red-200">
+                                                {item.character}
+                                            </span>
+                                            <button 
+                                                onClick={() => playSound(item.char)}
+                                                className="w-10 h-10 rounded-2xl bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center text-lg transition-all shadow-xs active:scale-95"
+                                                title="點擊聽發音"
+                                            >
+                                                🔊
+                                            </button>
+                                        </div>
+
+                                        <div className="flex items-center justify-center my-2 gap-3">
+                                            <span className="kr-font text-5xl font-bold text-gray-800">{item.char}</span>
+                                            <div className="text-left">
+                                                <span className="text-xl font-bold text-red-600">[{item.name}]</span>
+                                                <p className="text-xs text-gray-500 mt-0.5">口訣：{item.cantonese}</p>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-xs text-gray-600 bg-red-50/50 p-2.5 rounded-2xl mt-2 text-center border border-red-100">
+                                            {item.desc}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ==================== 頁面 6: 🧱 7 大代表收音教學 ==================== */}
+                    {activeTab === 'batchim-guide' && (
+                        <div className="space-y-6">
+                            <div className="bg-emerald-50 border border-emerald-200 rounded-3xl p-5 text-center">
+                                <h3 className="font-bold text-emerald-800 text-base md:text-lg mb-1">🧱 7 大代表收音（Batchim 받침）教學</h3>
+                                <p className="text-xs md:text-sm text-emerald-700 max-w-2xl mx-auto">
+                                    韓語字底下的尾音稱為「收音（받침）」。雖然寫法有 27 種，但實際讀音歸納為 <strong>7 大代表音</strong>！就像廣東話的入聲與鼻音韻尾一樣親切！
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                {batchimGuide.map((item, idx) => (
+                                    <div 
+                                        key={idx}
+                                        className="sanrio-card bg-white p-5 rounded-3xl border-2 border-emerald-200 shadow-xs flex flex-col justify-between"
+                                    >
+                                        <div className="flex justify-between items-start mb-3">
+                                            <div className="flex items-center gap-2">
+                                                <span className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-base kr-font">
+                                                    {item.rep}
+                                                </span>
+                                                <div>
+                                                    <span className="text-xs font-bold text-emerald-700">代表尾音：{item.sound}</span>
+                                                    <p className="text-[11px] text-gray-400">口型：{item.cantonese}</p>
+                                                </div>
+                                            </div>
+                                            <button 
+                                                onClick={() => playSound(item.example.split(' ')[0])}
+                                                className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 hover:bg-emerald-100 flex items-center justify-center text-lg transition-all shadow-xs active:scale-95"
+                                                title="點擊聽範例單字發音"
+                                            >
+                                                🔊
+                                            </button>
+                                        </div>
+
+                                        <div className="bg-emerald-50/60 p-3 rounded-2xl my-2 border border-emerald-100 flex justify-between items-center">
+                                            <div>
+                                                <span className="text-xs text-gray-500">家族成員：</span>
+                                                <div className="flex gap-1 mt-1 flex-wrap">
+                                                    {item.members.map((m, mi) => (
+                                                        <span key={mi} className="kr-font text-xs bg-white px-2 py-0.5 rounded border border-emerald-200 font-bold text-gray-700">
+                                                            {m}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <div className="text-right">
+                                                <span className="kr-font text-xl font-bold text-emerald-700">{item.example}</span>
+                                                <p className="text-[11px] text-gray-500">{item.meaning}</p>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-xs text-gray-600 mt-2">
+                                            {item.desc}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ==================== 頁面 7: 🧩 3層拼音積木屋 (Batchim 升級) ==================== */}
                     {activeTab === 'builder' && (
                         <div className="space-y-6">
-                            {/* Builder Box */}
                             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-sky-100">
-                                <h2 className="text-xl font-bold text-sky-600 text-center mb-6 flex items-center justify-center gap-2">
-                                    <span>🧩</span> 拼音積木組合屋
+                                <h2 className="text-xl font-bold text-sky-600 text-center mb-2 flex items-center justify-center gap-2">
+                                    <span>🧩</span> 3 層立體收音拼音積木屋
                                 </h2>
+                                <p className="text-xs text-gray-400 text-center mb-6">初聲 (子音) ＋ 中聲 (母音) ＋ 終聲 (收音) ＝ 11,172 種全能韓語發音組合</p>
 
-                                {/* Combiner Display */}
+                                {/* 3D 積木立體展示台 */}
                                 <div className="flex flex-col items-center mb-8">
-                                    <div className="bg-gradient-to-b from-sky-50 to-indigo-50 border-2 border-sky-200 p-8 rounded-3xl flex flex-col items-center w-64 shadow-inner relative">
-                                        <div className="flex items-center gap-4 text-3xl text-sky-400 mb-2">
-                                            <span className="kr-font font-bold text-gray-700 bg-white px-3 py-1 rounded-xl shadow-xs">{selectedC}</span>
-                                            <span>+</span>
-                                            <span className="kr-font font-bold text-gray-700 bg-white px-3 py-1 rounded-xl shadow-xs">{selectedV}</span>
-                                        </div>
-                                        <span className="text-xs text-gray-400 mb-4">點擊下方積木隨意切換</span>
+                                    <div className="bg-gradient-to-b from-sky-50 via-indigo-50 to-pink-50 border-2 border-sky-200 p-6 md:p-8 rounded-3xl flex flex-col items-center w-full max-w-sm block-shadow relative">
+                                        
+                                        {/* 積木分解圖示 */}
+                                        <div className="flex flex-col items-center gap-1.5 mb-4">
+                                            <div className="flex gap-2">
+                                                <div className="flex flex-col items-center">
+                                                    <span className="text-[10px] text-amber-600 font-bold mb-0.5">初聲(子音)</span>
+                                                    <span className="kr-font font-bold text-gray-800 bg-amber-100 border border-amber-300 w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-xs">
+                                                        {selectedC}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center text-sky-400 text-xl font-bold">+</div>
+                                                <div className="flex flex-col items-center">
+                                                    <span className="text-[10px] text-rose-600 font-bold mb-0.5">中聲(母音)</span>
+                                                    <span className="kr-font font-bold text-gray-800 bg-rose-100 border border-rose-300 w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-xs">
+                                                        {selectedV}
+                                                    </span>
+                                                </div>
+                                            </div>
 
-                                        {/* Result Syllable */}
-                                        <div className="bg-white rounded-2xl w-32 h-32 flex items-center justify-center shadow-md border-2 border-sky-300 my-2">
-                                            <span className="kr-font text-6xl font-bold text-sky-500">{currentSyllable}</span>
+                                            {/* 終聲收音積木托盤 */}
+                                            <div className="flex items-center text-sky-400 text-sm font-bold">+</div>
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-[10px] text-emerald-600 font-bold mb-0.5">終聲(收音/尾音)</span>
+                                                <span className="kr-font font-bold text-gray-800 bg-emerald-100 border border-emerald-300 w-24 h-9 rounded-xl flex items-center justify-center text-xl shadow-xs">
+                                                    {selectedT ? selectedT : '(無收音)'}
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <button 
-                                            onClick={() => playSound(currentSyllable)}
-                                            className="mt-4 px-6 py-2.5 bg-sky-400 hover:bg-sky-500 text-white rounded-2xl font-bold shadow-md flex items-center gap-2 transition-transform active:scale-95"
-                                        >
-                                            <span>🔊 點我聽發音</span>
-                                        </button>
+                                        {/* 合成大字展示 */}
+                                        <div className="bg-white rounded-2xl w-36 h-36 flex items-center justify-center shadow-lg border-2 border-sky-300 my-2 active-block-shadow">
+                                            <span className="kr-font text-7xl font-bold text-sky-600">{currentSyllable}</span>
+                                        </div>
+
+                                        {/* 發音按鈕組 */}
+                                        <div className="flex gap-2 mt-4 flex-wrap justify-center">
+                                            <button 
+                                                onClick={() => playSound(currentSyllable)}
+                                                className="px-5 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-2xl font-bold shadow-md flex items-center gap-2 transition-transform active:scale-95 text-sm"
+                                            >
+                                                <span>🔊 聽發音 【 {currentSyllable} 】</span>
+                                            </button>
+
+                                            {selectedT && (
+                                                <button 
+                                                    onClick={() => playSound(withoutBatchim)}
+                                                    className="px-3.5 py-2 bg-white hover:bg-sky-50 text-sky-600 border border-sky-200 rounded-2xl font-semibold shadow-xs flex items-center gap-1.5 transition-transform active:scale-95 text-xs"
+                                                    title="對比無收音發音"
+                                                >
+                                                    <span>無尾音【 {withoutBatchim} 】</span>
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Selectors */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {/* Consonants Selection */}
-                                    <div className="bg-amber-50/60 p-4 rounded-2xl border border-amber-200">
-                                        <h3 className="text-xs font-bold text-amber-600 mb-3 text-center">1. 選擇聲母 (子音積木)</h3>
-                                        <div className="flex justify-center gap-2 flex-wrap">
-                                            {consonants.map(c => (
+                                {/* 積木選單區 */}
+                                <div className="space-y-6">
+                                    
+                                    {/* 1. 初聲子音選擇 */}
+                                    <div className="bg-amber-50/70 p-4 md:p-5 rounded-3xl border border-amber-200">
+                                        <div className="flex justify-between items-center mb-3 flex-wrap gap-2">
+                                            <h3 className="text-xs md:text-sm font-bold text-amber-800">
+                                                1. 選擇【初聲】子音積木（目前：<strong className="text-base text-amber-600">{selectedC}</strong>）
+                                            </h3>
+                                            <div className="flex gap-1">
+                                                {[
+                                                    { id: 'all', label: '全部(19)' },
+                                                    { id: 'plain', label: '平音' },
+                                                    { id: 'aspirated', label: '激音' },
+                                                    { id: 'tense', label: '硬音' },
+                                                ].map(f => (
+                                                    <button
+                                                        key={f.id}
+                                                        onClick={() => setBuilderConsonantFilter(f.id)}
+                                                        className={`text-[11px] px-2 py-0.5 rounded-lg font-semibold ${
+                                                            builderConsonantFilter === f.id
+                                                            ? 'bg-amber-500 text-white'
+                                                            : 'bg-white text-gray-600 border border-amber-200'
+                                                        }`}
+                                                    >
+                                                        {f.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex gap-1.5 flex-wrap">
+                                            {CHOSEONG.filter(c => {
+                                                if (builderConsonantFilter === 'plain') return plainConsonants.some(p => p.char === c);
+                                                if (builderConsonantFilter === 'aspirated') return aspiratedConsonants.some(p => p.char === c);
+                                                if (builderConsonantFilter === 'tense') return tenseConsonants.some(p => p.char === c);
+                                                return true;
+                                            }).map(c => (
                                                 <button
-                                                    key={c.char}
-                                                    onClick={() => setSelectedC(c.char)}
-                                                    className={`w-12 h-12 rounded-xl text-xl font-bold kr-font transition-all ${
-                                                        selectedC === c.char 
-                                                        ? 'bg-amber-400 text-white shadow-md scale-110' 
-                                                        : 'bg-white text-gray-700 hover:bg-amber-100'
+                                                    key={c}
+                                                    onClick={() => setSelectedC(c)}
+                                                    className={`w-10 h-10 md:w-11 md:h-11 rounded-xl text-lg font-bold kr-font transition-all ${
+                                                        selectedC === c 
+                                                        ? 'bg-amber-500 text-white shadow-md scale-110' 
+                                                        : 'bg-white text-gray-700 hover:bg-amber-100 border border-amber-200'
                                                     }`}
                                                 >
-                                                    {c.char}
+                                                    {c}
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
 
-                                    {/* Vowels Selection */}
-                                    <div className="bg-rose-50/60 p-4 rounded-2xl border border-rose-200">
-                                        <h3 className="text-xs font-bold text-rose-600 mb-3 text-center">2. 選擇韻母 (母音積木)</h3>
-                                        <div className="flex justify-center gap-2 flex-wrap">
-                                            {vowels.map(v => (
+                                    {/* 2. 中聲母音選擇 */}
+                                    <div className="bg-rose-50/70 p-4 md:p-5 rounded-3xl border border-rose-200">
+                                        <div className="flex justify-between items-center mb-3 flex-wrap gap-2">
+                                            <h3 className="text-xs md:text-sm font-bold text-rose-800">
+                                                2. 選擇【中聲】母音積木（目前：<strong className="text-base text-rose-600">{selectedV}</strong>）
+                                            </h3>
+                                            <div className="flex gap-1">
+                                                {[
+                                                    { id: 'all', label: '全部(21)' },
+                                                    { id: 'basic', label: '基礎母音' },
+                                                    { id: 'compound', label: '複合母音' },
+                                                ].map(f => (
+                                                    <button
+                                                        key={f.id}
+                                                        onClick={() => setBuilderVowelFilter(f.id)}
+                                                        className={`text-[11px] px-2 py-0.5 rounded-lg font-semibold ${
+                                                            builderVowelFilter === f.id
+                                                            ? 'bg-rose-500 text-white'
+                                                            : 'bg-white text-gray-600 border border-rose-200'
+                                                        }`}
+                                                    >
+                                                        {f.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex gap-1.5 flex-wrap">
+                                            {JUNGSEONG.filter(v => {
+                                                if (builderVowelFilter === 'basic') return basicVowels.some(b => b.char === v);
+                                                if (builderVowelFilter === 'compound') return compoundVowels.some(b => b.char === v);
+                                                return true;
+                                            }).map(v => (
                                                 <button
-                                                    key={v.char}
-                                                    onClick={() => setSelectedV(v.char)}
-                                                    className={`w-12 h-12 rounded-xl text-xl font-bold kr-font transition-all ${
-                                                        selectedV === v.char 
-                                                        ? 'bg-rose-400 text-white shadow-md scale-110' 
-                                                        : 'bg-white text-gray-700 hover:bg-rose-100'
+                                                    key={v}
+                                                    onClick={() => setSelectedV(v)}
+                                                    className={`w-10 h-10 md:w-11 md:h-11 rounded-xl text-lg font-bold kr-font transition-all ${
+                                                        selectedV === v 
+                                                        ? 'bg-rose-500 text-white shadow-md scale-110' 
+                                                        : 'bg-white text-gray-700 hover:bg-rose-100 border border-rose-200'
                                                     }`}
                                                 >
-                                                    {v.char}
+                                                    {v}
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
+
+                                    {/* 3. 終聲收音選擇 */}
+                                    <div className="bg-emerald-50/70 p-4 md:p-5 rounded-3xl border border-emerald-200">
+                                        <div className="flex justify-between items-center mb-3 flex-wrap gap-2">
+                                            <h3 className="text-xs md:text-sm font-bold text-emerald-800">
+                                                3. 選擇【終聲】收音積木（目前：<strong className="text-base text-emerald-600">{selectedT ? selectedT : '無收音'}</strong>）
+                                            </h3>
+                                            <button
+                                                onClick={() => setSelectedT('')}
+                                                className={`text-[11px] px-3 py-1 rounded-lg font-bold transition-all ${
+                                                    selectedT === ''
+                                                    ? 'bg-emerald-600 text-white shadow-xs'
+                                                    : 'bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-100'
+                                                }`}
+                                            >
+                                                ❌ 清空收音 (無尾音)
+                                            </button>
+                                        </div>
+
+                                        {/* 常用 7 大代表收音快捷列 */}
+                                        <div className="mb-2.5">
+                                            <span className="text-[11px] text-emerald-700 font-semibold mb-1 block">⭐ 7 大代表收音快捷選取：</span>
+                                            <div className="flex gap-1.5 flex-wrap">
+                                                {['ㅇ', 'ㅁ', 'ㄴ', 'ㄹ', 'ㅂ', 'ㄱ', 'ㄷ'].map(t => (
+                                                    <button
+                                                        key={t}
+                                                        onClick={() => setSelectedT(t)}
+                                                        className={`px-3 py-1 rounded-xl text-sm font-bold kr-font transition-all ${
+                                                            selectedT === t 
+                                                            ? 'bg-emerald-600 text-white shadow-md scale-105' 
+                                                            : 'bg-white text-emerald-800 hover:bg-emerald-100 border border-emerald-300'
+                                                        }`}
+                                                    >
+                                                        {t}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* 全部 27 種收音盤 */}
+                                        <details className="mt-2">
+                                            <summary className="text-[11px] text-emerald-600 cursor-pointer font-semibold hover:underline">
+                                                展開全部 27 種收音（含雙收音/複尾音）
+                                            </summary>
+                                            <div className="flex gap-1.5 flex-wrap mt-2 pt-2 border-t border-emerald-200">
+                                                {JONGSEONG.filter(t => t !== '').map(t => (
+                                                    <button
+                                                        key={t}
+                                                        onClick={() => setSelectedT(t)}
+                                                        className={`w-9 h-9 rounded-lg text-sm font-bold kr-font transition-all ${
+                                                            selectedT === t 
+                                                            ? 'bg-emerald-600 text-white shadow-xs' 
+                                                            : 'bg-white text-gray-700 hover:bg-emerald-100 border border-emerald-200'
+                                                        }`}
+                                                    >
+                                                        {t}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </details>
+                                    </div>
+
                                 </div>
                             </div>
+                        </div>
+                    )}
 
-                            {/* Cloud Synced Vocabulary & Add Form */}
-                            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-sky-100">
-                                <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
-                                    <h3 className="text-base font-bold text-gray-700 flex items-center gap-2">
-                                        <span>☁️</span> 常用與雲端自學單字庫（點擊立即朗讀）
-                                    </h3>
-                                    <span className="text-xs bg-sky-50 text-sky-600 px-3 py-1 rounded-full border border-sky-200 font-semibold">
+                    {/* ==================== 頁面 8: ☁️ 雲端自學單字庫 ==================== */}
+                    {activeTab === 'wordbank' && (
+                        <div className="space-y-6">
+                            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-indigo-100">
+                                <div className="flex justify-between items-center mb-6 flex-wrap gap-2">
+                                    <div>
+                                        <h2 className="text-xl font-bold text-indigo-600 flex items-center gap-2">
+                                            <span>☁️</span> Firebase 雲端自學單字庫
+                                        </h2>
+                                        <p className="text-xs text-gray-400 mt-1">點擊單字立即發音，支援全體學員共享與自訂上傳</p>
+                                    </div>
+                                    <span className="text-xs bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full border border-indigo-200 font-semibold">
                                         已同步 {customWords.length} 個單字
                                     </span>
                                 </div>
 
-                                <div className="flex flex-wrap gap-3 mb-6">
+                                {/* 單字列表 */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-8">
                                     {customWords.map((word, index) => (
                                         <button
                                             key={word.id || index}
                                             onClick={() => playSound(word.kr)}
-                                            className="bg-sky-50 hover:bg-sky-100 border border-sky-200 px-4 py-2 rounded-2xl flex items-center gap-2 transition-transform active:scale-95 text-left"
+                                            className="sanrio-card bg-indigo-50/50 hover:bg-indigo-100/70 border border-indigo-200 p-3.5 rounded-2xl flex items-center justify-between transition-all text-left shadow-2xs"
                                         >
-                                            <span className="kr-font font-bold text-sky-600 text-lg">{word.kr}</span>
-                                            <span className="text-xs text-gray-500">[{word.sound}]</span>
-                                            <span className="text-xs text-gray-600 font-medium">{word.meaning}</span>
-                                            <span className="text-xs">🔊</span>
+                                            <div>
+                                                <div className="flex items-baseline gap-2">
+                                                    <span className="kr-font font-bold text-indigo-700 text-xl">{word.kr}</span>
+                                                    <span className="text-xs text-indigo-400 font-mono">[{word.sound}]</span>
+                                                </div>
+                                                <p className="text-xs text-gray-600 mt-1 font-medium">{word.meaning}</p>
+                                            </div>
+                                            <span className="w-8 h-8 rounded-full bg-white text-indigo-500 flex items-center justify-center text-sm shadow-2xs">
+                                                🔊
+                                            </span>
                                         </button>
                                     ))}
                                 </div>
 
-                                {/* Add Custom Word Form */}
-                                <form onSubmit={handleAddCustomWord} className="bg-sky-50/50 p-4 rounded-2xl border border-sky-100 flex flex-wrap gap-2 items-center">
-                                    <span className="text-xs font-bold text-sky-600">➕ 新增雲端單字：</span>
-                                    <input 
-                                        type="text" 
-                                        placeholder="韓文 (例: 우유)" 
-                                        value={newKr}
-                                        onChange={e => setNewKr(e.target.value)}
-                                        className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs flex-1 min-w-[100px] focus:outline-sky-400 bg-white"
-                                        required
-                                    />
-                                    <input 
-                                        type="text" 
-                                        placeholder="拼音 (例: u-yu)" 
-                                        value={newSound}
-                                        onChange={e => setNewSound(e.target.value)}
-                                        className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs flex-1 min-w-[90px] focus:outline-sky-400 bg-white"
-                                    />
-                                    <input 
-                                        type="text" 
-                                        placeholder="意思 (例: 牛奶 🥛)" 
-                                        value={newMeaning}
-                                        onChange={e => setNewMeaning(e.target.value)}
-                                        className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs flex-1 min-w-[110px] focus:outline-sky-400 bg-white"
-                                    />
-                                    <button
-                                        type="submit"
-                                        disabled={isAddingWord}
-                                        className="px-4 py-1.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl text-xs shadow-xs transition-all disabled:opacity-50"
-                                    >
-                                        {isAddingWord ? '同步中...' : '儲存至 Firebase'}
-                                    </button>
-                                </form>
+                                {/* 新增單字表單 */}
+                                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-3xl border border-indigo-100">
+                                    <h3 className="text-sm font-bold text-indigo-800 mb-3 flex items-center gap-1.5">
+                                        <span>➕</span> 新增單字到 Firebase 雲端字庫
+                                    </h3>
+                                    <form onSubmit={handleAddCustomWord} className="flex flex-wrap gap-2.5 items-center">
+                                        <input 
+                                            type="text" 
+                                            placeholder="韓文 (例: 사랑)" 
+                                            value={newKr}
+                                            onChange={e => setNewKr(e.target.value)}
+                                            className="px-3.5 py-2 rounded-xl border border-indigo-200 text-xs flex-1 min-w-[110px] focus:outline-indigo-400 bg-white"
+                                            required
+                                        />
+                                        <input 
+                                            type="text" 
+                                            placeholder="拼音 (例: sa-rang)" 
+                                            value={newSound}
+                                            onChange={e => setNewSound(e.target.value)}
+                                            className="px-3.5 py-2 rounded-xl border border-indigo-200 text-xs flex-1 min-w-[100px] focus:outline-indigo-400 bg-white"
+                                        />
+                                        <input 
+                                            type="text" 
+                                            placeholder="中文意思 (例: 愛情 💖)" 
+                                            value={newMeaning}
+                                            onChange={e => setNewMeaning(e.target.value)}
+                                            className="px-3.5 py-2 rounded-xl border border-indigo-200 text-xs flex-1 min-w-[120px] focus:outline-indigo-400 bg-white"
+                                        />
+                                        <button
+                                            type="submit"
+                                            disabled={isAddingWord}
+                                            className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-xs transition-all disabled:opacity-50 active:scale-95 whitespace-nowrap"
+                                        >
+                                            {isAddingWord ? '同步中...' : '儲存至雲端'}
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     )}
 
-                    {/* Tab 4: Quiz Game with Leaderboard submission */}
+                    {/* ==================== 頁面 9: ⭐ 隨堂星級挑戰 (純自我評量) ==================== */}
                     {activeTab === 'quiz' && (
                         <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-purple-100 max-w-xl mx-auto">
                             {!quizFinished ? (
                                 <>
                                     <div className="flex justify-between items-center mb-6">
-                                        <span className="text-xs font-bold text-purple-500 bg-purple-50 px-3 py-1 rounded-full">
+                                        <span className="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full border border-purple-200">
                                             第 {quizIndex + 1} / {quizQuestions.length} 題
                                         </span>
-                                        <span className="text-xs font-bold text-amber-500 bg-amber-50 px-3 py-1 rounded-full">
+                                        <span className="text-xs font-bold text-amber-500 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
                                             ⭐ 目前得分：{score}
                                         </span>
                                     </div>
 
-                                    <h3 className="text-lg font-bold text-gray-800 mb-6 text-center leading-relaxed">
+                                    <h3 className="text-base md:text-lg font-bold text-gray-800 mb-6 text-center">
                                         {quizQuestions[quizIndex].q}
                                     </h3>
 
-                                    <div className="grid grid-cols-1 gap-3 mb-6">
-                                        {quizQuestions[quizIndex].options.map((opt, i) => (
+                                    <div className="space-y-3 mb-6">
+                                        {quizQuestions[quizIndex].options.map((opt, idx) => (
                                             <button
-                                                key={i}
-                                                onClick={() => handleQuizOption(i)}
-                                                className={`p-4 rounded-2xl text-left font-semibold text-sm transition-all ${
+                                                key={idx}
+                                                onClick={() => handleQuizOption(idx)}
+                                                disabled={quizAnswered}
+                                                className={`w-full text-left px-5 py-3 rounded-2xl text-sm font-semibold transition-all border ${
                                                     quizAnswered
-                                                    ? i === quizQuestions[quizIndex].correct
-                                                        ? 'bg-emerald-100 border-2 border-emerald-400 text-emerald-700'
-                                                        : 'bg-gray-50 text-gray-400 border border-gray-100'
-                                                    : 'bg-purple-50/60 hover:bg-purple-100 border border-purple-100 text-purple-800 active:scale-98'
+                                                        ? idx === quizQuestions[quizIndex].correct
+                                                            ? 'bg-emerald-50 border-emerald-400 text-emerald-700 font-bold'
+                                                            : idx === selectedOption
+                                                                ? 'bg-rose-50 border-rose-400 text-rose-700'
+                                                                : 'bg-gray-50 border-gray-200 text-gray-400'
+                                                        : 'bg-white hover:bg-purple-50 border-gray-200 hover:border-purple-300 text-gray-700'
                                                 }`}
                                             >
-                                                {i + 1}. {opt}
+                                                <span className="inline-block w-6 text-purple-400 font-mono">{String.fromCharCode(65 + idx)}.</span>
+                                                {opt}
                                             </button>
                                         ))}
                                     </div>
 
-                                    {feedback && (
-                                        <div className="text-center p-3 mb-4 rounded-2xl bg-rose-50 text-rose-600 font-bold text-sm border border-rose-100 bounce-gentle">
-                                            {feedback}
-                                        </div>
-                                    )}
-
                                     {quizAnswered && (
-                                        <button
-                                            onClick={nextQuestion}
-                                            className="w-full py-3 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-2xl shadow-md transition-transform active:scale-95"
-                                        >
-                                            {quizIndex < quizQuestions.length - 1 ? '下一題 ➡️' : '查看總成績 🏆'}
-                                        </button>
+                                        <div className="text-center space-y-4">
+                                            <p className="text-sm font-bold text-purple-600 animate-bounce">{feedback}</p>
+                                            <button
+                                                onClick={nextQuestion}
+                                                className="px-6 py-2.5 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-2xl text-sm shadow-md transition-all active:scale-95"
+                                            >
+                                                {quizIndex < quizQuestions.length - 1 ? '下一題 ➔' : '查看學習總結 🏆'}
+                                            </button>
+                                        </div>
                                     )}
                                 </>
                             ) : (
-                                <div className="text-center py-4">
-                                    <span className="text-6xl">🎉</span>
-                                    <h3 className="text-2xl font-bold text-purple-600 mt-3 mb-1">挑戰完成！</h3>
-                                    <p className="text-gray-500 text-sm mb-6">太棒了！你的最終成績如下：</p>
-
-                                    <div className="bg-purple-50 border-2 border-purple-200 rounded-3xl p-6 mb-6 inline-block w-48">
-                                        <span className="text-4xl font-bold text-purple-600">{score}</span>
-                                        <span className="text-xs text-purple-400 block mt-1">/ 100 分</span>
+                                <div className="text-center py-6 space-y-6">
+                                    <div className="text-6xl animate-bounce">🎀</div>
+                                    <h3 className="text-2xl font-bold text-purple-600">測驗完成！學習成果</h3>
+                                    
+                                    <div className="bg-purple-50 p-6 rounded-3xl border border-purple-200 max-w-sm mx-auto">
+                                        <p className="text-xs text-gray-500 mb-1">本次自學得分</p>
+                                        <span className="text-5xl font-bold text-purple-600">{score}</span>
+                                        <span className="text-gray-400 text-sm"> / {quizQuestions.length * 20} 分</span>
+                                        <p className="text-xs text-purple-700 mt-3 font-semibold">
+                                            {score === quizQuestions.length * 20 ? '🌟 完美滿分！你是韓語發音小博士！' : '💖 很棒的嘗試！多拼幾次積木就全記住囉！'}
+                                        </p>
                                     </div>
 
-                                    {/* Submit to Firebase leaderboard */}
-                                    {!scoreSubmitted ? (
-                                        <form onSubmit={submitScore} className="max-w-xs mx-auto mb-6 bg-rose-50 p-4 rounded-2xl border border-rose-200">
-                                            <label className="block text-xs font-bold text-rose-600 mb-2">
-                                                📝 輸入暱稱登錄 Firebase 榮譽榜：
-                                            </label>
-                                            <div className="flex gap-2">
-                                                <input 
-                                                    type="text" 
-                                                    placeholder="你的暱稱 (例: Kitty粉)" 
-                                                    value={playerName}
-                                                    onChange={e => setPlayerName(e.target.value)}
-                                                    className="px-3 py-2 rounded-xl border border-rose-200 text-sm flex-1 focus:outline-rose-400 bg-white"
-                                                    maxLength="12"
-                                                />
-                                                <button
-                                                    type="submit"
-                                                    className="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xs transition-transform active:scale-95"
-                                                >
-                                                    上傳
-                                                </button>
-                                            </div>
-                                        </form>
-                                    ) : (
-                                        <div className="bg-emerald-50 text-emerald-700 font-bold p-3 rounded-2xl text-xs border border-emerald-200 mb-6">
-                                            ✅ 成績已成功同步至 Firebase 雲端榮譽榜！
-                                        </div>
-                                    )}
-
-                                    <div className="flex gap-3 justify-center">
-                                        <button
-                                            onClick={restartQuiz}
-                                            className="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl text-sm transition-transform active:scale-95"
-                                        >
-                                            再玩一次 🔄
-                                        </button>
-                                        <button
-                                            onClick={() => setActiveTab('leaderboard')}
-                                            className="px-6 py-2.5 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-2xl text-sm shadow-md transition-transform active:scale-95"
-                                        >
-                                            查看榮譽榜 🏆
-                                        </button>
-                                    </div>
+                                    <button
+                                        onClick={restartQuiz}
+                                        className="px-6 py-2.5 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-2xl text-sm shadow-md transition-all active:scale-95"
+                                    >
+                                        🔄 再挑戰一次
+                                    </button>
                                 </div>
                             )}
                         </div>
                     )}
 
-                    {/* Tab 5: Cloud Leaderboard */}
-                    {activeTab === 'leaderboard' && (
-                        <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-emerald-100 max-w-xl mx-auto">
-                            <div className="text-center mb-6">
-                                <h2 className="text-2xl font-bold text-emerald-600 flex items-center justify-center gap-2">
-                                    <span>🏆</span> Sanrio 雲端星級榮譽榜
-                                </h2>
-                                <p className="text-gray-400 text-xs mt-1">即時同步來自 Firebase 雲端學員的挑戰紀錄</p>
-                            </div>
-
-                            {leaderboard.length > 0 ? (
-                                <div className="space-y-3">
-                                    {leaderboard.map((item, index) => (
-                                        <div 
-                                            key={item.id || index}
-                                            className={`p-4 rounded-2xl flex justify-between items-center border ${
-                                                index === 0 
-                                                ? 'bg-amber-50 border-amber-300 shadow-sm' 
-                                                : index === 1 
-                                                ? 'bg-slate-50 border-slate-300' 
-                                                : index === 2 
-                                                ? 'bg-orange-50 border-orange-200' 
-                                                : 'bg-white border-gray-100'
-                                            }`}
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <span className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                                                    index === 0 ? 'bg-amber-400 text-white shadow-xs' :
-                                                    index === 1 ? 'bg-slate-300 text-white' :
-                                                    index === 2 ? 'bg-orange-300 text-white' :
-                                                    'bg-gray-100 text-gray-500'
-                                                }`}>
-                                                    {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
-                                                </span>
-                                                <div>
-                                                    <p className="font-bold text-gray-800 text-sm">{item.name || '無名小可愛'}</p>
-                                                    <span className="text-[10px] text-gray-400">{item.dateStr || '剛剛'}</span>
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <span className="text-lg font-bold text-emerald-600">{item.score}</span>
-                                                <span className="text-xs text-emerald-400 ml-1">分</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="text-center py-8 text-gray-400">
-                                    <p className="text-3xl mb-2">🌸</p>
-                                    <p className="text-sm">榮譽榜目前等待第一位挑戰者！快去完成挑戰吧！</p>
-                                </div>
-                            )}
-
-                            <div className="text-center mt-6">
-                                <button
-                                    onClick={() => {
-                                        restartQuiz();
-                                        setActiveTab('quiz');
-                                    }}
-                                    className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl text-sm shadow-md transition-transform active:scale-95"
-                                >
-                                    立即開始測驗挑戰 ⭐
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Footer Encouragement */}
+                    {/* Footer */}
                     <footer className="text-center mt-12 text-xs text-rose-300 flex flex-col items-center gap-1">
                         <p>Sanrio Style Korean Learning • Created for easy and stress-free learning ✨</p>
                         <p className="text-[11px] text-gray-400">Powered by Google Antigravity & Firebase Firestore Cloud Engine</p>

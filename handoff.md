@@ -29,33 +29,35 @@
 
 ### 雲端與後端 (Firebase Integration)
 - **SDK 版本**：Firebase v10.8.0 (Compat 模組：`firebase-app`, `firebase-auth`, `firebase-firestore`)
-- **專案 ID**：`stages-webpages-ai-sensebar`
+- **專案 ID**：`korean-learning-1ec2a`
 - **身份驗證 (Auth)**：啟用 `signInAnonymously()` 匿名驗證，免登入即可存取雲端功能。
 - **Firestore 集合架構**：
   1. `korean_app_stats/cheers`：
      - 欄位：`count (number)`（透過 `FieldValue.increment(1)` 進行原子累加）
-  2. `korean_quiz_leaderboard`：
-     - 欄位：`name (string)`, `score (number)`, `createdAt (timestamp)`, `dateStr (string)`
-     - 查詢方式：`orderBy('score', 'desc').limit(10)`
-  3. `korean_custom_words`：
+  2. `korean_custom_words`：
      - 欄位：`kr (string)`, `sound (string)`, `meaning (string)`, `createdAt (timestamp)`
-     - 查詢方式：`orderBy('createdAt', 'desc').limit(20)`
+     - 查詢方式：`orderBy('createdAt', 'desc').limit(30)`
 - **容錯設計**：具備本機離線 Fallback 機制，當 Firebase 離線或無網路時，會自動切換為本地模式運行，介面右上角具備連線狀態燈號。
 
 ---
 
-## 🧮 3. 韓語拼音演算法 (Hangul Syllable Formula)
+## 🧮 3. 韓語三層拼音演算法 (Hangul 3-Layer Batchim Formula)
 
-在「🧩 拼音積木屋」中，韓文字母組合係根據 Unicode 韓文拼音規範計算：
+在「🧩 3 層拼音積木屋」中，韓文字母組合係根據完整 Unicode 韓文拼音規範計算：
 ```javascript
-const combineSyllable = (c, v) => {
-    const cMap = { 'ㄱ': 0, 'ㄴ': 2, 'ㄷ': 3, 'ㅁ': 6, 'ㅇ': 11 };
-    const vMap = { 'ㅏ': 0, 'ㅓ': 4, 'ㅗ': 8, 'ㅜ': 13, 'ㅡ': 18, 'ㅣ': 20 };
-    const cIdx = cMap[c] !== undefined ? cMap[c] : 11;
-    const vIdx = vMap[v] !== undefined ? vMap[v] : 0;
+const CHOSEONG = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+const JUNGSEONG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
+const JONGSEONG = ['', 'ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+
+const combineHangul = (c, v, t = '') => {
+    const cIdx = CHOSEONG.indexOf(c);
+    const vIdx = JUNGSEONG.indexOf(v);
+    const tIdx = JONGSEONG.indexOf(t);
     
-    // Unicode 韓文字母計算公式：44032 + (子音索引 * 588) + (母音索引 * 28)
-    const code = 44032 + (cIdx * 588) + (vIdx * 28);
+    if (cIdx === -1 || vIdx === -1) return c + v + t;
+    
+    // Unicode 韓文字母計算公式：44032 + (初聲 * 588) + (中聲 * 28) + 終聲
+    const code = 44032 + (cIdx * 588) + (vIdx * 28) + (tIdx !== -1 ? tIdx : 0);
     return String.fromCharCode(code);
 };
 ```
@@ -64,14 +66,17 @@ const combineSyllable = (c, v) => {
 
 ## ✅ 4. 已完成功能清單 (Completed Features)
 
-1. [x] **🐱 6 大基礎母音教學**（Hello Kitty `ㅏ`、布甸狗 `ㅓ`、美樂蒂 `ㅗ`、玉桂狗 `ㅜ`、Kuromi `ㅡ`、雙子星 `ㅣ`）
-2. [x] **🐶 基礎子音積木**（`ㅇ`, `ㄱ`, `ㄴ`, `ㄷ`, `ㅁ`）
-3. [x] **🧩 拼音積木屋**（聲母韻母任意切換、實時拼出韓文字並發音）
-4. [x] **☁️ Firebase 雲端自學單字庫**（支援學員新增單字並即時同步）
-5. [x] **⭐ Sanrio 星級挑戰測驗**（5 題隨堂測驗評量學習成效）
-6. [x] **🏆 Firebase 即時星級榮譽榜**（測驗成績上傳與前 10 名即時排行）
-7. [x] **💖 即時集氣加油互動按鈕**（實時跳動累加）
-8. [x] **📦 GitHub 託管與 GitHub Pages 自動部署上線**
+1. [x] **🐱 基礎母音專頁**（10 個基礎母音 + Kitty/布甸狗/美樂蒂/玉桂狗/Kuromi/雙子星口訣）
+2. [x] **🐰 11 大複合母音專頁**（`ㅐ, ㅔ, ㅒ, ㅖ, ㅘ, ㅙ, ㅚ, ㅝ, ㅞ, ㅟ, ㅢ` 雙母音調色盤）
+3. [x] **🐶 10 大基礎平音專頁**（`ㄱ, ㄴ, ㄷ, ㄹ, ㅁ, ㅂ, ㅅ, ㅇ, ㅈ, ㅎ`）
+4. [x] **⚡ 4 大激音（送氣音）專頁**（`ㅊ, ㅋ, ㅌ, ㅍ` 爆破噴氣音教學）
+5. [x] **💥 5 大硬音（雙子音）專頁**（`ㄲ, ㄸ, ㅃ, ㅆ, ㅉ` 緊喉硬音教學）
+6. [x] **🧱 7 大代表收音（Batchim）專頁**（`ㅇ, ㅁ, ㄴ, ㄹ, ㅂ, ㄱ, ㄷ` 尾音規則與生活例詞）
+7. [x] **🧩 3 層收音拼音積木屋**（初聲+中聲+終聲立體積木，支援 11,172 韓文字合成與發音對比）
+8. [x] **☁️ Firebase 雲端自學單字庫**（支援學員新增單字並即時同步 Firestore）
+9. [x] **⭐ 隨堂星級自我挑戰測驗**（隨堂測驗評量學習成效，純自我評量）
+10. [x] **💖 即時集氣加油互動按鈕**（實時跳動累加）
+11. [x] **📦 GitHub 託管與 GitHub Pages 自動部署上線**
 
 ---
 
@@ -79,12 +84,7 @@ const combineSyllable = (c, v) => {
 
 若接手的 Agent / 開發者需要進一步升級專案，可參考以下方向：
 
-1. **擴充雙母音與雙子音**：
-   - 擴充母音：`ㅐ`, `ㅔ`, `ㅘ`, `ㅙ`, `ㅚ`, `ㅝ`, `ㅞ`, `ㅟ`, `ㅢ`
-   - 擴充硬音/激音子音：`ㅋ`, `ㅌ`, `ㅍ`, `ㅎ`, `ㄲ`, `ㄸ`, `ㅃ`, `ㅆ`, `ㅉ`
-2. **支援尾音 / 收音 (받침 Batchim)**：
-   - 升級拼音算式支援三層積木（初聲 + 中聲 + 終聲/尾音）：`44032 + (初聲 * 588) + (中聲 * 28) + 終聲`。
-3. **語音發音評分 (Speech Recognition)**：
+1. **語音發音評分 (Speech Recognition)**：
    - 引入 Web Speech Recognition API 讓使用者對著麥克風朗讀，進行發音準確度評分。
-4. **單字庫分類篩選**：
+2. **單字庫分類篩選**：
    - 為單字增加標籤（例如：食物、問候、日常、旅遊），並支援分類篩選。
