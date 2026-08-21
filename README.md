@@ -30,7 +30,9 @@
 - **Algorithm**：Hangul Unicode Syllable Decomposer, Revised Romanization of Korean, Jamo-level Levenshtein Distance Matcher
 
 ## 📚 附屬教材資源
-- **📖 Sanrio 韓語發音教學簡報 (20頁完整版 PDF)**：[hangul_sanrio_deck_20p.pdf](hangul_sanrio_deck_20p.pdf)
+- **📖 Sanrio 韓語發音教學簡報 (20頁完整版 PDF)**：
+  - 🌐 [線上即時清晰瀏覽 (GitHub Pages 直連)](https://kitty-sin.github.io/sanrio-korean-learning/hangul_sanrio_deck_20p.pdf)
+  - 📥 [直接下載 PDF 原檔 (Raw Download)](https://raw.githubusercontent.com/kitty-sin/sanrio-korean-learning/main/hangul_sanrio_deck_20p.pdf)
 - **📊 韓語字母拼音總表 (Hangul Syllable Chart)**：[assets/hangul_alphabet_chart.jpg](assets/hangul_alphabet_chart.jpg)
 
 <div align="center" style="margin-top: 16px;">
