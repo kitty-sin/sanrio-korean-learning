@@ -29,5 +29,8 @@
 - **Audio & AI**：Web Speech API (`ko-KR` 語音合成 SpeechSynthesis & 語音辨識 SpeechRecognition)
 - **Algorithm**：Hangul Unicode Syllable Decomposer, Revised Romanization of Korean, Jamo-level Levenshtein Distance Matcher
 
+## 📚 附屬教材資源
+- **📖 Sanrio 韓語發音教學簡報 (20頁完整版 PDF)**：[hangul_sanrio_deck_20p.pdf](hangul_sanrio_deck_20p.pdf)
+
 ## 🚀 線上即時體驗
 - **GitHub Pages**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
