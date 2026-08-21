@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanrio 韓語發音積木樂園 (3層收音與全套字母庫升級版)</title>
+    <title>Sanrio 韓語發音積木樂園 (智慧發音與雲端單字庫升級版)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -47,13 +47,38 @@
         .active-block-shadow {
             box-shadow: 0 4px 0 rgba(0,0,0,0.15), 0 8px 16px rgba(0,0,0,0.1);
         }
+        
+        /* 逐字極慢速播放粉紅發光跳動特效 */
+        .syllable-highlight {
+            background-color: #FFE4E6 !important;
+            border-color: #F43F5E !important;
+            color: #E11D48 !important;
+            transform: scale(1.12) translateY(-4px);
+            box-shadow: 0 0 25px rgba(244, 63, 94, 0.45);
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
+        }
+
+        /* 麥克風錄音波紋動畫 */
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        .mic-ripple {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 9999px;
+            background-color: rgba(244, 63, 94, 0.35);
+            animation: ripple 1.5s infinite;
+        }
     </style>
 </head>
 <body class="text-gray-700 min-h-screen pb-20">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
 
         // Firebase Configuration
         const firebaseConfig = {
@@ -81,8 +106,6 @@
         }
 
         // ==================== 1. 字母數據庫 ====================
-
-        // 1.1 基礎母音 (10 個)
         const basicVowels = [
             { char: 'ㅏ', name: 'a', cantonese: '呀 (aa)', character: 'Hello Kitty 🐱', color: 'border-rose-300 bg-rose-50 text-rose-600', icon: '🎀', desc: 'Hello Kitty 伸手向右打招呼（小手向右伸）' },
             { char: 'ㅑ', name: 'ya', cantonese: '野 (yaa)', character: 'Hello Kitty 雙手 🐱', color: 'border-rose-300 bg-rose-50 text-rose-600', icon: '✨', desc: 'Hello Kitty 兩隻小手向右揮揮，發出 Ya 音' },
@@ -96,7 +119,6 @@
             { char: 'ㅣ', name: 'i', cantonese: '衣 (微笑)', character: '雙子星 ⭐', color: 'border-indigo-300 bg-indigo-50 text-indigo-600', icon: '🪄', desc: '雙子星筆直仙女棒（牙齒露出微笑）' },
         ];
 
-        // 1.2 複合母音 (11 個)
         const compoundVowels = [
             { char: 'ㅐ', name: 'ae', cantonese: '愛 (ai / 矮)', character: 'Hello Kitty 調色盤 🎨', color: 'border-rose-300 bg-rose-50 text-rose-600', formula: 'ㅏ + ㅣ', desc: 'ㅏ 結合 ㅣ，嘴巴微張發「愛/哎」音' },
             { char: 'ㅔ', name: 'e', cantonese: '欸 (e / 禮)', character: '美樂蒂小木門 🚪', color: 'border-pink-300 bg-pink-50 text-pink-600', formula: 'ㅓ + ㅣ', desc: 'ㅓ 結合 ㅣ，嘴角輕輕向兩邊放鬆發「欸」' },
@@ -111,7 +133,6 @@
             { char: 'ㅢ', name: 'ui', cantonese: '醫 (ui)', character: '大眼蛙露齒笑 🐸', color: 'border-teal-300 bg-teal-50 text-teal-600', formula: 'ㅡ + ㅣ', desc: '咬牙 Eu 迅速過渡至 I，發出「Ui」' },
         ];
 
-        // 1.3 基礎平音子音 (10 個)
         const plainConsonants = [
             { char: 'ㄱ', name: 'g / k', cantonese: '哥 (g)', character: 'Kitty 手臂 🐱', color: 'border-rose-300 bg-rose-50 text-rose-600', desc: '直角鐮刀手臂彎彎，發輕聲 G/K' },
             { char: 'ㄴ', name: 'n', cantonese: '呢 (n)', character: '玉桂狗腳丫 ☁️', color: 'border-sky-300 bg-sky-50 text-sky-600', desc: 'L 型腳丫貼在地面，發鼻音 N' },
@@ -125,7 +146,6 @@
             { char: 'ㅎ', name: 'h', cantonese: '哈 (h)', character: '戴紳士禮帽紳士 🎩', color: 'border-red-300 bg-red-50 text-red-600', desc: '圓圈上頂著雙層禮帽，發喉部送氣 H' },
         ];
 
-        // 1.4 激音 / 送氣音 (4 個)
         const aspiratedConsonants = [
             { char: 'ㅊ', name: 'ch', cantonese: '叉 / 七 (cha)', character: '酷企鵝尖角帽 🐧', color: 'border-cyan-300 bg-cyan-50 text-cyan-700', base: 'ㅈ + 一點', desc: '比 ㅈ 多了一根天線，發強力噴氣 Ch 音' },
             { char: 'ㅋ', name: 'k', cantonese: '卡 (ka)', character: '水怪笑呵呵 🐟', color: 'border-teal-300 bg-teal-50 text-teal-700', base: 'ㄱ + 一橫', desc: '比 ㄱ 多了一道噴氣橫槓，發喉部噴氣 K 音' },
@@ -133,7 +153,6 @@
             { char: 'ㅍ', name: 'p', cantonese: '爬 / 趴 (pa)', character: '羅馬宮殿大門 🏛️', color: 'border-rose-300 bg-rose-50 text-rose-700', base: 'ㅂ 變形', desc: '雙柱門樓，雙唇爆破強力噴氣發 P 音' },
         ];
 
-        // 1.5 硬音 / 雙子音 (5 個)
         const tenseConsonants = [
             { char: 'ㄲ', name: 'kk', cantonese: '嫁 (緊喉 g)', character: '雙倍 Kitty 臂 🐱🐱', color: 'border-red-400 bg-red-50 text-red-700', desc: '兩個 ㄱ 合體，喉嚨收緊不送氣，發結實硬音 Kk' },
             { char: 'ㄸ', name: 'tt', cantonese: '帶 (緊喉 d)', character: '雙倍小屋門 🚪🚪', color: 'border-amber-400 bg-amber-50 text-amber-700', desc: '兩個 ㄷ 合體，舌尖用力收緊，發結實硬音 Tt' },
@@ -142,7 +161,6 @@
             { char: 'ㅉ', name: 'jj', cantonese: '煮 (緊喉 j)', character: '雙倍紳士帽子 🎩🎩', color: 'border-purple-400 bg-purple-50 text-purple-700', desc: '兩個 ㅈ 合體，聲帶緊繃發清脆硬音 Jj' },
         ];
 
-        // 1.6 7 大代表收音 (Batchim 받침) 教學數據
         const batchimGuide = [
             { rep: 'ㅇ', sound: '[ng]', cantonese: '唔 / 後鼻音', members: ['ㅇ'], example: '강 (gang / 江)', meaning: '大江大河 🌊', desc: '圓圈收音最圓潤，舌根後縮，發出飽滿的鼻音 [ng]' },
             { rep: 'ㅁ', sound: '[m]', cantonese: '閉唇音 / 嗎', members: ['ㅁ'], example: '봄 (bom / 春天)', meaning: '春暖花開 🌸', desc: '方盒收音要閉唇！發音結束時雙唇完全閉合收氣' },
@@ -153,7 +171,6 @@
             { rep: 'ㄷ', sound: '[t]', cantonese: '齒齦急止 / 八', members: ['ㄷ', 'ㅅ', 'ㅈ', 'ㅊ', 'ㅌ', 'ㅎ', 'ㅆ'], example: '옷 (ot / 衣服)', meaning: '漂亮衣服 👗', desc: '韓語收音最多成員的一族！舌尖抵住門牙齒齦立刻停止送氣' },
         ];
 
-        // 1.7 預設豐富雲端自學單字庫
         const defaultWords = [
             { id: '1', kr: '사랑', sound: 'sa-rang', meaning: '愛情 / 喜愛 💖' },
             { id: '2', kr: '감사', sound: 'gam-sa', meaning: '感謝 / 謝謝 🙏' },
@@ -165,45 +182,161 @@
             { id: '8', kr: '행복', sound: 'haeng-bok', meaning: '幸福快樂 🍀' },
         ];
 
-        // ==================== 2. Unicode 韓文拼音算式 ====================
+        // ==================== 2. Unicode 與 羅馬拼音核心演算法 ====================
         const CHOSEONG = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
         const JUNGSEONG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
         const JONGSEONG = ['', 'ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+
+        // 韓國國立國語院標準羅馬字轉寫對照表
+        const ROMAN_CHOSEONG = ['g', 'kk', 'n', 'd', 'tt', 'r', 'm', 'b', 'pp', 's', 'ss', '', 'j', 'jj', 'ch', 'k', 't', 'p', 'h'];
+        const ROMAN_JUNGSEONG = ['a', 'ae', 'ya', 'yae', 'eo', 'e', 'yeo', 'ye', 'o', 'wa', 'wae', 'oe', 'yo', 'u', 'wo', 'we', 'wi', 'yu', 'eu', 'ui', 'i'];
+        const ROMAN_JONGSEONG = ['', 'k', 'k', 'k', 'n', 'n', 'n', 't', 'l', 'k', 'm', 'p', 't', 't', 'p', 'l', 'm', 'p', 'p', 't', 't', 'ng', 't', 't', 'k', 't', 'p', 't'];
+
+        // 自動解析韓文字串為標準羅馬拼音
+        const romanizeHangul = (text) => {
+            if (!text) return '';
+            const syllables = Array.from(text);
+            const romList = [];
+            for (let char of syllables) {
+                const code = char.charCodeAt(0);
+                if (code >= 44032 && code <= 55203) {
+                    const offset = code - 44032;
+                    const cIdx = Math.floor(offset / 588);
+                    const vIdx = Math.floor((offset % 588) / 28);
+                    const tIdx = offset % 28;
+                    const r = ROMAN_CHOSEONG[cIdx] + ROMAN_JUNGSEONG[vIdx] + ROMAN_JONGSEONG[tIdx];
+                    romList.push(r);
+                } else {
+                    romList.push(char);
+                }
+            }
+            return romList.join('-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        };
+
+        // 拆解單個音節為 [初聲, 中聲, 終聲]
+        const decomposeSyllable = (char) => {
+            const code = char.charCodeAt(0);
+            if (code >= 44032 && code <= 55203) {
+                const offset = code - 44032;
+                const cIdx = Math.floor(offset / 588);
+                const vIdx = Math.floor((offset % 588) / 28);
+                const tIdx = offset % 28;
+                return {
+                    char,
+                    c: CHOSEONG[cIdx],
+                    v: JUNGSEONG[vIdx],
+                    t: JONGSEONG[tIdx] || '',
+                    rom: ROMAN_CHOSEONG[cIdx] + ROMAN_JUNGSEONG[vIdx] + ROMAN_JONGSEONG[tIdx]
+                };
+            }
+            return { char, c: '', v: '', t: '', rom: char };
+        };
+
+        // 韓語 Jamo 層級相似度比對演算法
+        const calculateJamoScore = (targetWord, spokenText) => {
+            if (!spokenText || !targetWord) return { percentage: 0, stars: 0, feedback: '未偵測到聲音，請再試一次！' };
+            
+            const extractJamos = (str) => {
+                const jamos = [];
+                for (let ch of Array.from(str.trim())) {
+                    const dec = decomposeSyllable(ch);
+                    if (dec.c) jamos.push(dec.c);
+                    if (dec.v) jamos.push(dec.v);
+                    if (dec.t) jamos.push(dec.t);
+                }
+                return jamos;
+            };
+
+            const targetJamos = extractJamos(targetWord);
+            const spokenJamos = extractJamos(spokenText);
+
+            if (targetJamos.length === 0 || spokenJamos.length === 0) {
+                return { percentage: 0, stars: 0, feedback: '未辨識到有效韓文字母！' };
+            }
+
+            // Levenshtein 距離計算
+            const m = targetJamos.length;
+            const n = spokenJamos.length;
+            const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+            for (let i = 0; i <= m; i++) dp[i][0] = i;
+            for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+            for (let i = 1; i <= m; i++) {
+                for (let j = 1; j <= n; j++) {
+                    if (targetJamos[i - 1] === spokenJamos[j - 1]) {
+                        dp[i][j] = dp[i - 1][j - 1];
+                    } else {
+                        dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+                    }
+                }
+            }
+
+            const distance = dp[m][n];
+            const maxLen = Math.max(m, n);
+            const percentage = Math.max(0, Math.min(100, Math.round((1 - distance / maxLen) * 100)));
+
+            let stars = 1;
+            let feedback = '💪 沒關係！放鬆嘴唇，再對著麥克風大聲唸一次！';
+
+            if (percentage >= 90) {
+                stars = 3;
+                feedback = '🎉 完美發音！Kitty 驚呼你簡直是韓劇主角！⭐⭐⭐';
+            } else if (percentage >= 75) {
+                stars = 2;
+                feedback = '💖 發音非常標準！再留意一下尾音收氣就滿分囉！⭐⭐';
+            } else if (percentage >= 50) {
+                stars = 1;
+                feedback = '🌸 很不錯的嘗試！跟著 0.3x 極慢速再聽一次試試看！⭐';
+            }
+
+            return { percentage, stars, feedback, targetJamos, spokenJamos };
+        };
 
         const combineHangul = (c, v, t = '') => {
             const cIdx = CHOSEONG.indexOf(c);
             const vIdx = JUNGSEONG.indexOf(v);
             const tIdx = JONGSEONG.indexOf(t);
-            
             if (cIdx === -1 || vIdx === -1) return c + v + t;
-            
             const code = 44032 + (cIdx * 588) + (vIdx * 28) + (tIdx !== -1 ? tIdx : 0);
             return String.fromCharCode(code);
         };
 
         // ==================== 3. 主應用程式組件 ====================
         function App() {
-            // Navigation tab: 'basic-vowels' | 'compound-vowels' | 'plain-consonants' | 'aspirated-consonants' | 'tense-consonants' | 'batchim-guide' | 'builder' | 'wordbank' | 'quiz'
             const [activeTab, setActiveTab] = useState('basic-vowels');
 
             // 拼音積木屋狀態
             const [selectedC, setSelectedC] = useState('ㅂ');
             const [selectedV, setSelectedV] = useState('ㅏ');
-            const [selectedT, setSelectedT] = useState('ㅂ'); // 預設 밥 (bap)
+            const [selectedT, setSelectedT] = useState('ㅂ');
             const [builderConsonantFilter, setBuilderConsonantFilter] = useState('all');
             const [builderVowelFilter, setBuilderVowelFilter] = useState('all');
 
-            // 雲端與狀態
+            // 雲端與單字庫狀態
             const [firebaseConnected, setFirebaseConnected] = useState(false);
             const [heartCount, setHeartCount] = useState(168);
             const [customWords, setCustomWords] = useState(defaultWords);
             const [newKr, setNewKr] = useState('');
-            const [newSound, setNewSound] = useState('');
             const [newMeaning, setNewMeaning] = useState('');
             const [isAddingWord, setIsAddingWord] = useState(false);
             const [showPoster, setShowPoster] = useState(false);
 
-            // 隨堂測驗狀態 (純自我評量，無榮譽榜)
+            // 逐字極慢速高亮狀態
+            const [highlightWord, setHighlightWord] = useState('');
+            const [highlightIndex, setHighlightIndex] = useState(-1);
+            const audioCancelRef = useRef(false);
+
+            // 彈窗狀態
+            const [decompModalWord, setDecompModalWord] = useState(null); // 字母拆解彈窗單字
+            const [speechModalWord, setSpeechModalWord] = useState(null); // 語音跟讀彈窗單字
+
+            // 語音辨識狀態
+            const [isRecording, setIsRecording] = useState(false);
+            const [recognizedText, setRecognizedText] = useState('');
+            const [speechResult, setSpeechResult] = useState(null);
+            const recognitionRef = useRef(null);
+
+            // 隨堂測驗狀態
             const [quizIndex, setQuizIndex] = useState(0);
             const [score, setScore] = useState(0);
             const [quizAnswered, setQuizAnswered] = useState(false);
@@ -211,11 +344,13 @@
             const [feedback, setFeedback] = useState('');
             const [quizFinished, setQuizFinished] = useState(false);
 
+            // 實時計算自動羅馬拼音預覽
+            const autoPreviewRoman = romanizeHangul(newKr);
+
             // Firebase 實時監聽
             useEffect(() => {
                 if (!db) return;
 
-                // 1. 集氣加油讚數
                 const unsubscribeCheers = db.collection('korean_app_stats').doc('cheers')
                     .onSnapshot(doc => {
                         setFirebaseConnected(true);
@@ -224,12 +359,8 @@
                         } else {
                             db.collection('korean_app_stats').doc('cheers').set({ count: 168 }, { merge: true });
                         }
-                    }, err => {
-                        console.log("Firestore cheers status:", err);
-                        setFirebaseConnected(false);
-                    });
+                    }, () => setFirebaseConnected(false));
 
-                // 2. 雲端自學單字庫實時同步
                 const unsubscribeWords = db.collection('korean_custom_words')
                     .orderBy('createdAt', 'desc')
                     .limit(30)
@@ -252,42 +383,138 @@
                 };
             }, []);
 
-            // 語音朗讀
-            const playSound = (text) => {
+            // 核心三段速發音播放器
+            const stopAllAudio = () => {
+                audioCancelRef.current = true;
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
+                }
+                setHighlightIndex(-1);
+                setHighlightWord('');
+            };
+
+            const playSingleSyllableAudio = (char) => {
+                return new Promise((resolve) => {
+                    if (!('speechSynthesis' in window)) return resolve();
+                    const utterance = new SpeechSynthesisUtterance(char);
+                    utterance.lang = 'ko-KR';
+                    utterance.rate = 0.9; // 飽滿標準音，不變頻
+                    utterance.onend = () => resolve();
+                    utterance.onerror = () => resolve();
+                    window.speechSynthesis.speak(utterance);
+                });
+            };
+
+            const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+
+            // 發音主函式：三段速支援
+            const playSound = async (text, speed = 1.0) => {
+                stopAllAudio();
+                await sleep(50);
+                audioCancelRef.current = false;
+
+                if (!('speechSynthesis' in window)) {
+                    alert("您的瀏覽器暫時不支援語音朗讀，建議使用 Chrome / Safari 瀏覽！");
+                    return;
+                }
+
+                if (speed === 0.3) {
+                    // 🦥 極慢速 0.3x：逐字獨立吐音 + 450ms 間隔 + 動態高亮
+                    setHighlightWord(text);
+                    const chars = Array.from(text);
+                    for (let i = 0; i < chars.length; i++) {
+                        if (audioCancelRef.current) break;
+                        setHighlightIndex(i);
+                        await playSingleSyllableAudio(chars[i]);
+                        if (audioCancelRef.current) break;
+                        await sleep(450); // 450ms 清晰停頓
+                    }
+                    setHighlightIndex(-1);
+                    setHighlightWord('');
+                } else {
+                    // 🔊 1.0x 標準 or 🐢 0.7x 慢速
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.lang = 'ko-KR';
-                    utterance.rate = 0.85;
+                    utterance.rate = speed;
                     window.speechSynthesis.speak(utterance);
-                } else {
-                    alert("您的瀏覽器暫時不支援語音朗讀，建議使用 Chrome / Safari 瀏覽！");
                 }
             };
 
-            // Firebase 集氣按讚
+            // 麥克風語音辨識跟讀評分
+            const startSpeechRecognition = (targetWord) => {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    alert("您的瀏覽器不支援 Web Speech 麥克風語音辨識，建議使用 Chrome 瀏覽器！");
+                    return;
+                }
+
+                stopAllAudio();
+                setRecognizedText('');
+                setSpeechResult(null);
+                setIsRecording(true);
+
+                try {
+                    const recognition = new SpeechRecognition();
+                    recognition.lang = 'ko-KR';
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+                    recognition.maxAlternatives = 1;
+
+                    recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        setRecognizedText(transcript);
+                        const result = calculateJamoScore(targetWord, transcript);
+                        setSpeechResult(result);
+                        setIsRecording(false);
+                    };
+
+                    recognition.onerror = (event) => {
+                        console.warn("Speech Error:", event.error);
+                        setIsRecording(false);
+                        setSpeechResult({ percentage: 0, stars: 0, feedback: '未能辨識到聲音，請靠近麥克風再試一次！' });
+                    };
+
+                    recognition.onend = () => {
+                        setIsRecording(false);
+                    };
+
+                    recognitionRef.current = recognition;
+                    recognition.start();
+                } catch (err) {
+                    console.error("Speech Init Error:", err);
+                    setIsRecording(false);
+                }
+            };
+
+            const stopSpeechRecognition = () => {
+                if (recognitionRef.current) {
+                    recognitionRef.current.stop();
+                }
+                setIsRecording(false);
+            };
+
+            // Firebase 按讚
             const handleAddHeart = async () => {
                 setHeartCount(prev => prev + 1);
                 if (db) {
                     try {
                         const ref = db.collection('korean_app_stats').doc('cheers');
-                        await ref.set({
-                            count: firebase.firestore.FieldValue.increment(1)
-                        }, { merge: true });
+                        await ref.set({ count: firebase.firestore.FieldValue.increment(1) }, { merge: true });
                     } catch (e) {
                         console.log("Heart error:", e);
                     }
                 }
             };
 
-            // 新增自學單字
+            // 新增自學單字（自動生成拼音，簡化為 2 欄）
             const handleAddCustomWord = async (e) => {
                 e.preventDefault();
                 if (!newKr.trim()) return;
                 setIsAddingWord(true);
+                const generatedRom = romanizeHangul(newKr.trim());
                 const wordObj = {
                     kr: newKr.trim(),
-                    sound: newSound.trim() || '自訂發音',
+                    sound: generatedRom || '自訂發音',
                     meaning: newMeaning.trim() || '自學單字',
                     createdAt: firebase.firestore.FieldValue ? firebase.firestore.FieldValue.serverTimestamp() : new Date()
                 };
@@ -296,7 +523,6 @@
                     try {
                         await db.collection('korean_custom_words').add(wordObj);
                         setNewKr('');
-                        setNewSound('');
                         setNewMeaning('');
                     } catch (err) {
                         console.error("Add word error:", err);
@@ -304,11 +530,13 @@
                     }
                 } else {
                     setCustomWords(prev => [wordObj, ...prev]);
+                    setNewKr('');
+                    setNewMeaning('');
                 }
                 setIsAddingWord(false);
             };
 
-            // 隨堂測驗題目
+            // 隨堂測驗
             const quizQuestions = [
                 { q: 'Hello Kitty 伸手向右打招呼（ㅏ），發音是什麼？', options: ['呀 (a)', '柯 (eo)', '屋 (u)', '衣 (i)'], correct: 0 },
                 { q: '美樂蒂 🐰 雙耳朝天的母音是哪一個？', options: ['ㅜ', 'ㅗ', 'ㅡ', 'ㅣ'], correct: 1 },
@@ -351,11 +579,9 @@
                 setQuizFinished(false);
             };
 
-            // 當前拼音積木屋合成文字
             const currentSyllable = combineHangul(selectedC, selectedV, selectedT);
             const withoutBatchim = combineHangul(selectedC, selectedV, '');
 
-            // 導覽標籤清單
             const navTabs = [
                 { id: 'basic-vowels', label: '🐱 基礎母音', color: 'bg-rose-400' },
                 { id: 'compound-vowels', label: '🐰 複合母音', color: 'bg-pink-400' },
@@ -372,7 +598,6 @@
                 <div className="max-w-5xl mx-auto px-4 pt-6">
                     {/* Header */}
                     <header className="text-center mb-6 bg-white/95 backdrop-blur rounded-3xl p-6 shadow-sm border border-rose-100 relative">
-                        {/* Firebase 狀態徽章 */}
                         <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full text-xs text-rose-600 shadow-xs">
                             <span className={`w-2.5 h-2.5 rounded-full ${firebaseConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`}></span>
                             <span>{firebaseConnected ? 'Firebase 雲端已連線' : '本機模式'}</span>
@@ -385,9 +610,8 @@
                             </h1>
                             <span className="text-3xl">🎀</span>
                         </div>
-                        <p className="text-gray-500 text-sm">全套字母庫 + 3層收音 (Batchim) 積木 + 廣東話口訣 + Firebase 雲端自學</p>
+                        <p className="text-gray-500 text-sm">3段速發音 + 450ms逐字跳動高亮 + 語音跟讀Jamo評分 + 自動羅馬拼音</p>
 
-                        {/* 集氣加油按鈕 */}
                         <div className="mt-4 flex justify-center items-center gap-3">
                             <button
                                 onClick={handleAddHeart}
@@ -399,12 +623,15 @@
                         </div>
                     </header>
 
-                    {/* 獨立分類 Navigation Tabs */}
+                    {/* Navigation Tabs */}
                     <nav className="flex justify-center gap-1.5 md:gap-2.5 mb-8 flex-wrap">
                         {navTabs.map(tab => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
+                                onClick={() => {
+                                    stopAllAudio();
+                                    setActiveTab(tab.id);
+                                }}
                                 className={`px-3.5 py-2 rounded-2xl text-xs md:text-sm font-semibold transition-all duration-200 shadow-xs ${
                                     activeTab === tab.id 
                                     ? `${tab.color} text-white scale-105 shadow-md font-bold` 
@@ -419,7 +646,6 @@
                     {/* ==================== 頁面 1: 🐱 基礎母音 ==================== */}
                     {activeTab === 'basic-vowels' && (
                         <div className="space-y-6">
-                            {/* 海報提示條 */}
                             <div className="bg-gradient-to-r from-rose-100 via-pink-50 to-purple-100 border border-rose-200 rounded-3xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
                                 <div className="flex items-center gap-3 text-center sm:text-left">
                                     <span className="text-3xl">🖼️</span>
@@ -437,7 +663,6 @@
                                 </button>
                             </div>
 
-                            {/* 海報彈窗 */}
                             {showPoster && (
                                 <div 
                                     className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
@@ -738,7 +963,7 @@
                         </div>
                     )}
 
-                    {/* ==================== 頁面 7: 🧩 3層拼音積木屋 (Batchim 升級) ==================== */}
+                    {/* ==================== 頁面 7: 🧩 3層拼音積木屋 ==================== */}
                     {activeTab === 'builder' && (
                         <div className="space-y-6">
                             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-sky-100">
@@ -747,11 +972,9 @@
                                 </h2>
                                 <p className="text-xs text-gray-400 text-center mb-6">初聲 (子音) ＋ 中聲 (母音) ＋ 終聲 (收音) ＝ 11,172 種全能韓語發音組合</p>
 
-                                {/* 3D 積木立體展示台 */}
                                 <div className="flex flex-col items-center mb-8">
                                     <div className="bg-gradient-to-b from-sky-50 via-indigo-50 to-pink-50 border-2 border-sky-200 p-6 md:p-8 rounded-3xl flex flex-col items-center w-full max-w-sm block-shadow relative">
                                         
-                                        {/* 積木分解圖示 */}
                                         <div className="flex flex-col items-center gap-1.5 mb-4">
                                             <div className="flex gap-2">
                                                 <div className="flex flex-col items-center">
@@ -769,7 +992,6 @@
                                                 </div>
                                             </div>
 
-                                            {/* 終聲收音積木托盤 */}
                                             <div className="flex items-center text-sky-400 text-sm font-bold">+</div>
                                             <div className="flex flex-col items-center">
                                                 <span className="text-[10px] text-emerald-600 font-bold mb-0.5">終聲(收音/尾音)</span>
@@ -779,12 +1001,10 @@
                                             </div>
                                         </div>
 
-                                        {/* 合成大字展示 */}
                                         <div className="bg-white rounded-2xl w-36 h-36 flex items-center justify-center shadow-lg border-2 border-sky-300 my-2 active-block-shadow">
                                             <span className="kr-font text-7xl font-bold text-sky-600">{currentSyllable}</span>
                                         </div>
 
-                                        {/* 發音按鈕組 */}
                                         <div className="flex gap-2 mt-4 flex-wrap justify-center">
                                             <button 
                                                 onClick={() => playSound(currentSyllable)}
@@ -806,10 +1026,7 @@
                                     </div>
                                 </div>
 
-                                {/* 積木選單區 */}
                                 <div className="space-y-6">
-                                    
-                                    {/* 1. 初聲子音選擇 */}
                                     <div className="bg-amber-50/70 p-4 md:p-5 rounded-3xl border border-amber-200">
                                         <div className="flex justify-between items-center mb-3 flex-wrap gap-2">
                                             <h3 className="text-xs md:text-sm font-bold text-amber-800">
@@ -859,7 +1076,6 @@
                                         </div>
                                     </div>
 
-                                    {/* 2. 中聲母音選擇 */}
                                     <div className="bg-rose-50/70 p-4 md:p-5 rounded-3xl border border-rose-200">
                                         <div className="flex justify-between items-center mb-3 flex-wrap gap-2">
                                             <h3 className="text-xs md:text-sm font-bold text-rose-800">
@@ -907,7 +1123,6 @@
                                         </div>
                                     </div>
 
-                                    {/* 3. 終聲收音選擇 */}
                                     <div className="bg-emerald-50/70 p-4 md:p-5 rounded-3xl border border-emerald-200">
                                         <div className="flex justify-between items-center mb-3 flex-wrap gap-2">
                                             <h3 className="text-xs md:text-sm font-bold text-emerald-800">
@@ -925,7 +1140,6 @@
                                             </button>
                                         </div>
 
-                                        {/* 常用 7 大代表收音快捷列 */}
                                         <div className="mb-2.5">
                                             <span className="text-[11px] text-emerald-700 font-semibold mb-1 block">⭐ 7 大代表收音快捷選取：</span>
                                             <div className="flex gap-1.5 flex-wrap">
@@ -945,7 +1159,6 @@
                                             </div>
                                         </div>
 
-                                        {/* 全部 27 種收音盤 */}
                                         <details className="mt-2">
                                             <summary className="text-[11px] text-emerald-600 cursor-pointer font-semibold hover:underline">
                                                 展開全部 27 種收音（含雙收音/複尾音）
@@ -967,13 +1180,12 @@
                                             </div>
                                         </details>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    {/* ==================== 頁面 8: ☁️ 雲端自學單字庫 ==================== */}
+                    {/* ==================== 頁面 8: ☁️ 雲端自學單字庫 (深度升級版) ==================== */}
                     {activeTab === 'wordbank' && (
                         <div className="space-y-6">
                             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-indigo-100">
@@ -982,73 +1194,440 @@
                                         <h2 className="text-xl font-bold text-indigo-600 flex items-center gap-2">
                                             <span>☁️</span> Firebase 雲端自學單字庫
                                         </h2>
-                                        <p className="text-xs text-gray-400 mt-1">點擊單字立即發音，支援全體學員共享與自訂上傳</p>
+                                        <p className="text-xs text-gray-400 mt-1">三段速發音示範 + 450ms逐字跳動高亮 + 雙彈窗字母拆解與AI跟讀挑戰</p>
                                     </div>
                                     <span className="text-xs bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full border border-indigo-200 font-semibold">
                                         已同步 {customWords.length} 個單字
                                     </span>
                                 </div>
 
-                                {/* 單字列表 */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-8">
-                                    {customWords.map((word, index) => (
-                                        <button
-                                            key={word.id || index}
-                                            onClick={() => playSound(word.kr)}
-                                            className="sanrio-card bg-indigo-50/50 hover:bg-indigo-100/70 border border-indigo-200 p-3.5 rounded-2xl flex items-center justify-between transition-all text-left shadow-2xs"
-                                        >
-                                            <div>
-                                                <div className="flex items-baseline gap-2">
-                                                    <span className="kr-font font-bold text-indigo-700 text-xl">{word.kr}</span>
-                                                    <span className="text-xs text-indigo-400 font-mono">[{word.sound}]</span>
+                                {/* 單字卡列表 */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                                    {customWords.map((word, index) => {
+                                        const isHighlightingThisWord = highlightWord === word.kr;
+                                        const chars = Array.from(word.kr);
+
+                                        return (
+                                            <div
+                                                key={word.id || index}
+                                                className="sanrio-card bg-indigo-50/40 hover:bg-indigo-50/80 border border-indigo-200/80 p-4 rounded-3xl flex flex-col justify-between gap-3 shadow-2xs relative"
+                                            >
+                                                {/* 單字頂部：韓文音節展示（支援逐字跳動高亮） */}
+                                                <div className="flex justify-between items-start">
+                                                    <div>
+                                                        <div className="flex items-center gap-1.5 flex-wrap">
+                                                            {chars.map((char, ci) => (
+                                                                <span
+                                                                    key={ci}
+                                                                    className={`kr-font font-bold text-2xl px-2 py-0.5 rounded-xl border transition-all ${
+                                                                        isHighlightingThisWord && highlightIndex === ci
+                                                                        ? 'syllable-highlight'
+                                                                        : 'bg-white border-indigo-100 text-indigo-800'
+                                                                    }`}
+                                                                >
+                                                                    {char}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                        <div className="flex items-center gap-2 mt-1.5">
+                                                            <span className="text-xs text-indigo-500 font-mono font-semibold">[{word.sound}]</span>
+                                                            <span className="text-xs text-gray-700 font-medium">{word.meaning}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* 右上角快速發音 */}
+                                                    <button
+                                                        onClick={() => playSound(word.kr, 1.0)}
+                                                        className="w-9 h-9 rounded-xl bg-indigo-100 hover:bg-indigo-200 text-indigo-600 flex items-center justify-center text-sm shadow-2xs transition-transform active:scale-95"
+                                                        title="標準速度發音"
+                                                    >
+                                                        🔊
+                                                    </button>
                                                 </div>
-                                                <p className="text-xs text-gray-600 mt-1 font-medium">{word.meaning}</p>
+
+                                                {/* 單字底部：三段速切換 + 雙彈窗按鈕 */}
+                                                <div className="flex items-center justify-between pt-2 border-t border-indigo-100/60 flex-wrap gap-2">
+                                                    {/* 三段速發音小按鈕 */}
+                                                    <div className="flex items-center gap-1">
+                                                        <span className="text-[10px] text-gray-400 font-bold mr-0.5">速：</span>
+                                                        <button
+                                                            onClick={() => playSound(word.kr, 1.0)}
+                                                            className="text-[11px] px-2 py-0.5 rounded-lg bg-white border border-indigo-200 hover:bg-indigo-100 text-indigo-700 font-semibold transition-all active:scale-95"
+                                                            title="1.0x 標準自然流暢語速"
+                                                        >
+                                                            1.0x
+                                                        </button>
+                                                        <button
+                                                            onClick={() => playSound(word.kr, 0.7)}
+                                                            className="text-[11px] px-2 py-0.5 rounded-lg bg-white border border-amber-200 hover:bg-amber-100 text-amber-700 font-semibold transition-all active:scale-95"
+                                                            title="0.7x 慢速口型連讀"
+                                                        >
+                                                            🐢 0.7x
+                                                        </button>
+                                                        <button
+                                                            onClick={() => playSound(word.kr, 0.3)}
+                                                            className="text-[11px] px-2 py-0.5 rounded-lg bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-600 font-bold transition-all active:scale-95"
+                                                            title="0.3x 逐字清晰獨立發音 + 450ms停頓 + 畫面高亮"
+                                                        >
+                                                            🦥 0.3x 逐字
+                                                        </button>
+                                                    </div>
+
+                                                    {/* 雙彈窗入口 */}
+                                                    <div className="flex items-center gap-1.5">
+                                                        <button
+                                                            onClick={() => {
+                                                                stopAllAudio();
+                                                                setDecompModalWord(word);
+                                                            }}
+                                                            className="text-[11px] px-2.5 py-1 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 font-bold flex items-center gap-1 transition-transform active:scale-95"
+                                                        >
+                                                            <span>🧩</span> 拆解
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                stopAllAudio();
+                                                                setRecognizedText('');
+                                                                setSpeechResult(null);
+                                                                setSpeechModalWord(word);
+                                                            }}
+                                                            className="text-[11px] px-2.5 py-1 rounded-xl bg-gradient-to-r from-rose-400 to-pink-500 hover:from-rose-500 hover:to-pink-600 text-white font-bold flex items-center gap-1 shadow-2xs transition-transform active:scale-95"
+                                                        >
+                                                            <span>🎤</span> 跟讀
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <span className="w-8 h-8 rounded-full bg-white text-indigo-500 flex items-center justify-center text-sm shadow-2xs">
-                                                🔊
-                                            </span>
-                                        </button>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
 
-                                {/* 新增單字表單 */}
-                                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-3xl border border-indigo-100">
-                                    <h3 className="text-sm font-bold text-indigo-800 mb-3 flex items-center gap-1.5">
-                                        <span>➕</span> 新增單字到 Firebase 雲端字庫
-                                    </h3>
-                                    <form onSubmit={handleAddCustomWord} className="flex flex-wrap gap-2.5 items-center">
-                                        <input 
-                                            type="text" 
-                                            placeholder="韓文 (例: 사랑)" 
-                                            value={newKr}
-                                            onChange={e => setNewKr(e.target.value)}
-                                            className="px-3.5 py-2 rounded-xl border border-indigo-200 text-xs flex-1 min-w-[110px] focus:outline-indigo-400 bg-white"
-                                            required
-                                        />
-                                        <input 
-                                            type="text" 
-                                            placeholder="拼音 (例: sa-rang)" 
-                                            value={newSound}
-                                            onChange={e => setNewSound(e.target.value)}
-                                            className="px-3.5 py-2 rounded-xl border border-indigo-200 text-xs flex-1 min-w-[100px] focus:outline-indigo-400 bg-white"
-                                        />
-                                        <input 
-                                            type="text" 
-                                            placeholder="中文意思 (例: 愛情 💖)" 
-                                            value={newMeaning}
-                                            onChange={e => setNewMeaning(e.target.value)}
-                                            className="px-3.5 py-2 rounded-xl border border-indigo-200 text-xs flex-1 min-w-[120px] focus:outline-indigo-400 bg-white"
-                                        />
-                                        <button
-                                            type="submit"
-                                            disabled={isAddingWord}
-                                            className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-xs transition-all disabled:opacity-50 active:scale-95 whitespace-nowrap"
-                                        >
-                                            {isAddingWord ? '同步中...' : '儲存至雲端'}
-                                        </button>
+                                {/* 新增單字表單（自動即時解析羅馬拼音，極致簡化為 2 欄） */}
+                                <div className="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 p-5 rounded-3xl border border-indigo-100">
+                                    <div className="flex items-center justify-between mb-3 flex-wrap gap-1">
+                                        <h3 className="text-sm font-bold text-indigo-900 flex items-center gap-1.5">
+                                            <span>➕</span> 登記新單字到 Firebase 雲端字庫
+                                        </h3>
+                                        <span className="text-[11px] text-indigo-500 bg-white/80 px-2.5 py-0.5 rounded-full border border-indigo-200">
+                                            ⚡ 系統已啟用「自動標準羅馬拼音解析」免手動輸入拼音
+                                        </span>
+                                    </div>
+
+                                    <form onSubmit={handleAddCustomWord} className="space-y-3">
+                                        <div className="flex flex-wrap gap-2.5 items-center">
+                                            <div className="flex-1 min-w-[140px]">
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="輸入韓文 (例: 사랑、바나나、감사합니다)" 
+                                                    value={newKr}
+                                                    onChange={e => setNewKr(e.target.value)}
+                                                    className="w-full px-3.5 py-2.5 rounded-2xl border border-indigo-200 text-xs focus:outline-indigo-400 bg-white shadow-2xs"
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="flex-1 min-w-[140px]">
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="輸入中文意思 (例: 愛情 💖 / 香蕉 🍌)" 
+                                                    value={newMeaning}
+                                                    onChange={e => setNewMeaning(e.target.value)}
+                                                    className="w-full px-3.5 py-2.5 rounded-2xl border border-indigo-200 text-xs focus:outline-indigo-400 bg-white shadow-2xs"
+                                                    required
+                                                />
+                                            </div>
+
+                                            <button
+                                                type="submit"
+                                                disabled={isAddingWord || !newKr.trim()}
+                                                className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-2xl text-xs shadow-md transition-all disabled:opacity-40 active:scale-95 whitespace-nowrap"
+                                            >
+                                                {isAddingWord ? '同步中...' : '儲存至 Firebase ☁️'}
+                                            </button>
+                                        </div>
+
+                                        {/* 即時自動拼音預覽條 */}
+                                        {newKr.trim() && (
+                                            <div className="bg-white/90 px-3.5 py-1.5 rounded-xl border border-indigo-200 flex items-center gap-2 text-xs">
+                                                <span className="font-bold text-indigo-600">💡 自動生成標準拼音：</span>
+                                                <span className="font-mono text-purple-600 font-bold bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
+                                                    [{autoPreviewRoman || '解析中...'}]
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => playSound(newKr, 1.0)}
+                                                    className="ml-auto text-indigo-500 hover:text-indigo-700 font-bold flex items-center gap-1 text-[11px]"
+                                                >
+                                                    🔊 試聽輸入發音
+                                                </button>
+                                            </div>
+                                        )}
                                     </form>
                                 </div>
                             </div>
+
+                            {/* ==================== 彈窗 1: 🧩 單字字母拆解彈窗 ==================== */}
+                            {decompModalWord && (
+                                <div 
+                                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+                                    onClick={() => {
+                                        stopAllAudio();
+                                        setDecompModalWord(null);
+                                    }}
+                                >
+                                    <div 
+                                        className="bg-white rounded-3xl p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl space-y-5"
+                                        onClick={e => e.stopPropagation()}
+                                    >
+                                        <button 
+                                            onClick={() => {
+                                                stopAllAudio();
+                                                setDecompModalWord(null);
+                                            }}
+                                            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center text-sm font-bold z-10"
+                                        >
+                                            ✕
+                                        </button>
+
+                                        {/* 彈窗標題 */}
+                                        <div className="text-center">
+                                            <span className="text-3xl">🧩</span>
+                                            <h3 className="text-xl font-bold text-indigo-800 mt-1">
+                                                單字結構積木拆解：【 <span className="kr-font text-2xl text-rose-500">{decompModalWord.kr}</span> 】
+                                            </h3>
+                                            <p className="text-xs text-gray-500 mt-0.5">[{decompModalWord.sound}] • {decompModalWord.meaning}</p>
+                                        </div>
+
+                                        {/* 三段速發音控制條 */}
+                                        <div className="bg-indigo-50/70 p-3.5 rounded-2xl border border-indigo-200 flex justify-between items-center flex-wrap gap-2">
+                                            <span className="text-xs font-bold text-indigo-700">三段速朗讀示範：</span>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => playSound(decompModalWord.kr, 1.0)}
+                                                    className="px-3 py-1 bg-white hover:bg-indigo-100 text-indigo-700 font-semibold rounded-xl text-xs border border-indigo-200 shadow-2xs active:scale-95"
+                                                >
+                                                    🔊 1.0x 標準
+                                                </button>
+                                                <button
+                                                    onClick={() => playSound(decompModalWord.kr, 0.7)}
+                                                    className="px-3 py-1 bg-white hover:bg-amber-100 text-amber-700 font-semibold rounded-xl text-xs border border-amber-200 shadow-2xs active:scale-95"
+                                                >
+                                                    🐢 0.7x 慢速
+                                                </button>
+                                                <button
+                                                    onClick={() => playSound(decompModalWord.kr, 0.3)}
+                                                    className="px-3.5 py-1 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl text-xs shadow-xs active:scale-95"
+                                                >
+                                                    🦥 0.3x 逐字慢速 (450ms)
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* 各音節拆解卡片清單 */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                                            {Array.from(decompModalWord.kr).map((char, idx) => {
+                                                const dec = decomposeSyllable(char);
+                                                const isHighlighted = highlightWord === decompModalWord.kr && highlightIndex === idx;
+
+                                                return (
+                                                    <div 
+                                                        key={idx}
+                                                        className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center justify-between ${
+                                                            isHighlighted
+                                                            ? 'syllable-highlight'
+                                                            : 'bg-indigo-50/30 border-indigo-100 hover:border-indigo-300'
+                                                        }`}
+                                                    >
+                                                        <span className="text-[10px] text-gray-400 font-bold mb-1">第 {idx + 1} 個音節</span>
+                                                        
+                                                        {/* 大音節 */}
+                                                        <div className="w-16 h-16 rounded-2xl bg-white border border-indigo-200 flex items-center justify-center shadow-xs my-1">
+                                                            <span className="kr-font text-4xl font-bold text-indigo-700">{char}</span>
+                                                        </div>
+                                                        <span className="text-xs font-mono font-bold text-indigo-400 mt-1">/{dec.rom}/</span>
+
+                                                        {/* 初中終聲標籤 */}
+                                                        <div className="w-full space-y-1 mt-2.5 pt-2 border-t border-indigo-100 text-[11px]">
+                                                            <div className="flex justify-between">
+                                                                <span className="text-amber-600 font-semibold">初聲(子音):</span>
+                                                                <strong className="kr-font text-gray-800">{dec.c || '-'}</strong>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-rose-600 font-semibold">中聲(母音):</span>
+                                                                <strong className="kr-font text-gray-800">{dec.v || '-'}</strong>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-emerald-600 font-semibold">終聲(收音):</span>
+                                                                <strong className="kr-font text-gray-800">{dec.t ? dec.t : '(無收音)'}</strong>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* 單音節獨立發音按鈕 */}
+                                                        <button
+                                                            onClick={() => playSound(char, 1.0)}
+                                                            className="mt-3 px-3 py-1 bg-white hover:bg-indigo-100 text-indigo-600 border border-indigo-200 rounded-xl text-xs font-semibold shadow-2xs active:scale-95 flex items-center gap-1"
+                                                        >
+                                                            <span>🔊 單獨發音</span>
+                                                        </button>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ==================== 彈窗 2: 🎤 跟讀挑戰與 Jamo 字母比對評分彈窗 ==================== */}
+                            {speechModalWord && (
+                                <div 
+                                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+                                    onClick={() => {
+                                        stopAllAudio();
+                                        stopSpeechRecognition();
+                                        setSpeechModalWord(null);
+                                    }}
+                                >
+                                    <div 
+                                        className="bg-white rounded-3xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-2xl space-y-5"
+                                        onClick={e => e.stopPropagation()}
+                                    >
+                                        <button 
+                                            onClick={() => {
+                                                stopAllAudio();
+                                                stopSpeechRecognition();
+                                                setSpeechModalWord(null);
+                                            }}
+                                            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center text-sm font-bold z-10"
+                                        >
+                                            ✕
+                                        </button>
+
+                                        {/* 彈窗標題 */}
+                                        <div className="text-center">
+                                            <span className="text-3xl">🎤</span>
+                                            <h3 className="text-xl font-bold text-rose-600 mt-1">
+                                                AI 語音跟讀挑戰與 Jamo 評分
+                                            </h3>
+                                            <p className="text-xs text-gray-500 mt-0.5">對著麥克風朗讀，即時分析初聲、中聲與收音精確度！</p>
+                                        </div>
+
+                                        {/* 目標單字卡 */}
+                                        <div className="bg-gradient-to-b from-rose-50 to-pink-50 p-4 rounded-3xl border border-rose-200 text-center">
+                                            <span className="text-xs text-gray-400 font-semibold block mb-1">目標挑戰單字</span>
+                                            <span className="kr-font text-5xl font-bold text-gray-800 tracking-wider">{speechModalWord.kr}</span>
+                                            <div className="flex justify-center items-center gap-2 mt-2">
+                                                <span className="text-xs text-rose-500 font-mono font-bold">[{speechModalWord.sound}]</span>
+                                                <span className="text-xs text-gray-600 font-medium">{speechModalWord.meaning}</span>
+                                            </div>
+
+                                            {/* 三段速示範 */}
+                                            <div className="flex justify-center gap-2 mt-3 pt-3 border-t border-rose-200/60">
+                                                <button
+                                                    onClick={() => playSound(speechModalWord.kr, 1.0)}
+                                                    className="px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-600 font-bold rounded-xl text-xs border border-rose-200 active:scale-95 shadow-2xs"
+                                                >
+                                                    🔊 1.0x
+                                                </button>
+                                                <button
+                                                    onClick={() => playSound(speechModalWord.kr, 0.7)}
+                                                    className="px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-700 font-bold rounded-xl text-xs border border-amber-200 active:scale-95 shadow-2xs"
+                                                >
+                                                    🐢 0.7x
+                                                </button>
+                                                <button
+                                                    onClick={() => playSound(speechModalWord.kr, 0.3)}
+                                                    className="px-3 py-1 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl text-xs active:scale-95 shadow-2xs"
+                                                >
+                                                    🦥 0.3x 逐字
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* 麥克風互動按鈕 */}
+                                        <div className="flex flex-col items-center justify-center my-4">
+                                            <div className="relative flex items-center justify-center">
+                                                {isRecording && <div className="mic-ripple"></div>}
+                                                <button
+                                                    onClick={() => {
+                                                        if (isRecording) {
+                                                            stopSpeechRecognition();
+                                                        } else {
+                                                            startSpeechRecognition(speechModalWord.kr);
+                                                        }
+                                                    }}
+                                                    className={`w-20 h-20 rounded-full flex items-center justify-center text-3xl text-white shadow-lg transition-transform active:scale-90 z-10 ${
+                                                        isRecording
+                                                        ? 'bg-rose-600 animate-pulse ring-4 ring-rose-200'
+                                                        : 'bg-gradient-to-r from-rose-400 to-pink-500 hover:from-rose-500 hover:to-pink-600'
+                                                    }`}
+                                                >
+                                                    {isRecording ? '⏹️' : '🎙️'}
+                                                </button>
+                                            </div>
+                                            <span className="text-xs font-bold text-gray-500 mt-2">
+                                                {isRecording ? '正在聆聽您的發音... 請朗讀！' : '點擊麥克風開始跟讀'}
+                                            </span>
+                                        </div>
+
+                                        {/* 辨識與評分結果 */}
+                                        {speechResult && (
+                                            <div className="bg-purple-50 p-4 rounded-3xl border border-purple-200 space-y-3 animate-fade-in">
+                                                <div className="flex justify-between items-center">
+                                                    <div>
+                                                        <span className="text-xs text-gray-400">辨識到的發音：</span>
+                                                        <h4 className="kr-font text-2xl font-bold text-purple-800">
+                                                            {recognizedText || '(未能識別)'}
+                                                        </h4>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <span className="text-xs text-gray-400">Jamo 吻合度</span>
+                                                        <div className="text-3xl font-bold text-purple-600">
+                                                            {speechResult.percentage} <span className="text-sm text-gray-400">%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* 星級 */}
+                                                <div className="text-center py-1">
+                                                    <span className="text-2xl tracking-widest">
+                                                        {'⭐'.repeat(speechResult.stars) + '☆'.repeat(3 - speechResult.stars)}
+                                                    </span>
+                                                    <p className="text-xs font-bold text-purple-700 mt-1">
+                                                        {speechResult.feedback}
+                                                    </p>
+                                                </div>
+
+                                                {/* Jamo 字母拆解比對視覺 */}
+                                                {speechResult.targetJamos && (
+                                                    <div className="bg-white/80 p-2.5 rounded-2xl text-[11px] border border-purple-100 space-y-1">
+                                                        <div className="flex gap-1 items-center">
+                                                            <span className="text-gray-500 font-semibold w-16">標準字母:</span>
+                                                            <div className="flex gap-1 flex-wrap">
+                                                                {speechResult.targetJamos.map((j, ji) => (
+                                                                    <span key={ji} className="kr-font bg-rose-100 text-rose-700 font-bold px-1.5 py-0.5 rounded">
+                                                                        {j}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex gap-1 items-center">
+                                                            <span className="text-gray-500 font-semibold w-16">您的發音:</span>
+                                                            <div className="flex gap-1 flex-wrap">
+                                                                {speechResult.spokenJamos.map((j, ji) => (
+                                                                    <span key={ji} className="kr-font bg-purple-100 text-purple-700 font-bold px-1.5 py-0.5 rounded">
+                                                                        {j}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
                         </div>
                     )}
 
