@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎀 Sanrio 韓語 100 個常見食物學習清單 (10頁完整版 & 發音打卡手札)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+KR:wght@500;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+            background-color: #FFF5F8;
+            color: #4A4050;
+        }
+        .kr-font {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .cute-font {
+            font-family: 'Gaegu', 'Noto Sans TC', cursive, sans-serif;
+        }
+
+        /* A4 Page Dimensions for Screen & Print */
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto 30px auto;
+            padding: 14mm 16mm 14mm 16mm;
+            background: #FFFFFF;
+            box-shadow: 0 10px 30px rgba(244, 114, 182, 0.15), 0 2px 8px rgba(0, 0, 0, 0.04);
+            border-radius: 24px;
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Checkbox circle styling */
+        .check-circle {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #CBD5E1;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: #FFFFFF;
+            user-select: none;
+        }
+        .check-circle:hover {
+            border-color: #F472B6;
+            transform: scale(1.15);
+        }
+        .check-circle.checked {
+            background-color: #EC4899;
+            border-color: #EC4899;
+            color: #FFFFFF;
+            transform: scale(1.05);
+            box-shadow: 0 2px 6px rgba(236, 72, 153, 0.35);
+        }
+
+        /* Row pill styles */
+        .kr-pill {
+            background-color: #FEF3C7;
+            color: #78350F;
+            border: 1.5px solid #FDE68A;
+            transition: all 0.2s ease;
+        }
+        .kr-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2);
+            background-color: #FDE68A;
+        }
+        
+        .pinyin-pill {
+            background-color: #E2E8F0;
+            color: #334155;
+            border: 1.5px solid #CBD5E1;
+        }
+        
+        .zh-pill {
+            background-color: #FEF9C3;
+            color: #713F12;
+            border: 1.5px solid #FEF08A;
+        }
+
+        /* Print Settings */
+        @media print {
+            body {
+                background: #FFFFFF !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .a4-page {
+                width: 100% !important;
+                min-height: 100vh !important;
+                height: 100vh !important;
+                margin: 0 !important;
+                padding: 12mm 14mm 10mm 14mm !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                box-sizing: border-box !important;
+            }
+            .a4-page:last-child {
+                page-break-after: auto !important;
+            }
+            .check-circle {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+
+        /* Animations */
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .bounce-hover:hover {
+            animation: bounce-slow 0.6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6">
+
+    <!-- Top Control Bar (Screen Only) -->
+    <header class="no-print sticky top-2 z-50 max-w-5xl mx-auto px-4 mb-6">
+        <div class="bg-white/95 backdrop-blur-md border-2 border-pink-200 shadow-xl rounded-3xl p-4 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-pink-100 rounded-2xl flex items-center justify-center text-pink-500 text-2xl shadow-inner">
+                    🎀
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-pink-600 flex items-center gap-2">
+                        Sanrio 韓語 100 個常見食物學習清單
+                        <span class="text-xs bg-pink-500 text-white font-normal px-2.5 py-0.5 rounded-full">10 頁完整版</span>
+                    </h1>
+                    <p class="text-xs text-gray-500">點擊單字即可聆聽標準發音 ｜ 點擊圓圈打卡 ｜ 支援 A4 完美列印 PDF</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center flex-wrap gap-2">
+                <!-- Speed Toggle -->
+                <button id="speedBtn" onclick="toggleAudioSpeed()" class="px-3 py-2 bg-pink-50 hover:bg-pink-100 text-pink-700 text-sm font-semibold rounded-xl border border-pink-200 flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span id="speedLabel">語速: 1.0x</span>
+                </button>
+
+                <!-- Search Input -->
+                <div class="relative">
+                    <input type="text" id="searchInput" oninput="filterWords()" placeholder="搜尋食物/韓文/發音..." class="w-40 md:w-52 pl-8 pr-3 py-2 text-sm bg-gray-50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-gray-400 text-xs"></i>
+                </div>
+
+                <!-- Print to PDF Button -->
+                <button onclick="window.print()" class="px-4 py-2 bg-gradient-to-r from-pink-500 to-rose-400 hover:from-pink-600 hover:to-rose-500 text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i>
+                    列印 / 轉存 PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Navigation Jumpers -->
+        <div class="mt-3 flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+            <span class="text-gray-400 font-semibold px-1 whitespace-nowrap">快速跳頁:</span>
+            <button onclick="scrollToPage(1)" class="px-2.5 py-1 bg-white border border-pink-200 rounded-lg hover:bg-pink-50 text-pink-600 font-medium whitespace-nowrap">P1 🎀 小菜</button>
+            <button onclick="scrollToPage(2)" class="px-2.5 py-1 bg-white border-yellow-200 border rounded-lg hover:bg-yellow-50 text-amber-700 font-medium whitespace-nowrap">P2 🍮 超商</button>
+            <button onclick="scrollToPage(3)" class="px-2.5 py-1 bg-white border-rose-200 border rounded-lg hover:bg-rose-50 text-rose-600 font-medium whitespace-nowrap">P3 🍓 小吃</button>
+            <button onclick="scrollToPage(4)" class="px-2.5 py-1 bg-white border-sky-200 border rounded-lg hover:bg-sky-50 text-sky-600 font-medium whitespace-nowrap">P4 ☁️ 飲品</button>
+            <button onclick="scrollToPage(5)" class="px-2.5 py-1 bg-white border-emerald-200 border rounded-lg hover:bg-emerald-50 text-emerald-700 font-medium whitespace-nowrap">P5 🐾 茶與咖啡</button>
+            <button onclick="scrollToPage(6)" class="px-2.5 py-1 bg-white border-purple-200 border rounded-lg hover:bg-purple-50 text-purple-700 font-medium whitespace-nowrap">P6 💜 鍋物料理</button>
+            <button onclick="scrollToPage(7)" class="px-2.5 py-1 bg-white border-slate-300 border rounded-lg hover:bg-slate-50 text-slate-700 font-medium whitespace-nowrap">P7 🐧 烤肉熱湯</button>
+            <button onclick="scrollToPage(8)" class="px-2.5 py-1 bg-white border-orange-200 border rounded-lg hover:bg-orange-50 text-orange-700 font-medium whitespace-nowrap">P8 🍗 韓式炸雞</button>
+            <button onclick="scrollToPage(9)" class="px-2.5 py-1 bg-white border-indigo-200 border rounded-lg hover:bg-indigo-50 text-indigo-600 font-medium whitespace-nowrap">P9 ✨ 布帳馬車</button>
+            <button onclick="scrollToPage(10)" class="px-2.5 py-1 bg-white border-lime-200 border rounded-lg hover:bg-lime-50 text-lime-700 font-medium whitespace-nowrap">P10 🥟 中華料理</button>
+        </div>
+    </header>
+
+    <!-- 10 Pages Main Container -->
+    <main id="pagesContainer" class="flex flex-col items-center">
+        <!-- Rendered dynamically by JavaScript -->
+    </main>
+
+    <!-- Back to Top Floating Button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="no-print fixed bottom-6 right-6 w-12 h-12 bg-pink-500 hover:bg-pink-600 text-white rounded-full shadow-2xl flex items-center justify-center text-lg transition z-40">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 100 Food Data Structured in 10 Pages
+        const foodPagesData = [
+            {
+                page: 1,
+                character: "Hello Kitty",
+                avatar: "🎀",
+                themeColor: "pink",
+                headerBg: "bg-pink-50",
+                borderColor: "border-pink-200",
+                titleBadgeBg: "bg-pink-500",
+                category: "必備經典小菜篇 (Banchan)",
+                tip: "開動前桌上擺滿滿的小菜（밑반찬）是韓國用餐不可或缺的靈魂喔！✨",
+                foodIllustrations: [
+                    { icon: "🥘", name: "韓式蒸蛋", kr: "계란찜" },
+                    { icon: "🥬", name: "傳統泡菜", kr: "김치" }
+                ],
+                items: [
+                    { id: "01", kr: "김치", py: "Kim-chi", zh: "泡菜" },
+                    { id: "02", kr: "깍두기", py: "Kkak-du-gi", zh: "醃蘿蔔塊" },
+                    { id: "03", kr: "계란찜", py: "Gye-ran-jjim", zh: "韓式蒸蛋" },
+                    { id: "04", kr: "멸치볶음", py: "Myeol-chi-bo-kkeum", zh: "炒小魚乾" },
+                    { id: "05", kr: "무생채", py: "Mu-saeng-chae", zh: "涼拌蘿蔔絲" },
+                    { id: "06", kr: "감자조림", py: "Gam-ja-jo-rim", zh: "燉馬鈴薯" },
+                    { id: "07", kr: "시금치나물", py: "Si-geum-chi-na-mul", zh: "涼拌菠菜" },
+                    { id: "08", kr: "콩나물무침", py: "Kong-na-mul-mu-chim", zh: "涼拌黃豆芽" },
+                    { id: "09", kr: "밑반찬", py: "Mit-ban-chan", zh: "基本小菜" },
+                    { id: "10", kr: "감자볶음", py: "Gam-ja-bo-kkeum", zh: "炒馬鈴薯絲" }
+                ]
+            },
+            {
+                page: 2,
+                character: "Pompompurin 布丁狗",
+                avatar: "🍮",
+                themeColor: "amber",
+                headerBg: "bg-amber-50",
+                borderColor: "border-amber-200",
+                titleBadgeBg: "bg-amber-500",
+                category: "便利店必買速食篇 (Convenience Store)",
+                tip: "宵夜去超商買香蕉牛奶配杯麵或三角飯糰，療癒滿分～🍮",
+                foodIllustrations: [
+                    { icon: "🍌", name: "香蕉牛奶", kr: "바나나 우유" },
+                    { icon: "🍱", name: "超商便當", kr: "도시락" },
+                    { icon: "🍙", name: "三角飯糰", kr: "삼각김밥" }
+                ],
+                items: [
+                    { id: "11", kr: "삼각김밥", py: "Sam-gak-gim-bap", zh: "三角飯糰" },
+                    { id: "12", kr: "도시락", py: "Do-si-rak", zh: "便當" },
+                    { id: "13", kr: "샌드위치", py: "Saen-deu-wi-chi", zh: "三明治" },
+                    { id: "14", kr: "햄버거", py: "Haem-beo-geo", zh: "漢堡" },
+                    { id: "15", kr: "얼음컵", py: "Eo-leum-keop", zh: "冰塊杯" },
+                    { id: "16", kr: "숙취해소제", py: "Suk-chwi-hae-so-je", zh: "解酒劑" },
+                    { id: "17", kr: "훈제계란", py: "Hun-je-gye-ran", zh: "煙燻雞蛋" },
+                    { id: "18", kr: "바나나 우유", py: "Ba-na-na u-yu", zh: "香蕉牛奶" },
+                    { id: "19", kr: "컵라면", py: "Keop-la-myeon", zh: "杯麵" },
+                    { id: "20", kr: "음료수", py: "Eum-ryo-su", zh: "飲料" }
+                ]
+            },
+            {
+                page: 3,
+                character: "My Melody 美樂蒂",
+                avatar: "🍓",
+                themeColor: "rose",
+                headerBg: "bg-rose-50",
+                borderColor: "border-rose-200",
+                titleBadgeBg: "bg-rose-500",
+                category: "街頭人氣甜點小吃篇 (Street Snacks)",
+                tip: "冬天走在首爾街頭，吃熱騰騰剛出爐的糖餅跟鯽魚餅最幸福了！🍓",
+                foodIllustrations: [
+                    { icon: "🐟", name: "鯽魚餅", kr: "붕어빵" },
+                    { icon: "🍡", name: "烤雞肉串", kr: "닭꼬치" }
+                ],
+                items: [
+                    { id: "21", kr: "붕어빵", py: "Bung-eo-bang", zh: "鯽魚餅" },
+                    { id: "22", kr: "호떡", py: "Ho-deok", zh: "糖餅" },
+                    { id: "23", kr: "계란빵", py: "Gye-ran-bang", zh: "雞蛋麵包" },
+                    { id: "24", kr: "핫도그", py: "Hat-do-geu", zh: "韓式熱狗" },
+                    { id: "25", kr: "닭꼬치", py: "Dak-go-chi", zh: "烤雞肉串" },
+                    { id: "26", kr: "달고나", py: "Dal-go-na", zh: "韓式烤糖 / 椪糖" },
+                    { id: "27", kr: "훈제계란", py: "Hun-je-gye-ran", zh: "煙燻雞蛋" },
+                    { id: "28", kr: "군고구마", py: "Gun-go-gu-ma", zh: "烤地瓜" },
+                    { id: "29", kr: "군밤", py: "Gun-bam", zh: "烤栗子" },
+                    { id: "30", kr: "탕후루", py: "Tang-hu-ru", zh: "糖葫蘆" }
+                ]
+            },
+            {
+                page: 4,
+                character: "Cinnamoroll 大耳狗",
+                avatar: "☁️",
+                themeColor: "sky",
+                headerBg: "bg-sky-50",
+                borderColor: "border-sky-200",
+                titleBadgeBg: "bg-sky-500",
+                category: "經典飲品與微醺篇 (Drinks & Alcohol)",
+                tip: "烤肉搭配冰涼的燒酒或汽水，清爽解膩，像在雲朵上飛翔！☁️",
+                foodIllustrations: [
+                    { icon: "🍶", name: "綠瓶燒酒", kr: "소주" },
+                    { icon: "🥤", name: "可樂氣泡", kr: "콜라" }
+                ],
+                items: [
+                    { id: "31", kr: "소주", py: "So-ju", zh: "燒酒" },
+                    { id: "32", kr: "맥주", py: "Maek-ju", zh: "啤酒" },
+                    { id: "33", kr: "막걸리", py: "Mak-geol-ri", zh: "瑪格利酒" },
+                    { id: "34", kr: "콜라", py: "Kol-ra", zh: "可樂" },
+                    { id: "35", kr: "사이다", py: "Sa-i-da", zh: "汽水" },
+                    { id: "36", kr: "우유", py: "U-yu", zh: "牛奶" },
+                    { id: "37", kr: "두유", py: "Tu-yu", zh: "豆奶" },
+                    { id: "38", kr: "딸기 에이드", py: "Ttal-gi E-i-deu", zh: "草莓氣泡飲" },
+                    { id: "39", kr: "옥수수차", py: "Ok-su-su-cha", zh: "玉米鬚茶" },
+                    { id: "40", kr: "오미자차", py: "O-mi-ja-cha", zh: "五味子茶" }
+                ]
+            },
+            {
+                page: 5,
+                character: "Pochacco 帕恰狗",
+                avatar: "🐾",
+                themeColor: "emerald",
+                headerBg: "bg-emerald-50",
+                borderColor: "border-emerald-200",
+                titleBadgeBg: "bg-emerald-600",
+                category: "傳統養生茶與咖啡時光篇 (Teas & Coffee)",
+                tip: "韓國人最愛『凍死美 (얼죽아)』～不管多冷都要來杯冰美式！🐾",
+                foodIllustrations: [
+                    { icon: "☕", name: "美式外帶", kr: "아메리카노" },
+                    { icon: "🍵", name: "暖心大麥茶", kr: "보리차" }
+                ],
+                items: [
+                    { id: "41", kr: "식혜", py: "Sik-hye", zh: "甜米釀" },
+                    { id: "42", kr: "수정과", py: "Su-jeong-gwa", zh: "水正果" },
+                    { id: "43", kr: "유자차", py: "Yu-ja-cha", zh: "柚子茶" },
+                    { id: "44", kr: "매실차", py: "Mae-sil-cha", zh: "梅子茶" },
+                    { id: "45", kr: "대추차", py: "Dae-chu-cha", zh: "紅棗茶" },
+                    { id: "46", kr: "보리차", py: "Po-ri-cha", zh: "大麥茶" },
+                    { id: "47", kr: "녹차", py: "Nok-cha", zh: "綠茶" },
+                    { id: "48", kr: "커피", py: "Keo-pi", zh: "咖啡" },
+                    { id: "49", kr: "아메리카노", py: "A-me-ri-ka-no", zh: "美式咖啡" },
+                    { id: "50", kr: "카페라테", py: "Ka-pe-ra-te", zh: "拿鐵" }
+                ]
+            },
+            {
+                page: 6,
+                character: "Kuromi 酷洛米",
+                avatar: "💜",
+                themeColor: "purple",
+                headerBg: "bg-purple-50",
+                borderColor: "border-purple-200",
+                titleBadgeBg: "bg-purple-600",
+                category: "招牌暖胃湯鍋與經典正餐篇 (Soups & Meals)",
+                tip: "大口吃辣辣熱熱的泡菜鍋與拌飯，吃飽才有力氣惡作劇！💜",
+                foodIllustrations: [
+                    { icon: "🍲", name: "熱滾泡菜鍋", kr: "김치찌개" },
+                    { icon: "🍛", name: "彩虹拌飯", kr: "비빔밥" }
+                ],
+                items: [
+                    { id: "51", kr: "비빔밥", py: "Bi-bim-bap", zh: "拌飯" },
+                    { id: "52", kr: "김치찌개", py: "Gim-chi-jji-gae", zh: "泡菜鍋" },
+                    { id: "53", kr: "된장찌개", py: "Doen-jang-jji-gae", zh: "大醬鍋" },
+                    { id: "54", kr: "순두부찌개", py: "Sun-du-bu-jji-gae", zh: "嫩豆腐鍋" },
+                    { id: "55", kr: "갈비탕", py: "Kal-bi-tang", zh: "排骨湯" },
+                    { id: "56", kr: "삼계탕", py: "Sam-gye-tang", zh: "人蔘雞湯" },
+                    { id: "57", kr: "육개장", py: "Yuk-gae-jang", zh: "辣牛肉湯" },
+                    { id: "58", kr: "물냉면", py: "Mul-naeng-myeon", zh: "水冷麵" },
+                    { id: "59", kr: "비빔냉면", py: "Bi-bim-naeng-myeon", zh: "冷拌麵" },
+                    { id: "60", kr: "족발", py: "Jok-bal", zh: "豬腳" }
+                ]
+            },
+            {
+                page: 7,
+                character: "Badtz-Maru 酷企鵝",
+                avatar: "🐧",
+                themeColor: "slate",
+                headerBg: "bg-slate-100",
+                borderColor: "border-slate-300",
+                titleBadgeBg: "bg-slate-800",
+                category: "熱血韓式烤肉與道地解酒篇 (BBQ & Hearty Soups)",
+                tip: "五花肉在烤盤上滋滋作響，包上新鮮生菜大口咬下最過癮！🐧",
+                foodIllustrations: [
+                    { icon: "🥩", name: "黃金五花肉", kr: "삼겹살" },
+                    { icon: "🥗", name: "包肉生菜", kr: "상추" }
+                ],
+                items: [
+                    { id: "61", kr: "닭발", py: "Dak-bal", zh: "雞腳" },
+                    { id: "62", kr: "감자탕", py: "Gam-ja-tang", zh: "馬鈴薯排骨湯" },
+                    { id: "63", kr: "칼국수", py: "Kal-guk-su", zh: "刀削麵" },
+                    { id: "64", kr: "삼겹살", py: "Sam-gyeop-sal", zh: "五花肉" },
+                    { id: "65", kr: "불고기", py: "Bul-go-gi", zh: "烤肉" },
+                    { id: "66", kr: "보쌈", py: "Bo-ssam", zh: "菜包肉" },
+                    { id: "67", kr: "순대국", py: "Sun-dae-guk", zh: "血腸湯" },
+                    { id: "68", kr: "해장국", py: "Hae-jang-guk", zh: "解酒湯" },
+                    { id: "69", kr: "선지국", py: "Seon-ji-guk", zh: "牛血湯" },
+                    { id: "70", kr: "상추", py: "Sang-chu", zh: "生菜" }
+                ]
+            },
+            {
+                page: 8,
+                character: "Tuxedosam 山姆企鵝",
+                avatar: "🍗",
+                themeColor: "orange",
+                headerBg: "bg-orange-50",
+                borderColor: "border-orange-200",
+                titleBadgeBg: "bg-orange-500",
+                category: "吮指韓式炸雞派對篇 (Fried Chicken)",
+                tip: "半半炸雞（原味＋洋釀）配上濃郁起司球與醃黃瓜，誰能抗拒！🍗",
+                foodIllustrations: [
+                    { icon: "🍗", name: "香脆炸雞", kr: "후라이드 치킨" },
+                    { icon: "🥒", name: "爽口醃瓜", kr: "피클" }
+                ],
+                items: [
+                    { id: "71", kr: "후라이드 치킨", py: "Hu-la-i-deu Chi-kin", zh: "原味炸雞" },
+                    { id: "72", kr: "양념 치킨", py: "Yang-nyeom Chi-kin", zh: "調味炸雞" },
+                    { id: "73", kr: "간장 치킨", py: "Gan-jang Chi-kin", zh: "醬油炸雞" },
+                    { id: "74", kr: "마늘 치킨", py: "Ma-neul Chi-kin", zh: "大蒜炸雞" },
+                    { id: "75", kr: "파닭", py: "Pa-dak", zh: "蔥味炸雞" },
+                    { id: "76", kr: "순살 치킨", py: "Sun-sal Chi-kin", zh: "無骨炸雞" },
+                    { id: "77", kr: "닭다리", py: "Dak-da-ri", zh: "雞腿" },
+                    { id: "78", kr: "닭날개", py: "Dak-nal-gae", zh: "雞翅" },
+                    { id: "79", kr: "치즈볼", py: "Chi-jeu-bol", zh: "起司球" },
+                    { id: "80", kr: "피클", py: "Pi-keul", zh: "醃小黃瓜" }
+                ]
+            },
+            {
+                page: 9,
+                character: "Little Twin Stars 雙子星",
+                avatar: "✨",
+                themeColor: "indigo",
+                headerBg: "bg-indigo-50",
+                borderColor: "border-indigo-200",
+                titleBadgeBg: "bg-indigo-500",
+                category: "布帳馬車與庶民麵食篇 (Bunsik & Street Noodles)",
+                tip: "辣炒年糕沾炸冬粉海苔捲，再來碗暖呼呼的魚板湯，星光下最溫暖～✨",
+                foodIllustrations: [
+                    { icon: "🍢", name: "魚板串", kr: "어묵" },
+                    { icon: "🍜", name: "辛香泡麵", kr: "라면" }
+                ],
+                items: [
+                    { id: "81", kr: "떡볶이", py: "Tteok-bo-kki", zh: "辣炒年糕" },
+                    { id: "82", kr: "라볶이", py: "Ra-bo-kki", zh: "辣炒年糕泡麵" },
+                    { id: "83", kr: "김밥", py: "Gim-bap", zh: "紫菜飯捲" },
+                    { id: "84", kr: "튀김", py: "Twi-gim", zh: "炸物" },
+                    { id: "85", kr: "어묵/오뎅", py: "Eo-muk / O-deng", zh: "魚板" },
+                    { id: "86", kr: "라면", py: "Ra-myeon", zh: "泡麵" },
+                    { id: "87", kr: "우동", py: "U-dong", zh: "烏龍麵" },
+                    { id: "88", kr: "수제비", py: "Su-je-bi", zh: "麵疙瘩" },
+                    { id: "89", kr: "칼국수", py: "Kal-guk-su", zh: "刀削麵" },
+                    { id: "90", kr: "김말이", py: "Kim-ma-li", zh: "海苔捲" }
+                ]
+            },
+            {
+                page: 10,
+                character: "Keroppi 大眼蛙",
+                avatar: "🐸",
+                themeColor: "lime",
+                headerBg: "bg-lime-50",
+                borderColor: "border-lime-200",
+                titleBadgeBg: "bg-lime-600",
+                category: "韓式中華料理大滿足篇 (Korean-Chinese Cuisine)",
+                tip: "黑黑濃郁的炸醬麵配上現炸酸甜糖醋肉，吸麵聲超級治癒！🐸",
+                foodIllustrations: [
+                    { icon: "🥟", name: "金黃煎餃", kr: "군만두" },
+                    { icon: "🍲", name: "海鮮辣麵", kr: "짬뽕" }
+                ],
+                items: [
+                    { id: "91", kr: "짜장면", py: "Jja-jang-myeon", zh: "炸醬麵" },
+                    { id: "92", kr: "간짜장", py: "Kan-jja-jang", zh: "乾炸醬麵" },
+                    { id: "93", kr: "짬뽕", py: "Jjam-ppong", zh: "海鮮辣湯麵" },
+                    { id: "94", kr: "탕수육", py: "Tang-su-yuk", zh: "糖醋肉" },
+                    { id: "95", kr: "볶음밥", py: "Bo-kkeum-bap", zh: "炒飯" },
+                    { id: "96", kr: "깐풍기", py: "Kkan-pung-gi", zh: "乾烹雞" },
+                    { id: "97", kr: "마파두부", py: "Ma-pa-du-bu", zh: "麻婆豆腐" },
+                    { id: "98", kr: "깐쇼새우", py: "Kkan-syo-sae-u", zh: "乾燒蝦" },
+                    { id: "99", kr: "팔보채", py: "Pal-bo-chae", zh: "八寶菜" },
+                    { id: "100", kr: "군만두", py: "Gun-man-du", zh: "煎餃" }
+                ]
+            }
+        ];
+
+        // State & LocalStorage Keys
+        let currentRate = 1.0;
+        const STORAGE_KEY = "sanrio_korean_food_checks";
+        let userChecks = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+
+        // Speech Synthesis
+        function speakKorean(text) {
+            if (!('speechSynthesis' in window)) {
+                alert("您的瀏覽器不支援語音播放功能。");
+                return;
+            }
+            window.speechSynthesis.cancel(); // Stop any pending speech
+            const cleanText = text.split('/')[0].trim();
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'ko-KR';
+            utterance.rate = currentRate;
+            utterance.pitch = 1.05;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Toggle Audio Speed
+        function toggleAudioSpeed() {
+            if (currentRate === 1.0) {
+                currentRate = 0.7;
+                document.getElementById("speedLabel").innerText = "語速: 0.7x (慢速)";
+                document.getElementById("speedBtn").classList.replace("bg-pink-50", "bg-amber-100");
+            } else {
+                currentRate = 1.0;
+                document.getElementById("speedLabel").innerText = "語速: 1.0x (標準)";
+                document.getElementById("speedBtn").classList.replace("bg-amber-100", "bg-pink-50");
+            }
+        }
+
+        // Toggle Practice Checkbox
+        function toggleCheck(id, index) {
+            const key = `${id}_${index}`;
+            userChecks[key] = !userChecks[key];
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(userChecks));
+            
+            const el = document.getElementById(`check_${id}_${index}`);
+            if (el) {
+                if (userChecks[key]) {
+                    el.classList.add("checked");
+                    el.innerHTML = '<i class="fa-solid fa-check text-xs"></i>';
+                } else {
+                    el.classList.remove("checked");
+                    el.innerHTML = '';
+                }
+            }
+        }
+
+        // Scroll to Page
+        function scrollToPage(pageNum) {
+            const el = document.getElementById(`page-${pageNum}`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Filter words across all pages
+        function filterWords() {
+            const query = document.getElementById("searchInput").value.trim().toLowerCase();
+            const rows = document.querySelectorAll(".food-row");
+            
+            rows.forEach(row => {
+                const kr = row.getAttribute("data-kr").toLowerCase();
+                const py = row.getAttribute("data-py").toLowerCase();
+                const zh = row.getAttribute("data-zh").toLowerCase();
+                
+                if (kr.includes(query) || py.includes(query) || zh.includes(query)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        // Render All 10 Pages
+        function renderPages() {
+            const container = document.getElementById("pagesContainer");
+            container.innerHTML = "";
+
+            foodPagesData.forEach((pData) => {
+                const pageEl = document.createElement("div");
+                pageEl.id = `page-${pData.page}`;
+                pageEl.className = `a4-page border ${pData.borderColor}`;
+
+                // Header Section
+                const headerHTML = `
+                    <div>
+                        <!-- Top Metadata Line -->
+                        <div class="flex justify-between items-center pb-2 border-b ${pData.borderColor} mb-3 text-xs text-gray-500 font-medium">
+                            <div class="flex items-center gap-2">
+                                <span class="text-base">${pData.avatar}</span>
+                                <span class="font-bold text-gray-700">${pData.character} 韓語手札</span>
+                                <span class="bg-pink-100 text-pink-700 text-[10px] px-2 py-0.5 rounded-full font-semibold">親製講義</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="bg-amber-100/70 border border-amber-200 px-2.5 py-1 rounded-md text-amber-900 font-bold">
+                                    學習日期：____ / ____ / ____
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Main Title Banner -->
+                        <div class="flex items-center justify-between my-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-pink-400 to-rose-400 text-white flex items-center justify-center text-xl shadow-md">
+                                    🇰🇷
+                                </div>
+                                <div>
+                                    <h2 class="text-xl md:text-2xl font-black text-gray-800 tracking-tight flex items-center gap-2">
+                                        100個常見食物學習清單
+                                    </h2>
+                                    <p class="text-xs font-bold text-pink-600 flex items-center gap-1.5 mt-0.5">
+                                        <span>${pData.avatar}</span>
+                                        <span>${pData.category}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Decorative Stamp -->
+                            <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-dashed border-pink-300 bg-pink-50/50 text-[11px] text-pink-600">
+                                <i class="fa-regular fa-star text-pink-400"></i>
+                                <span>每日跟讀 3 次</span>
+                            </div>
+                        </div>
+
+                        <!-- Table Column Headers -->
+                        <div class="grid grid-cols-12 gap-2 mt-4 px-2 py-2 text-xs font-bold text-gray-600 border-b-2 border-pink-200 bg-pink-50/70 rounded-t-xl">
+                            <div class="col-span-4 text-center">韓文 (한국어) 🔊</div>
+                            <div class="col-span-3 text-center">發音 (Pronunciation)</div>
+                            <div class="col-span-3 text-center">中文 (Chinese)</div>
+                            <div class="col-span-2 text-center text-pink-600">跟讀打勾區</div>
+                        </div>
+                    </div>
+                `;
+
+                // 10 Food Rows
+                let rowsHTML = `<div class="flex flex-col justify-around flex-grow my-1 space-y-1.5">`;
+                pData.items.forEach((item) => {
+                    const check1 = userChecks[`${item.id}_1`] ? 'checked' : '';
+                    const check2 = userChecks[`${item.id}_2`] ? 'checked' : '';
+                    const check3 = userChecks[`${item.id}_3`] ? 'checked' : '';
+
+                    rowsHTML += `
+                        <div class="food-row grid grid-cols-12 gap-2 items-center py-1.5 px-2 rounded-xl hover:bg-pink-50/40 transition border border-transparent hover:border-pink-100" 
+                             data-kr="${item.kr}" data-py="${item.py}" data-zh="${item.zh}">
+                            
+                            <!-- Korean Pill Button (Click to Speak) -->
+                            <div class="col-span-4 flex items-center">
+                                <button onclick="speakKorean('${item.kr}')" title="點擊發音: ${item.kr}" 
+                                        class="kr-pill w-full py-1.5 px-2 rounded-full font-bold text-sm md:text-base text-center shadow-xs hover:shadow flex items-center justify-center gap-1.5 group">
+                                    <span class="text-[10px] text-amber-600/70 font-mono font-normal">#${item.id}</span>
+                                    <span class="kr-font tracking-wide">${item.kr}</span>
+                                    <i class="fa-solid fa-volume-high text-[11px] text-amber-500 opacity-60 group-hover:opacity-100 transition no-print"></i>
+                                </button>
+                            </div>
+
+                            <!-- Romanized Pronunciation -->
+                            <div class="col-span-3 text-center">
+                                <span class="pinyin-pill inline-block w-full py-1 px-1.5 rounded-full text-xs font-semibold truncate" title="${item.py}">
+                                    ${item.py}
+                                </span>
+                            </div>
+
+                            <!-- Chinese Meaning -->
+                            <div class="col-span-3 text-center">
+                                <span class="zh-pill inline-block w-full py-1 px-2 rounded-full text-xs font-bold truncate" title="${item.zh}">
+                                    ${item.zh}
+                                </span>
+                            </div>
+
+                            <!-- 3 Practice Checkboxes -->
+                            <div class="col-span-2 flex items-center justify-center space-x-1.5">
+                                <div id="check_${item.id}_1" onclick="toggleCheck('${item.id}', 1)" class="check-circle ${check1}">
+                                    ${check1 ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                                </div>
+                                <div id="check_${item.id}_2" onclick="toggleCheck('${item.id}', 2)" class="check-circle ${check2}">
+                                    ${check2 ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                                </div>
+                                <div id="check_${item.id}_3" onclick="toggleCheck('${item.id}', 3)" class="check-circle ${check3}">
+                                    ${check3 ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                rowsHTML += `</div>`;
+
+                // Bottom Illustration & Character Cheering Speech Bubble
+                let illustHTML = ``;
+                pData.foodIllustrations.forEach(food => {
+                    illustHTML += `
+                        <div class="flex items-center gap-1.5 bg-white/90 border border-pink-200 px-3 py-1 rounded-xl shadow-xs text-xs">
+                            <span class="text-xl">${food.icon}</span>
+                            <span class="font-bold text-gray-700">${food.name}</span>
+                            <span class="text-[10px] text-pink-500 font-mono">(${food.kr})</span>
+                        </div>
+                    `;
+                });
+
+                const bottomSectionHTML = `
+                    <div class="mt-2">
+                        <!-- Character Bubble & Mini Food Badges -->
+                        <div class="bg-gradient-to-r from-pink-50/80 to-rose-50/80 border border-pink-200 rounded-2xl p-2.5 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-2 text-xs text-gray-700">
+                                <div class="w-8 h-8 rounded-full bg-pink-200 flex items-center justify-center text-base shrink-0">
+                                    ${pData.avatar}
+                                </div>
+                                <div class="cute-font text-sm leading-snug">
+                                    <span class="font-bold text-pink-600">${pData.character}：</span>
+                                    <span>「${pData.tip}」</span>
+                                </div>
+                            </div>
+                            <div class="hidden sm:flex items-center gap-2 shrink-0">
+                                ${illustHTML}
+                            </div>
+                        </div>
+
+                        <!-- Footer Info & Page Number -->
+                        <div class="flex justify-between items-center pt-2 mt-2 border-t ${pData.borderColor} text-[11px] text-gray-400 font-medium">
+                            <div class="flex items-center gap-1.5">
+                                <span>🌸 Sanrio 韓語教室 · 100個常見食物學習手札 · 僅供個人學習使用</span>
+                            </div>
+                            <div class="font-bold text-gray-600 bg-gray-100 px-2.5 py-0.5 rounded-full">
+                                Page ${pData.page} / 10
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                pageEl.innerHTML = headerHTML + rowsHTML + bottomSectionHTML;
+                container.appendChild(pageEl);
+            });
+        }
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPages();
+        });
+    </script>
+</body>
+</html>
