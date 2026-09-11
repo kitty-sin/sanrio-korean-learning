@@ -1,4 +1,4 @@
-# 📋 Project Handover: Sanrio 韓語發音積木樂園 (Sanrio Korean Learning Playground)
+# 📋 Project Handover: KITTY 韓語發音積木樂園 (KITTY Korean Learning Playground)
 
 本文件旨在為後續接手或協作的 AI Agent / 開發者提供完整的專案狀態、架構設計、自訂拼音指引與後續擴充方向。
 
@@ -6,8 +6,9 @@
 
 ## 📌 1. 專案基本資訊 (Project Summary)
 
-- **專案名稱**：Sanrio 韓語發音積木樂園 (Sanrio Korean Learning Playground)
-- **核心目標**：透過 Sanrio 人氣角色視覺聯想、廣東話諧音口訣與動態積木拼音，搭配 Firebase 即時雲端互動（榮譽榜、自學單字庫）與 20 頁超大字拼音總表，提供無痛有趣的韓語學習體驗。
+- **專案名稱**：KITTY 韓語發音積木樂園 (KITTY Korean Learning Playground)
+- **副標題**：Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與音變 ✨
+- **核心目標**：透過 Sanrio 人氣角色視覺聯想、廣東話諧音口訣與動態積木拼音，搭配 Firebase 即時雲端自學單字庫與 20 頁超大字拼音總表，提供無痛有趣的韓語學習體驗。
 - **線上體驗網址 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **GitHub 倉庫**：[https://github.com/kitty-sin/sanrio-korean-learning](https://github.com/kitty-sin/sanrio-korean-learning)
 - **核心工作目錄**：
@@ -22,10 +23,10 @@
 ### 前端技術棧
 - **核心框架**：React 18 (CDN UMD) + Babel Standalone
 - **樣式庫**：Tailwind CSS (CDN) + 自訂 Sanrio 配色與 CSS 動畫
-- **語音朗讀**：Web Speech API (`window.speechSynthesis`)，語言代碼 `ko-KR`，語速 `0.85x`（食物單字表支援 `0.3x` 逐字口型）。
+- **語音朗讀**：Web Speech API (`window.speechSynthesis`)，語言代碼 `ko-KR`，語速 `0.85x`（食物單字表與卡片支援 `0.3x` 逐字口型）。
 
 ### 雲端與資料庫
-- **Firebase v10.8.0**：Firestore 集合 `korean_custom_words`、`korean_app_stats/cheers`，具備匿名登入與離線 Fallback 機制。
+- **Firebase v10.8.0**：Firestore 集合 `korean_custom_words`，具備匿名登入與離線 Fallback 機制。
 - **核心資料庫**：全量 5,666 詞彙資料庫（`korean_vocab_5666.csv` / `korean_vocab_5666.md`）。
 
 ---
@@ -62,7 +63,7 @@
 
 ## 🚦 5. 目前狀態與下一步 (Status & Roadmap)
 
-- **🚦 目前狀態**：已成功擴充「🏃 60 核心生活動詞與時態變化」與「🪄 6 大音變透視鏡」兩大互動單元至 `index.html`，完整結合三段速發音、積木拆解與跟讀評分，並已同步更新部署至 GitHub Pages。
+- **🚦 目前狀態**：已成功更新首頁主標題為「KITTY 韓語發音積木樂園」與副標題「Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與音變 ✨」，並同步部署至 GitHub Pages。
 - **➡️ 下一步**：
   1. 待使用者有空時，依其自訂的拼音規則批次修改 `hangul_sanrio_deck.html` 中的諧音標籤，並重新匯出覆蓋 `hangul_sanrio_deck_20p.pdf`。
   2. 依學習進度持續擴充進階文法句型或主題練習題庫。
@@ -70,6 +71,6 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-11 13:55 PT
+- **更新時間**：2026-09-11 14:15 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)

@@ -1,6 +1,6 @@
-# 🌸 Sanrio 韓語發音積木樂園 (Sanrio Korean Learning Playground)
+# 🌸 KITTY 韓語發音積木樂園 (KITTY Korean Learning Playground)
 
-可愛圖像聯想 + 輕鬆發音 + 韓文積木拼音 + Firebase 雲端即時互動！
+Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與音變 ✨
 
 <div align="center">
   <img src="assets/sanrio_vowels_flashcard.jpg" alt="Sanrio 6 大基礎母音視覺記憶卡" width="480" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
