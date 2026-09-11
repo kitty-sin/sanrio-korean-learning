@@ -5668,3 +5668,6 @@
 | 5664 | 호주 | hoju | 澳洲、澳大利亞 | Australia | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5665 | 남대문시장 | namdaemunsijang | 南大門市場 | Shopping center in seoul | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5666 | 남산 | namsan | 南山 | Mountain in south central seoul | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
+| 5667 | 홍콩 | hongkong | 香港 | Hong Kong | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
+| 5668 | 대만 | daeman | 台灣（臺灣） | Taiwan | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
+| 5669 | 로스앤젤레스 | roseuaenjellesseu | 洛杉磯（LA） | Los Angeles (LA) | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |

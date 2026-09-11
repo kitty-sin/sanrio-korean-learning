@@ -668,3 +668,6 @@
 | 5664 | 호주 | hoju | 澳洲、澳大利亞 | Australia |
 | 5665 | 남대문시장 | namdaemunsijang | 南大門市場 | Shopping center in seoul |
 | 5666 | 남산 | namsan | 南山 | Mountain in south central seoul |
+| 5667 | 홍콩 | hongkong | 香港 | Hong Kong |
+| 5668 | 대만 | daeman | 台灣（臺灣） | Taiwan |
+| 5669 | 로스앤젤레스 | roseuaenjellesseu | 洛杉磯（LA） | Los Angeles (LA) |

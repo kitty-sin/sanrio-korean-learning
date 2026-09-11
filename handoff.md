@@ -70,6 +70,10 @@
   - **RDQ 活力化背景與視覺體驗升級**：導入柔和動態極光光斑（Ambient Glow）、精緻階層卡片漸層與微動態，全面提升視覺活力且不干擾文字辨識。
   - **修復白屏問題**：補齊外層容器閉合標籤 `</div>`，透過 Node.js 完整校驗 JSX 標籤對稱性（全部 81 組 div 標籤嚴格平衡）。
   - **Git 部署**：最新版本已推送至 GitHub Pages（Commit `4043001`）。
+- **2026-09-11 16:03 PT**：
+  - **新增常用地名與國名**：已將 `#5667 홍콩 (香港 / Hong Kong)`、`#5668 대만 (台灣 / Taiwan)`、`#5669 로스앤젤레스 (洛杉磯 / Los Angeles)` 新增至 `[🗺️ 專有名詞 (地名/國名)]`（Level D）。
+  - **同步檔案**：`korean_vocab_5666.csv`、`korean_vocab_5666.md`、`korean_vocab_5001_5666.csv`、`korean_vocab_5001_5666.md`、`korean_vocab_5666_data.js`。
+  - **專有名詞總量**：由 59 筆提升至 62 筆，詞庫總量由 5,666 筆擴充至 5,669 筆。
 - **➡️ 下一步**：
   1. 待使用者有空時，依其自訂的拼音規則批次修改 `hangul_sanrio_deck.html` 中的諧音標籤，並重新匯出覆蓋 `hangul_sanrio_deck_20p.pdf`。
   2. 依學習進度持續擴充進階文法句型或主題練習題庫。
@@ -77,6 +81,6 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-11 15:57 PT
+- **更新時間**：2026-09-11 16:03 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
