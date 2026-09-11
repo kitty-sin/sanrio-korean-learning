@@ -5636,7 +5636,7 @@
 | 5632 | 전라도 | jeonrado | 全羅道 | South-western region of south korea | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5633 | 북한 | bukhan | 北韓、朝鮮 | North korea | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5634 | 부산 | busan | 釜山 | Busan, city in SE Korea, with largest beach in S.Korea | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
-| 5635 | 미국 | miguk | 美國 | America | D | 動詞 (Verb / 동사)，如 하다（做）、가다（去）。 |
+| 5635 | 미국 | miguk | 美國 | America | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5636 | 백두산 | baekdusan | 白頭山、長白山 | Korean mountain | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5637 | 백제 | baekje | 百濟（韓國古代三國之一） | Historical Korean government | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5638 | 베이징 | beijing | 北京 | Beijing | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
@@ -5656,7 +5656,7 @@
 | 5652 | 일본 | ilbon | 日本 | Japan | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5653 | 파리 | pari | 巴黎 | Paris | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5654 | 지리산 | jirisan | 智異山 | Chili mountain, very beautiful | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
-| 5655 | 제주도 | jejudo | 濟州島 | Tourist island off south S.Korea | D | 動詞 (Verb / 동사)，如 하다（做）、가다（去）。 |
+| 5655 | 제주도 | jejudo | 濟州島 | Tourist island off south S.Korea | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5656 | 서울 | seoul | 首爾 | Seoul | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5657 | 서울역 | seouryeok | 首爾站 | Seoul train station | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5658 | 남대문 | namdaemun | 南大門（崇禮門） | Seoul’s old south gate | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
