@@ -2682,7 +2682,7 @@
                                             type="text"
                                             value={verbSearch}
                                             onChange={(e) => setVerbSearch(e.target.value)}
-                                            placeholder="🔍 搜尋動詞 / 中文 / 拼音..."
+                                            placeholder="搜尋動詞 / 中文 / 拼音..."
                                             className="w-full pl-8 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-teal-400 focus:outline-none transition-all"
                                         />
                                         <span className="absolute left-2.5 top-2 text-gray-400 text-xs">🔍</span>
@@ -2867,7 +2867,7 @@
                                                     : 'bg-white border-gray-200 text-gray-600 hover:bg-violet-50/50'
                                             }`}
                                         >
-                                            {r.icon} {r.title.split(' ')[0]}
+                                            {r.icon} {r.title.split(' (')[0].split(' / ')[0]}
                                         </button>
                                     ))}
                                 </div>
@@ -2878,7 +2878,7 @@
                                             type="text"
                                             value={soundRuleSearch}
                                             onChange={(e) => setSoundRuleSearch(e.target.value)}
-                                            placeholder="🔍 搜尋音變規則 / 單字 (如: 밥물, 學校, 連音)..."
+                                            placeholder="搜尋音變規則 / 單字 (如: 밥물, 學校, 連音)..."
                                             className="w-full pl-8 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-violet-400 focus:outline-none transition-all"
                                         />
                                         <span className="absolute left-2.5 top-2 text-gray-400 text-xs">🔍</span>
