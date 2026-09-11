@@ -349,10 +349,20 @@
                 return filteredList.slice(start, start + pageSize);
             }, [filteredList, currentPage, pageSize]);
 
-            // 詞性清單分類統計
-            const posOptions = useMemo(() => {
-                return ['全部', '名詞', '專有名詞', '動詞', '形容詞', '副詞', '代名詞', '依存名詞', '冠形詞', '助詞', '感嘆詞', '數詞', '補助用言', '接辭'];
-            }, []);
+            // 詞性清單分類動態計算真實數量
+            const posCategories = useMemo(() => {
+                const map = {};
+                rawVocab.forEach(w => {
+                    const p = w.p || '其他';
+                    map[p] = (map[p] || 0) + 1;
+                });
+                const order = ['全部', '名詞', '專有名詞', '動詞', '形容詞', '副詞', '依存名詞', '冠形詞', '代名詞', '數詞', '補助用言', '獨立詞', '助詞', '其他'];
+                return order.filter(name => name === '全部' || (map[name] && map[name] > 0)).map(name => ({
+                    id: name === '全部' ? 'ALL' : name,
+                    name: name === '全部' ? '全部' : (name === '專有名詞' ? '🗺️ 專有名詞 (地名/國名)' : name === '依存名詞' ? '依存名詞 (量詞)' : name === '獨立詞' ? '獨立詞 (常用短句)' : name),
+                    count: name === '全部' ? rawVocab.length : (map[name] || 0)
+                }));
+            }, [rawVocab]);
 
             // 單字卡跳轉控制
             const nextCard = () => {
@@ -577,24 +587,21 @@
                             <div className="flex items-center gap-2 flex-wrap">
                                 <span className="font-bold text-gray-500 w-16">詞性分類:</span>
                                 <div className="flex gap-1.5 flex-wrap">
-                                    {posOptions.map(pos => {
-                                        const posVal = pos === '全部' ? 'ALL' : pos;
-                                        return (
-                                            <button
-                                                key={pos}
-                                                onClick={() => setSelectedPos(posVal)}
-                                                className={`px-2.5 py-1 rounded-xl font-medium transition-all ${
-                                                    selectedPos === posVal
-                                                    ? 'bg-purple-500 text-white font-bold shadow-xs'
-                                                    : pos === '專有名詞'
-                                                    ? 'bg-amber-100 text-amber-800 font-bold border border-amber-200 hover:bg-amber-200'
-                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                }`}
-                                            >
-                                                {pos === '專有名詞' ? '🗺️ 專有名詞 (地名/國名)' : pos}
-                                            </button>
-                                        );
-                                    })}
+                                    {posCategories.map(pos => (
+                                        <button
+                                            key={pos.id}
+                                            onClick={() => setSelectedPos(pos.id)}
+                                            className={`px-2.5 py-1 rounded-xl font-medium transition-all ${
+                                                selectedPos === pos.id
+                                                ? 'bg-purple-500 text-white font-bold shadow-xs'
+                                                : pos.id === '專有名詞'
+                                                ? 'bg-amber-100 text-amber-800 font-bold border border-amber-200 hover:bg-amber-200'
+                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                            }`}
+                                        >
+                                            {pos.name} ({pos.count})
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
                         </div>
