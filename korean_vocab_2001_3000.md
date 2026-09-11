@@ -1,0 +1,1004 @@
+# 韓語常用 2001-3000 詞彙表 (Korean Core Vocabulary 2001-3000)
+
+| 編號 | 韓文 | 羅馬拼音 | 中文 | 英文 |
+| :---: | :--- | :--- | :--- | :--- |
+| 2001 | 화학 | hwahak | 化學 | Chemistry |
+| 2002 | 활발하다 | hwalbalhada | 活潑、活躍 | Be lively, sprightly |
+| 2003 | 가리다 | garida | 堆積、堆放、遮蔽 | Pile up or stack up or heap up |
+| 2004 | 거칠다 | geochilda | 粗糙、粗暴、荒涼 | Coarse (texture) or wild (behavior) or (rain and wind) rough or wild |
+| 2005 | 그나마 | geunama | 儘管如此、好在、幸好 | Even though or nevertheless |
+| 2006 | 껍질 | kkeopjil | 皮、外殼、外皮 | Skin or nutshell |
+| 2007 | 남부 | nambu | 南部、南方 | The south part |
+| 2008 | 명령 | myeongryeong | 命令、指示 | An order,command |
+| 2009 | 몰래 | molrae | 偷偷地、暗暗地 | secretly,quietly |
+| 2010 | 무조건 | mujogeon | 無條件地、盲目地 | Unconditional |
+| 2011 | 반장 | banjang | 班長、組長 | Squad leader |
+| 2012 | 부근 | bugeun | 附近、周圍 | neighborhood,vicinity |
+| 2013 | 선택 | seontaek | 選擇、抉擇 | A choice |
+| 2014 | 역사가 | yeoksaga | 歷史學家 | Historian |
+| 2015 | 연구자 | yeonguja | 研究人員、研究者 | Researcher |
+| 2016 | 연기자 | yeongija | 演員、表演者 | A performer, an actor |
+| 2017 | 조그맣다 | jogeumata | 小巧、矮小、微小 | Be tiny,small |
+| 2018 | 줄기 | julgi | 莖、樹幹、枝條 | A trunk, stem, stalk |
+| 2019 | 찾아내다 | chajanaeda | 找出、查出、發現 | To find out, discover |
+| 2020 | 토요일 | toyoil | 星期六、週六 | Saturday |
+| 2021 | 경찰관 | gyeongchalgwan | 警察、警官 | a policeman |
+| 2022 | 권하다 | gwonhada | 勸導、推薦、勸告 | 1) advise or persuade 2) recommend |
+| 2023 | 극장 | geukjang | 劇場、電影院、戲院 | Theater or playhouse |
+| 2024 | 끝내 | kkeunnae | 終究、最終、到底 | The end |
+| 2025 | 대문 | daemun | 大門 | A big gate |
+| 2026 | 더욱이 | deougi | 何況、更加、況且 | Besides, moreover |
+| 2027 | 별도 | byeoldo | 另外、特別、個別 | A separate way |
+| 2028 | 비극 | bigeuk | 悲劇 | A tragedy |
+| 2029 | 솜씨 | somssi | 手藝、技巧、本領 | skill,ability |
+| 2030 | 시내 | sinae | 市區、市內 / 小溪 | The city |
+| 2031 | 신 | sin | 興致、興奮、興頭 | joy,delight |
+| 2032 | 실내 | silnae | 室內 | In the room |
+| 2033 | 쏟다 | ssotda | 傾注、傾倒、傾瀉 | To pour . 붓다 |
+| 2034 | 연결하다 | yeongyeolhada | 連接、連繫 | Connect, attach |
+| 2035 | 외교 | oegyo | 外交 | Diplomacy |
+| 2036 | 주머니 | jumeoni | 口袋、荷包、錢袋 | Pocket |
+| 2037 | 계약 | gyeyak | 契約、合約 | Contract |
+| 2038 | 과장 | gwajang | 課長、處長 / 誇張 | The department/section head |
+| 2039 | 극 | geuk | 戲劇、劇 | Drama or play |
+| 2040 | 나란히 | naranhi | 並排、齊聲 | In a line, row |
+| 2041 | 다방 | dabang | 茶館、咖啡廳 | Tea room |
+| 2042 | 부끄럽다 | bukkeureopda | 害羞、慚愧、難為情 | Be shameful,disgraceful |
+| 2043 | 성공 | seonggong | 成功 | success,achievement |
+| 2044 | 수행하다 | suhaenghada | 執行、履行、完成 | Accomplishment |
+| 2045 | 신청 | sincheong | 申請 | application,request |
+| 2046 | 실로 | silro | 確實、實在、真正 | really,indeed |
+| 2047 | 아픔 | apeum | 痛苦、痛楚 | Pain |
+| 2048 | 알아듣다 | aradeutda | 聽懂、領會 | To listen and comprehend |
+| 2049 | 약간 | yakgan | 稍微、些許、略微 | Some, a little |
+| 2050 | 연기 | yeongi | 煙、煙霧 | Smoke, fume |
+| 2051 | 이동 | idong | 移動、遷移 | movement,migration,drift |
+| 2052 | 인연 | inyeon | 緣分、因緣 | Cause and occasion |
+| 2053 | 일행 | ilhaeng | 同行者、一行人 | A party, a troupe; a row, a line |
+| 2054 | 지도 | jido | 指導、引導 | Instruction, guidance |
+| 2055 | 지식인 | jisigin | 知識分子 | An intellectual |
+| 2056 | 진지하다 | jinjihada | 認真、嚴肅 | To be serious, earnest |
+| 2057 | 치다 | chida | 算作、計算、當作 | to count, reckon, calculate |
+| 2058 | 호흡 | hoheup | 呼吸、氣息 | Respiration, breath |
+| 2059 | 흔들리다 | heundeulrida | 搖晃、動搖（被動） | Shake, swing,rock,tremble |
+| 2060 | 기온 | gion | 氣溫 | Temperature |
+| 2061 | 날아가다 | naragada | 飛走、飛去 | To fly away |
+| 2062 | 많아지다 | manajida | 變多、增加 | Become a lot |
+| 2063 | 바위 | bawi | 岩石、礁石 | A rock, a crag |
+| 2064 | 버릇 | beoreut | 習慣、習氣、毛病 | Habit |
+| 2065 | 비판하다 | bipanhada | 批判、批評 | To criticize |
+| 2066 | 빨갛다 | ppalgata | 鮮紅、通紅 | deep-red,crimson |
+| 2067 | 세워지다 | sewojida | 被建立、豎立（被動） | To become erected |
+| 2068 | 술집 | suljip | 酒吧、酒館 | Bar of some kind |
+| 2069 | 쉬다 | swida | 呼吸、喘氣 | to breathe |
+| 2070 | 오랜만 | oraenman | 隔了許久、好久 | After a long time |
+| 2071 | 일부러 | ilbureo | 特意、故意 | On purpose, intentionally |
+| 2072 | 전체적 | jeonchejeok | 全體的、總體的 | entirely,generally |
+| 2073 | 절반 | jeolban | 一半、半數 | Half |
+| 2074 | 접근하다 | jeopgeunhada | 接近、靠近 | approach,get near |
+| 2075 | 편안하다 | pyeonanhada | 平安、舒適、安寧 | To be peaceful |
+| 2076 | 확실히 | hwaksilhi | 確實、明確地 | certainly,for sure |
+| 2077 | 흩어지다 | heuteojida | 散開、分散 | Scatter about |
+| 2078 | 갈다 | galda | 磨（刀）、研磨、榨（汁） | 1) sharpen (a blade) 2) rub or chafe 3) make juice in a mixer |
+| 2079 | 교류 | gyoryu | 交流 / 交流電 | Interchange (cultural) ; alternating current (electrical) |
+| 2080 | 글쓰기 | geulsseugi | 寫作、寫文章 | Writing |
+| 2081 | 기후 | gihu | 氣候 | Climate or weather |
+| 2082 | 내내 | naenae | 一直、始終 | All along, the entire time |
+| 2083 | 대기업 | daegieop | 大企業、大集團 | Big enterprise |
+| 2084 | 대응하다 | daeeunghada | 應對、對應 | Cope or correspond to |
+| 2085 | 도구 | dogu | 工具、器具 | Tool, instrument |
+| 2086 | 매력 | maeryeok | 魅力、吸引力 | fascination,charm, bewitchery |
+| 2087 | 백 | baek | 數百、許多 | Hundreds of |
+| 2088 | 보험 | boheom | 保險 | guarantee,insurance |
+| 2089 | 부럽다 | bureopda | 羨慕、眼紅 | Be enviable |
+| 2090 | 부장 | bujang | 部長、處長 | Head of a department |
+| 2091 | 섞이다 | seokkida | 混合、摻雜（被動） | To be mixed,blended |
+| 2092 | 소 | so | 牛、黃牛 | A cow |
+| 2093 | 심리 | simri | 心理 | A mental state |
+| 2094 | 심정 | simjeong | 心情、心緒 | one’s heart, one’s feelings |
+| 2095 | 쏘다 | ssoda | 發射、射擊 / 叮、螫 | (1) To shoot (2) to sting, bite (an insect, animal) |
+| 2096 | 아줌마 | ajumma | 大嬸、阿姨 | Old or married lady |
+| 2097 | 위치하다 | wichihada | 位於、坐落於 | To be located |
+| 2098 | 이룩하다 | irukhada | 建立、成就、達成 | Erect, build |
+| 2099 | 이틀 | iteul | 兩天、兩日 | Two days |
+| 2100 | 전달하다 | jeondalhada | 傳達、轉達、傳遞 | To deliver |
+| 2101 | 정말로 | jeongmalro | 真的、確實 | Really |
+| 2102 | 추다 | chuda | 跳（舞）（춤을 추다） | To dance |
+| 2103 | 켜다 | kyeoda | 打開（電燈/電器）、點亮 | To light, turn on, kindle |
+| 2104 | 코너 | koneo | 專櫃、角落、專欄 | Corner |
+| 2105 | 행동하다 | haengdonghada | 行動、表現、行事 | To act, behave |
+| 2106 | 형사 | hyeongsa | 刑事、刑警 | A criminal, penal case |
+| 2107 | 희곡 | huigok | 戲劇、劇本 | A drama, a play |
+| 2108 | 감동 | gamdong | 感動、觸動 | Agitate or stir up the emotions |
+| 2109 | 공항 | gonghang | 機場、航空港 | Airport |
+| 2110 | 군인 | gunin | 軍人 | Sb in the military |
+| 2111 | 굳이 | guji | 硬要、非得、執意 | Firmly or admanantly |
+| 2112 | 그늘 | geuneul | 樹蔭、陰涼處 / 庇護 | 1) shade 2)parental prodection |
+| 2113 | 급하다 | geuphada | 急迫、緊急、著急 | Be urgent or pressing or iminent |
+| 2114 | 달걀 | dalgyal | 雞蛋 | An egg |
+| 2115 | 대중문화 | daejungmunhwa | 大眾文化、流行文化 | Pop culture |
+| 2116 | 마련되다 | maryeondoeda | 被準備、備妥（被動） | To be planned and arranged |
+| 2117 | 마루 | maru | 地板、客廳大廳 | A wooden floor, floor, flooring |
+| 2118 | 무게 | muge | 重量、分量 | Weight |
+| 2119 | 물기 | mulgi | 水分、水氣、濕氣 | Moisture |
+| 2120 | 성적 | seongjeok | 成績、分數 | A result,grade |
+| 2121 | 솔직히 | soljikhi | 坦白地、坦率地 | frankly,candidly |
+| 2122 | 시도하다 | sidohada | 嘗試、試圖 | To try,attempt |
+| 2123 | 아니요 | aniyo | 不是、不（敬語否定） | No, that’s not the case |
+| 2124 | 예절 | yejeol | 禮節、禮儀 | propriety,decorum |
+| 2125 | 인상 | insang | 印象 / 面相 | Impression, imprint |
+| 2126 | 인터넷 | inteonet | 網際網路、網路 | Internet |
+| 2127 | 적용하다 | jeogyonghada | 應用、適用 | To apply (sth to sth else) |
+| 2128 | 전통적 | jeontongjeok | 傳統的 | Traditional |
+| 2129 | 참가하다 | chamgahada | 參加、參賽 | To take part in, join |
+| 2130 | 치마 | chima | 裙子 | A skirt |
+| 2131 | 친척 | chincheok | 親戚 | Relatives |
+| 2132 | 특정하다 | teukjeonghada | 特定、指明 | Specify |
+| 2133 | 호텔 | hotel | 飯店、旅館 | Hotel |
+| 2134 | 경계 | gyeonggye | 警戒、邊界、分界 | Boundary |
+| 2135 | 공식 | gongsik | 公式、正式、常規 | A formula or formality |
+| 2136 | 그다지 | geudaji | 並不怎麼、不大 | So much or to that extent |
+| 2137 | 긴장 | ginjang | 緊張 | Tension |
+| 2138 | 깎다 | kkakda | 削（皮）、砍價、剪 | Cut or trim |
+| 2139 | 다리 | dari | 橋、橋樑 | Bridge |
+| 2140 | 머물다 | meomulda | 停留、留宿 | Stay overnight |
+| 2141 | 명예 | myeongye | 名譽、榮譽 | Honor |
+| 2142 | 뱃사람 | baetsaram | 水手、船員、漁民 | A seaman, sailor |
+| 2143 | 부처 | bucheo | 佛祖、佛陀 / 夫婦 | Buddha |
+| 2144 | 숙이다 | sugida | 低下、垂下（頭） | Lower one’s head |
+| 2145 | 아가씨 | agassi | 小姐、姑娘 | Mis, young lady |
+| 2146 | 온도 | ondo | 溫度 | Temperature |
+| 2147 | 이마 | ima | 前額、額頭 | Forehead |
+| 2148 | 절대로 | jeoldaero | 絕對、萬萬（加否定） | Absolutely |
+| 2149 | 지붕 | jibung | 屋頂 | A roof |
+| 2150 | 지원하다 | jiwonhada | 應徵、報名、志願 | To desire, aspire, hence to apply for [e.g. a job] or volunteer for sth |
+| 2151 | 진짜 | jinjja | 真的、真實 | Real |
+| 2152 | 짙다 | jitda | 濃、深、厚 | Be dark, dense |
+| 2153 | 창밖 | changbak | 窗外 | Outside the window |
+| 2154 | 청소 | cheongso | 打掃、清潔 | Cleaning |
+| 2155 | 침묵 | chimmuk | 沉默 | Silence |
+| 2156 | 텍스트 | tekseuteu | 文本、文章 | Text |
+| 2157 | 표면 | pyomyeon | 表面 | Front, surface, exterior |
+| 2158 | 햇살 | haetsal | 陽光、日光 | The rays of the sun |
+| 2159 | 객관적 | gaekgwanjeok | 客觀的 | Objective |
+| 2160 | 걱정하다 | geokjeonghada | 擔心、操心 | To worry or be anxious |
+| 2161 | 경제적 | gyeongjejeok | 經濟的、划算的 | Economical |
+| 2162 | 구름 | gureum | 雲、白雲 | A cloud or the clouds |
+| 2163 | 구석 | guseok | 角落、偏僻處 | 1) a corner 2) an out of the way place |
+| 2164 | 끄다 | kkeuda | 關閉（電器）、熄滅（火） | Put out or extinguish |
+| 2165 | 담당하다 | damdanghada | 擔任、負責 | Take charge of |
+| 2166 | 벗기다 | beotgida | 脫去、剝掉 | Unclothe, undress |
+| 2167 | 부대 | budae | 部隊、軍隊 | A detachment, squad |
+| 2168 | 불빛 | bulbit | 燈光、火光 | Fire light |
+| 2169 | 서클 | seokeul | 社團、俱樂部 | Circle |
+| 2170 | 시청자 | sicheongja | 觀眾、電視觀眾 | TV audience member |
+| 2171 | 실체 | silche | 實體、真相 | substance,essence |
+| 2172 | 엄격하다 | eomgyeokhada | 嚴格、嚴厲 | To be strict, serious |
+| 2173 | 완벽하다 | wanbyeokhada | 完美、完美無缺 | Perfect |
+| 2174 | 완전하다 | wanjeonhada | 完整、健全、毫無瑕疵 | To be perfect and faultless |
+| 2175 | 절 | jeol | 寺院、寺廟 | A Buddhist temple |
+| 2176 | 종업원 | jongeobwon | 服務生、員工 | waiter/waitress |
+| 2177 | 증가 | jeungga | 增加、增長 | An increase,augmentation |
+| 2178 | 출연 | churyeon | 出演、登台 | Going on stage |
+| 2179 | 학기 | hakgi | 學期 | An educational term |
+| 2180 | 한동안 | handongan | 一段時間、好一陣子 | For quite a while |
+| 2181 | 후기 | hugi | 後期、下半期 | The latter term/period |
+| 2182 | 계절 | gyejeol | 季節 | Season |
+| 2183 | 만지다 | manjida | 觸摸、摸 | To touch |
+| 2184 | 목사 | moksa | 牧師 | A pastor |
+| 2185 | 바늘 | baneul | 針、指針 | A needle, pin |
+| 2186 | 버티다 | beotida | 堅持、撐住、頂住 | Endure, tolerate |
+| 2187 | 부 | bu | 部、部門、部數 | A department, a part |
+| 2188 | 분포하다 | bunpohada | 分布 | Distribution |
+| 2189 | 비중 | bijung | 比重 | Specific gravity |
+| 2190 | 수입 | suip | 收入、收益 | Income |
+| 2191 | 아이디어 | aidieo | 想法、點子、構想 | Idea |
+| 2192 | 양쪽 | yangjjok | 雙方、兩側、兩邊 | Both sides |
+| 2193 | 예컨대 | yekeondae | 例如、譬如 | For example, such as |
+| 2194 | 운동장 | undongjang | 運動場、操場 | Stadium, playground |
+| 2195 | 전개 | jeongae | 展開、發展 | unfolding,development,expansion |
+| 2196 | 접촉 | jeopchok | 接觸 | contact,touch |
+| 2197 | 짐 | jim | 行李、負擔 | Luggage ; what is on a person |
+| 2198 | 풀 | pul | 草、雜草、草坪 | Grass (cut the ~) |
+| 2199 | 해마다 | haemada | 年年、每年 | Every year, each year |
+| 2200 | 후배 | hubae | 後輩、學弟妹 | one’s junior |
+| 2201 | 휴가 | hyuga | 休假、假期 | holidays,vacation |
+| 2202 | 경기 | gyeonggi | 景氣、經濟狀況 | The business market’s state |
+| 2203 | 계곡 | gyegok | 溪谷、峽谷 | A valley or gorge |
+| 2204 | 국회의원 | gukhoeuiwon | 國會議員 | A member of the national Assembly |
+| 2205 | 다투다 | datuda | 爭吵、爭奪 | Quarrel |
+| 2206 | 도저히 | dojeohi | 到底、無論如何也（加否定） | (도저히 + negative (지 않다/없다))Absolutely impossible ; by all means |
+| 2207 | 뻗다 | ppeotda | 伸展、延伸、延伸到 | Stretch out, extend beyond |
+| 2208 | 생활하다 | saenghwalhada | 生活、過日子 | To live, make a living |
+| 2209 | 솔직하다 | soljikhada | 率直、坦誠 | frankness,candidness |
+| 2210 | 안타깝다 | antakkapda | 遺憾、痛心、可惜 | To be heart-breaking |
+| 2211 | 앞장서다 | apjangseoda | 帶頭、領頭、走在前面 | To be in the lead/ at the head |
+| 2212 | 요청하다 | yocheonghada | 請求、要求 | To ask for, to request |
+| 2213 | 이르다 | ireuda | 早、過早、尚早 | Be early, premature |
+| 2214 | 일치하다 | ilchihada | 一致、吻合 | Agree with, to be in accord with |
+| 2215 | 젓다 | jeotda | 搖（頭）、擺（手）/ 攪拌 | To make a sign,gesticulate |
+| 2216 | 정치권 | jeongchigwon | 政治界、政界 | Political rights |
+| 2217 | 처녀 | cheonyeo | 處女、未婚少女 | A virgin, a young maiden |
+| 2218 | 축제 | chukje | 節慶、慶典 | a festival |
+| 2219 | 터뜨리다 | teotteurida | 爆發、引爆、使破裂 | Break, burst,explode |
+| 2220 | 학습 | hakseup | 學習 | Learning, education |
+| 2221 | 개발되다 | gaebaldoeda | 被開發、被研發（被動） | To be developed or exploited |
+| 2222 | 높이 | nopi | 高高地（副詞） | High, aloft (adverb) |
+| 2223 | 당연히 | dangyeonhi | 當然、理所當然地 | Of course |
+| 2224 | 대비하다 | daebihada | 預備、防備、做好準備 | Provide for, prepare onself for |
+| 2225 | 마구 | magu | 胡亂、隨便、接連不斷 | continuously, without pause |
+| 2226 | 만남 | mannam | 相遇、會面 | A meeting |
+| 2227 | 미디어 | midieo | 媒體、大眾傳媒 | Media |
+| 2228 | 복도 | bokdo | 走廊、迴廊 | A corridor |
+| 2229 | 수상 | susang | 總理、首相 / 獲獎 | The prime minister |
+| 2230 | 쓰러지다 | sseureojida | 倒下、暈倒、癱倒 | Fall, collapse |
+| 2231 | 영상 | yeongsang | 影像、畫面 / 零上（氣溫） | An image [picture], reflection (moving pictures, movies) |
+| 2232 | 영혼 | yeonghon | 靈魂 | A soul, a spirit |
+| 2233 | 운전사 | unjeonsa | 司機、駕駛員 | The driver (of a taxi) |
+| 2234 | 자랑스럽다 | jarangseureopda | 感到自豪、驕傲 | To be proud |
+| 2235 | 잠깐 | jamkkan | 稍微、片刻、一會兒 | For a little while |
+| 2236 | 적당하다 | jeokdanghada | 適當、合適 | To be appropriate |
+| 2237 | 적용되다 | jeogyongdoeda | 被應用、被適用（被動） | To be applied |
+| 2238 | 주 | ju | 週、星期 | One week |
+| 2239 | 지속적 | jisokjeok | 持續的 | Continuous |
+| 2240 | 진행하다 | jinhaenghada | 進行、推進 | Advance, proceed |
+| 2241 | 차별 | chabyeol | 差別、歧視 | distinction,differentiation |
+| 2242 | 곳곳 | gotgot | 到處、處處 | Everywhere |
+| 2243 | 구분 | gubun | 區分、劃分 | A division or section |
+| 2244 | 금지 | geumji | 禁止 | Forbidden or prohibitted |
+| 2245 | 내지 | naeji | 乃至、或者 | From A to B |
+| 2246 | 달려오다 | dalryeooda | 跑來、奔來 | Come running |
+| 2247 | 분노 | bunno | 憤怒、狂怒 | rage,anger |
+| 2248 | 비교 | bigyo | 比較 | A comparison |
+| 2249 | 소위 | sowi | 所謂 | What is called for |
+| 2250 | 스치다 | seuchida | 擦過、掠過 | Graze past |
+| 2251 | 역사적 | yeoksajeok | 歷史性的、歷史的 | Historical |
+| 2252 | 열차 | yeolcha | 列車、火車 | Train |
+| 2253 | 요즈음 | yojeueum | 最近、近來 | Recently, nowadays |
+| 2254 | 유난히 | yunanhi | 格外、格外特別、異常 | uncommon,exceptional |
+| 2255 | 의무 | uimu | 義務 | A duty, an obligation |
+| 2256 | 잃어버리다 | ileobeorida | 遺失、丟失 | To lose |
+| 2257 | 잠깐 | jamkkan | 稍等、片刻、一會兒 | For a little while |
+| 2258 | 잠들다 | jamdeulda | 入睡、睡著 | Fall asleep |
+| 2259 | 정식 | jeongsik | 正式 | Formality, due form |
+| 2260 | 조용하다 | joyonghada | 安靜、平靜 | To be quiet,still |
+| 2261 | 즉시 | jeuksi | 即刻、立刻 | At once,immediately |
+| 2262 | 최선 | choeseon | 盡力、最好、最佳辦法 | The best, one’s best |
+| 2263 | 탑 | tap | 塔、佛塔 | A tower |
+| 2264 | 한복 | hanbok | 韓服 | Korean traditional clothing |
+| 2265 | 활동하다 | hwaldonghada | 活動、過活躍的生活 | To be active, lead an active life |
+| 2266 | 건축 | geonchuk | 建築 | Construction or building or erection |
+| 2267 | 귀엽다 | gwiyeopda | 可愛 | To be cute |
+| 2268 | 답답하다 | dapdaphada | 悶悶不樂、憋悶、焦急 | Feel anxious |
+| 2269 | 당황하다 | danghwanghada | 慌張、不知所措 | Be confused |
+| 2270 | 말 | mal | 馬、駿馬 | Horse |
+| 2271 | 밀가루 | milgaru | 麵粉 | Flour |
+| 2272 | 바깥 | bakkat | 外面、外部 | Outside |
+| 2273 | 바지 | baji | 褲子 | Pants |
+| 2274 | 벌리다 | beolrida | 張開、張大 | Open, wide |
+| 2275 | 보고서 | bogoseo | 報告書 | Report |
+| 2276 | 보관하다 | bogwanhada | 保管、存放 | Keep in one’s custody |
+| 2277 | 부딪치다 | buditchida | 碰撞、撞上 | Collide with, bump against |
+| 2278 | 빨래 | ppalrae | 洗衣、洗滌物 | washing,laundry |
+| 2279 | 상하다 | sanghada | 受傷、受損、變質 | damage,injure |
+| 2280 | 설치 | seolchi | 設置、設立、安裝 | establisment,institution |
+| 2281 | 식용유 | sigyongyu | 食用油 | Food oil |
+| 2282 | 싫어하다 | sileohada | 討厭、不喜歡 | To dislike, be reluctant (to do) |
+| 2283 | 업종 | eopjong | 行業、業種 | Types of industry |
+| 2284 | 연출 | yeonchul | 導演、策劃、演出 | Production, presentation |
+| 2285 | 테이블 | teibeul | 桌子、餐桌 | Table |
+| 2286 | 트이다 | teuida | 敞開、開朗、通暢 | Get cleared out, open up |
+| 2287 | 피곤하다 | pigonhada | 疲勞、疲憊 | To be very tired, exhausted |
+| 2288 | 한국어 | hangugeo | 韓國語、韓語 | Korean (language) |
+| 2289 | 한자 | hanja | 漢字 | Korean character, derived from chinese |
+| 2290 | 겁 | geop | 害怕、恐懼 | Fear or fright |
+| 2291 | 관리 | gwanri | 官吏、官員 | A government official |
+| 2292 | 국제화 | gukjehwa | 國際化 | Internationalization |
+| 2293 | 근육 | geunyuk | 肌肉 | Muscles |
+| 2294 | 깔리다 | kkalrida | 鋪著、被鋪上（被動） | To be spread or overspread |
+| 2295 | 사전 | sajeon | 事先、預先 | beforehand,in advance |
+| 2296 | 산소 | sanso | 氧氣 / 墳墓 | Oxygen |
+| 2297 | 석유 | seogyu | 石油 | Petroleum |
+| 2298 | 소리치다 | sorichida | 大聲喊叫、高呼 | To shout, yell |
+| 2299 | 시 | si | 市、城市 / 詩 | City |
+| 2300 | 신선하다 | sinseonhada | 新鮮 | Fresh |
+| 2301 | 안경 | angyeong | 眼鏡 | Glasses |
+| 2302 | 약속하다 | yaksokhada | 約定、承諾 | To make a promise |
+| 2303 | 연합 | yeonhap | 聯合、同盟 | Combination, federacy, union |
+| 2304 | 인격 | ingyeok | 人格 | Personality, character |
+| 2305 | 장 | jang | 章（書之章節） | A chapter in a book |
+| 2306 | 적 | jeok | 敵人 | The enemy |
+| 2307 | 조심하다 | josimhada | 小心、提防 | To be careful |
+| 2308 | 질 | jil | 品質、質量、性質 | Quality, character |
+| 2309 | 찌르다 | jjireuda | 刺、戳、扎 | stab,thrust |
+| 2310 | 책임자 | chaegimja | 負責人 | Person responsible |
+| 2311 | 총 | chong | 總計、全部（冠形詞） | all,entire,whole |
+| 2312 | 취미 | chwimi | 興趣、愛好 | Hobby |
+| 2313 | 표 | pyo | 標記、記號、標誌 | A marker, indication |
+| 2314 | 품목 | pummok | 品項、項目 | The name of an article, a list of articles |
+| 2315 | 확대되다 | hwakdaedoeda | 被擴大、放大（被動） | To be magnified |
+| 2316 | 거실 | geosil | 客廳 | Living room |
+| 2317 | 논 | non | 水田、稻田 | A rice field |
+| 2318 | 덥다 | deopda | 熱、炎熱 | Be hot, heated |
+| 2319 | 바보 | babo | 傻瓜、笨蛋 | Ignorant |
+| 2320 | 별 | byeol | 依...分類（~별） | Classified by |
+| 2321 | 보람 | boram | 意義、價值、成效 | worth,result |
+| 2322 | 부작용 | bujagyong | 副作用 | reaction,side effect |
+| 2323 | 비난 | binan | 譴責、責難 | Criticism, reproach |
+| 2324 | 신고 | singo | 申報、報案 | A statement,declaration |
+| 2325 | 야구 | yagu | 棒球 | Baseball |
+| 2326 | 어떡하다 | eotteokhada | 怎麼辦、如何處置 | To take some measures, to manage somehow |
+| 2327 | 예상 | yesang | 預想、預測 | Expectation, anticipation; forecast, preconception, prenotion |
+| 2328 | 위협 | wihyeop | 威脅、恐嚇 | Menace, threat, intimidation |
+| 2329 | 이 | i | 牙齒、齒 | A tooth |
+| 2330 | 이상 | isang | 理想、目標 | An ideal, a goal |
+| 2331 | 잠기다 | jamgida | 淹沒、沉浸 / 鎖上 | Sink in water |
+| 2332 | 주고받다 | jugobatda | 相互給予、交流 | Give and receive, exchange |
+| 2333 | 주먹 | jumeok | 拳頭 | Fist |
+| 2334 | 지지 | jiji | 支持 | support,backing |
+| 2335 | 털다 | teolda | 抖落、拂去 | To shake off, brush up |
+| 2336 | 경고 | gyeonggo | 警告 | Warning |
+| 2337 | 공개하다 | gonggaehada | 公開 | Open to the public |
+| 2338 | 과목 | gwamok | 科目、學科 | A subject or a lesson |
+| 2339 | 구경 | gugyeong | 參觀、觀賞、看熱鬧 | An enjoyable sight or spectacle |
+| 2340 | 그분 | geubun | 那位（敬稱） | That person (respectful) |
+| 2341 | 근무 | geunmu | 勤務、工作 | Duty or service or work |
+| 2342 | 논쟁 | nonjaeng | 爭論、爭辯 | Controversy, argument |
+| 2343 | 달아나다 | daranada | 逃跑、逃脫 | Escape, flee |
+| 2344 | 묶다 | mukda | 綑綁、綁 | bind,tie |
+| 2345 | 성명 | seongmyeong | 聲明 / 姓名 | A declaration,statement |
+| 2346 | 소스 | soseu | 醬汁、沙司 | Sauce |
+| 2347 | 수십 | susip | 數十 | Tens of sth |
+| 2348 | 신다 | sinda | 穿（鞋/襪） | Put on, wear |
+| 2349 | 우리말 | urimal | 我們的母語、韓語 | Korean (language) |
+| 2350 | 유교 | yugyo | 儒教、儒家 | Confucianism |
+| 2351 | 이불 | ibul | 棉被、被子 | Bedding, bed clothes |
+| 2352 | 이성 | iseong | 理性 | Reason, reasoning |
+| 2353 | 일상 | ilsang | 日常、平時 | Everyday, usual, ordinary |
+| 2354 | 자동 | jadong | 自動 | self-acting, self-moving, automatic |
+| 2355 | 장래 | jangrae | 將來、前途 | The future |
+| 2356 | 전개되다 | jeongaedoeda | 展開、展開進展（被動） | To be unfolded,spread out |
+| 2357 | 죄송하다 | joesonghada | 抱歉、慚愧 | regret,be sorry for |
+| 2358 | 중요성 | jungyoseong | 重要性 | importance,gravity |
+| 2359 | 크다 | keuda | 大、長大 | To be big, large |
+| 2360 | 탤런트 | taelreonteu | 電視演員、藝能人才 | Talent |
+| 2361 | 특별히 | teukbyeolhi | 特別地、格外 | Especially |
+| 2362 | 품질 | pumjil | 品質、質量 | The quality of the article ( but not the article itself) |
+| 2363 | 회견 | hoegyeon | 會見、記者會 | An interview, a meeting |
+| 2364 | 훔치다 | humchida | 偷竊、偷 | To steal |
+| 2365 | 흔적 | heunjeok | 痕跡、蹤跡 | traces,signs,evidences |
+| 2366 | 고전 | gojeon | 古典 | A classic in literature |
+| 2367 | 과학적 | gwahakjeok | 科學的 | Scientifically |
+| 2368 | 구분하다 | gubunhada | 區分、劃分 | To divide or to classify |
+| 2369 | 그럼 | geureom | 那麼 / 當然（感嘆詞） | Interjection: “yeh or that’s right” |
+| 2370 | 뇌 | noe | 大腦、腦 | Brains |
+| 2371 | 봉투 | bongtu | 信封、紙袋 | Envelope |
+| 2372 | 분명 | bunmyeong | 明顯、清楚 | Obviousness |
+| 2373 | 사설 | saseol | 社論、社評 | An editorial |
+| 2374 | 승리 | seungri | 勝利 | A victory |
+| 2375 | 좌우 | jwau | 左右 | Left and right |
+| 2376 | 주 | ju | 主人、雇主 | one’s master, ones employer |
+| 2377 | 지다 | jida | 落下、下沉（太陽） | Set (the sun) |
+| 2378 | 추억 | chueok | 回憶 | Memory |
+| 2379 | 하여튼 | hayeoteun | 無論如何、總之 | Anyways |
+| 2380 | 함부로 | hamburo | 隨便、隨意、胡亂 | Indiscriminately, at random |
+| 2381 | 향기 | hyanggi | 香氣、芬芳 | fragrance,aroma,perfume |
+| 2382 | 현지 | hyeonji | 當地、現場 | The actual place, the very spot |
+| 2383 | 가늘다 | ganeulda | 細、苗條 | Thin or fine or slender |
+| 2384 | 개인적 | gaeinjeok | 個人的、私人的 | Private or personal |
+| 2385 | 겉 | geot | 表面、外表 | The outer surface |
+| 2386 | 굽히다 | guphida | 彎曲、屈服 | Bend or stoop |
+| 2387 | 근무하다 | geunmuhada | 工作、任職 | Work or labor |
+| 2388 | 깜짝 | kkamjjak | 猛然、吃驚地 | With a surprise |
+| 2389 | 넓히다 | neophida | 拓寬、擴大 | Widen |
+| 2390 | 대 | dae | 對、對比 / 一對 | 1) Versus 2)a pair, counterpart |
+| 2391 | 매년 | maenyeon | 每年 | Every year |
+| 2392 | 발생 | balsaeng | 發生、產生 | 1) Birth 2) development |
+| 2393 | 셋 | set | 三 | Three |
+| 2394 | 소주 | soju | 燒酒 | Korean sake |
+| 2395 | 손바닥 | sonbadak | 手掌 | The palm |
+| 2396 | 승용차 | seungyongcha | 轎車、客車 | A passenger car |
+| 2397 | 어색하다 | eosaekhada | 尷尬、不自在、生硬 | To be awkward, shy with words, speechless |
+| 2398 | 얹다 | eonda | 擱在...上、放上 | Put on, place, lay, set |
+| 2399 | 의학 | uihak | 醫學 | Medical science |
+| 2400 | 장점 | jangjeom | 優點、長處 | A merit,strong point |
+| 2401 | 적당히 | jeokdanghi | 適當地、恰當地 | suitable,proper |
+| 2402 | 줍다 | jupda | 撿起、拾起 | Pick up, gather |
+| 2403 | 진출 | jinchul | 進軍、走向、進出 | An advance |
+| 2404 | 창조 | changjo | 創造 | Creation |
+| 2405 | 킬로그램 | kilrogeuraem | 公斤、千克 | Kilogram |
+| 2406 | 평범하다 | pyeongbeomhada | 平凡、普通 | Plain, average |
+| 2407 | 프로 | peuro | 節目 / 專業 | Program |
+| 2408 | 홍보 | hongbo | 宣傳、公關 | Public information, public relations |
+| 2409 | 확인 | hwagin | 確認、核實 | A check,confirmation |
+| 2410 | 가루 | garu | 粉末、粉 | Powder or flour; meal |
+| 2411 | 건지다 | geonjida | 撈起 / 拯救、挽救 | Take or bring out of the water or 2) rescue a person from danger |
+| 2412 | 깨지다 | kkaejida | 碎裂、打碎 / 破裂 | To break |
+| 2413 | 내다보다 | naedaboda | 遠望、展望、預測 | Look out for |
+| 2414 | 대량 | daeryang | 大量 | A large quantity |
+| 2415 | 마땅하다 | mattanghada | 理當、應當、合適 | Be right, approppriate |
+| 2416 | 바로잡다 | barojapda | 糾正、矯正、端正 | Straighten |
+| 2417 | 박히다 | bakhida | 被釘入、嵌入、深印 | Be nailed in |
+| 2418 | 방금 | banggeum | 剛才、方才 | Just now |
+| 2419 | 생선 | saengseon | 鮮魚、生魚 | Raw fish |
+| 2420 | 슬픔 | seulpeum | 悲傷、悲痛 | Sorrow |
+| 2421 | 아무렇지 않다 | amureochi anta | 若無其事、毫不介意 | To be indifferent, casually |
+| 2422 | 이용되다 | iyongdoeda | 被利用、被使用（被動） | To be used |
+| 2423 | 이튿날 | iteunnal | 翌日、次日、第二天 | The second day after |
+| 2424 | 임시 | imsi | 臨時、特別 | Temporary, special |
+| 2425 | 제거하다 | jegeohada | 消除、除去、清除 | exclusion,removal |
+| 2426 | 줄다 | julda | 減少、縮小 | Diminish |
+| 2427 | 지구 | jigu | 地區、地帶 | A district,region |
+| 2428 | 지우다 | jiuda | 擦掉、抹去、消除 | To erase |
+| 2429 | 참기름 | chamgireum | 麻油、芝麻油 | Sesame oil |
+| 2430 | 통 | tong | 桶、木桶 / 封（信件量詞） | A tub, a cask |
+| 2431 | 특수 | teuksu | 特殊、特別 | characteristic,distinct,unique |
+| 2432 | 팬 | paen | 平底鍋 / 粉絲 | Pan |
+| 2433 | 합치다 | hapchida | 合併、結合 | combine,unite |
+| 2434 | 호기심 | hogisim | 好奇心 | Curiousity |
+| 2435 | 골목 | golmok | 小巷、胡同 | A side street or alley |
+| 2436 | 기운 | giun | 精神、氣力、氣色 | Strength or might (the strength you feel you have on that particular day) |
+| 2437 | 기획 | gihoek | 企劃、策劃 | Planning |
+| 2438 | 대충 | daechung | 大致、大致上、草率 | Almost, nearly, about |
+| 2439 | 맞서다 | matseoda | 對峙、抗衡、面對 | Stand opposite |
+| 2440 | 모자라다 | mojarada | 不足、不夠、欠缺 | To be insufficient |
+| 2441 | 박다 | bakda | 釘入、鑲嵌、釘 | Drive,hammer in |
+| 2442 | 본성 | bonseong | 本性、天性 | Original nature or character |
+| 2443 | 상상하다 | sangsanghada | 想像 | Imagine |
+| 2444 | 생산력 | saengsanryeok | 生產力 | Productive capacity |
+| 2445 | 안전하다 | anjeonhada | 安全 | To be safe |
+| 2446 | 유학 | yuhak | 留學 | Studying abroad |
+| 2447 | 이르다 | ireuda | 告訴、告知、告發 | Inform, report, tell |
+| 2448 | 장비 | jangbi | 裝備、設備 | equipment,fittings |
+| 2449 | 정치인 | jeongchiin | 政治家、政界人士 | Politician |
+| 2450 | 정치적 | jeongchijeok | 政治的 | Political |
+| 2451 | 졸업 | joreop | 畢業 | Graduation |
+| 2452 | 처벌 | cheobeol | 處罰、懲處 | punishment,penalty |
+| 2453 | 카페 | kape | 咖啡館、咖啡廳 | Cafe (place to drink coffee) |
+| 2454 | 콤플렉스 | kompeulrekseu | 自卑感、情結 | Complex |
+| 2455 | 검토 | geomto | 檢討、審查、研議 | An examination or investigation or study |
+| 2456 | 그다음 | geudaeum | 其次、接下來、隨後 | Next |
+| 2457 | 기법 | gibeop | 技法、技巧 | Techniques |
+| 2458 | 끓다 | kkeulta | 沸騰、煮開 | Boil or simmer |
+| 2459 | 날아오다 | naraoda | 飛來 | Come flying |
+| 2460 | 농담 | nongdam | 玩笑 | A joke |
+| 2461 | 닭 | dak | 雞 | Chicken |
+| 2462 | 담임 | damim | 導師、班主任、擔當 | Charge, duty |
+| 2463 | 도중 | dojung | 途中、中途 | On the way |
+| 2464 | 맥주 | maekju | 啤酒 | Beer |
+| 2465 | 모래 | morae | 沙子 | Sand |
+| 2466 | 살아남다 | saranamda | 生存、活下來 | Survive |
+| 2467 | 살인 | sarin | 殺人、謀殺 | Murder |
+| 2468 | 성질 | seongjil | 性質、脾氣、性格 | naure,disposition |
+| 2469 | 신호 | sinho | 信號、暗號 | A signal,signaling |
+| 2470 | 아버님 | abeonim | 父親、令尊（敬稱） | Father (respectful word) |
+| 2471 | 의심하다 | uisimhada | 懷疑 | To be suspicious, to doubt |
+| 2472 | 인 | in | 人、名（人數單位） | A person |
+| 2473 | 잇따르다 | itttareuda | 接連、接二連三 | Follow one after another |
+| 2474 | 자랑하다 | jaranghada | 炫耀、誇耀、自豪 | To be proud |
+| 2475 | 자판 | japan | 鍵盤 | Keyboard |
+| 2476 | 적용 | jeogyong | 適用、應用 | Application |
+| 2477 | 전기 | jeongi | 前期、前半期 / 傳記 | the former period/term |
+| 2478 | 중반 | jungban | 中期、中葉、中盤 | At the middle stage (of a game or contest, or otherwise) |
+| 2479 | 지시하다 | jisihada | 指示、命令 | To direct, instruct |
+| 2480 | 출발 | chulbal | 出發 | To start (a journey,trip) |
+| 2481 | 허용하다 | heoyonghada | 允許、准許、容許 | To permit, approve, grant, allow |
+| 2482 | 가르침 | gareuchim | 教導、教誨、指引 | Teaching or an instruction |
+| 2483 | 각국 | gakguk | 各國 | Each country |
+| 2484 | 교과서 | gyogwaseo | 教科書、課本 | Textbook |
+| 2485 | 그려지다 | geuryeojida | 被描繪、浮現（被動） | Draw |
+| 2486 | 꾸준히 | kkujunhi | 堅持不懈地、持續地 | Untiringly, ceaselessly |
+| 2487 | 년도 | nyeondo | 年度 | Year |
+| 2488 | 다수 | dasu | 多數、眾多 | A great number |
+| 2489 | 덕분 | deokbun | 多虧、托福 | Indebtedness |
+| 2490 | 무리 | muri | 勉強、過度、不合情理 | Be unreasonable |
+| 2491 | 물음 | mureum | 提問、問題 | A question |
+| 2492 | 빌다 | bilda | 祈求、祈願、乞求 | pray,wish,ask |
+| 2493 | 수영 | suyeong | 游泳 | Swimming |
+| 2494 | 스님 | seunim | 和尚、僧人 | A priest |
+| 2495 | 썩다 | sseokda | 腐爛、腐敗 | Go bad, rot |
+| 2496 | 어머님 | eomeonim | 母親、令堂（敬稱） | Mother (respectful word) |
+| 2497 | 엉뚱하다 | eongttunghada | 荒唐、離奇、異想天開 | Be extraordinary, extravagant ; to misdirect somebody's attention |
+| 2498 | 여보 | yeobo | 老公/老婆（夫妻親暱稱呼） | Spouse (term of affection) |
+| 2499 | 잊어버리다 | ijeobeorida | 忘掉、忘記 | To forget |
+| 2500 | 정면 | jeongmyeon | 正面 | The front, the facade |
+| 2501 | 조각 | jogak | 雕刻、雕塑 | Sculpture |
+| 2502 | 태우다 | taeuda | 燃燒、燒掉 / 載（人） | Burn, commit to flames |
+| 2503 | 해석 | haeseok | 解釋、解說、註釋 | Interpretation, a comment |
+| 2504 | 가리다 | garida | 挑選、分辨、認生 | Choose or select |
+| 2505 | 개국 | gaeguk | 開國、建國 | The foundation of a country |
+| 2506 | 계산하다 | gyesanhada | 計算、結帳 | To calculate |
+| 2507 | 근원 | geunwon | 根源、本源 | The origin or root or source |
+| 2508 | 기차 | gicha | 火車、列車 | A train |
+| 2509 | 담그다 | damgeuda | 浸泡、醃製 | Soak in water |
+| 2510 | 마음대로 | maeumdaero | 隨心所欲、隨意 | As you wish |
+| 2511 | 며느리 | myeoneuri | 媳婦、兒媳 | Daughter-in-law |
+| 2512 | 믿음 | mideum | 信任、信念、信仰 | Belief |
+| 2513 | 발견 | balgyeon | 發現 | Discovery |
+| 2514 | 보고 | bogo | 報告、匯報 | report,information |
+| 2515 | 부탁하다 | butakhada | 拜託、請求 | Ask sb a favor |
+| 2516 | 사용자 | sayongja | 使用者、用戶 | A user,consumer,employer |
+| 2517 | 사회주의 | sahoejuui | 社會主義 | Socialism |
+| 2518 | 설치되다 | seolchidoeda | 被安裝、被設立（被動） | To be established |
+| 2519 | 수도권 | sudogwon | 首都圈、都會區 | The Metropolitan area |
+| 2520 | 식탁 | siktak | 餐桌、飯桌 | Dinner table |
+| 2521 | 실패하다 | silpaehada | 失敗 | To fail |
+| 2522 | 영원하다 | yeongwonhada | 永遠、永恆 | To be eternal |
+| 2523 | 우연히 | uyeonhi | 偶然地、意外地 | accidentally,by chance |
+| 2524 | 자극 | jageuk | 刺激 | A stimulus |
+| 2525 | 정해지다 | jeonghaejida | 被確定、定下來（被動） | To be determined, settled |
+| 2526 | 짚다 | jipda | 觸摸、摸索 / 拄（拐杖） | Feel, examine |
+| 2527 | 총리 | chongri | 總理 | General overseeing, presiding over |
+| 2528 | 칭찬 | chingchan | 表揚、稱讚 | Praide, admiration |
+| 2529 | 튼튼하다 | teunteunhada | 堅固、結實、健康 | Solid, compact, firm |
+| 2530 | 햇빛 | haetbit | 陽光、日光 | Sunshine, sunlight |
+| 2531 | 공원 | gongwon | 公園 | Park |
+| 2532 | 긍정적 | geungjeongjeok | 肯定的、積極正面的 | Affirmation or admission |
+| 2533 | 논의하다 | nonuihada | 討論、研討 | Discussion |
+| 2534 | 대출 | daechul | 貸款、借出 | Lending |
+| 2535 | 덕 | deok | 德、恩德、恩惠 | Virtue, morality |
+| 2536 | 먼지 | meonji | 灰塵、塵土 | Dust |
+| 2537 | 바닷가 | badatga | 海邊、海岸 | The beach |
+| 2538 | 바치다 | bachida | 獻出、奉獻 | Give, offer |
+| 2539 | 반하다 | banhada | 相反、違背 / 著迷 | To be contrary to |
+| 2540 | 발표되다 | balpyodoeda | 被發表、被公佈（被動） | Be announced |
+| 2541 | 부정하다 | bujeonghada | 不定、無常、不規則 | Be uncertain,irregular |
+| 2542 | 불러일으키다 | bulreoireukida | 引起、喚起、激發 | rouse,stir up |
+| 2543 | 사원 | sawon | 職員、社員 / 寺院 | Company employee |
+| 2544 | 소유자 | soyuja | 擁有者、所有人 | Possessor |
+| 2545 | 씹다 | ssipda | 咀嚼、嚼 | To chew |
+| 2546 | 아무튼 | amuteun | 總之、無論如何 | In any case |
+| 2547 | 안되다 | andoeda | 不行、不能 | Must not, should not |
+| 2548 | 액수 | aeksu | 金額、數額 | A sum, an amount |
+| 2549 | 왠지 | waenji | 不知為何、總覺得 | I don’t know why, there is no reason for it |
+| 2550 | 욕심 | yoksim | 貪心、慾望 | Greed, selfishness |
+| 2551 | 우승 | useung | 冠軍、優勝 | First place |
+| 2552 | 익다 | ikda | 熟、成熟 / 熟悉 | Ripe, be ripe |
+| 2553 | 제출하다 | jechulhada | 提交、提出 | To submit,tender |
+| 2554 | 조심스럽다 | josimseureopda | 謹慎、小心翼翼 | Cautious |
+| 2555 | 직전 | jikjeon | 緊接著之前、正前方 | Just immediately before |
+| 2556 | 짐작하다 | jimjakhada | 推測、猜想 | To guess, infer |
+| 2557 | 택하다 | taekhada | 選擇、挑選 | Choose, select |
+| 2558 | 터 | teo | 場地、地基、處所 | A site, place |
+| 2559 | 피시 | pisi | 個人電腦、PC | PC, personal computer |
+| 2560 | 흘러나오다 | heulreonaoda | 流出、傳出 | Flow out, run, effuse |
+| 2561 | 가구 | gagu | 戶、家庭 / 家具 | Family |
+| 2562 | 간단히 | gandanhi | 簡單地、簡約地 | Simply speaking |
+| 2563 | 강물 | gangmul | 江水、河水 | River water |
+| 2564 | 궁극적 | gunggeukjeok | 終極的、最終的 | Finally or in the end, 마지막으로 |
+| 2565 | 극히 | geukhi | 極其、極端地 | Exceedingly or extremely |
+| 2566 | 기여하다 | giyeohada | 貢獻、致力 | Contribute or add much to |
+| 2567 | 꼭 | kkok | 緊緊地 / 一定 | Tightly or fast |
+| 2568 | 날짜 | naljja | 日期 | Date |
+| 2569 | 대륙 | daeryuk | 大陸 | A continent |
+| 2570 | 모니터 | moniteo | 螢幕、監視器 | Monitor |
+| 2571 | 범인 | beomin | 犯人、罪犯 | A criminal |
+| 2572 | 변동 | byeondong | 變動、波動 | Change, flucutation |
+| 2573 | 불가피하다 | bulgapihada | 不可避免、無可奈何 | Inevitable, unavoidable |
+| 2574 | 삶다 | samda | 煮、燉、蒸（蛋/肉） | boil,cook (eggs) |
+| 2575 | 샌드위치 | saendeuwichi | 三明治 | Sandwich |
+| 2576 | 서류 | seoryu | 文件、公文 | documents,papers |
+| 2577 | 손해 | sonhae | 損害、損失 | damage,injury |
+| 2578 | 숨지다 | sumjida | 斷氣、逝世 | Breathe one’s last breath |
+| 2579 | 아유 | ayu | 哎呀（感嘆詞） | Good heavens! |
+| 2580 | 요청 | yocheong | 請求、要求 | request,demand,claim |
+| 2581 | 운 | un | 運氣、命運 | Fortune, luck, fate |
+| 2582 | 일상생활 | ilsangsaenghwal | 日常生活 | Everyday (daily) life |
+| 2583 | 자존심 | jajonsim | 自尊心 | Self-confidence |
+| 2584 | 주저앉다 | jujeoanda | 癱坐、跌坐 | Sit down, plump down |
+| 2585 | 증권사 | jeunggwonsa | 證券公司 | Securities corporation |
+| 2586 | 진하다 | jinhada | 濃厚、深濃 | Be dark, deep |
+| 2587 | 초원 | chowon | 草原 | A plain, a prarie |
+| 2588 | 최종 | choejong | 最終、最後 | last,final,terminal |
+| 2589 | 회복하다 | hoebokhada | 恢復、康復 | To recover, get better, get well again |
+| 2590 | 흘러가다 | heulreogada | 流淌、流逝 | flow,run,drift along |
+| 2591 | 흥미 | heungmi | 興趣、興致 | interest,zeal |
+| 2592 | 검사 | geomsa | 檢察官 | A public prosecutor |
+| 2593 | 그쪽 | geujjok | 那邊、他們 | Those people |
+| 2594 | 꾸다 | kkuda | 借入（錢/物） | Borrow or loan |
+| 2595 | 내려다보다 | naeryeodaboda | 俯視、俯瞰 | Overlook |
+| 2596 | 눈썹 | nunsseop | 眉毛 | The eyebrow |
+| 2597 | 대신하다 | daesinhada | 代替、取代 | Relieve, replace another |
+| 2598 | 마디 | madi | 節、段、節拍、言語片段 | A word, a tune, a song, a paragraph |
+| 2599 | 미처 | micheo | 尚未、來不及 | To that extent |
+| 2600 | 비닐 | binil | 塑膠、乙烯基 | a thin sheet of plastic, vinyl |
+| 2601 | 비율 | biyul | 比率、比例 | ratio,percentage |
+| 2602 | 생물 | saengmul | 生物 | A living thing |
+| 2603 | 소음 | soeum | 噪音、雜音 | A noise,cacaphony |
+| 2604 | 양국 | yangguk | 兩國、雙方國家 | Both countries |
+| 2605 | 얼핏 | eolpit | 隱約、乍看、一閃 | at a momentary glance or intermittently appearing (e.g. catch a fleeting glimpse of) |
+| 2606 | 오래되다 | oraedoeda | 久遠、年代久遠 | To last for a long time |
+| 2607 | 웬 | wen | 什麼樣的、哪來的 | What sort of, what kind of |
+| 2608 | 조각 | jogak | 碎片、零碎、薄片 | A piece,scrap,fragment |
+| 2609 | 중부 | jungbu | 中部 | The center, middle part |
+| 2610 | 차 | cha | 茶、茶水 | Tea |
+| 2611 | 채소 | chaeso | 蔬菜 | vegetables,greens |
+| 2612 | 침 | chim | 口水、唾液 / 針 | Spit |
+| 2613 | 털 | teol | 毛、毛髮、羽毛 | Hair; fur, feathers |
+| 2614 | 판매하다 | panmaehada | 銷售、販賣 | To sell |
+| 2615 | 항의 | hangui | 抗議 | A protest |
+| 2616 | 해당 | haedang | 該當、符合、相應 | Come/fall under the purview of |
+| 2617 | 확보 | hwakbo | 確保、掌握 | security,insurance |
+| 2618 | 환경오염 | hwangyeongoyeom | 環境污染 | Environmental pollution |
+| 2619 | 가치관 | gachigwan | 價值觀 | one’s values or sense of values, a value system |
+| 2620 | 검은색 | geomeunsaek | 黑色 | Black or dark |
+| 2621 | 고생하다 | gosaenghada | 吃苦、受苦、辛勞 | To suffer or to have trials ; to do something you don't want to do, 하고 싶자 않은 것 |
+| 2622 | 기원전 | giwonjeon | 公元前、西元前 | B.C. |
+| 2623 | 기타 | gita | 其他、其餘 / 吉他 | The others or the rest |
+| 2624 | 긴급 | gingeup | 緊急 | Emergency |
+| 2625 | 꺾다 | kkeokda | 折斷、轉折、挫敗 | Break off or snap off |
+| 2626 | 꿈꾸다 | kkumkkuda | 做夢、夢想 | To dream |
+| 2627 | 무려 | muryeo | 高達、竟然有、多達 | As many as, no less than |
+| 2628 | 묻히다 | muthida | 被埋、被掩蓋 / 沾上（被動） | Get buried |
+| 2629 | 수표 | supyo | 支票 | A check |
+| 2630 | 실태 | siltae | 實態、實際情況 | The actual conditions,reality |
+| 2631 | 아쉽다 | aswipda | 惋惜、可惜、捨不得 | To miss, feel the loss of |
+| 2632 | 애정 | aejeong | 愛情、熱愛、喜愛 | Love for a person, affection |
+| 2633 | 얘 | yae | 這孩子、餵（稱呼晚輩） | Sonny, you there |
+| 2634 | 어머 | eomeo | 哎呀、天哪 | Oh my god! |
+| 2635 | 여보세요 | yeoboseyo | 餵（電話問候） | Telephone HELLO |
+| 2636 | 일정 | iljeong | 日程、固定 | To be fixed, settled, regular |
+| 2637 | 장르 | jangreu | 類型、體裁 | Genre |
+| 2638 | 저렇다 | jeoreota | 那樣、像那樣 | Such a thing as that |
+| 2639 | 접하다 | jeophada | 挨著、鄰接 / 接觸 | adjoin,be adjacent to |
+| 2640 | 정성 | jeongseong | 精誠、誠心、心意 | True heart,devotion |
+| 2641 | 제약 | jeyak | 制約、限制 | A condition,restriction |
+| 2642 | 쫓다 | jjotda | 驅趕、追逐、驅逐 | Drive away, chase off |
+| 2643 | 추가 | chuga | 追加、添加 | An addition |
+| 2644 | 테이프 | teipeu | 膠帶、錄音帶 | Tape |
+| 2645 | 품 | pum | 衣服胸圍 / 懷抱、胸口 | Width; bosom, breast (the clothes have a big ~) |
+| 2646 | 해석 | haeseok | 分析、解析 | Analysis, analytical research |
+| 2647 | 확인되다 | hwagindoeda | 被確認、核實（被動） | To be confirmed |
+| 2648 | 가하다 | gahada | 加以、施加 | To add |
+| 2649 | 간장 | ganjang | 醬油 / 肝腸 | Soy sauce |
+| 2650 | 강의 | gangui | 講課、講座、課程 | A lecture or discourse |
+| 2651 | 거 | geo | 那件事、那個（것的口語） | That thing |
+| 2652 | 고민하다 | gominhada | 苦惱、焦慮 | Be in anguish or worried |
+| 2653 | 과 | gwa | 科、系、部門 | 1) A course or branch of study 2) a department or a faculty |
+| 2654 | 교환 | gyohwan | 交換、交流 | An exchange |
+| 2655 | 국어 | gugeo | 國語、韓語 | 1) The national language or 2) Korean |
+| 2656 | 노랗다 | norata | 黃色、發黃 | Be yellow |
+| 2657 | 다치다 | dachida | 受傷、碰傷 | To hurt |
+| 2658 | 상 | sang | 上、上等 / 獎 | Upper |
+| 2659 | 새 | sae | 之間、間隔、空隙 | An interval |
+| 2660 | 악기 | akgi | 樂器 | Musical instrument |
+| 2661 | 연말 | yeonmal | 年底、歲末 | The end, close of the year |
+| 2662 | 올려놓다 | olryeonota | 放在上面、擱置 | Put a thing on a place |
+| 2663 | 외면하다 | oemyeonhada | 轉移視線、迴避 / 外貌 | Outward appearance |
+| 2664 | 원고 | wongo | 原稿、稿件 / 原告 | A manuscript |
+| 2665 | 줄곧 | julgot | 一直、始終 | All the time, all through, repeatedly, constantly |
+| 2666 | 지출 | jichul | 支出、開銷 | Expenses, expenditure |
+| 2667 | 차 | cha | 差距、差額、差別 | difference,margin |
+| 2668 | 치우다 | chiuda | 收拾、移開、整理 | Straighten up, tidy, remove |
+| 2669 | 피로 | piro | 疲勞、疲倦 | Fatigue, exhaustion |
+| 2670 | 향 | hyang | 香、香氣、芬芳 | perfume,incense |
+| 2671 | 개선하다 | gaeseonhada | 改善、改進 | To renovate or to improve |
+| 2672 | 계좌 | gyejwa | 帳戶、帳號 | Account |
+| 2673 | 당기다 | danggida | 拉、拽 / 引起食慾 | Pull |
+| 2674 | 들다 | deulda | 拿、持 / 進入 / 費用 | Means continuing the main verb’s action ; to enter/go into ; to hold, to carry |
+| 2675 | 말기 | malgi | 末期、晚期 | The end, final period |
+| 2676 | 말없이 | mareopsi | 默默地、無言地 | At a loss for words |
+| 2677 | 망하다 | manghada | 敗亡、滅亡、完蛋 | Go to ruin |
+| 2678 | 문서 | munseo | 文件、公文、文書 | A document |
+| 2679 | 박수 | baksu | 鼓掌、拍手 | Applause |
+| 2680 | 부자 | buja | 富翁、富人 / 父子 | A rich person |
+| 2681 | 사흘 | saheul | 三天 | Three days |
+| 2682 | 서쪽 | seojjok | 西方、西面 | The west |
+| 2683 | 성립되다 | seongripdoeda | 成立、達成（被動） | To be concluded, formed |
+| 2684 | 손자 | sonja | 孫子 | Grandson |
+| 2685 | 신랑 | sinrang | 新郎 | A bridegroom |
+| 2686 | 실습 | silseup | 實習、實踐練習 | Actual training,practice |
+| 2687 | 일찍이 | iljjigi | 早早地、早先、很早就 | Early |
+| 2688 | 자율 | jayul | 自律、自主 | self-control,autonomy |
+| 2689 | 제법 | jebeop | 相當、頗為、蠻 | quite,fairly,considerably |
+| 2690 | 집중되다 | jipjungdoeda | 集中、匯聚（被動） | To concentrate |
+| 2691 | 창조적 | changjojeok | 創造性的、創新的 | Creatively |
+| 2692 | 천장 | cheonjang | 天花板、頂棚 | The ceiling |
+| 2693 | 파다 | pada | 挖、掘 | To dig |
+| 2694 | 하긴 | hagin | 事實上、說的也是、確實 | Indeed, though, nevertheless |
+| 2695 | 해결되다 | haegyeoldoeda | 獲得解決、迎刃而解（被動） | To be settled, resolved |
+| 2696 | 향상 | hyangsang | 提高、提升、向上 | Improve; elevation,rise |
+| 2697 | 화가 | hwaga | 畫家 | A painter, a drawer artist |
+| 2698 | 가라앉다 | garaanda | 下沉、沉靜、平息 | To sink (calm,settle,subside) |
+| 2699 | 감싸다 | gamssada | 包裹 / 袒護、包庇 | 1) wrap up or tuck in 2) to protect or defend |
+| 2700 | 고작 | gojak | 頂多、充其量、僅僅 | To be at the highest or the best |
+| 2701 | 구경하다 | gugyeonghada | 參觀、觀看、看熱鬧 | To watch or enjoy watching |
+| 2702 | 국물 | gungmul | 湯汁、菜湯 | soup or broth or gravy |
+| 2703 | 기구 | gigu | 器具、器械 | A utensil or tool |
+| 2704 | 깔다 | kkalda | 鋪（床/路）、鋪設 | to pave (a road), lay down a floor, spread a blanket etc. |
+| 2705 | 다짐하다 | dajimhada | 下決心、保證、下定志向 | Pledge, vow, swear |
+| 2706 | 대합실 | daehapsil | 等候室、候車室 | A waiting room |
+| 2707 | 말씀드리다 | malsseumdeurida | 向...稟告、說（敬語） | Speak (honor.) |
+| 2708 | 매장 | maejang | 賣場、專賣店 / 埋葬 | A store, shop |
+| 2709 | 멀어지다 | meoreojida | 疏遠、變遠 | Become distant to |
+| 2710 | 명칭 | myeongching | 名稱、稱謂 | A name,title |
+| 2711 | 불쌍하다 | bulssanghada | 可憐 | To be deplorable |
+| 2712 | 상업 | sangeop | 商業 | commerce,trade |
+| 2713 | 생산되다 | saengsandoeda | 被生產、製造（被動） | To be produced |
+| 2714 | 숨기다 | sumgida | 隱藏、藏匿 | To hide |
+| 2715 | 실력 | silryeok | 實力、才能 | one’s real ability,talent |
+| 2716 | 야채 | yachae | 蔬菜 | Vegetables |
+| 2717 | 엉덩이 | eongdeongi | 屁股、臀部 | The buttocks |
+| 2718 | 울음 | ureum | 哭聲、哭泣 | crying,weeping |
+| 2719 | 이달 | idal | 本月、這個月 | This month |
+| 2720 | 인체 | inche | 人體 | The human body |
+| 2721 | 저고리 | jeogori | 上衣、短襖（韓服） | A coat, korean jacket |
+| 2722 | 전부 | jeonbu | 全部、全體 | All, everything |
+| 2723 | 즐거움 | jeulgeoum | 快樂、樂趣 | pleasure,merriment |
+| 2724 | 지다 | jida | 輸、失敗（在比賽/戰爭中） | To lose (at war, a game) |
+| 2725 | 진단 | jindan | 診斷 | Diagnosis |
+| 2726 | 질병 | jilbyeong | 疾病 | A disease, sickness |
+| 2727 | 짜다 | jjada | 編織、組織、構思 / 鹹 | Form, organize |
+| 2728 | 체력 | cheryeok | 體力 | Physical strength |
+| 2729 | 친하다 | chinhada | 親近、要好 | To be intimate, familiar, close, friendly |
+| 2730 | 헤아리다 | hearida | 體諒、揣摩、清點 | Consider, weigh, ponder, consider |
+| 2731 | 각기 | gakgi | 各自、各個 | Each or severally or respectively |
+| 2732 | 경찰서 | gyeongchalseo | 警察局、派出所 | A police station |
+| 2733 | 곧바로 | gotbaro | 徑直、立刻 | At once or straight away |
+| 2734 | 관찰 | gwanchal | 觀察 | Observation or survey |
+| 2735 | 구두 | gudu | 皮鞋 | Shoes or boots |
+| 2736 | 군사 | gunsa | 軍士、士兵 | A soldier or a private |
+| 2737 | 귀신 | gwisin | 鬼、鬼神 | A ghost |
+| 2738 | 귀하다 | gwihada | 珍貴、寶貴、尊貴 | 1) noble or high 2) dear 3) lovable or precious |
+| 2739 | 그토록 | geutorok | 那麼、那樣、如此地 | So much or to such an extent |
+| 2740 | 기초하다 | gichohada | 基於、奠基於 | Make the basis for |
+| 2741 | 깊이 | gipi | 深度、深處 | Depth |
+| 2742 | 나뭇가지 | namutgaji | 樹枝 | A tree branch |
+| 2743 | 낫다 | natda | 痊癒、好轉 | to get better (from an illness) |
+| 2744 | 답하다 | daphada | 回答、答覆 | Answer, reply |
+| 2745 | 대가 | daega | 代價、報酬 / 大家 | A price, cost, charge, consideration, purchase money, value |
+| 2746 | 더위 | deowi | 炎熱、暑氣 | The heat |
+| 2747 | 말리다 | malrida | 曬乾、弄乾 / 勸阻 | Dry sth |
+| 2748 | 무덤 | mudeom | 墳墓、墳塚 | A grave,tomb |
+| 2749 | 물결 | mulgyeol | 水波、波浪 | A wave |
+| 2750 | 밥상 | bapsang | 飯桌、餐桌 | Dinner table |
+| 2751 | 보장하다 | bojanghada | 保障、保證 | To secure,guarantee |
+| 2752 | 사과 | sagwa | 蘋果 / 道歉 | An apple |
+| 2753 | 사귀다 | sagwida | 結交、交往 | Make friends with |
+| 2754 | 서너 | seoneo | 三四個、三四（冠形詞） | About three, three or four |
+| 2755 | 솟다 | sotda | 湧出、高聳、冒出 | rise,soar,tower above |
+| 2756 | 실패 | silpae | 失敗 | Failure |
+| 2757 | 예상하다 | yesanghada | 預想、預估 | To expect, anticipate |
+| 2758 | 예외 | yeoe | 例外 | An exception |
+| 2759 | 완전 | wanjeon | 完全、完美 | Perfection, completeness |
+| 2760 | 웃기다 | utgida | 好笑、逗笑 | To be funny |
+| 2761 | 유리 | yuri | 玻璃 | A glass pane |
+| 2762 | 절대적 | jeoldaejeok | 絕對的 | absolute,unconditional |
+| 2763 | 제작하다 | jejakhada | 製作、製造 | To produce,manufacture |
+| 2764 | 쥐 | jwi | 老鼠 | Mouse |
+| 2765 | 최대한 | choedaehan | 最大限度、最大限 | At the most, at the maximum |
+| 2766 | 턱 | teok | 下巴 / 緣故 | The chin |
+| 2767 | 팔리다 | palrida | 賣出、暢銷（被動） | To be in demand, to be sold |
+| 2768 | 품다 | pumda | 懷抱、抱有、孵 | To hold, embrace |
+| 2769 | 하하 | haha | 哈哈（笑聲） | Ha ha ha ha ha |
+| 2770 | 형부 | hyeongbu | 姐夫（女稱姐夫） | A husband of a girl’s older sister |
+| 2771 | 휴식 | hyusik | 休息 | Rest, take a rest |
+| 2772 | 굳다 | gutda | 堅硬、變硬、堅定 | Harden or become hard |
+| 2773 | 굳어지다 | gudeojida | 變硬、固化、確定 | Become hard |
+| 2774 | 굶다 | gumda | 挨餓、餓肚子 | To starve or go hungry |
+| 2775 | 금년 | geumnyeon | 今年 | This year |
+| 2776 | 기기 | gigi | 機器、設備、儀器 | Machinery and tools |
+| 2777 | 까맣다 | kkamata | 烏黑、漆黑 | Black |
+| 2778 | 나침반 | nachimban | 指南針、羅盤 | A compass |
+| 2779 | 농부 | nongbu | 農民、農夫 | A farmer |
+| 2780 | 대학원 | daehagwon | 研究所、研究生院 | Graduate school |
+| 2781 | 더럽다 | deoreopda | 骯髒、卑劣 | Foul, dirty |
+| 2782 | 도달하다 | dodalhada | 到達、達到 | Arrival |
+| 2783 | 맛보다 | matboda | 品嚐、嚐到 | Taste |
+| 2784 | 무늬 | munui | 花紋、圖案 | Pattern |
+| 2785 | 문장 | munjang | 文章、句子 | writing,composition |
+| 2786 | 묻다 | mutda | 埋、掩埋、埋藏 | to Bury |
+| 2787 | 변호사 | byeonhosa | 律師 | Lawyer |
+| 2788 | 상 | sang | 塑像、圖像、雕像 | A statue,a figure |
+| 2789 | 상상력 | sangsangryeok | 想像力 | Imaginative powers |
+| 2790 | 여학생 | yeohaksaeng | 女學生 | Female student |
+| 2791 | 영업 | yeongeop | 營業、經商 | business, doing business |
+| 2792 | 예 | ye | 昔日、從前 | Old days, days gone by |
+| 2793 | 예방 | yebang | 預防 | Prevention, protection |
+| 2794 | 완성 | wanseong | 完成 | completion,accomplishment |
+| 2795 | 유리하다 | yurihada | 有利 | To be profitable, favorable |
+| 2796 | 자연환경 | jayeonhwangyeong | 自然環境 | Natural surroundings |
+| 2797 | 증명하다 | jeungmyeonghada | 證明 | To prove,show,bear |
+| 2798 | 지적되다 | jijeokdoeda | 被指出、被指明（被動） | To be pointed out to |
+| 2799 | 지점 | jijeom | 地點、分店、據點 | A spot, point |
+| 2800 | 철저히 | cheoljeohi | 徹底地 | Thoroughly |
+| 2801 | 코스 | koseu | 路線、球場、課程 | Course |
+| 2802 | 학부모 | hakbumo | 學生家長 | Mothers of the students |
+| 2803 | 합리적 | haprijeok | 合理的 | Rational, reasonable |
+| 2804 | 해석하다 | haeseokhada | 解釋、解析 | To intrepret, construe |
+| 2805 | 힘쓰다 | himsseuda | 努力、竭力、用力 | To try really hard |
+| 2806 | 거듭 | geodeup | 一再、再三、反覆 | Again or over and over |
+| 2807 | 귀국하다 | gwigukhada | 回國、歸國 | To return to one’s home country |
+| 2808 | 기뻐하다 | gippeohada | 高興、喜悅 | Be pleased or delighted with |
+| 2809 | 날리다 | nalrida | 使飛起、放飛 / 揮霍 | To send flying |
+| 2810 | 내려놓다 | naeryeonota | 放下、擱下 | Set or put down |
+| 2811 | 냉장고 | naengjanggo | 冰箱、冷凍庫 | Freezer |
+| 2812 | 당근 | danggeun | 胡蘿蔔 / 當然 | A carrot |
+| 2813 | 덜다 | deolda | 減少、減輕、分出 | Save, lighten |
+| 2814 | 마누라 | manura | 老婆、老伴 | one’s wife |
+| 2815 | 맞이하다 | majihada | 迎接、迎來 | Go to greet |
+| 2816 | 불행하다 | bulhaenghada | 不幸、倒楣、坎坷 | Unfortunate, unlucky (opp. 다행하다) |
+| 2817 | 신고하다 | singohada | 申報、報案 | To state, declare |
+| 2818 | 연속 | yeonsok | 連續 | continuity,succession |
+| 2819 | 외롭다 | oeropda | 孤單、寂寞 | To be lonely, lonesome |
+| 2820 | 욕 | yok | 辱罵、髒話 / 恥辱 | An insult |
+| 2821 | 원장 | wonjang | 院長（補習班/幼兒園/醫院） | The chief/head (of a 학원) |
+| 2822 | 유물 | yumul | 遺物、文化遺產 | A relic, cultural remains |
+| 2823 | 저절로 | jeojeolro | 自然而然地、自動地 | Of itself, on its own accord |
+| 2824 | 절 | jeol | 行禮、鞠躬、拜年 | Bow in salutation |
+| 2825 | 정비 | jeongbi | 整備、整頓、保養維修 | maintaining equipment in good working order |
+| 2826 | 주의 | juui | 注意、留心 / 主義 | attention,notice |
+| 2827 | 지난번 | jinanbeon | 上次、上回 | Last time |
+| 2828 | 집어넣다 | jibeoneota | 放進、塞進 | Put in |
+| 2829 | 통계 | tonggye | 統計 | Statistics |
+| 2830 | 파일 | pail | 檔案、文件夾 | File |
+| 2831 | 판 | pan | 局、盤、場（比賽單位） | A match, game, contest |
+| 2832 | 피해자 | pihaeja | 受害者、受害人 | A sufferer, the injured party |
+| 2833 | 필수적 | pilsujeok | 必須的、必不可少的 | necessary,indispensable |
+| 2834 | 학용품 | hagyongpum | 學生文具、學習用品 | School things, supplies |
+| 2835 | 화분 | hwabun | 花盆 | Flower pot |
+| 2836 | 환하다 | hwanhada | 明亮、豁亮、燦爛 | To be clear, unobstructed ; to be light, bright (opp. 어둡다) |
+| 2837 | 갈색 | galsaek | 褐色、棕色 | Brown |
+| 2838 | 감기 | gamgi | 感冒 | A cold |
+| 2839 | 강남 | gangnam | 江南（漢江以南） | South of a river |
+| 2840 | 구속되다 | gusokdoeda | 被拘留、拘捕（被動） | To be arrested |
+| 2841 | 멋지다 | meotjida | 帥氣、精彩、極棒 | Be splendid |
+| 2842 | 반발 | banbal | 反彈、抗拒、強烈反對 | Repulsion, a backlash |
+| 2843 | 반찬 | banchan | 小菜、配菜 | Sie dishes |
+| 2844 | 방지 | bangji | 防止、預防 | Prevention, check |
+| 2845 | 배다 | baeda | 滲透、滲入、習慣成自然 | Soak into |
+| 2846 | 보장 | bojang | 保障、保證 | guarantee,security |
+| 2847 | 빠져나오다 | ppajyeonaoda | 擺脫、逃出、走出來 | Come out of somewhere |
+| 2848 | 새다 | saeda | 漏、滲漏、破曉 | leak,escape from |
+| 2849 | 소개되다 | sogaedoeda | 被介紹（被動） | To be introduced,presented |
+| 2850 | 씨 | ssi | 種子、種 | Seeds (sow) |
+| 2851 | 안쪽 | anjjok | 內側、裡面 | The inside, the inner part |
+| 2852 | 억울하다 | eogulhada | 冤枉、委屈 | To be regrettable, disappointing |
+| 2853 | 오가다 | ogada | 來往、穿梭 | Come and go, keep going and coming |
+| 2854 | 요구되다 | yogudoeda | 被要求（被動） | To be requested, claimed |
+| 2855 | 음성 | eumseong | 聲音、語音 | A voice |
+| 2856 | 이윽고 | ieukgo | 不久、隨後 | After a while, shortly |
+| 2857 | 장식 | jangsik | 裝飾、裝潢 | Decoration |
+| 2858 | 전개하다 | jeongaehada | 展開、開展 | To unfold,evolve,spread out |
+| 2859 | 전날 | jeonnal | 前一天、前日 | The day before, the day prior |
+| 2860 | 전반적 | jeonbanjeok | 全盤的、普遍的 | over-all,all |
+| 2861 | 척하다 | cheokhada | 假裝、裝作 | The preceding verb is a lie |
+| 2862 | 풍습 | pungseup | 風俗、習俗 | customs,manners,practices ; a ritual, rituals |
+| 2863 | 한가운데 | hangaunde | 正中間、正中央 | The very middle, the center |
+| 2864 | 한정되다 | hanjeongdoeda | 受限、被限定（被動） | To be limiited, qualified |
+| 2865 | 해내다 | haenaeda | 戰勝、克服、完成 | To accomplish, achieve, carry through |
+| 2866 | 흉내 | hyungnae | 模仿、效仿 | Imitation, mimicry |
+| 2867 | 감옥 | gamok | 監獄 | Prison |
+| 2868 | 갚다 | gapda | 償還、報答、報復 | Pay back a loan |
+| 2869 | 건전하다 | geonjeonhada | 健全、健康 | Health or soundness or vitality |
+| 2870 | 결혼식 | gyeolhonsik | 結婚典禮、婚禮 | Wedding |
+| 2871 | 계산기 | gyesangi | 計算機 | Calculator |
+| 2872 | 광장 | gwangjang | 廣場 | An open space or a plaza or public square |
+| 2873 | 그렇지 | geureochi | 是啊、沒錯 | So it is or that is right |
+| 2874 | 깨다 | kkaeda | 打碎、摔破、打破 | Break or crack |
+| 2875 | 꽉 | kkwak | 緊緊地、塞滿 | Tightly or fast |
+| 2876 | 끼우다 | kkiuda | 插入、夾入、套入 | To put between or insert |
+| 2877 | 노래하다 | noraehada | 唱歌、歌唱 | To sing |
+| 2878 | 다듬다 | dadeumda | 修整、修剪、梳理 | Trim, shave |
+| 2879 | 다름없다 | dareumeopda | 毫無二致、差不多 | Be similar, not different |
+| 2880 | 당당하다 | dangdanghada | 堂堂正正、威風凜凜 | Dignified |
+| 2881 | 댐 | daem | 水壩、水庫 | Dam |
+| 2882 | 덩어리 | deongeori | 塊、團、疙瘩 | A lump, a cluster |
+| 2883 | 모처럼 | mocheoreom | 難得、好不容易 | At long last |
+| 2884 | 물리학 | mulrihak | 物理學 | Physics |
+| 2885 | 벌 | beol | 懲罰、罰 / 套（衣服量詞） | Punishment |
+| 2886 | 부정적 | bujeongjeok | 否定的、消極的 | negative, contradicting sth else, not positive |
+| 2887 | 북부 | bukbu | 北部、北方 | The north part |
+| 2888 | 분리 | bunri | 分離、分開 | separation,segration |
+| 2889 | 상당 | sangdang | 相當、合適 | proper,fit,suitable |
+| 2890 | 세다 | seda | 強、強烈、厲害 | To be strong, mighty |
+| 2891 | 소개 | sogae | 介紹 | Introduction |
+| 2892 | 수화기 | suhwagi | 話筒、聽筒 | Telephone receiver |
+| 2893 | 애인 | aein | 愛人、情人、戀人 | A lover |
+| 2894 | 애초 | aecho | 當初、一開始 | The first, the beginning |
+| 2895 | 얇다 | yalda | 薄 | To be thin |
+| 2896 | 양념 | yangnyeom | 調味料、佐料 | Spices and condiments |
+| 2897 | 에 | e | 在、於、到（助詞） | at/in/on |
+| 2898 | 오염되다 | oyeomdoeda | 被污染（被動） | To be polluted, contaminated |
+| 2899 | 오해 | ohae | 誤會、誤解 | Misunderstanding |
+| 2900 | 웬일 | wenil | 什麼事、怎麼回事 | What cause, what reason |
+| 2901 | 의식 | uisik | 儀式 / 意識 | A ceremony |
+| 2902 | 의지하다 | uijihada | 依靠、依賴 | To look to, depend on, rely on |
+| 2903 | 일기 | ilgi | 日記 | A diary, journal |
+| 2904 | 절대 | jeoldae | 絕對 | Absoluteness |
+| 2905 | 제한하다 | jehanhada | 限制、局限 | To restrict,limit |
+| 2906 | 존중하다 | jonjunghada | 尊重 | appreciate,esteem,value |
+| 2907 | 창고 | changgo | 倉庫 | A warehouse,storehouse |
+| 2908 | 채 | chae | 尚未、不到（副詞） / 棟 | Still, not yet |
+| 2909 | 책임지다 | chaegimjida | 承擔責任、負責 | Take responsibility |
+| 2910 | 청춘 | cheongchun | 青春 | youth,the springtime of life |
+| 2911 | 초반 | choban | 前期、前半期、開局 | The opening part (of a game of baduk) |
+| 2912 | 트럭 | teureok | 卡車、貨車 | Truck |
+| 2913 | 파 | pa | 蔥、大蔥 | Onions |
+| 2914 | 폭넓다 | pongneolda | 廣泛、寬廣 | To be broad |
+| 2915 | 표현되다 | pyohyeondoeda | 被表達、呈現（被動） | To have been expressed |
+| 2916 | 학번 | hakbeon | 入學年份、學號 | Year of graduation |
+| 2917 | 학원 | hagwon | 補習班、學院 | Learning institute |
+| 2918 | 허가 | heoga | 許可、批准 | Permission, grant, leave |
+| 2919 | 헤매다 | hemaeda | 徘徊、迷惘 | Wander about, roam about |
+| 2920 | 가장 | gajang | 家長、一家之主 | Head of a household |
+| 2921 | 곡 | gok | 曲子、歌曲 | A tune or an air |
+| 2922 | 곡식 | goksik | 糧食、穀物 | Cereals or grain |
+| 2923 | 꽂다 | kkotda | 插、插上 | Be stuck in or insert |
+| 2924 | 망설이다 | mangseorida | 猶豫、躊躇 | Hesitate |
+| 2925 | 무리 | muri | 群、群體、幫 | A company, a band |
+| 2926 | 버터 | beoteo | 奶油、牛油 | Butter |
+| 2927 | 별다르다 | byeoldareuda | 特別、與眾不同 | Be of a peculiar kind |
+| 2928 | 보편적 | bopyeonjeok | 普遍的 | Universal |
+| 2929 | 부품 | bupum | 零件、配件 | Parts, accessories |
+| 2930 | 뻔하다 | ppeonhada | 差一點、險些 / 明擺著 | almost,nearly |
+| 2931 | 뽑히다 | ppophida | 被拔出、被選中（被動） | Be taken out, pulled out |
+| 2932 | 상담 | sangdam | 諮詢、商談 | Consultation |
+| 2933 | 서부 | seobu | 西部、西方 | The western part |
+| 2934 | 속담 | sokdam | 俗語、諺語 | A proverb,saying |
+| 2935 | 시중 | sijung | 市面、民間 | In the city |
+| 2936 | 심사 | simsa | 審查、評審 | judgment,examination |
+| 2937 | 아이 | ai | 哎呀（感嘆詞） / 孩子 | Oh my god! |
+| 2938 | 앞세우다 | apseuda | 讓...走在前面、推舉、由...領頭 | Make a person go |
+| 2939 | 유사하다 | yusahada | 相似、雷同 | To be similar, to resemble |
+| 2940 | 유치원 | yuchiwon | 幼兒園 | Kindergarten |
+| 2941 | 의욕 | uiyok | 幹勁、意志、意欲 | volition,will,desire |
+| 2942 | 인근 | ingeun | 附近、鄰近地區 | The neighborhood |
+| 2943 | 일반인 | ilbanin | 一般人、大眾 | Of the general public |
+| 2944 | 작성하다 | jakseonghada | 填寫、編寫、製作 | To edit or compose, write up ; to fill out a form |
+| 2945 | 전공 | jeongong | 專業、主修 | Specialty |
+| 2946 | 정기 | jeonggi | 定期 | A fixed time period |
+| 2947 | 제의 | jeui | 提議、提請 | A proposal,an offer |
+| 2948 | 종일 | jongil | 整天、終日 | All day, throughout the whole day |
+| 2949 | 좋아지다 | joajida | 好轉、變好 | To become better |
+| 2950 | 차림 | charim | 打扮、裝束 | Appearance of clothes or worn objecs |
+| 2951 | 창조하다 | changjohada | 創造 | Create |
+| 2952 | 추위 | chuwi | 寒冷、嚴寒 | Cold |
+| 2953 | 토마토 | tomato | 番茄、西紅柿 | Tomato |
+| 2954 | 파랗다 | parata | 湛藍、碧綠、青 | To be blue |
+| 2955 | 펴내다 | pyeonaeda | 出版、發行 | Publish, bring out in print |
+| 2956 | 하드웨어 | hadeuweeo | 硬體 | Hardwaer |
+| 2957 | 화장 | hwajang | 化妝 / 火葬 | Makeup |
+| 2958 | 가져가다 | gajyeogada | 帶走、拿去 | To take or carry |
+| 2959 | 감자 | gamja | 馬鈴薯、土豆 | Potato |
+| 2960 | 강렬하다 | gangryeolhada | 強烈、劇烈 | Intense or strong or severe |
+| 2961 | 갖다 | gatda | 擁有、具有、拿著 | Possess |
+| 2962 | 괴롭다 | goeropda | 痛苦、難受 | Be painful or distressing |
+| 2963 | 교통사고 | gyotongsago | 交通事故、車禍 | Traffic accident |
+| 2964 | 군데 | gunde | 處、處所、個（場所單位） | A place or spot |
+| 2965 | 메시지 | mesiji | 訊息、短信 | Message |
+| 2966 | 면하다 | myeonhada | 免除、避開、免於 | escape,avoid |
+| 2967 | 모색하다 | mosaekhada | 摸索、尋求 | Seek, explore |
+| 2968 | 붙잡다 | butjapda | 抓緊、抓住 | seize,catch |
+| 2969 | 빛깔 | bitkkal | 色彩、色澤 | A color,shade,hue |
+| 2970 | 뺨 | ppyam | 臉頰、面頰 | Cheek |
+| 2971 | 사방 | sabang | 四方、周圍 | The four directions |
+| 2972 | 살림 | salrim | 家計、生計、過日子 | living,livelihood |
+| 2973 | 실현 | silhyeon | 實現 | realization,materialization |
+| 2974 | 아냐 | anya | 不是、沒有（平語） | No, that’s not the case |
+| 2975 | 연예인 | yeonyein | 演藝人員、藝人 | A performer, an entertainer |
+| 2976 | 영원히 | yeongwonhi | 永遠、長久 | Forever |
+| 2977 | 월급 | wolgeup | 月薪、月工資 | Monthly salary |
+| 2978 | 유행 | yuhaeng | 流行、風尚 | Fashion, vogue |
+| 2979 | 이내 | inae | 很快、立刻 / 以內 | soon,right away |
+| 2980 | 이리 | iri | 這邊、這樣 / 狼 | This way, this direction |
+| 2981 | 제발 | jebal | 拜託、千萬、懇請 | kindly,please |
+| 2982 | 차츰 | chacheum | 漸漸、逐步 | gradually,step by step |
+| 2983 | 투표 | tupyo | 投票 | vote,voting |
+| 2984 | 파괴하다 | pagoehada | 破壞、摧毀 | Destruction, demolition |
+| 2985 | 하느님 | haneunim | 天主、上帝、老天爺 | God |
+| 2986 | 해당되다 | haedangdoeda | 屬於、符合、相應（被動） | To be applied/applicable under |
+| 2987 | 홀로 | holro | 獨自、一人 | Alone, by oneself |
+| 2988 | 가까이 | gakkai | 靠近、接近（副詞） | Close |
+| 2989 | 가득하다 | gadeukhada | 充滿、滿溢 | To fill |
+| 2990 | 각자 | gakja | 各自、各自每個人 | Each one or every one |
+| 2991 | 감히 | gamhi | 敢於、竟敢、貿然 | Daringly or boldly |
+| 2992 | 강요하다 | gangyohada | 強迫、強求、施壓 | Insist on, demand, force |
+| 2993 | 개미 | gaemi | 螞蟻 | Ant |
+| 2994 | 관습 | gwanseup | 習俗、慣例 | Custom or usage |
+| 2995 | 광경 | gwanggyeong | 光景、情景、景象 | A spectacle or a sight in 3-d and uncut (compare 관광 tourism) |
+| 2996 | 금세 | geumse | 頓時、轉眼間、立刻 | In a moment or at once |
+| 2997 | 낮추다 | natchuda | 降低、調低 | Lower, make low |
+| 2998 | 내주다 | naejuda | 讓出、拿出給予 | Take out and give away |
+| 2999 | 명의 | myeongui | 人數（...名）、名義 | name,title |
+| 3000 | 물고기 | mulgogi | 魚、魚類 | Fish |
