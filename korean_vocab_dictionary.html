@@ -246,7 +246,7 @@
                 const bookQ = params.get('bookmarks');
 
                 if (searchQ) setSearchTerm(searchQ);
-                if (levelQ && ['A', 'B', 'C'].includes(levelQ.toUpperCase())) setSelectedLevel(levelQ.toUpperCase());
+                if (levelQ && ['A', 'B', 'C', 'D'].includes(levelQ.toUpperCase())) setSelectedLevel(levelQ.toUpperCase());
                 if (posQ) setSelectedPos(posQ);
                 if (viewQ === 'flashcard') setViewMode('flashcard');
                 if (bookQ === 'true') setOnlyBookmarks(true);
@@ -319,14 +319,16 @@
                     list = list.filter(item => item.p === selectedPos || item.pd.includes(selectedPos));
                 }
 
-                // 搜尋關鍵字過濾
+                // 搜尋關鍵字過濾（支援韓、中、拼音、英、詞性）
                 if (searchTerm.trim()) {
                     const q = searchTerm.trim().toLowerCase();
                     list = list.filter(item => 
                         item.k.toLowerCase().includes(q) ||
                         item.c.toLowerCase().includes(q) ||
                         item.r.toLowerCase().includes(q) ||
-                        item.e.toLowerCase().includes(q)
+                        item.e.toLowerCase().includes(q) ||
+                        item.p.toLowerCase().includes(q) ||
+                        item.pd.toLowerCase().includes(q)
                     );
                 }
 
@@ -349,7 +351,7 @@
 
             // 詞性清單分類統計
             const posOptions = useMemo(() => {
-                return ['全部', '名詞', '動詞', '形容詞', '副詞', '代名詞', '依存名詞', '冠形詞', '助詞', '感嘆詞', '數詞', '補助用言', '接辭'];
+                return ['全部', '名詞', '專有名詞', '動詞', '形容詞', '副詞', '代名詞', '依存名詞', '冠形詞', '助詞', '感嘆詞', '數詞', '補助用言', '接辭'];
             }, []);
 
             // 單字卡跳轉控制
@@ -553,7 +555,8 @@
                                         { id: 'ALL', label: '全部等級', count: rawVocab.length, color: 'bg-gray-100 text-gray-700' },
                                         { id: 'A', label: '🌸 A 級 (初級基礎)', count: rawVocab.filter(w=>w.l==='A').length, color: 'bg-rose-50 text-rose-700 border-rose-200' },
                                         { id: 'B', label: '☁️ B 級 (中級進階)', count: rawVocab.filter(w=>w.l==='B').length, color: 'bg-sky-50 text-sky-700 border-sky-200' },
-                                        { id: 'C', label: '😈 C 級 (高級拓展)', count: rawVocab.filter(w=>w.l==='C').length, color: 'bg-purple-50 text-purple-700 border-purple-200' }
+                                        { id: 'C', label: '😈 C 級 (高級拓展)', count: rawVocab.filter(w=>w.l==='C').length, color: 'bg-purple-50 text-purple-700 border-purple-200' },
+                                        { id: 'D', label: '🗺️ D 級 (地名/專名)', count: rawVocab.filter(w=>w.l==='D').length, color: 'bg-amber-50 text-amber-800 border-amber-300' }
                                     ].map(lvl => (
                                         <button
                                             key={lvl.id}
@@ -583,10 +586,12 @@
                                                 className={`px-2.5 py-1 rounded-xl font-medium transition-all ${
                                                     selectedPos === posVal
                                                     ? 'bg-purple-500 text-white font-bold shadow-xs'
+                                                    : pos === '專有名詞'
+                                                    ? 'bg-amber-100 text-amber-800 font-bold border border-amber-200 hover:bg-amber-200'
                                                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                                 }`}
                                             >
-                                                {pos}
+                                                {pos === '專有名詞' ? '🗺️ 專有名詞 (地名/國名)' : pos}
                                             </button>
                                         );
                                     })}
@@ -669,7 +674,13 @@
                                             ? 'bg-rose-100 text-rose-700 border-rose-200' 
                                             : word.l === 'B' 
                                             ? 'bg-sky-100 text-sky-700 border-sky-200' 
-                                            : 'bg-purple-100 text-purple-700 border-purple-200';
+                                            : word.l === 'C'
+                                            ? 'bg-purple-100 text-purple-700 border-purple-200'
+                                            : 'bg-amber-100 text-amber-800 border-amber-300';
+
+                                        const posBadgeStyle = word.p === '專有名詞'
+                                            ? 'bg-amber-100 text-amber-800 font-bold border border-amber-200'
+                                            : 'bg-gray-100 text-gray-600';
 
                                         return (
                                             <div 
@@ -686,7 +697,7 @@
                                                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${levelBadgeColor}`}>
                                                                 {word.l} 級
                                                             </span>
-                                                            <span className="text-[10px] font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md">
+                                                            <span className={`text-[10px] px-2 py-0.5 rounded-md ${posBadgeStyle}`}>
                                                                 {word.p}
                                                             </span>
                                                         </div>
@@ -871,8 +882,13 @@
                                             <div className="absolute inset-0 backface-hidden bg-gradient-to-b from-white to-pink-50/50 p-8 rounded-3xl border-3 border-pink-200 shadow-lg flex flex-col justify-between items-center text-center">
                                                 {/* 頂部裝飾 */}
                                                 <div className="w-full flex justify-between items-center">
-                                                    <span className="text-xs font-bold text-rose-500 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
-                                                        🎀 {currentCardWord.l} 級 • {currentCardWord.p}
+                                                    <span className={`text-xs font-bold px-3 py-1 rounded-full border ${
+                                                        currentCardWord.l === 'A' ? 'text-rose-500 bg-rose-50 border-rose-200' :
+                                                        currentCardWord.l === 'B' ? 'text-sky-600 bg-sky-50 border-sky-200' :
+                                                        currentCardWord.l === 'C' ? 'text-purple-600 bg-purple-50 border-purple-200' :
+                                                        'text-amber-800 bg-amber-50 border-amber-300'
+                                                    }`}>
+                                                        {currentCardWord.l === 'D' ? '🗺️' : '🎀'} {currentCardWord.l} 級 • {currentCardWord.p}
                                                     </span>
                                                     <span className="text-xs font-semibold text-gray-400">
                                                         #{currentCardWord.id} (點擊卡片翻面 🔄)
