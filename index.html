@@ -1649,6 +1649,30 @@
             // 實時計算自動羅馬拼音預覽
             const autoPreviewRoman = romanizeHangul(newKr);
 
+            // 讀取 URL 參數（支援從詞庫一鍵跳轉積木屋或特定分頁）
+            useEffect(() => {
+                const params = new URLSearchParams(window.location.search);
+                const builderParam = params.get('builder');
+                const tabParam = params.get('tab');
+                if (tabParam) setActiveTab(tabParam);
+                if (builderParam) {
+                    setActiveTab('builder');
+                    const firstChar = builderParam.trim()[0];
+                    if (firstChar) {
+                        const charCode = firstChar.charCodeAt(0);
+                        if (charCode >= 0xAC00 && charCode <= 0xD7A3) {
+                            const syllableIndex = charCode - 0xAC00;
+                            const jongIndex = syllableIndex % 28;
+                            const jungIndex = Math.floor((syllableIndex - jongIndex) / 28) % 21;
+                            const choIndex = Math.floor((syllableIndex - jongIndex) / (28 * 21));
+                            if (CHOSEONG[choIndex]) setSelectedC(CHOSEONG[choIndex]);
+                            if (JUNGSEONG[jungIndex]) setSelectedV(JUNGSEONG[jungIndex]);
+                            setSelectedT(JONGSEONG[jongIndex] || '');
+                        }
+                    }
+                }
+            }, []);
+
             // Firebase 實時監聽
             useEffect(() => {
                 if (!db) return;
@@ -1958,6 +1982,14 @@
                                 {tab.label}
                             </button>
                         ))}
+                        <a
+                            href="korean_vocab_dictionary.html"
+                            className="px-3.5 py-2 rounded-2xl text-xs md:text-sm font-bold transition-all duration-200 shadow-md bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 hover:from-rose-600 hover:to-purple-600 text-white flex items-center gap-1.5 active:scale-95 animate-pulse"
+                            title="開啟 5,666 核心詞庫大字典與萌趣單字卡"
+                        >
+                            <span>📚</span>
+                            <span>5,666 核心大詞庫</span>
+                        </a>
                     </nav>
 
                     {/* ==================== 頁面 1: 🐱 基礎母音 ==================== */}
@@ -1979,6 +2011,13 @@
                                         <span>🔍</span>
                                         <span>查看海報</span>
                                     </button>
+                                    <a
+                                        href="korean_vocab_dictionary.html"
+                                        className="bg-pink-500 hover:bg-pink-600 text-white text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xs transition-all flex items-center gap-1.5 whitespace-nowrap active:scale-95"
+                                    >
+                                        <span>📚</span>
+                                        <span>5,666 核心大詞庫</span>
+                                    </a>
                                     <a
                                         href="hangul_sanrio_deck_20p.pdf"
                                         target="_blank"

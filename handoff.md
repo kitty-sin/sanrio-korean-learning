@@ -58,12 +58,20 @@
 8. [x] **🍲 10 頁 Sanrio 主題 100 常見食物發音學習手札**（`sanrio_korean_food_100.html`，含 0.3x 逐字慢速口型）
 9. [x] **📚 韓語核心高頻 5,666 詞彙全量結構化資料庫**（各期 CSV/MD 與終極總表 `korean_vocab_5666.csv/md`）
 10. [x] **📄 20 頁超大字 Sanrio 拼音總表 PDF 與 HTML 母檔**
+11. [x] **🎀 Sanrio 5,666 韓語核心詞庫大字典與萌趣單字卡**（`korean_vocab_dictionary.html` + `korean_vocab_5666_data.js`，支援 TOPIK A/B/C 全量毫秒級檢索、3D 翻轉單字卡、遮字測驗、Unicode 音節結構即時拆解、生詞本與 3 段速語音朗讀）
+12. [x] **🌐 全站生態圈雙向無縫互聯**（主站 `index.html`、大字典 `korean_vocab_dictionary.html`、美食清單 `sanrio_korean_food_100.html` 互聯導航與積木屋跨頁參數傳遞）
 
 ---
 
 ## 🚦 5. 目前狀態與下一步 (Status & Roadmap)
 
-- **🚦 目前狀態**：已成功更新首頁主標題為「KITTY 韓語發音積木樂園」與副標題「Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與音變 ✨」，並同步部署至 GitHub Pages。
+- **🚦 目前狀態**：已成功推出 5,666 核心詞庫大字典與全站生態圈互聯，並同步部署至 GitHub Pages。
+- **🕒 最近更新紀錄 (2026-09-11 15:15 PT)**：
+  - 成功建置獨立新頁面 `korean_vocab_dictionary.html`，整合 5,666 筆 TOPIK 全量核心詞庫。
+  - 實作「速查字典」與「Sanrio 萌趣單字卡」雙視圖切換，提供翻卡、遮中文/遮韓文記憶自測與隨機抽考。
+  - 研發 Unicode 音節結構分解演算法，點擊任何詞彙可彈窗拆解為「初聲 + 中聲 + 終聲收音」，並智能匹配 7 大代表收音口訣。
+  - 實現生詞收藏夾（LocalStorage + Firebase Firestore 雙層同步）與 3 段速（1.0x / 0.7x / 0.3x）語音播放。
+  - 完成主站與附屬頁面的雙向導航串接與 URL 參數連動（支援 `?builder=...` 直達積木屋）。
 - **➡️ 下一步**：
   1. 待使用者有空時，依其自訂的拼音規則批次修改 `hangul_sanrio_deck.html` 中的諧音標籤，並重新匯出覆蓋 `hangul_sanrio_deck_20p.pdf`。
   2. 依學習進度持續擴充進階文法句型或主題練習題庫。

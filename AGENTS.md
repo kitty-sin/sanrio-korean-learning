@@ -19,6 +19,8 @@
 `
 Korean-Learning/
 ├── index.html                   # 主應用 SPA (React 18 + Tailwind + Firebase + Web Speech)
+├── korean_vocab_dictionary.html # 5,666 核心詞庫大字典 (TOPIK 全量速查 + 萌趣單字卡 + 結構拆解)
+├── korean_vocab_5666_data.js    # 5,666 筆高壓縮常數數據集
 ├── hangul_sanrio_deck_20p.pdf   # 20 頁超大字 Sanrio 拼音總表 (PDF 直連瀏覽)
 ├── sanrio_korean_food_100.html  # 100 種常見食物發音打卡學習手札 (含 0.3x 口型)
 ├── sanrio_korean_food_100.md    # 100 種常見食物 Markdown 清單
@@ -42,6 +44,8 @@ Korean-Learning/
 - [x] **Firebase 雲端自學單字庫** (Firestore 即時同步、0.3x 極慢速高亮發音、字母拆解、AI 跟讀評分)
 - [x] **隨堂星級自我挑戰測驗** (7 大題隨堂評量與分數結算)
 - [x] **100 種常見食物學習手札與 20 頁大字 PDF 講義**
+- [x] **Sanrio 5,666 韓語核心詞庫大字典** (korean_vocab_dictionary.html，含 TOPIK A/B/C 全量即時檢索、11大詞性篩選、3D 單字卡翻卡記憶測驗、Unicode 音節結構即時拆解、❤️ 生詞本與 3 段速語音)
+- [x] **全生態圈雙向無縫互聯** (主站、大字典、美食清單、PDF 講義與積木屋跨頁參數傳遞)
 
 ---
 
