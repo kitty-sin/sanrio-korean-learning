@@ -7,7 +7,7 @@
 ## 📌 1. 專案基本資訊 (Project Summary)
 
 - **專案名稱**：Sanrio 韓語發音積木樂園 (Sanrio Korean Learning Playground)
-- **核心目標**：透過 Sanrio 人氣角色視覺聯想、廣東話諧音口訣與動態積木拼音，搭配 Firebase 即時雲端互動（榮譽榜、集氣讚、自學單字庫）與 20 頁超大字拼音總表，提供無痛有趣的韓語學習體驗。
+- **核心目標**：透過 Sanrio 人氣角色視覺聯想、廣東話諧音口訣與動態積木拼音，搭配 Firebase 即時雲端互動（榮譽榜、自學單字庫）與 20 頁超大字拼音總表，提供無痛有趣的韓語學習體驗。
 - **線上體驗網址 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **GitHub 倉庫**：[https://github.com/kitty-sin/sanrio-korean-learning](https://github.com/kitty-sin/sanrio-korean-learning)
 - **核心工作目錄**：
