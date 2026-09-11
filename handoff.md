@@ -74,6 +74,9 @@
   - **新增常用地名與國名**：已將 `#5667 홍콩 (香港 / Hong Kong)`、`#5668 대만 (台灣 / Taiwan)`、`#5669 로스앤젤레스 (洛杉磯 / Los Angeles)` 新增至 `[🗺️ 專有名詞 (地名/國名)]`（Level D）。
   - **同步檔案**：`korean_vocab_5666.csv`、`korean_vocab_5666.md`、`korean_vocab_5001_5666.csv`、`korean_vocab_5001_5666.md`、`korean_vocab_5666_data.js`。
   - **專有名詞總量**：由 59 筆提升至 62 筆，詞庫總量由 5,666 筆擴充至 5,669 筆。
+- **2026-09-11 16:06 PT**：
+  - **全站標題優化**：因詞庫已持續動態擴充超過 5,666 筆（目前為 5,669 筆），正式將大字典頂部標題、副標題與頁腳全面更名為「**韓語核心詞庫大字典**」，並同步更新主站 `index.html` 與美食手札 `sanrio_korean_food_100.html` 之導航按鈕文案。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `0f9b686`）。
 - **➡️ 下一步**：
   1. 待使用者有空時，依其自訂的拼音規則批次修改 `hangul_sanrio_deck.html` 中的諧音標籤，並重新匯出覆蓋 `hangul_sanrio_deck_20p.pdf`。
   2. 依學習進度持續擴充進階文法句型或主題練習題庫。
@@ -81,6 +84,6 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-11 16:03 PT
+- **更新時間**：2026-09-11 16:06 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
