@@ -283,6 +283,1198 @@
             { id: '8', kr: '행복', sound: 'haeng-bok', meaning: '幸福快樂 🍀' },
         ];
 
+        // ==================== 1.5 Hailey 60 核心動詞與 6 大音變資料庫 ====================
+        const haileyVerbThemes = [
+        {
+                "id": "all",
+                "name": "🌟 全部 60 動詞",
+                "color": "border-teal-400 text-teal-600 bg-teal-50"
+        },
+        {
+                "id": "movement",
+                "name": "🚶 移動與位置 (5對反義)",
+                "color": "border-blue-400 text-blue-600 bg-blue-50"
+        },
+        {
+                "id": "action",
+                "name": "⚡ 行動與狀態 (5對反義)",
+                "color": "border-amber-400 text-amber-600 bg-amber-50"
+        },
+        {
+                "id": "interaction",
+                "name": "🎁 互動與喜好 (5對反義)",
+                "color": "border-rose-400 text-rose-600 bg-rose-50"
+        },
+        {
+                "id": "communication",
+                "name": "🗣️ 語言與溝通 (10詞)",
+                "color": "border-purple-400 text-purple-600 bg-purple-50"
+        },
+        {
+                "id": "daily",
+                "name": "☕ 日常生活 (10詞)",
+                "color": "border-emerald-400 text-emerald-600 bg-emerald-50"
+        },
+        {
+                "id": "mind",
+                "name": "💭 思維與情感 (10詞)",
+                "color": "border-pink-400 text-pink-600 bg-pink-50"
+        }
+];
+
+        const haileyVerbs = [
+        {
+                "id": "v1",
+                "theme": "movement",
+                "base": "가다",
+                "meaning": "去 / 走",
+                "icon": "🚶",
+                "antonym": "오다 (來)",
+                "antonymId": "v2",
+                "present": "가요",
+                "past": "갔어요",
+                "formal": "갑니다",
+                "wish": "가고 싶어요",
+                "exampleKr": "학교에 가요.",
+                "exampleZh": "去學校。",
+                "ruleHint": "ㅏ+ㅏ➔가요 (縮合)"
+        },
+        {
+                "id": "v2",
+                "theme": "movement",
+                "base": "오다",
+                "meaning": "來 / 到達",
+                "icon": "🏃",
+                "antonym": "가다 (去)",
+                "antonymId": "v1",
+                "present": "와요",
+                "past": "왔어요",
+                "formal": "옵니다",
+                "wish": "오고 싶어요",
+                "exampleKr": "친구가 집에 와요.",
+                "exampleZh": "朋友來我家。",
+                "ruleHint": "ㅗ+ㅏ➔와요 (複合母音)"
+        },
+        {
+                "id": "v3",
+                "theme": "movement",
+                "base": "타다",
+                "meaning": "搭乘 / 騎",
+                "icon": "🚌",
+                "antonym": "내리다 (下車)",
+                "antonymId": "v4",
+                "present": "타요",
+                "past": "탔어요",
+                "formal": "탑니다",
+                "wish": "타고 싶어요",
+                "exampleKr": "지하철을 타요.",
+                "exampleZh": "搭地鐵。",
+                "ruleHint": "ㅏ+ㅏ➔타요"
+        },
+        {
+                "id": "v4",
+                "theme": "movement",
+                "base": "내리다",
+                "meaning": "下車 / 降下",
+                "icon": "🚏",
+                "antonym": "타다 (搭乘)",
+                "antonymId": "v3",
+                "present": "내려요",
+                "past": "내렸어요",
+                "formal": "내립니다",
+                "wish": "내리고 싶어요",
+                "exampleKr": "여기서 내려요.",
+                "exampleZh": "在這裡下車。",
+                "ruleHint": "ㅣ+ㅓ➔여 (내려요)"
+        },
+        {
+                "id": "v5",
+                "theme": "movement",
+                "base": "앉다",
+                "meaning": "坐下",
+                "icon": "🪑",
+                "antonym": "서다 (站立)",
+                "antonymId": "v6",
+                "present": "앉아요",
+                "past": "앉았어요",
+                "formal": "앉습니다",
+                "wish": "앉고 싶어요",
+                "exampleKr": "의자에 앉아요.",
+                "exampleZh": "坐在椅子上。",
+                "ruleHint": "陽性母音ㅏ ➔ -아요 [안자요]"
+        },
+        {
+                "id": "v6",
+                "theme": "movement",
+                "base": "서다",
+                "meaning": "站立 / 停住",
+                "icon": "🧍",
+                "antonym": "앉다 (坐下)",
+                "antonymId": "v5",
+                "present": "서요",
+                "past": "섰어요",
+                "formal": "섭니다",
+                "wish": "서고 싶어요",
+                "exampleKr": "줄을 서요.",
+                "exampleZh": "排隊站好。",
+                "ruleHint": "ㅓ+ㅓ➔서요 (縮合)"
+        },
+        {
+                "id": "v7",
+                "theme": "movement",
+                "base": "들어가다",
+                "meaning": "進去",
+                "icon": "🚪",
+                "antonym": "나오다 (出來)",
+                "antonymId": "v8",
+                "present": "들어가요",
+                "past": "들어갔어요",
+                "formal": "들어갑니다",
+                "wish": "들어가고 싶어요",
+                "exampleKr": "방에 들어가요.",
+                "exampleZh": "進去房間。",
+                "ruleHint": "들다 + 가다 複合詞"
+        },
+        {
+                "id": "v8",
+                "theme": "movement",
+                "base": "나오다",
+                "meaning": "出來 / 出現",
+                "icon": "🚪",
+                "antonym": "들어가다 (進去)",
+                "antonymId": "v7",
+                "present": "나와요",
+                "past": "나왔어요",
+                "formal": "나옵니다",
+                "wish": "나오고 싶어요",
+                "exampleKr": "밖으로 나와요.",
+                "exampleZh": "走到外面來。",
+                "ruleHint": "나다 + 오다 複合詞"
+        },
+        {
+                "id": "v9",
+                "theme": "movement",
+                "base": "올라가다",
+                "meaning": "上去 / 爬上",
+                "icon": "🧗",
+                "antonym": "내려가다 (下去)",
+                "antonymId": "v10",
+                "present": "올라가요",
+                "past": "올라갔어요",
+                "formal": "올라갑니다",
+                "wish": "올拉가고 싶어요",
+                "exampleKr": "산에 올라가요.",
+                "exampleZh": "爬上山去。",
+                "ruleHint": "오르다 變形 + 가다"
+        },
+        {
+                "id": "v10",
+                "theme": "movement",
+                "base": "내려가다",
+                "meaning": "下去 / 下降",
+                "icon": "📉",
+                "antonym": "올라가다 (上去)",
+                "antonymId": "v9",
+                "present": "내려가요",
+                "past": "내려갔어요",
+                "formal": "내려갑니다",
+                "wish": "내려가고 싶어요",
+                "exampleKr": "계단으로 내려가요.",
+                "exampleZh": "走樓梯下去。",
+                "ruleHint": "내리다 + 가다"
+        },
+        {
+                "id": "v11",
+                "theme": "action",
+                "base": "자다",
+                "meaning": "睡覺",
+                "icon": "😴",
+                "antonym": "일어나다 (起床)",
+                "antonymId": "v12",
+                "present": "자요",
+                "past": "잤어요",
+                "formal": "잡니다",
+                "wish": "자고 싶어요",
+                "exampleKr": "일찍 자요.",
+                "exampleZh": "早點睡覺。",
+                "ruleHint": "ㅏ+ㅏ➔자요"
+        },
+        {
+                "id": "v12",
+                "theme": "action",
+                "base": "일어나다",
+                "meaning": "起床 / 起立",
+                "icon": "⏰",
+                "antonym": "자다 (睡覺)",
+                "antonymId": "v11",
+                "present": "일어나요",
+                "past": "일어났어요",
+                "formal": "일어납니다",
+                "wish": "일어나고 싶어요",
+                "exampleKr": "아침 7시에 일어나요.",
+                "exampleZh": "早上 7 點起床。",
+                "ruleHint": "나다 ➔ 나요"
+        },
+        {
+                "id": "v13",
+                "theme": "action",
+                "base": "열다",
+                "meaning": "打開 (門/窗/店)",
+                "icon": "📂",
+                "antonym": "닫다 (關閉)",
+                "antonymId": "v14",
+                "present": "열어요",
+                "past": "열었어요",
+                "formal": "엽니다 (ㄹ脫落)",
+                "wish": "열고 싶어요",
+                "exampleKr": "창문을 열어요.",
+                "exampleZh": "打開窗戶。",
+                "ruleHint": "陰性母音ㅓ ➔ -어요"
+        },
+        {
+                "id": "v14",
+                "theme": "action",
+                "base": "닫다",
+                "meaning": "關閉 (門/盒)",
+                "icon": "📁",
+                "antonym": "열다 (打開)",
+                "antonymId": "v13",
+                "present": "닫아요",
+                "past": "닫았어요",
+                "formal": "닫습니다",
+                "wish": "닫고 싶어요",
+                "exampleKr": "문 좀 닫아요.",
+                "exampleZh": "請把門關上。",
+                "ruleHint": "陽性母音ㅏ ➔ -아요"
+        },
+        {
+                "id": "v15",
+                "theme": "action",
+                "base": "켜다",
+                "meaning": "開 (燈/電視/電器)",
+                "icon": "💡",
+                "antonym": "끄다 (關電)",
+                "antonymId": "v16",
+                "present": "켜요",
+                "past": "켰어요",
+                "formal": "켭니다",
+                "wish": "켜고 싶어요",
+                "exampleKr": "불을 켜요.",
+                "exampleZh": "開燈。",
+                "ruleHint": "ㅕ+ㅓ➔켜요"
+        },
+        {
+                "id": "v16",
+                "theme": "action",
+                "base": "끄다",
+                "meaning": "關 (燈/火/電器)",
+                "icon": "🔌",
+                "antonym": "켜다 (開電)",
+                "antonymId": "v15",
+                "present": "꺼요 (ㅡ脫落)",
+                "past": "껐어요",
+                "formal": "끕니다",
+                "wish": "끄고 싶어요",
+                "exampleKr": "TV를 꺼요.",
+                "exampleZh": "關掉電視。",
+                "ruleHint": "ㅡ脫落 + ㅓ➔꺼요"
+        },
+        {
+                "id": "v17",
+                "theme": "action",
+                "base": "입다",
+                "meaning": "穿 (衣服)",
+                "icon": "👗",
+                "antonym": "벗다 (脫掉)",
+                "antonymId": "v18",
+                "present": "입어요",
+                "past": "입었어요",
+                "formal": "입습니다",
+                "wish": "입고 싶어요",
+                "exampleKr": "코트를 입어요.",
+                "exampleZh": "穿大衣。",
+                "ruleHint": "陰性母音ㅣ ➔ -어요"
+        },
+        {
+                "id": "v18",
+                "theme": "action",
+                "base": "벗다",
+                "meaning": "脫 (衣服/鞋帽)",
+                "icon": "👟",
+                "antonym": "입다 (穿衣服)",
+                "antonymId": "v17",
+                "present": "벗어요",
+                "past": "벗었어요",
+                "formal": "벗습니다",
+                "wish": "벗고 싶어요",
+                "exampleKr": "신발을 벗어요.",
+                "exampleZh": "脫鞋子。",
+                "ruleHint": "陰性母音ㅓ ➔ -어요"
+        },
+        {
+                "id": "v19",
+                "theme": "action",
+                "base": "시작하다",
+                "meaning": "開始",
+                "icon": "🏁",
+                "antonym": "끝나다 (結束)",
+                "antonymId": "v20",
+                "present": "시작해요",
+                "past": "시작했어요",
+                "formal": "시작합니다",
+                "wish": "시작하고 싶어요",
+                "exampleKr": "수업을 시작해요.",
+                "exampleZh": "開始上課。",
+                "ruleHint": "하다 ➔ 해요 規則變化"
+        },
+        {
+                "id": "v20",
+                "theme": "action",
+                "base": "끝나다",
+                "meaning": "結束 / 完畢",
+                "icon": "🎉",
+                "antonym": "시작하다 (開始)",
+                "antonymId": "v19",
+                "present": "끝나요",
+                "past": "끝났어요",
+                "formal": "끝납니다",
+                "wish": "끝나고 싶어요",
+                "exampleKr": "영화가 끝나요.",
+                "exampleZh": "電影結束了。",
+                "ruleHint": "나다 ➔ 나요"
+        },
+        {
+                "id": "v21",
+                "theme": "interaction",
+                "base": "사다",
+                "meaning": "買 / 購買",
+                "icon": "🛍️",
+                "antonym": "팔다 (賣)",
+                "antonymId": "v22",
+                "present": "사요",
+                "past": "샀어요",
+                "formal": "삽니다",
+                "wish": "사고 싶어요",
+                "exampleKr": "사과를 사요.",
+                "exampleZh": "買蘋果。",
+                "ruleHint": "ㅏ+ㅏ➔사요"
+        },
+        {
+                "id": "v22",
+                "theme": "interaction",
+                "base": "팔다",
+                "meaning": "賣 / 販售",
+                "icon": "🏷️",
+                "antonym": "사다 (買)",
+                "antonymId": "v21",
+                "present": "팔아요",
+                "past": "팔았어요",
+                "formal": "팝니다 (ㄹ脫落)",
+                "wish": "팔고 싶어요",
+                "exampleKr": "꽃을 팔아요.",
+                "exampleZh": "賣花。",
+                "ruleHint": "陽性母音ㅏ ➔ -아요"
+        },
+        {
+                "id": "v23",
+                "theme": "interaction",
+                "base": "주다",
+                "meaning": "給 / 給予",
+                "icon": "🎁",
+                "antonym": "받다 (收到)",
+                "antonymId": "v24",
+                "present": "줘요",
+                "past": "줬어요",
+                "formal": "줍니다",
+                "wish": "주고 싶어요",
+                "exampleKr": "선물을 줘요.",
+                "exampleZh": "給禮物。",
+                "ruleHint": "ㅜ+ㅓ➔줘요 (複合母音)"
+        },
+        {
+                "id": "v24",
+                "theme": "interaction",
+                "base": "받다",
+                "meaning": "收 / 接受",
+                "icon": "📬",
+                "antonym": "주다 (給予)",
+                "antonymId": "v23",
+                "present": "받아요",
+                "past": "받았어요",
+                "formal": "받습니다",
+                "wish": "받고 싶어요",
+                "exampleKr": "편지를 받아요.",
+                "exampleZh": "收到信件。",
+                "ruleHint": "陽性母音ㅏ ➔ -아요"
+        },
+        {
+                "id": "v25",
+                "theme": "interaction",
+                "base": "보내다",
+                "meaning": "寄送 / 度過",
+                "icon": "✉️",
+                "antonym": "받다 (收到)",
+                "antonymId": "v24",
+                "present": "보내요",
+                "past": "보냈어요",
+                "formal": "보냅니다",
+                "wish": "보내고 싶어요",
+                "exampleKr": "문자를 보내요.",
+                "exampleZh": "發簡訊。",
+                "ruleHint": "ㅐ+ㅓ➔보내요"
+        },
+        {
+                "id": "v26",
+                "theme": "interaction",
+                "base": "만나다",
+                "meaning": "見面 / 遇見",
+                "icon": "🤝",
+                "antonym": "헤어지다 (分別)",
+                "antonymId": "v27",
+                "present": "만나요",
+                "past": "만났어요",
+                "formal": "만납니다",
+                "wish": "만나고 싶어요",
+                "exampleKr": "친구를 만나요.",
+                "exampleZh": "見朋友。",
+                "ruleHint": "ㅏ+ㅏ➔만나요"
+        },
+        {
+                "id": "v27",
+                "theme": "interaction",
+                "base": "헤어지다",
+                "meaning": "分別 / 分手",
+                "icon": "👋",
+                "antonym": "만나다 (見面)",
+                "antonymId": "v26",
+                "present": "헤어져요",
+                "past": "헤어졌어요",
+                "formal": "헤어집니다",
+                "wish": "헤어지고 싶어요",
+                "exampleKr": "내일 헤어져요.",
+                "exampleZh": "明天分別告別。",
+                "ruleHint": "지다 ➔ 져요"
+        },
+        {
+                "id": "v28",
+                "theme": "interaction",
+                "base": "좋아하다",
+                "meaning": "喜歡",
+                "icon": "💖",
+                "antonym": "싫어하다 (討厭)",
+                "antonymId": "v29",
+                "present": "좋아해요",
+                "past": "좋아했어요",
+                "formal": "좋아합니다",
+                "wish": "좋아하고 싶어요",
+                "exampleKr": "고양이를 좋아해요.",
+                "exampleZh": "喜歡小貓。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v29",
+                "theme": "interaction",
+                "base": "싫어하다",
+                "meaning": "討厭 / 不喜歡",
+                "icon": "💔",
+                "antonym": "좋아하다 (喜歡)",
+                "antonymId": "v28",
+                "present": "싫어해요",
+                "past": "싫어했어요",
+                "formal": "싫어합니다",
+                "wish": "싫어하고 싶어요",
+                "exampleKr": "비 오는 날을 싫어해요.",
+                "exampleZh": "討厭下雨天。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v30",
+                "theme": "interaction",
+                "base": "빌리다",
+                "meaning": "借 (入/出)",
+                "icon": "📚",
+                "antonym": "돌려주다 (歸還)",
+                "antonymId": "v30_2",
+                "present": "빌려요",
+                "past": "빌렸어요",
+                "formal": "빌립니다",
+                "wish": "빌리고 싶어요",
+                "exampleKr": "책을 빌려요.",
+                "exampleZh": "借書。",
+                "ruleHint": "ㅣ+ㅓ➔여 (빌려요)"
+        },
+        {
+                "id": "v31",
+                "theme": "communication",
+                "base": "말하다",
+                "meaning": "說話 / 講述",
+                "icon": "🗣️",
+                "present": "말해요",
+                "past": "말했어요",
+                "formal": "말합니다",
+                "wish": "말하고 싶어요",
+                "exampleKr": "한국어로 말해요.",
+                "exampleZh": "用韓語說話。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v32",
+                "theme": "communication",
+                "base": "이야기하다",
+                "meaning": "聊天 / 談話",
+                "icon": "💬",
+                "present": "이야기해요",
+                "past": "이야기했어요",
+                "formal": "이야기합니다",
+                "wish": "이야기하고 싶어요",
+                "exampleKr": "가족과 이야기해요.",
+                "exampleZh": "跟家人聊天。",
+                "ruleHint": "縮寫可為 얘기해요"
+        },
+        {
+                "id": "v33",
+                "theme": "communication",
+                "base": "듣다",
+                "meaning": "聽 / 聆聽",
+                "icon": "🎧",
+                "present": "들어요 (ㄷ不規則)",
+                "past": "들었어요",
+                "formal": "듣습니다",
+                "wish": "듣고 싶어요",
+                "exampleKr": "음악을 들어요.",
+                "exampleZh": "聽音樂。",
+                "ruleHint": "⚠️ ㄷ碰母音變ㄹ: 들어요"
+        },
+        {
+                "id": "v34",
+                "theme": "communication",
+                "base": "보다",
+                "meaning": "看 / 望見 / 考試",
+                "icon": "👀",
+                "present": "봐요",
+                "past": "봤어요",
+                "formal": "봅니다",
+                "wish": "보고 싶어요",
+                "exampleKr": "영화를 봐요.",
+                "exampleZh": "看電影。",
+                "ruleHint": "ㅗ+ㅏ➔봐요 (縮合)"
+        },
+        {
+                "id": "v35",
+                "theme": "communication",
+                "base": "읽다",
+                "meaning": "讀 / 閱讀",
+                "icon": "📖",
+                "present": "읽어요",
+                "past": "읽었어요",
+                "formal": "읽습니다",
+                "wish": "읽고 싶어요",
+                "exampleKr": "소설을 읽어요.",
+                "exampleZh": "讀小說。",
+                "ruleHint": "陰性母音ㅣ ➔ -어요 [일거요]"
+        },
+        {
+                "id": "v36",
+                "theme": "communication",
+                "base": "쓰다",
+                "meaning": "寫 / 戴(帽子) / 用",
+                "icon": "✍️",
+                "present": "써요 (ㅡ脫落)",
+                "past": "썼어요",
+                "formal": "씁니다",
+                "wish": "쓰고 싶어요",
+                "exampleKr": "일기를 써요.",
+                "exampleZh": "寫日記。",
+                "ruleHint": "ㅡ脫落 + ㅓ➔써요"
+        },
+        {
+                "id": "v37",
+                "theme": "communication",
+                "base": "묻다",
+                "meaning": "詢問 / 探問",
+                "icon": "❓",
+                "present": "물어요 (ㄷ不規則)",
+                "past": "물었어요",
+                "formal": "묻습니다",
+                "wish": "묻고 싶어요",
+                "exampleKr": "길을 물어요.",
+                "exampleZh": "問路。",
+                "ruleHint": "⚠️ ㄷ碰母音變ㄹ: 물어요"
+        },
+        {
+                "id": "v38",
+                "theme": "communication",
+                "base": "대답하다",
+                "meaning": "回答 / 答覆",
+                "icon": "💡",
+                "present": "대답해요",
+                "past": "대답했어요",
+                "formal": "대답합니다",
+                "wish": "대답하고 싶어요",
+                "exampleKr": "선생님께 대답해요.",
+                "exampleZh": "回答老師的問題。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v39",
+                "theme": "communication",
+                "base": "가르치다",
+                "meaning": "教導 / 傳授",
+                "icon": "👩‍🏫",
+                "present": "가르쳐요",
+                "past": "가르쳤어요",
+                "formal": "가르칩니다",
+                "wish": "가르치고 싶어요",
+                "exampleKr": "한국어를 가르쳐요.",
+                "exampleZh": "教韓語。",
+                "ruleHint": "ㅣ+ㅓ➔여 (가르쳐요)"
+        },
+        {
+                "id": "v40",
+                "theme": "communication",
+                "base": "배우다",
+                "meaning": "學習 / 領會",
+                "icon": "📝",
+                "present": "배워요",
+                "past": "배웠어요",
+                "formal": "배웁니다",
+                "wish": "배우고 싶어요",
+                "exampleKr": "태권도를 배워요.",
+                "exampleZh": "學跆拳道。",
+                "ruleHint": "ㅜ+ㅓ➔워요 (배워요)"
+        },
+        {
+                "id": "v41",
+                "theme": "daily",
+                "base": "먹다",
+                "meaning": "吃",
+                "icon": "🍚",
+                "present": "먹어요",
+                "past": "먹었어요",
+                "formal": "먹습니다",
+                "wish": "먹고 싶어요",
+                "exampleKr": "비빔밥을 먹어요.",
+                "exampleZh": "吃拌飯。",
+                "ruleHint": "陰性母音ㅓ ➔ -어요 [머거요]"
+        },
+        {
+                "id": "v42",
+                "theme": "daily",
+                "base": "마시다",
+                "meaning": "喝 / 飲用",
+                "icon": "☕",
+                "present": "마셔요",
+                "past": "마셨어요",
+                "formal": "마십니다",
+                "wish": "마시고 싶어요",
+                "exampleKr": "따뜻한 커피를 마셔요.",
+                "exampleZh": "喝熱咖啡。",
+                "ruleHint": "ㅣ+ㅓ➔여 (마셔요)"
+        },
+        {
+                "id": "v43",
+                "theme": "daily",
+                "base": "요리하다",
+                "meaning": "料理 / 做菜",
+                "icon": "🍳",
+                "present": "요리해요",
+                "past": "요리했어요",
+                "formal": "요리합니다",
+                "wish": "요리하고 싶어요",
+                "exampleKr": "저녁을 요리해요.",
+                "exampleZh": "做晚餐。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v44",
+                "theme": "daily",
+                "base": "일하다",
+                "meaning": "工作 / 勞動",
+                "icon": "💼",
+                "present": "일해요",
+                "past": "일했어요",
+                "formal": "일합니다",
+                "wish": "일하고 싶어요",
+                "exampleKr": "회사에서 일해요.",
+                "exampleZh": "在公司上班工作。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v45",
+                "theme": "daily",
+                "base": "공부하다",
+                "meaning": "唸書 / 學習",
+                "icon": "📚",
+                "present": "공부해요",
+                "past": "공부했어요",
+                "formal": "공부합니다",
+                "wish": "공부하고 싶어요",
+                "exampleKr": "도서관에서 공부해요.",
+                "exampleZh": "在圖書館讀書。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v46",
+                "theme": "daily",
+                "base": "운동하다",
+                "meaning": "運動 / 健身",
+                "icon": "🏃‍♂️",
+                "present": "운동해요",
+                "past": "운동했어요",
+                "formal": "운동합니다",
+                "wish": "운동하고 싶어요",
+                "exampleKr": "공원에서 운동해요.",
+                "exampleZh": "在公園運動。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v47",
+                "theme": "daily",
+                "base": "쉬다",
+                "meaning": "休息",
+                "icon": "🛋️",
+                "present": "쉬어요",
+                "past": "쉬었어요",
+                "formal": "쉬십니다 / 쉽니다",
+                "wish": "쉬고 싶어요",
+                "exampleKr": "집에서 푹 쉬어요.",
+                "exampleZh": "在家好好休息。",
+                "ruleHint": "ㅟ+ㅓ➔쉬어요"
+        },
+        {
+                "id": "v48",
+                "theme": "daily",
+                "base": "씻다",
+                "meaning": "洗 (手/臉/澡)",
+                "icon": "🧼",
+                "present": "씻어요",
+                "past": "씻었어요",
+                "formal": "씻습니다",
+                "wish": "씻고 싶어요",
+                "exampleKr": "손을 깨끗이 씻어요.",
+                "exampleZh": "把手洗乾淨。",
+                "ruleHint": "陰性母音ㅣ ➔ -어요 [씨서요]"
+        },
+        {
+                "id": "v49",
+                "theme": "daily",
+                "base": "청소하다",
+                "meaning": "打掃 / 清潔",
+                "icon": "🧹",
+                "present": "청소해요",
+                "past": "청소했어요",
+                "formal": "청소합니다",
+                "wish": "청소하고 싶어요",
+                "exampleKr": "방을 청소해요.",
+                "exampleZh": "打掃房間。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v50",
+                "theme": "daily",
+                "base": "빨래하다",
+                "meaning": "洗衣服",
+                "icon": "🧺",
+                "present": "빨래해요",
+                "past": "빨래했어요",
+                "formal": "빨래합니다",
+                "wish": "빨래하고 싶어요",
+                "exampleKr": "주말에 빨래해요.",
+                "exampleZh": "週末洗衣服。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v51",
+                "theme": "mind",
+                "base": "생각하다",
+                "meaning": "思考 / 認為",
+                "icon": "🤔",
+                "present": "생각해요",
+                "past": "생각했어요",
+                "formal": "생각합니다",
+                "wish": "생각하고 싶어요",
+                "exampleKr": "미래를 생각해요.",
+                "exampleZh": "思考未來。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v52",
+                "theme": "mind",
+                "base": "알다",
+                "meaning": "知道 / 認識",
+                "icon": "💡",
+                "antonym": "모르다 (不知道)",
+                "antonymId": "v53",
+                "present": "알아요",
+                "past": "알았어요",
+                "formal": "압니다 (ㄹ脫落)",
+                "wish": "알고 싶어요",
+                "exampleKr": "그 사람을 알아요.",
+                "exampleZh": "我認識那個人。",
+                "ruleHint": "陽性母音ㅏ ➔ -아요"
+        },
+        {
+                "id": "v53",
+                "theme": "mind",
+                "base": "모르다",
+                "meaning": "不知道 / 不懂",
+                "icon": "🤷",
+                "antonym": "알다 (知道)",
+                "antonymId": "v52",
+                "present": "몰라요 (르不規則)",
+                "past": "몰랐어요",
+                "formal": "모릅니다",
+                "wish": "모르고 싶어요",
+                "exampleKr": "한국어를 잘 몰라요.",
+                "exampleZh": "我不太懂韓語。",
+                "ruleHint": "⚠️ 르前面加ㄹ + 라요: 몰라요"
+        },
+        {
+                "id": "v54",
+                "theme": "mind",
+                "base": "기억하다",
+                "meaning": "記得 / 記住",
+                "icon": "🧠",
+                "antonym": "잊어버리다 (忘記)",
+                "antonymId": "v55",
+                "present": "기억해요",
+                "past": "기억했어요",
+                "formal": "기억합니다",
+                "wish": "기억하고 싶어요",
+                "exampleKr": "그 날을 기억해요.",
+                "exampleZh": "我記得那一天。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v55",
+                "theme": "mind",
+                "base": "잊어버리다",
+                "meaning": "忘記 / 遺忘",
+                "icon": "🍃",
+                "antonym": "기억하다 (記得)",
+                "antonymId": "v54",
+                "present": "잊어버려요",
+                "past": "잊어버렸어요",
+                "formal": "잊어버립니다",
+                "wish": "잊어버리고 싶어요",
+                "exampleKr": "비밀번호를 잊어버렸어요.",
+                "exampleZh": "忘記了密碼。",
+                "ruleHint": "버리다 ➔ 버려요"
+        },
+        {
+                "id": "v56",
+                "theme": "mind",
+                "base": "사랑하다",
+                "meaning": "愛 / 疼愛",
+                "icon": "❤️",
+                "present": "사랑해요",
+                "past": "사랑했어요",
+                "formal": "사랑합니다",
+                "wish": "사랑하고 싶어요",
+                "exampleKr": "가족을 사랑해요.",
+                "exampleZh": "我愛我的家人。",
+                "ruleHint": "하다 ➔ 해요"
+        },
+        {
+                "id": "v57",
+                "theme": "mind",
+                "base": "웃다",
+                "meaning": "笑 / 微笑",
+                "icon": "😄",
+                "antonym": "울다 (哭泣)",
+                "antonymId": "v58",
+                "present": "웃어요",
+                "past": "웃었어요",
+                "formal": "웃습니다",
+                "wish": "웃고 싶어요",
+                "exampleKr": "환하게 웃어요.",
+                "exampleZh": "燦爛地微笑。",
+                "ruleHint": "陰性母音ㅜ ➔ -어요 [우서요]"
+        },
+        {
+                "id": "v58",
+                "theme": "mind",
+                "base": "울다",
+                "meaning": "哭 / 哭泣",
+                "icon": "😭",
+                "antonym": "웃다 (微笑)",
+                "antonymId": "v57",
+                "present": "울어요",
+                "past": "울었어요",
+                "formal": "웁니다 (ㄹ脫落)",
+                "wish": "울고 싶어요",
+                "exampleKr": "아기가 울어요.",
+                "exampleZh": "寶寶在哭。",
+                "ruleHint": "陰性母音ㅜ ➔ -어요 [우러요]"
+        },
+        {
+                "id": "v59",
+                "theme": "mind",
+                "base": "기다리다",
+                "meaning": "等待 / 期盼",
+                "icon": "⏳",
+                "present": "기다려요",
+                "past": "기다렸어요",
+                "formal": "기다립니다",
+                "wish": "기다리고 싶어요",
+                "exampleKr": "여기서 친구를 기다려요.",
+                "exampleZh": "在這裡等朋友。",
+                "ruleHint": "ㅣ+ㅓ➔여 (기다려요)"
+        },
+        {
+                "id": "v60",
+                "theme": "mind",
+                "base": "도와주다",
+                "meaning": "幫助 / 協助",
+                "icon": "🤝",
+                "present": "도와줘요",
+                "past": "도와줬어요",
+                "formal": "도와줍니다",
+                "wish": "도와주고 싶어요",
+                "exampleKr": "친구를 도와줘요.",
+                "exampleZh": "幫助朋友。",
+                "ruleHint": "돕다(ㅂ變우) + 주다"
+        }
+];
+
+        const soundChangeRules = [
+        {
+                "id": "liaison",
+                "title": "1. 連音化 (Liaison)",
+                "icon": "🔗",
+                "badgeColor": "bg-blue-500",
+                "formula": "前字收音 (有尾音) + 後字開頭為「ㅇ」 ➔ 收音移至後字初聲發音",
+                "description": "當前一個字的收音遇到後一個字以無聲的子音「ㅇ」開頭時，收音會直接溜過去填補後字的初聲位置，讓發音更流暢省力！",
+                "tip": "💡 提示：雙收音時，左邊收音留在原地，右邊收音溜到後面（如 앉아 ➔ [안자]）。",
+                "examples": [
+                        {
+                                "write": "한국어",
+                                "read": "한구거",
+                                "rom": "han-gu-geo",
+                                "meaning": "韓國語",
+                                "explain": "ㄱ 溜到 後面 어 變成 거"
+                        },
+                        {
+                                "write": "음악",
+                                "read": "으막",
+                                "rom": "eu-mak",
+                                "meaning": "音樂",
+                                "explain": "ㅁ 溜到 後面 악 變成 막"
+                        },
+                        {
+                                "write": "할아버지",
+                                "read": "하라버지",
+                                "rom": "ha-ra-beo-ji",
+                                "meaning": "爺爺",
+                                "explain": "ㄹ 溜到 後面 아 變成 라"
+                        },
+                        {
+                                "write": "앉아요",
+                                "read": "안자요",
+                                "rom": "an-ja-yo",
+                                "meaning": "請坐",
+                                "explain": "雙收音 ㄵ: ㄴ留下，ㅈ 溜到後面"
+                        }
+                ]
+        },
+        {
+                "id": "nasalization",
+                "title": "2. 鼻音化 (Nasalization)",
+                "icon": "👃",
+                "badgeColor": "bg-emerald-500",
+                "formula": "收音 [ㅂ/ㄷ/ㄱ] + 後字子音 [ㅁ/ㄴ] ➔ 收音變鼻音 [ㅁ/ㄴ/ㅇ]",
+                "description": "塞音在遇到鼻子哼氣的鼻音（ㅁ, ㄴ）時，為了不讓嘴巴打結，發音部位不變但氣流改由鼻腔通過，變成溫柔的鼻音！",
+                "tip": "💡 記憶口訣：ㅂ變ㅁ、ㄷ變ㄴ、ㄱ變ㅇ（嘴唇配嘴唇、舌尖配舌尖、舌根配舌根）。",
+                "examples": [
+                        {
+                                "write": "밥물",
+                                "read": "밤물",
+                                "rom": "bam-mul",
+                                "meaning": "煮飯水",
+                                "explain": "收音 ㅂ 遇到 ㅁ 變成 鼻音 ㅁ"
+                        },
+                        {
+                                "write": "국물",
+                                "read": "궁물",
+                                "rom": "gung-mul",
+                                "meaning": "湯汁",
+                                "explain": "收音 ㄱ 遇到 ㅁ 變成 鼻音 ㅇ"
+                        },
+                        {
+                                "write": "감사합니다",
+                                "read": "감사함니다",
+                                "rom": "gam-sa-ham-ni-da",
+                                "meaning": "謝謝您",
+                                "explain": "합 的收音 ㅂ 遇到 니다 的 ㄴ 變成 ㅁ"
+                        },
+                        {
+                                "write": "한국말",
+                                "read": "한궁말",
+                                "rom": "han-gung-mal",
+                                "meaning": "韓文話",
+                                "explain": "국 的收音 ㄱ 遇到 말 的 ㅁ 變成 ㅇ"
+                        }
+                ]
+        },
+        {
+                "id": "liquidization",
+                "title": "3. 流音化 (Liquidization)",
+                "icon": "🌊",
+                "badgeColor": "bg-cyan-500",
+                "formula": "「ㄴ」遇到「ㄹ」 或 「ㄹ」遇到「ㄴ」 ➔ 通通變成捲舌流音「ㄹ」",
+                "description": "舌尖鼻音 ㄴ 與舌尖流音 ㄹ 相遇時，舌頭來不及切換，流音 ㄹ 具有超強同化力，把 ㄴ 全部捲成 ㄹ + ㄹ！",
+                "tip": "💡 聽起來就像英文的 'll' 連音，舌尖頂在上顎彈動！",
+                "examples": [
+                        {
+                                "write": "신라",
+                                "read": "실라",
+                                "rom": "sil-la",
+                                "meaning": "新羅 (古國名/酒店)",
+                                "explain": "ㄴ + ㄹ ➔ 全部變成 ㄹ + ㄹ [실라]"
+                        },
+                        {
+                                "write": "연락",
+                                "read": "열락",
+                                "rom": "yeol-lak",
+                                "meaning": "聯絡 / 聯繫",
+                                "explain": "ㄴ + ㄹ ➔ [열락]"
+                        },
+                        {
+                                "write": "칼날",
+                                "read": "칼랄",
+                                "rom": "khal-lal",
+                                "meaning": "刀刃",
+                                "explain": "ㄹ + ㄴ ➔ [칼랄]"
+                        },
+                        {
+                                "write": "설날",
+                                "read": "설랄",
+                                "rom": "seol-lal",
+                                "meaning": "農曆新年",
+                                "explain": "ㄹ + ㄴ ➔ [설랄]"
+                        }
+                ]
+        },
+        {
+                "id": "aspiration",
+                "title": "4. 激音化 / 送氣化 (Aspiration)",
+                "icon": "💨",
+                "badgeColor": "bg-rose-500",
+                "formula": "平音 [ㄱ/ㄷ/ㅂ/ㅈ] + 帶氣音「ㅎ」 相遇 ➔ 爆炸噴氣變 [ㅋ/ㅌ/ㅍ/ㅊ]",
+                "description": "溫和的平音遇到帶有強烈氣息的「ㅎ」時，會瞬間結合並爆發出大量氣流，升級成激音！",
+                "tip": "💡 無論是前字收音為 ㅎ，還是後字初聲為 ㅎ，只要碰到就會合體噴氣！",
+                "examples": [
+                        {
+                                "write": "축하",
+                                "read": "추카",
+                                "rom": "chu-kha",
+                                "meaning": "祝賀 / 慶祝",
+                                "explain": "收音 ㄱ + ㅎ ➔ 噴氣變成 ㅋ [추카]"
+                        },
+                        {
+                                "write": "입학",
+                                "read": "이팍",
+                                "rom": "i-phak",
+                                "meaning": "入學",
+                                "explain": "收音 ㅂ + ㅎ ➔ 噴氣變成 ㅍ [이팍]"
+                        },
+                        {
+                                "write": "좋다",
+                                "read": "조타",
+                                "rom": "jo-tha",
+                                "meaning": "好 / 喜歡",
+                                "explain": "收音 ㅎ + ㄷ ➔ 噴氣變成 ㅌ [조타]"
+                        },
+                        {
+                                "write": "맞히다",
+                                "read": "마치다",
+                                "rom": "ma-chi-da",
+                                "meaning": "猜對 / 命中",
+                                "explain": "收音 ㅈ + ㅎ ➔ 噴氣變成 ㅊ [마치다]"
+                        }
+                ]
+        },
+        {
+                "id": "tensification",
+                "title": "5. 硬音化 / 濃音化 (Tensification)",
+                "icon": "💥",
+                "badgeColor": "bg-red-500",
+                "formula": "收音 [ㄱ/ㄷ/ㅂ] + 後字平音 [ㄱ/ㄷ/ㅂ/ㅅ/ㅈ] ➔ 後字變緊繃硬音 [ㄲ/ㄸ/ㅃ/ㅆ/ㅉ]",
+                "description": "當喉嚨緊閉的塞音收音後面接著平音時，喉部肌肉自然緊縮加壓，後面的子音就會被壓出清脆短促的硬音！",
+                "tip": "💡 像國語發四聲或肚子用力的短促音（ㄲ, ㄸ, ㅃ, ㅆ, ㅉ）。",
+                "examples": [
+                        {
+                                "write": "학교",
+                                "read": "학꾜",
+                                "rom": "hak-kkyo",
+                                "meaning": "學校",
+                                "explain": "收音 ㄱ + ㄱ ➔ 後字緊縮變 ㄲ [학꾜]"
+                        },
+                        {
+                                "write": "식당",
+                                "read": "식땅",
+                                "rom": "sik-ttang",
+                                "meaning": "餐廳 / 食堂",
+                                "explain": "收音 ㄱ + ㄷ ➔ 後字緊縮變 ㄸ [식땅]"
+                        },
+                        {
+                                "write": "잡지",
+                                "read": "잡찌",
+                                "rom": "jap-jji",
+                                "meaning": "雜誌",
+                                "explain": "收音 ㅂ + ㅈ ➔ 後字緊縮變 ㅉ [잡찌]"
+                        },
+                        {
+                                "write": "옷장",
+                                "read": "옫짱",
+                                "rom": "ot-jjang",
+                                "meaning": "衣櫃",
+                                "explain": "收音 ㅅ(代表音ㄷ) + ㅈ ➔ [옫짱]"
+                        }
+                ]
+        },
+        {
+                "id": "palatalization",
+                "title": "6. 口蓋音化 / 顎化 (Palatalization)",
+                "icon": "👄",
+                "badgeColor": "bg-purple-500",
+                "formula": "收音 [ㄷ/ㅌ] + 後字以「이」或「介音 y」開頭 ➔ 變成 [ㅈ/ㅊ]",
+                "description": "舌尖音 ㄷ/ㅌ 要發母音 ㅣ 時，舌頭必須大幅移動到硬顎處很費力。因此韓語自然轉變成在硬顎發音的 ㅈ/ㅊ！",
+                "tip": "💡 ㄷ + 이 ➔ [지]、ㅌ + 이 ➔ [치]，最常見於日常口語「一起 (같이 [가치])」！",
+                "examples": [
+                        {
+                                "write": "같이",
+                                "read": "가치",
+                                "rom": "ga-chi",
+                                "meaning": "一起",
+                                "explain": "收音 ㅌ 遇到 ㅣ ➔ 口蓋音化為 ㅊ [가치]"
+                        },
+                        {
+                                "write": "굳이",
+                                "read": "구지",
+                                "rom": "gu-ji",
+                                "meaning": "非得 / 執意",
+                                "explain": "收音 ㄷ 遇到 ㅣ ➔ 口蓋音化為 ㅈ [구지]"
+                        },
+                        {
+                                "write": "해돋이",
+                                "read": "해도지",
+                                "rom": "hae-do-ji",
+                                "meaning": "日出",
+                                "explain": "돋 的收音 ㄷ 遇到 이 ➔ [해도지]"
+                        },
+                        {
+                                "write": "붙이다",
+                                "read": "부치다",
+                                "rom": "bu-chi-da",
+                                "meaning": "貼上 / 附上",
+                                "explain": "收音 ㅌ 遇到 이 ➔ [부치다]"
+                        }
+                ]
+        }
+];
+
+
         // ==================== 2. Unicode 與 羅馬拼音核心演算法 ====================
         const CHOSEONG = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
         const JUNGSEONG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
@@ -410,6 +1602,15 @@
             const [selectedC, setSelectedC] = useState('ㅂ');
             const [selectedV, setSelectedV] = useState('ㅏ');
             const [selectedT, setSelectedT] = useState('ㅂ');
+            // Hailey 60 動詞狀態
+            const [verbThemeFilter, setVerbThemeFilter] = useState('all');
+            const [verbSearch, setVerbSearch] = useState('');
+            const [globalVerbTense, setGlobalVerbTense] = useState('present'); // 'base' | 'present' | 'past' | 'formal' | 'wish'
+
+            // 6 大音變透視鏡狀態
+            const [soundRuleFilter, setSoundRuleFilter] = useState('all');
+            const [soundRuleSearch, setSoundRuleSearch] = useState('');
+
             const [builderConsonantFilter, setBuilderConsonantFilter] = useState('all');
             const [builderVowelFilter, setBuilderVowelFilter] = useState('all');
 
@@ -684,6 +1885,27 @@
             const currentSyllable = combineHangul(selectedC, selectedV, selectedT);
             const withoutBatchim = combineHangul(selectedC, selectedV, '');
             const activeBatchimInfo = getBatchimInfo(selectedT);
+            // 過濾 Hailey 60 動詞
+            const filteredVerbs = haileyVerbs.filter(v => {
+                const matchTheme = verbThemeFilter === 'all' || v.theme === verbThemeFilter;
+                const matchSearch = !verbSearch.trim() || 
+                    v.base.includes(verbSearch.trim()) || 
+                    v.meaning.includes(verbSearch.trim()) || 
+                    v.present.includes(verbSearch.trim()) ||
+                    (v.antonym && v.antonym.includes(verbSearch.trim()));
+                return matchTheme && matchSearch;
+            });
+
+            // 過濾 6 大音變規則
+            const filteredSoundRules = soundChangeRules.filter(r => {
+                const matchTheme = soundRuleFilter === 'all' || r.id === soundRuleFilter;
+                const matchSearch = !soundRuleSearch.trim() ||
+                    r.title.includes(soundRuleSearch.trim()) ||
+                    r.description.includes(soundRuleSearch.trim()) ||
+                    r.examples.some(ex => ex.write.includes(soundRuleSearch.trim()) || ex.meaning.includes(soundRuleSearch.trim()) || ex.read.includes(soundRuleSearch.trim()));
+                return matchTheme && matchSearch;
+            });
+
 
             const navTabs = [
                 { id: 'basic-vowels', label: '🐱 基礎母音', color: 'bg-rose-400' },
@@ -693,6 +1915,8 @@
                 { id: 'tense-consonants', label: '💥 硬音 (雙子音)', color: 'bg-red-400' },
                 { id: 'batchim-guide', label: '🧱 7大收音教學', color: 'bg-emerald-500' },
                 { id: 'builder', label: '🧩 3層拼音積木屋', color: 'bg-sky-500' },
+                { id: 'verbs', label: '🏃 60核心動詞與時態', color: 'bg-teal-500' },
+                { id: 'sound-rules', label: '🪄 6大音變透視鏡', color: 'bg-violet-500' },
                 { id: 'wordbank', label: '☁️ 雲端自學單字庫', color: 'bg-indigo-500' },
                 { id: 'quiz', label: '⭐ 隨堂星級挑戰', color: 'bg-purple-400' },
             ];
@@ -1396,6 +2620,376 @@
                                         </details>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ==================== 頁面 7.5: 🏃 60 核心生活動詞與時態變化 (Hailey 權威指引) ==================== */}
+                    {activeTab === 'verbs' && (
+                        <div className="space-y-6">
+                            {/* 頂部引導橫幅 */}
+                            <div className="bg-gradient-to-r from-teal-100 via-emerald-50 to-teal-50 border border-teal-200 rounded-3xl p-6 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+                                <div className="space-y-1 text-center md:text-left">
+                                    <div className="flex items-center justify-center md:justify-start gap-2">
+                                        <span className="text-2xl">🏃</span>
+                                        <h2 className="text-xl font-bold text-teal-800">Hailey 60 核心生活動詞與 4 大實用時態</h2>
+                                    </div>
+                                    <p className="text-xs text-teal-700">精選 6 大主題、15 組必背反義詞對，掌握原形、現在式、過去式、正式敬語與意願表達！</p>
+                                </div>
+                                <div className="flex items-center gap-2 bg-white/80 backdrop-blur px-4 py-2 rounded-2xl border border-teal-200 text-xs text-teal-800 shadow-2xs font-semibold">
+                                    <span>💡 點擊時態標籤可切換整頁動詞變化，點喇叭立即聽真人語音！</span>
+                                </div>
+                            </div>
+
+                            {/* 控制面板：主題選擇 + 全域時態切換 + 搜尋列 */}
+                            <div className="bg-white rounded-3xl p-5 shadow-xs border border-teal-100 space-y-4">
+                                {/* 主題標籤列 */}
+                                <div className="flex flex-wrap gap-2 items-center">
+                                    <span className="text-xs font-bold text-gray-500 mr-1">主題分類：</span>
+                                    {haileyVerbThemes.map(theme => (
+                                        <button
+                                            key={theme.id}
+                                            onClick={() => setVerbThemeFilter(theme.id)}
+                                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                                                verbThemeFilter === theme.id
+                                                    ? `${theme.color} ring-2 ring-teal-400 font-bold shadow-xs scale-105`
+                                                    : 'bg-white border-gray-200 text-gray-600 hover:bg-teal-50/50'
+                                            }`}
+                                        >
+                                            {theme.name}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2 border-t border-gray-100">
+                                    {/* 全域時態切換器 */}
+                                    <div className="flex items-center gap-1.5 bg-teal-50/70 p-1 rounded-2xl border border-teal-200">
+                                        <span className="text-[11px] font-bold text-teal-700 px-2">時態展示：</span>
+                                        {[
+                                            { id: 'base', label: '原形 (-다)' },
+                                            { id: 'present', label: '現在式 (-아요/어요)' },
+                                            { id: 'past', label: '過去式 (-았/었어요)' },
+                                            { id: 'formal', label: '敬語 (-ㅂ/습니다)' },
+                                            { id: 'wish', label: '想做 (-고 싶어요)' },
+                                        ].map(t => (
+                                            <button
+                                                key={t.id}
+                                                onClick={() => setGlobalVerbTense(t.id)}
+                                                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all ${
+                                                    globalVerbTense === t.id
+                                                        ? 'bg-teal-500 text-white shadow-xs'
+                                                        : 'text-teal-800 hover:bg-teal-200/50'
+                                                }`}
+                                            >
+                                                {t.label}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {/* 搜尋列 */}
+                                    <div className="relative min-w-[220px]">
+                                        <input
+                                            type="text"
+                                            value={verbSearch}
+                                            onChange={(e) => setVerbSearch(e.target.value)}
+                                            placeholder="🔍 搜尋動詞 / 中文 / 拼音..."
+                                            className="w-full pl-8 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-teal-400 focus:outline-none transition-all"
+                                        />
+                                        <span className="absolute left-2.5 top-2 text-gray-400 text-xs">🔍</span>
+                                        {verbSearch && (
+                                            <button 
+                                                onClick={() => setVerbSearch('')}
+                                                className="absolute right-2.5 top-1.5 text-gray-400 hover:text-gray-600 text-xs"
+                                            >
+                                                ✕
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 動詞卡片網格 (共 60 詞) */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {filteredVerbs.map(verb => {
+                                    const activeDisplayWord = 
+                                        globalVerbTense === 'base' ? verb.base :
+                                        globalVerbTense === 'present' ? verb.present :
+                                        globalVerbTense === 'past' ? verb.past :
+                                        globalVerbTense === 'formal' ? verb.formal :
+                                        verb.wish;
+
+                                    return (
+                                        <div 
+                                            key={verb.id} 
+                                            className="bg-white rounded-3xl p-5 shadow-xs border border-teal-100 hover:border-teal-300 hover:shadow-md transition-all flex flex-col justify-between group"
+                                        >
+                                            {/* 卡片標頭：原形、意義與反義詞 */}
+                                            <div>
+                                                <div className="flex items-start justify-between mb-2">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-2xl p-1.5 bg-teal-50 rounded-2xl border border-teal-100">{verb.icon}</span>
+                                                        <div>
+                                                            <div className="flex items-center gap-1.5">
+                                                                <h3 className="text-lg font-bold text-gray-800 kr-font">{verb.base}</h3>
+                                                                <span className="text-xs text-gray-400 font-mono">({romanizeHangul(verb.base)})</span>
+                                                            </div>
+                                                            <p className="text-xs font-semibold text-teal-600">{verb.meaning}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    {verb.antonym && (
+                                                        <span className="text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full border border-rose-200 font-medium whitespace-nowrap">
+                                                            ↔️ {verb.antonym}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {/* 當前選中時態大字展示與發音控制 */}
+                                                <div className="my-3 p-3 bg-gradient-to-r from-teal-50/80 to-emerald-50/50 rounded-2xl border border-teal-100 text-center relative overflow-hidden">
+                                                    <div className="text-[11px] text-teal-700 font-bold mb-0.5 flex justify-center items-center gap-1">
+                                                        <span>當前變化：</span>
+                                                        <span className="bg-teal-500 text-white px-1.5 py-0.2 rounded text-[10px]">
+                                                            {globalVerbTense === 'base' ? '原形' :
+                                                             globalVerbTense === 'present' ? '現在式' :
+                                                             globalVerbTense === 'past' ? '過去式' :
+                                                             globalVerbTense === 'formal' ? '敬語' : '想做'}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="text-2xl md:text-3xl font-bold text-teal-900 kr-font tracking-wide my-1">
+                                                        {activeDisplayWord}
+                                                    </div>
+                                                    <div className="text-[11px] text-gray-400 font-mono">
+                                                        [{romanizeHangul(activeDisplayWord)}]
+                                                    </div>
+
+                                                    {/* 發音與功能按鈕列 */}
+                                                    <div className="flex items-center justify-center gap-1.5 mt-3 flex-wrap">
+                                                        <button
+                                                            onClick={() => playSound(activeDisplayWord, 1.0)}
+                                                            className="px-2 py-1 bg-teal-500 hover:bg-teal-600 text-white rounded-xl text-[11px] font-bold shadow-2xs flex items-center gap-1 active:scale-95 transition-all"
+                                                            title="標準 1.0x 朗讀"
+                                                        >
+                                                            <span>🔊 1.0x</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => playSound(activeDisplayWord, 0.7)}
+                                                            className="px-2 py-1 bg-teal-100 hover:bg-teal-200 text-teal-800 rounded-xl text-[11px] font-bold shadow-2xs flex items-center gap-1 active:scale-95 transition-all"
+                                                            title="慢速 0.7x 朗讀"
+                                                        >
+                                                            <span>🐢 0.7x</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => playSound(activeDisplayWord, 0.3)}
+                                                            className="px-2 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl text-[11px] font-bold shadow-2xs flex items-center gap-1 active:scale-95 transition-all"
+                                                            title="極慢速 0.3x 逐字高亮朗讀"
+                                                        >
+                                                            <span>🦥 0.3x</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setDecompModalWord({ kr: activeDisplayWord, meaning: `${verb.base} (${verb.meaning})` })}
+                                                            className="px-2 py-1 bg-sky-100 hover:bg-sky-200 text-sky-800 rounded-xl text-[11px] font-bold shadow-2xs flex items-center gap-1 active:scale-95 transition-all"
+                                                            title="字母積木拆解"
+                                                        >
+                                                            <span>🧩 拆解</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => startSpeechRecognition(activeDisplayWord)}
+                                                            className="px-2 py-1 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-xl text-[11px] font-bold shadow-2xs flex items-center gap-1 active:scale-95 transition-all"
+                                                            title="麥克風跟讀評分"
+                                                        >
+                                                            <span>🎤 跟讀</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* 變化規則小提示 */}
+                                                <div className="text-[11px] text-gray-500 bg-gray-50 p-2 rounded-xl border border-gray-100 mb-2">
+                                                    <span className="font-bold text-teal-700">規則要點：</span> {verb.ruleHint}
+                                                </div>
+                                            </div>
+
+                                            {/* 底部：實用例句 */}
+                                            <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-2 text-xs">
+                                                <div className="truncate">
+                                                    <span className="font-bold text-gray-700 kr-font">{verb.exampleKr}</span>
+                                                    <span className="text-gray-400 ml-1.5 text-[11px]">{verb.exampleZh}</span>
+                                                </div>
+                                                <button
+                                                    onClick={() => playSound(verb.exampleKr, 1.0)}
+                                                    className="p-1 text-teal-600 hover:text-teal-800 hover:bg-teal-50 rounded-lg transition-all"
+                                                    title="朗讀例句"
+                                                >
+                                                    🔊
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {filteredVerbs.length === 0 && (
+                                <div className="text-center py-12 bg-white rounded-3xl border border-teal-100">
+                                    <p className="text-gray-400 text-sm">找不到符合條件的動詞，換個關鍵字搜尋看看吧！🔍</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* ==================== 頁面 7.6: 🪄 6 大音變透視鏡 (40音變精華) ==================== */}
+                    {activeTab === 'sound-rules' && (
+                        <div className="space-y-6">
+                            {/* 頂部引導橫幅 */}
+                            <div className="bg-gradient-to-r from-violet-100 via-purple-50 to-pink-50 border border-violet-200 rounded-3xl p-6 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+                                <div className="space-y-1 text-center md:text-left">
+                                    <div className="flex items-center justify-center md:justify-start gap-2">
+                                        <span className="text-2xl">🪄</span>
+                                        <h2 className="text-xl font-bold text-violet-900">韓語 6 大核心音變透視鏡 (發音大師秘笈)</h2>
+                                    </div>
+                                    <p className="text-xs text-violet-700">為什麼寫「한국어」卻唸「한구거」？掌握連音、鼻音、流音、激音、硬音與口蓋音化，韓語聽說一次通透！</p>
+                                </div>
+                                <div className="flex items-center gap-2 bg-white/80 backdrop-blur px-4 py-2 rounded-2xl border border-violet-200 text-xs text-violet-800 shadow-2xs font-semibold">
+                                    <span>🎧 點擊單字旁的發音按鈕，直接對比「書寫」與「實際發音」！</span>
+                                </div>
+                            </div>
+
+                            {/* 分類導覽與搜尋 */}
+                            <div className="bg-white rounded-3xl p-5 shadow-xs border border-violet-100 space-y-4">
+                                <div className="flex flex-wrap gap-2 items-center">
+                                    <span className="text-xs font-bold text-gray-500 mr-1">音變類別：</span>
+                                    <button
+                                        onClick={() => setSoundRuleFilter('all')}
+                                        className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                                            soundRuleFilter === 'all'
+                                                ? 'bg-violet-500 text-white border-violet-500 shadow-xs scale-105 font-bold'
+                                                : 'bg-white border-gray-200 text-gray-600 hover:bg-violet-50/50'
+                                        }`}
+                                    >
+                                        🌟 全部 6 大音變
+                                    </button>
+                                    {soundChangeRules.map(r => (
+                                        <button
+                                            key={r.id}
+                                            onClick={() => setSoundRuleFilter(r.id)}
+                                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                                                soundRuleFilter === r.id
+                                                    ? 'bg-violet-500 text-white border-violet-500 shadow-xs scale-105 font-bold'
+                                                    : 'bg-white border-gray-200 text-gray-600 hover:bg-violet-50/50'
+                                            }`}
+                                        >
+                                            {r.icon} {r.title.split(' ')[0]}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="pt-2 border-t border-gray-100">
+                                    <div className="relative max-w-md">
+                                        <input
+                                            type="text"
+                                            value={soundRuleSearch}
+                                            onChange={(e) => setSoundRuleSearch(e.target.value)}
+                                            placeholder="🔍 搜尋音變規則 / 單字 (如: 밥물, 學校, 連音)..."
+                                            className="w-full pl-8 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-violet-400 focus:outline-none transition-all"
+                                        />
+                                        <span className="absolute left-2.5 top-2 text-gray-400 text-xs">🔍</span>
+                                        {soundRuleSearch && (
+                                            <button 
+                                                onClick={() => setSoundRuleSearch('')}
+                                                className="absolute right-2.5 top-1.5 text-gray-400 hover:text-gray-600 text-xs"
+                                            >
+                                                ✕
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 音變詳細卡片清單 */}
+                            <div className="space-y-6">
+                                {filteredSoundRules.map(rule => (
+                                    <div 
+                                        key={rule.id}
+                                        className="bg-white rounded-3xl p-6 shadow-xs border border-violet-100 hover:border-violet-300 transition-all space-y-4"
+                                    >
+                                        {/* 規則標題與公式 */}
+                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-3 border-b border-gray-100">
+                                            <div className="flex items-center gap-3">
+                                                <span className="text-3xl p-2 bg-violet-50 rounded-2xl border border-violet-100">{rule.icon}</span>
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                                                        {rule.title}
+                                                        <span className={`${rule.badgeColor} text-white text-[10px] px-2 py-0.5 rounded-full font-semibold`}>
+                                                            必背音變
+                                                        </span>
+                                                    </h3>
+                                                    <p className="text-xs text-gray-600 mt-0.5">{rule.description}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* 核心公式黃金牌 */}
+                                        <div className="bg-gradient-to-r from-violet-50 to-purple-50 p-3.5 rounded-2xl border border-violet-200 flex items-center gap-2 text-xs text-violet-900 font-semibold">
+                                            <span className="text-base">⚡</span>
+                                            <span><strong>核心公式：</strong> {rule.formula}</span>
+                                        </div>
+
+                                        {/* 記憶小提示 */}
+                                        <div className="text-xs text-amber-800 bg-amber-50/80 p-3 rounded-2xl border border-amber-200">
+                                            {rule.tip}
+                                        </div>
+
+                                        {/* 範例對照展示表 */}
+                                        <div>
+                                            <h4 className="text-xs font-bold text-gray-600 mb-2.5 flex items-center gap-1.5">
+                                                <span>📚 經典單字對照實例：</span>
+                                            </h4>
+
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                {rule.examples.map((ex, exIdx) => (
+                                                    <div 
+                                                        key={exIdx}
+                                                        className="bg-gray-50/80 hover:bg-violet-50/50 p-3.5 rounded-2xl border border-gray-100 hover:border-violet-200 transition-all flex items-center justify-between gap-3 group"
+                                                    >
+                                                        <div>
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-sm font-bold text-gray-800 kr-font">{ex.write}</span>
+                                                                <span className="text-xs text-rose-500 font-bold">➔</span>
+                                                                <span className="text-sm font-bold text-violet-600 kr-font bg-violet-100/70 px-1.5 py-0.5 rounded-lg">
+                                                                    [{ex.read}]
+                                                                </span>
+                                                            </div>
+                                                            <div className="text-[11px] text-gray-500 mt-1">
+                                                                <span className="font-semibold text-gray-700">{ex.meaning}</span>
+                                                                <span className="text-gray-400 font-mono ml-1.5">({ex.rom})</span>
+                                                            </div>
+                                                            <div className="text-[10px] text-gray-400 mt-0.5">
+                                                                {ex.explain}
+                                                            </div>
+                                                        </div>
+
+                                                        {/* 發音與跟讀按鈕 */}
+                                                        <div className="flex items-center gap-1">
+                                                            <button
+                                                                onClick={() => playSound(ex.write, 1.0)}
+                                                                className="px-2.5 py-1.5 bg-violet-500 hover:bg-violet-600 text-white rounded-xl text-xs font-bold shadow-2xs flex items-center gap-1 active:scale-95 transition-all"
+                                                                title="聽實際發音"
+                                                            >
+                                                                <span>🔊</span>
+                                                            </button>
+                                                            <button
+                                                                onClick={() => startSpeechRecognition(ex.read)}
+                                                                className="px-2 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-xl text-xs font-bold shadow-2xs active:scale-95 transition-all"
+                                                                title="跟讀評分"
+                                                            >
+                                                                <span>🎤</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}
