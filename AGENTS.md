@@ -19,9 +19,14 @@
 ```
 Korean-Learning/
 ├── scripts/
-│   └── manage_vocab.py          # 韓語核心詞庫自動化管理 CLI (查重+拼音+5檔同步+Git部署)
+│   ├── manage_vocab.py          # 韓語核心詞庫自動化管理 CLI (查重+拼音+5檔同步+Git部署)
+│   └── build_hanja_dataset.py   # 韓語漢字大辭典資料集建置管線
 ├── index.html                   # 主應用 SPA (React 18 + Tailwind + Firebase + Web Speech)
 ├── korean_vocab_dictionary.html # 韓語核心詞庫大字典 (TOPIK 全量速查 + 萌趣單字卡 + 結構拆解)
+├── korean_hanja_dictionary.html # 韓語漢字音變大辭典 (Glossika 6,277 漢字詞 + 471 音節矩陣 + 外來語)
+├── korean_hanja_data.js         # 6,519 筆漢字詞與音節常數數據集
+├── korean_hanja.csv             # 6,519 筆漢字詞與外來語 CSV 總表
+├── korean_hanja.md              # 漢字詞對照 Markdown 字典
 ├── korean_vocab_5666_data.js    # 5,673 筆高壓縮常數數據集
 ├── hangul_sanrio_deck_20p.pdf   # 20 頁超大字 Sanrio 拼音總表 (PDF 直連瀏覽)
 ├── sanrio_korean_food_100.html  # 100 種常見食物發音打卡學習手札 (含 0.3x 口型)
@@ -47,8 +52,9 @@ Korean-Learning/
 - [x] **隨堂星級自我挑戰測驗** (7 大題隨堂評量與分數結算)
 - [x] **100 種常見食物學習手札與 20 頁大字 PDF 講義**
 - [x] **韓語核心詞庫大字典** (korean_vocab_dictionary.html，含 TOPIK 全量即時檢索、12大詞性篩選、3D 單字卡翻卡記憶測驗、Unicode 音節結構即時拆解、❤️ 生詞本與 3 段速語音)
-- [x] **全生態圈雙向無縫互聯** (主站、大字典、美食清單、PDF 講義與積木屋跨頁參數傳遞)
-- [x] **自動化詞庫管理管線** (`scripts/manage_vocab.py` + `korean-vocab-manager` Agent Skill，支援「查加 XX」全自動秒級查重、拼音生成、5 檔同步與 Git 自動部署)
+- [x] **韓語漢字音變大辭典** (korean_hanja_dictionary.html，收錄 Glossika 6,277 筆漢字詞、471 組單音節矩陣與 242 筆外來語，支援以字查音/以音查字、單字卡、3段速語音、字母結構拆解與全生態圈雙向互聯)
+- [x] **全生態圈雙向無縫互聯** (主站、核心大字典、漢字大辭典、美食清單、PDF 講義與積木屋跨頁參數傳遞)
+- [x] **自動化詞庫管理管線** (`scripts/manage_vocab.py` + `scripts/build_hanja_dataset.py` + `korean-vocab-manager` Agent Skill，支援「查加 XX」全自動秒級查重、拼音生成、5 檔同步與 Git 自動部署)
 
 ---
 

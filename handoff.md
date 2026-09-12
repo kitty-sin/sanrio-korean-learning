@@ -97,13 +97,22 @@
   - **建立「韓語詞庫自動化管理管線」**：
     1. **方案 B 核心 CLI 腳本**：[`scripts/manage_vocab.py`](file:///c:/Users/PC/Documents/Google-Antigravity/2026-Miscellaneous/Korean-Learning/scripts/manage_vocab.py)，支援秒級查重、Unicode 標準拼音生成、5 檔同步原子寫入與 Git 自動部署。
     2. **方案 A 專屬 Agent 技能**：[`korean-vocab-manager`](file:///C:/Users/PC/.gemini/config/skills/korean-vocab-manager/SKILL.md)，使用者在對話框只要說「`查加 XX`」或「`搜索有沒有 XX，沒有就新增`」，即可全自動觸發管線並輸出精美單字卡片。
+- **2026-09-11 21:30 PT**：
+  - **全新推出「韓語漢字音變大辭典 (Korean Hanja Dictionary)」**：
+    - **資料來源**：完整轉換《Glossika 韓文漢字對照工具書》，包含 **6,277 筆** 核心漢字詞、**471 組** 單音節 ↔ 漢字群矩陣與 **242 筆** 外來語借詞庫。
+    - **標準五大欄位**：嚴格依指定格式 `(編號, 韓文, 羅馬拼音, 中文, 英文)` 轉換並自動生成標準 Revised Romanization。
+    - **產出檔案矩陣**：`korean_hanja_dictionary.html`（主應用 SPA）、`korean_hanja_data.js`（6,519 筆資料常數）、`korean_hanja.csv`（完整試算表）、`korean_hanja.md`（對照字典）與 `scripts/build_hanja_dataset.py`（自動化建置管線）。
+    - **四大功能模式**：【📋 漢字詞速查字典】+【🎴 3D 萌趣單字卡翻卡測驗】+【🔤 單音節 ↔ 漢字矩陣（支援以字查音與漢字反向檢索）】+【🌐 常用外來語庫】。
+    - **全生態圈無縫互聯**：於主站 `index.html`、大詞庫 `korean_vocab_dictionary.html`、美食手札 `sanrio_korean_food_100.html` 頂部導航列全面新增「🈴 韓語漢字辭典」快捷入口，並支援 `index.html?block=XX` 積木屋跨頁直達。
 - **➡️ 下一步**：
-  1. 待使用者有空時，依其自訂的拼音規則批次修改 `hangul_sanrio_deck.html` 中的諧音標籤，並重新匯出覆蓋 `hangul_sanrio_deck_20p.pdf`。
-  2. 依學習進度持續擴充進階文法句型或主題練習題庫。
+  1. 持續豐富漢字詞庫之生活例句與成語聯想。
+  2. 依學習反饋擴充更多漢字部首與音變口訣。
+  3. 待使用者有空時，依其自訂的拼音規則批次修改 `hangul_sanrio_deck.html` 中的諧音標籤，並重新匯出覆蓋 `hangul_sanrio_deck_20p.pdf`。
+  4. 依學習進度持續擴充進階文法句型或主題練習題庫。
 
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-11 17:48 PT
+- **更新時間**：2026-09-11 21:30 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
