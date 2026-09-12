@@ -6,7 +6,7 @@
 
 | 編號 | 韓文 | 羅馬拼音 | 中文 | 英文 | 漢語拼音 | IPA 音標 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | **애칭** | `aeching` | 愛稱 | *pet name* | àichēng | `ɛ.ʨʰiŋ.` |
+| 1 | **애칭** | `aeching` | 暱稱、愛稱 | *Nickname, pet name* | àichēng | `ɛ.ʨʰiŋ.` |
 | 2 | **애도** | `aedo` | 哀悼 | *mourn* | āidào | `ɛ.do.` |
 | 3 | **애무** | `aemu` | 愛撫 | *Caress* | àifǔ | `ɛ.mu.` |
 | 4 | **애가** | `aega` | 哀歌 | *Elegy* | āigē | `ɛ.ɡa.` |
@@ -18,18 +18,18 @@
 | 10 | **애정** | `aejeong` | 愛情 | *Love for a person, affection* | àiqíng | `ɛ.ʥʌŋ.` |
 | 11 | **애인** | `aein` | 愛人 | *A lover* | àirén | `ɛ.in.` |
 | 12 | **애원** | `aewon` | 哀願 | *condolences* | āiyuàn | `ɛ.u̯ʌn.` |
-| 13 | **애착** | `aechak` | 愛着 | *love* | àizhe· | `ɛ.ʨʰak̚.` |
+| 13 | **애착** | `aechak` | 依戀、依附、愛著 | *Attachment, deep affection* | àizhe· | `ɛ.ʨʰak̚.` |
 | 14 | **안정** | `anjeong` | 安定 | *Stability* | āndìng | `an.ʥʌŋ.` |
 | 15 | **안동** | `andong` | 安東 | *간고등어 fish common in this city, ANDONG* | āndōng | `an.doŋ.` |
-| 16 | **안부** | `anbu` | 安否 | *safety,welfare* | ānfǒu | `am.bu.` |
+| 16 | **안부** | `anbu` | 問候、安好、安否 | *Regards, greetings, inquiry* | ānfǒu | `am.bu.` |
 | 17 | **암호** | `amho` | 暗號 | *secret code* | ànhào | `am.ho.` |
 | 18 | **암초** | `amcho` | 暗礁 | *reef* | ànjīao | `am.ʨʰo.` |
 | 19 | **안정** | `anjeong` | 安靜 | *Stability* | ānjìng | `an.ʥʌŋ.` |
-| 20 | **안주** | `anju` | 按酒 | *Appetizers for alcohol* | ànjiǔ | `an.ʥu.` |
+| 20 | **안주** | `anju` | 下酒菜、按酒 | *Side dish for drinks, snacks* | ànjiǔ | `an.ʥu.` |
 | 21 | **안락** | `anrak` | 安樂 | *peace of mind* | ānlè | `al.lak̚.` |
 | 22 | **암류** | `amryu` | 暗流 | *undercurrent* | ànliú | `am.nju.` |
 | 23 | **안마** | `anma` | 按摩 | *Massage* | ànmó | `am.ma.` |
-| 24 | **안내** | `annae` | 案內 | *Guidance, conducting* | ànnèi | `an.nɛ.` |
+| 24 | **안내** | `annae` | 引導、接待、介紹、案內 | *Guidance, information, guide* | ànnèi | `an.nɛ.` |
 | 25 | **안녕** | `annyeong` | 安寧 | *hello/goodbye* | ānníng | `an.njʌŋ.` |
 | 26 | **암거** | `amgeo` | 暗渠 | *culvert* | ànqú | `am.ɡʌ.` |
 | 27 | **안전** | `anjeon` | 安全 | *Safety* | ānquán | `an.ʥʌn.` |

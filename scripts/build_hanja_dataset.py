@@ -129,6 +129,15 @@ def parse_glossika_md():
         except Exception:
             hanja_cache = {}
 
+    CUSTOM_HANJA_OVERRIDES = {
+        "애칭": {"c": "暱稱、愛稱", "e": "Nickname, pet name"},
+        "애착": {"c": "依戀、依附、愛著", "e": "Attachment, deep affection"},
+        "애교": {"c": "撒嬌、愛嬌", "e": "Cuteness, charm, aegyo"},
+        "안주": {"c": "下酒菜、按酒", "e": "Side dish for drinks, snacks"},
+        "안내": {"c": "引導、接待、介紹、案內", "e": "Guidance, information, guide"},
+        "안부": {"c": "問候、安好、安否", "e": "Regards, greetings, inquiry"},
+    }
+
     hanja_words = []
     word_id = 1
 
@@ -160,6 +169,14 @@ def parse_glossika_md():
                     english = hanja_cache.get(chinese, "")
                 if not english:
                     english = chinese
+
+                # 套用自訂高精確度校正
+                if hangul in CUSTOM_HANJA_OVERRIDES:
+                    ov = CUSTOM_HANJA_OVERRIDES[hangul]
+                    if "c" in ov:
+                        chinese = ov["c"]
+                    if "e" in ov:
+                        english = ov["e"]
 
                 hanja_words.append({
                     "id": word_id,
