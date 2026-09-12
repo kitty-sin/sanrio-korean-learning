@@ -162,6 +162,11 @@ def parse_glossika_md():
                 word_id += 1
 
     # 3. 解析第三部分 (外來語對照)
+    try:
+        from loanword_translations import LOANWORD_TRANSLATIONS
+    except ImportError:
+        LOANWORD_TRANSLATIONS = {}
+
     loanwords = []
     loan_id = 1
     for l in part3_lines:
@@ -177,9 +182,10 @@ def parse_glossika_md():
 
                 roman = romanize_hangul(hangul)
                 
-                chinese = ""
-                pos = "名詞"
-                if hangul in existing_vocab:
+                # 優先使用完整翻譯字典
+                chinese = LOANWORD_TRANSLATIONS.get(hangul, "")
+                pos = "外來語"
+                if not chinese and hangul in existing_vocab:
                     ev = existing_vocab[hangul]
                     chinese = ev.get('c', '')
                     pos = ev.get('p', '外來語')
