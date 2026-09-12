@@ -744,11 +744,6 @@
                                                             <span className="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded-md border border-gray-100">
                                                                 {word.p || '名詞'}
                                                             </span>
-                                                            {word.py && (
-                                                                <span className="text-[11px] text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100">
-                                                                    {word.py}
-                                                                </span>
-                                                            )}
                                                         </div>
                                                         <button
                                                             onClick={(e) => toggleBookmark(word, e)}
@@ -776,11 +771,6 @@
                                                         <span className="text-sm font-bold text-rose-600 font-mono">
                                                             [{word.r}]
                                                         </span>
-                                                        {word.ipa && (
-                                                            <span className="text-xs text-gray-400 font-mono hidden sm:inline">
-                                                                /{word.ipa}/
-                                                            </span>
-                                                        )}
                                                     </div>
 
                                                     {/* 中文釋義 */}
@@ -931,11 +921,6 @@
                                                         <p className="text-lg md:text-xl font-bold text-rose-600 font-mono">
                                                             [{currentCardWord.r}]
                                                         </p>
-                                                        {currentCardWord.py && (
-                                                            <p className="text-sm text-purple-600 mt-1 font-mono">
-                                                                拼音: {currentCardWord.py}
-                                                            </p>
-                                                        )}
                                                     </div>
 
                                                     <div className="text-center text-xs text-gray-400">

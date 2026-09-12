@@ -120,6 +120,15 @@ def parse_glossika_md():
 
     # 2. 解析第二部分 (漢字詞對照)
     existing_vocab = load_existing_vocab()
+    hanja_cache = {}
+    cache_file = os.path.join(BASE_DIR, "scripts", "hanja_translations_cache.json")
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                hanja_cache = json.load(f)
+        except Exception:
+            hanja_cache = {}
+
     hanja_words = []
     word_id = 1
 
@@ -142,11 +151,15 @@ def parse_glossika_md():
                 pos = "名詞"
                 if hangul in existing_vocab:
                     ev = existing_vocab[hangul]
-                    english = ev.get('e', '')
+                    e_val = ev.get('e', '')
+                    if e_val and not e_val.startswith('Korean expression:'):
+                        english = e_val
                     pos = ev.get('p', '名詞')
                 
                 if not english:
-                    english = f"Hanja word: {chinese} ({pinyin})"
+                    english = hanja_cache.get(chinese, "")
+                if not english:
+                    english = chinese
 
                 hanja_words.append({
                     "id": word_id,
