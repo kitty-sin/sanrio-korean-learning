@@ -671,4 +671,6 @@
 | 5667 | 홍콩 | hongkong | 香港 | Hong Kong |
 | 5668 | 대만 | daeman | 台灣（臺灣） | Taiwan |
 | 5669 | 로스앤젤레스 | roseuaenjellesseu | 洛杉磯（LA） | Los Angeles (LA) |
-| 5670 | 잘자 | jalja | 早唞（晚安、好好睡） | Good night, sleep tight (informal) |
+| 5670 | 잘자 | jalja | 早唞、晚安（平語/非敬語，對朋友晚輩） | Good night, sleep tight (informal) |
+| 5671 | 잘 자요 | jal jayo | 晚安、早唞（日常敬語 / 해요體） | Good night (polite / informal polite) |
+| 5672 | 안녕히 주무세요 | annyeonghi jumuseyo | 祝您晚安安睡、早唞（長輩/上司尊稱敬語） | Good night, sleep peacefully (formal honorific / respectful) |
