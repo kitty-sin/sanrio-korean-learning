@@ -268,7 +268,7 @@ def main():
     with open(OUT_MD, 'w', encoding='utf-8') as f:
         f.write("# 🎀 韓語漢字詞與外來語大辭典 (Hanja & Loanwords Dictionary)\n\n")
         f.write(f"> 收錄 **{len(hanja_words):,} 筆** 核心漢字詞、**{len(syllables)} 組** 單音節漢字矩陣與 **{len(loanwords)} 筆** 常用外來語。\n\n")
-        f.write("## 🈴 核心漢字詞列表\n\n")
+        f.write("## 🧸 核心漢字詞列表\n\n")
         f.write("| 編號 | 韓文 | 羅馬拼音 | 中文 | 英文 | 漢語拼音 | IPA 音標 |\n")
         f.write("| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n")
         for item in hanja_words[:500]:

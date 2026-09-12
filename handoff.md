@@ -104,7 +104,7 @@
     - **100% 中文翻譯補齊**：為全部 242 筆外來語逐一建立繁體中文對照庫（`scripts/loanword_translations.py`），單字卡中英雙語清晰排版。
     - **產出檔案矩陣**：`korean_hanja_dictionary.html`（主應用 SPA）、`korean_hanja_data.js`（6,519 筆資料常數）、`korean_hanja.csv`（完整試算表）、`korean_hanja.md`（對照字典）與 `scripts/build_hanja_dataset.py`（自動化建置管線）。
     - **四大功能模式**：【📋 漢字詞速查字典】+【🎴 3D 萌趣單字卡翻卡測驗】+【🔤 單音節 ↔ 漢字矩陣（支援以字查音與漢字反向檢索）】+【🌐 常用外來語庫】。
-    - **全生態圈無縫互聯**：於主站 `index.html`、大詞庫 `korean_vocab_dictionary.html`、美食手札 `sanrio_korean_food_100.html` 頂部導航列全面新增「🈴 韓語漢字辭典」快捷入口，並支援 `index.html?block=XX` 積木屋跨頁直達。
+    - **全生態圈無縫互聯**：於主站 `index.html`、大詞庫 `korean_vocab_dictionary.html`、美食手札 `sanrio_korean_food_100.html` 頂部導航列全面新增「🧸 韓語漢字辭典」快捷入口，並支援 `index.html?block=XX` 積木屋跨頁直達。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
