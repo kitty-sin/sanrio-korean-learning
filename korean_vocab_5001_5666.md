@@ -674,3 +674,4 @@
 | 5670 | 잘자 | jalja | 早唞、晚安（平語/非敬語，對朋友晚輩） | Good night, sleep tight (informal) |
 | 5671 | 잘 자요 | jal jayo | 晚安、早唞（日常敬語 / 해요體） | Good night (polite / informal polite) |
 | 5672 | 안녕히 주무세요 | annyeonghi jumuseyo | 祝您晚安安睡、早唞（長輩/上司尊稱敬語） | Good night, sleep peacefully (formal honorific / respectful) |
+| 5673 | 초급 | chogeup | 初級、初階 | Beginner level, elementary grade |

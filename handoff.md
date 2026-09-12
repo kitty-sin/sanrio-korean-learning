@@ -90,7 +90,9 @@
     - 導入固定 Header（含發音速控按鈕與關閉鍵）與固定 Footer（關閉與跳轉積木屋），中間主體採用 `max-h-[90vh] overflow-y-auto` 專屬滾動條。
     - 音節數 >= 3 時，桌面端自動啟用自適應雙欄網格（2-column grid），節省 50% 垂直空間。
     - 修復音節序號計算（過濾空格，保證 1..N 連續正確編號）。
-  - **Git 部署**：已推播至 GitHub Pages（Commit `eccf7a7`）。
+- **2026-09-11 17:32 PT**：
+  - **新增常用分級詞彙**：已將 `#5673 초급 (初級 / Beginner Level)`（Level A 名詞）新增至核心詞庫與大字典中。
+  - **全量同步**：`korean_vocab_5666.csv/md`、`korean_vocab_5001_5666.csv/md`、`korean_vocab_5666_data.js`，詞庫總量擴充至 **5,673 筆**。
 - **➡️ 下一步**：
   1. 待使用者有空時，依其自訂的拼音規則批次修改 `hangul_sanrio_deck.html` 中的諧音標籤，並重新匯出覆蓋 `hangul_sanrio_deck_20p.pdf`。
   2. 依學習進度持續擴充進階文法句型或主題練習題庫。
@@ -98,6 +100,6 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-11 17:20 PT
+- **更新時間**：2026-09-11 17:32 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
