@@ -105,6 +105,13 @@
     - **產出檔案矩陣**：`korean_hanja_dictionary.html`（主應用 SPA）、`korean_hanja_data.js`（6,519 筆資料常數）、`korean_hanja.csv`（完整試算表）、`korean_hanja.md`（對照字典）與 `scripts/build_hanja_dataset.py`（自動化建置管線）。
     - **四大功能模式**：【📋 漢字詞速查字典】+【🎴 3D 萌趣單字卡翻卡測驗】+【🔤 單音節 ↔ 漢字矩陣（支援以字查音與漢字反向檢索）】+【🌐 常用外來語庫】。
     - **全生態圈無縫互聯**：於主站 `index.html`、大詞庫 `korean_vocab_dictionary.html`、美食手札 `sanrio_korean_food_100.html` 頂部導航列全面新增「🧸 韓語漢字辭典」快捷入口，並支援 `index.html?block=XX` 積木屋跨頁直達。
+- **2026-09-11 22:10 PT**：
+  - **RDQ 需求探索與視覺升級**：
+    - 依使用者需求透過 **RDQ Method** 完成結構化訪談與規格卡確認（[`rdq/RDQ-spec-hanja-theme-redesign-20260911.md`](file:///c:/Users/PC/Documents/Google-Antigravity/2026-Miscellaneous/Korean-Learning/rdq/RDQ-spec-hanja-theme-redesign-20260911.md)）。
+    - 將 `korean_hanja_dictionary.html` 視覺背景全面升級為「**柔和奶茶暖杏風**」（`linear-gradient(180deg, #FBF4EC 0%, #FAF6F0 100%)`）。
+    - 頂部導航列與搜尋區注入 `backdrop-blur-md` 柔光毛玻璃與暖琥珀邊框（`border-amber-200/50`）。
+    - 6,277 筆單字卡、3D 翻卡測驗、471 單音節矩陣及外來語卡片邊框/標籤全面調和為溫潤護眼的琥珀暖木棕色調。
+    - 專屬圖標全面升級為泰迪熊 `🧸`，變更已成功推播至 GitHub Pages。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -114,6 +121,6 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-11 21:42 PT
+- **更新時間**：2026-09-11 22:10 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
