@@ -93,6 +93,10 @@
 - **2026-09-11 17:32 PT**：
   - **新增常用分級詞彙**：已將 `#5673 초급 (初級 / Beginner Level)`（Level A 名詞）新增至核心詞庫與大字典中。
   - **全量同步**：`korean_vocab_5666.csv/md`、`korean_vocab_5001_5666.csv/md`、`korean_vocab_5666_data.js`，詞庫總量擴充至 **5,673 筆**。
+- **2026-09-11 17:48 PT**：
+  - **建立「韓語詞庫自動化管理管線」**：
+    1. **方案 B 核心 CLI 腳本**：[`scripts/manage_vocab.py`](file:///c:/Users/PC/Documents/Google-Antigravity/2026-Miscellaneous/Korean-Learning/scripts/manage_vocab.py)，支援秒級查重、Unicode 標準拼音生成、5 檔同步原子寫入與 Git 自動部署。
+    2. **方案 A 專屬 Agent 技能**：[`korean-vocab-manager`](file:///C:/Users/PC/.gemini/config/skills/korean-vocab-manager/SKILL.md)，使用者在對話框只要說「`查加 XX`」或「`搜索有沒有 XX，沒有就新增`」，即可全自動觸發管線並輸出精美單字卡片。
 - **➡️ 下一步**：
   1. 待使用者有空時，依其自訂的拼音規則批次修改 `hangul_sanrio_deck.html` 中的諧音標籤，並重新匯出覆蓋 `hangul_sanrio_deck_20p.pdf`。
   2. 依學習進度持續擴充進階文法句型或主題練習題庫。
@@ -100,6 +104,6 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-11 17:32 PT
+- **更新時間**：2026-09-11 17:48 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
