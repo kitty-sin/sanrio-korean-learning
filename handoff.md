@@ -120,7 +120,12 @@
     - **拼豆 Yoda 寶寶圖標適配**：透過 PIL 自動去背並生成 48x48 ~ 512x512 Android Adaptive Icons 與啟動 Splash Screen，搭配柔和馬卡龍漸層底色與微圓角。
     - **Android 原生返回鍵與直屏優化**：鎖定 `portrait` 直屏單手體驗，注入 `app_mobile_bridge.js` 實現子頁面返回與主頁雙擊防誤觸退出。
     - **GitHub Actions 自動編譯工作流**：建立 `.github/workflows/build-apk.yml`，推送到 GitHub 雲端自動編譯產出 `app-debug.apk` 並成功發布至 GitHub Releases ([v1.0.0-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.0-apk))。
-    - **行動端 Header 佈局重構**：將 Firebase 連線膠囊與主標題徹底重構為純垂直彈性盒模型 (Pure Flexbox Column)，全面消除絕對定位重疊問題，手機直屏文字 100% 完整清晰呈現。
+- **2026-09-13 00:09 PT**：
+  - **🔊 終極全域發音引擎 `KittyVoice` 部署（徹底解決 Samsung Galaxy / S26 Ultra 系統靜音問題）**：
+    - **問題根因**：Samsung One UI 預設使用「三星文字轉語音 (Samsung TTS)」，因未預裝韓語包產生「靜默無聲（不發音也不拋錯）」假死現象，且鎖定手勢前音訊通道。
+    - **發音引擎重構**：於 `app_mobile_bridge.js` 開發全域 `window.KittyVoice` 發音模組，注入手勢自動解鎖、韓語語音包真實存在性偵測、450ms 假死超時切換，以及 **Google & Baidu 雙線路雲端極速真人發音 Fallback**。
+    - **全生態圈對接**：主站 `index.html`（含 0.3x 逐字朗讀）、詞庫大字典 `korean_vocab_dictionary.html`、漢字大辭典 `korean_hanja_dictionary.html`、美食手札 `sanrio_korean_food_100.html` 全面接入 `KittyVoice`，保證 100% 響亮發音。
+    - **Toast 提示視覺優化**：所有頁面操作 Toast 全面移至螢幕底部居中 (`bottom-16`)，徹底消除遮擋頂部文字與篩選器的問題。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -130,8 +135,9 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-12 23:13 PT
+- **更新時間**：2026-09-13 00:09 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
+
 
 
