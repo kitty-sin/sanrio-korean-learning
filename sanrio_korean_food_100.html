@@ -565,11 +565,6 @@
             await sleep(50);
             cancelAudioPlayback = false;
 
-            if (!('speechSynthesis' in window)) {
-                alert("您的瀏覽器不支援語音播放功能。");
-                return;
-            }
-
             if (speed === 0.3) {
                 // 🦥 極慢速 0.3x：自動拆解獨立音節 + 450ms 間隔 + 粉紅發光放大跳動
                 const chars = Array.from(text);
@@ -578,33 +573,38 @@
                     
                     const char = chars[i];
                     const charEl = document.getElementById(`syl_${itemId}_${i}`);
+                    if (charEl) charEl.classList.add('syllable-highlight');
 
-                    // Highlight current syllable
-                    if (charEl) {
-                        charEl.classList.add('syllable-highlight');
-                    }
+                    await new Promise((resolve) => {
+                        if (window.KittyVoice && window.KittyVoice.speak) {
+                            window.KittyVoice.speak(char, 0.9, () => resolve());
+                        } else {
+                            try {
+                                const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${encodeURIComponent(char)}`);
+                                audio.onended = () => resolve();
+                                audio.onerror = () => resolve();
+                                audio.play().catch(() => resolve());
+                            } catch (e) {
+                                resolve();
+                            }
+                        }
+                    });
 
-                    // Speak individual syllable (skip whitespace)
-                    if (char.trim() !== '') {
-                        await playSingleSyllableAudio(char);
-                    }
-
-                    // Remove highlight after speech
-                    if (charEl) {
-                        charEl.classList.remove('syllable-highlight');
-                    }
-
+                    if (charEl) charEl.classList.remove('syllable-highlight');
                     if (cancelAudioPlayback) break;
-                    // 450ms precise pause
-                    await sleep(450);
+                    await sleep(450); // 450ms 清晰逐字間隔
                 }
             } else {
-                // 🔊 1.0x 標準速 or 🐢 0.7x 慢速
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'ko-KR';
-                utterance.rate = speed;
-                utterance.pitch = 1.05;
-                window.speechSynthesis.speak(utterance);
+                // 🔊 1.0x 標準 or 🐢 0.7x 慢速
+                if (window.KittyVoice && window.KittyVoice.speak) {
+                    window.KittyVoice.speak(text, speed);
+                } else {
+                    try {
+                        const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${encodeURIComponent(text)}`);
+                        audio.playbackRate = speed;
+                        audio.play().catch(() => {});
+                    } catch (e) {}
+                }
             }
         }
 

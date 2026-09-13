@@ -339,16 +339,17 @@
                 }
             };
 
-            // 雙重發音引擎：Web Speech 優先，自動切換 Google 雲端音頻 Fallback
+            // 全域終極發音引擎 (Samsung S26 / Android WebView / iOS 100% 響亮發音)
             const playAudio = useCallback((text, rate = 1.0) => {
                 if (!text) return;
                 setSpeakingWord(text);
 
-                const playFallback = () => {
+                if (window.KittyVoice && window.KittyVoice.speak) {
+                    window.KittyVoice.speak(text, rate, () => setSpeakingWord(''));
+                } else {
                     try {
                         const cleanText = encodeURIComponent(text.trim());
-                        const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`;
-                        const audio = new Audio(audioUrl);
+                        const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`);
                         audio.playbackRate = rate || 1.0;
                         audio.onended = () => setSpeakingWord('');
                         audio.onerror = () => setSpeakingWord('');
@@ -356,46 +357,6 @@
                     } catch (err) {
                         setSpeakingWord('');
                     }
-                };
-
-                if ('speechSynthesis' in window && window.speechSynthesis) {
-                    try {
-                        window.speechSynthesis.cancel();
-                        if (rate <= 0.35 && text.length > 1) {
-                            let index = 0;
-                            const speakChar = () => {
-                                if (index >= text.length) {
-                                    setSpeakingWord('');
-                                    return;
-                                }
-                                const char = text[index];
-                                const charUtterance = new SpeechSynthesisUtterance(char);
-                                charUtterance.lang = 'ko-KR';
-                                charUtterance.rate = 0.5;
-                                charUtterance.pitch = 1.0;
-                                charUtterance.onend = () => {
-                                    index++;
-                                    setTimeout(speakChar, 450);
-                                };
-                                charUtterance.onerror = () => setSpeakingWord('');
-                                window.speechSynthesis.speak(charUtterance);
-                            };
-                            speakChar();
-                        } else {
-                            const utterance = new SpeechSynthesisUtterance(text);
-                            utterance.lang = 'ko-KR';
-                            utterance.rate = rate;
-                            utterance.pitch = 1.0;
-                            utterance.onend = () => setSpeakingWord('');
-                            utterance.onerror = () => playFallback();
-                            window.speechSynthesis.speak(utterance);
-                        }
-                        return;
-                    } catch (e) {
-                        playFallback();
-                    }
-                } else {
-                    playFallback();
                 }
             }, []);
 

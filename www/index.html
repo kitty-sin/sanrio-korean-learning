@@ -1721,41 +1721,30 @@
 
             const playSingleSyllableAudio = (char) => {
                 return new Promise((resolve) => {
-                    if (!('speechSynthesis' in window)) return resolve();
-                    const utterance = new SpeechSynthesisUtterance(char);
-                    utterance.lang = 'ko-KR';
-                    utterance.rate = 0.9; // 飽滿標準音，不變頻
-                    utterance.onend = () => resolve();
-                    utterance.onerror = () => resolve();
-                    window.speechSynthesis.speak(utterance);
+                    if (window.KittyVoice && window.KittyVoice.speak) {
+                        window.KittyVoice.speak(char, 0.9, () => resolve());
+                    } else {
+                        try {
+                            const cleanText = encodeURIComponent(char.trim());
+                            const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`);
+                            audio.onended = () => resolve();
+                            audio.onerror = () => resolve();
+                            audio.play().catch(() => resolve());
+                        } catch (e) {
+                            resolve();
+                        }
+                    }
                 });
             };
 
             const sleep = (ms) => new Promise(res => setTimeout(res, ms));
 
-            // 發音主函式：三段速支援 + 雲端 Google TTS 雙重 Fallback
+            // 發音主函式：三段速支援 + 全域 KittyVoice 引擎 (Samsung S26 100% 響亮)
             const playSound = async (text, speed = 1.0) => {
                 if (!text) return;
                 stopAllAudio();
                 await sleep(50);
                 audioCancelRef.current = false;
-
-                const playFallback = () => {
-                    try {
-                        const cleanText = encodeURIComponent(text.trim());
-                        const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`;
-                        const audio = new Audio(audioUrl);
-                        audio.playbackRate = speed || 1.0;
-                        audio.play().catch(e => console.log("Audio fallback notice:", e));
-                    } catch (err) {
-                        console.log("Audio fallback err:", err);
-                    }
-                };
-
-                if (!('speechSynthesis' in window) || !window.speechSynthesis) {
-                    playFallback();
-                    return;
-                }
 
                 if (speed === 0.3) {
                     // 🦥 極慢速 0.3x：逐字獨立吐音 + 450ms 間隔 + 動態高亮
@@ -1772,14 +1761,15 @@
                     setHighlightWord('');
                 } else {
                     // 🔊 1.0x 標準 or 🐢 0.7x 慢速
-                    try {
-                        const utterance = new SpeechSynthesisUtterance(text);
-                        utterance.lang = 'ko-KR';
-                        utterance.rate = speed;
-                        utterance.onerror = () => playFallback();
-                        window.speechSynthesis.speak(utterance);
-                    } catch (e) {
-                        playFallback();
+                    if (window.KittyVoice && window.KittyVoice.speak) {
+                        window.KittyVoice.speak(text, speed);
+                    } else {
+                        try {
+                            const cleanText = encodeURIComponent(text.trim());
+                            const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`);
+                            audio.playbackRate = speed || 1.0;
+                            audio.play().catch(() => {});
+                        } catch (e) {}
                     }
                 }
             };

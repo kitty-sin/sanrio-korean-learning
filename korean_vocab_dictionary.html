@@ -354,53 +354,25 @@
                 }
             };
 
-            // 雙重發音引擎：Web Speech 優先，失敗時無縫切換至雲端高音質 Google TTS Fallback
+            // 全域終極發音引擎 (Samsung S26 / Android WebView / iOS 100% 響亮發音)
             const playAudio = useCallback((text, customRate = null) => {
                 if (!text) return;
                 const targetRate = customRate !== null ? customRate : speechRate;
                 setSpeakingWord(text);
 
-                // 備援音頻播放函數 (100% 支援 Android WebView / iOS / 舊版瀏覽器)
-                const playFallback = () => {
+                if (window.KittyVoice && window.KittyVoice.speak) {
+                    window.KittyVoice.speak(text, targetRate, () => setSpeakingWord(''));
+                } else {
                     try {
                         const cleanText = encodeURIComponent(text.trim());
-                        const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`;
-                        const audio = new Audio(audioUrl);
+                        const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`);
                         audio.playbackRate = targetRate || 1.0;
                         audio.onended = () => setSpeakingWord('');
                         audio.onerror = () => setSpeakingWord('');
-                        audio.play().catch(e => {
-                            console.log("Audio fallback notice:", e);
-                            setSpeakingWord('');
-                        });
-                    } catch (err) {
+                        audio.play().catch(() => setSpeakingWord(''));
+                    } catch (e) {
                         setSpeakingWord('');
                     }
-                };
-
-                // 優先嘗試 Web Speech API
-                if ('speechSynthesis' in window && window.speechSynthesis) {
-                    try {
-                        window.speechSynthesis.cancel();
-                        const utterance = new SpeechSynthesisUtterance(text);
-                        utterance.lang = 'ko-KR';
-                        utterance.rate = targetRate;
-                        utterance.pitch = 1.05;
-
-                        utterance.onend = () => setSpeakingWord('');
-                        utterance.onerror = () => {
-                            // Web Speech 出錯時自動切換雲端備援
-                            playFallback();
-                        };
-                        window.speechSynthesis.speak(utterance);
-                        return;
-                    } catch (e) {
-                        console.warn("Web Speech error, falling back:", e);
-                        playFallback();
-                    }
-                } else {
-                    // 若環境不支援 Web Speech，直接使用雲端備援發音
-                    playFallback();
                 }
             }, [speechRate]);
 
