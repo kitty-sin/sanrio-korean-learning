@@ -354,23 +354,54 @@
                 }
             };
 
-            // 語音朗讀函數
+            // 雙重發音引擎：Web Speech 優先，失敗時無縫切換至雲端高音質 Google TTS Fallback
             const playAudio = useCallback((text, customRate = null) => {
-                if (!('speechSynthesis' in window)) {
-                    showToast("⚠️ 您的瀏覽器不支援 Web Speech 發音");
-                    return;
-                }
-                window.speechSynthesis.cancel();
+                if (!text) return;
+                const targetRate = customRate !== null ? customRate : speechRate;
                 setSpeakingWord(text);
 
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'ko-KR';
-                utterance.rate = customRate !== null ? customRate : speechRate;
-                utterance.pitch = 1.05;
+                // 備援音頻播放函數 (100% 支援 Android WebView / iOS / 舊版瀏覽器)
+                const playFallback = () => {
+                    try {
+                        const cleanText = encodeURIComponent(text.trim());
+                        const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`;
+                        const audio = new Audio(audioUrl);
+                        audio.playbackRate = targetRate || 1.0;
+                        audio.onended = () => setSpeakingWord('');
+                        audio.onerror = () => setSpeakingWord('');
+                        audio.play().catch(e => {
+                            console.log("Audio fallback notice:", e);
+                            setSpeakingWord('');
+                        });
+                    } catch (err) {
+                        setSpeakingWord('');
+                    }
+                };
 
-                utterance.onend = () => setSpeakingWord('');
-                utterance.onerror = () => setSpeakingWord('');
-                window.speechSynthesis.speak(utterance);
+                // 優先嘗試 Web Speech API
+                if ('speechSynthesis' in window && window.speechSynthesis) {
+                    try {
+                        window.speechSynthesis.cancel();
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        utterance.lang = 'ko-KR';
+                        utterance.rate = targetRate;
+                        utterance.pitch = 1.05;
+
+                        utterance.onend = () => setSpeakingWord('');
+                        utterance.onerror = () => {
+                            // Web Speech 出錯時自動切換雲端備援
+                            playFallback();
+                        };
+                        window.speechSynthesis.speak(utterance);
+                        return;
+                    } catch (e) {
+                        console.warn("Web Speech error, falling back:", e);
+                        playFallback();
+                    }
+                } else {
+                    // 若環境不支援 Web Speech，直接使用雲端備援發音
+                    playFallback();
+                }
             }, [speechRate]);
 
             // 過濾全部詞彙
@@ -478,9 +509,9 @@
                     <div className="ambient-glow-3"></div>
 
                     <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-6 relative z-10">
-                        {/* Toast 提示條 */}
+                        {/* Toast 提示條：改至螢幕底部居中，採用柔和深色毛玻璃，絕不遮擋上方內容 */}
                         {toastMessage && (
-                            <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-rose-600 text-white px-5 py-2.5 rounded-full text-xs md:text-sm font-bold shadow-xl flex items-center gap-2 animate-bounce">
+                            <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 text-white px-5 py-2.5 rounded-full text-xs md:text-sm font-bold shadow-2xl backdrop-blur-md flex items-center gap-2 transition-all">
                                 <span>✨</span>
                                 <span>{toastMessage}</span>
                             </div>

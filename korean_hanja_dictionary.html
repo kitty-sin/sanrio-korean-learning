@@ -339,43 +339,63 @@
                 }
             };
 
-            // 語音播放引擎 (Web Speech API)
+            // 雙重發音引擎：Web Speech 優先，自動切換 Google 雲端音頻 Fallback
             const playAudio = useCallback((text, rate = 1.0) => {
-                if (!('speechSynthesis' in window)) {
-                    showToast("您的瀏覽器不支援語音合成");
-                    return;
-                }
-                window.speechSynthesis.cancel();
+                if (!text) return;
                 setSpeakingWord(text);
 
-                if (rate <= 0.35 && text.length > 1) {
-                    let index = 0;
-                    const speakChar = () => {
-                        if (index >= text.length) {
-                            setSpeakingWord('');
-                            return;
+                const playFallback = () => {
+                    try {
+                        const cleanText = encodeURIComponent(text.trim());
+                        const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`;
+                        const audio = new Audio(audioUrl);
+                        audio.playbackRate = rate || 1.0;
+                        audio.onended = () => setSpeakingWord('');
+                        audio.onerror = () => setSpeakingWord('');
+                        audio.play().catch(() => setSpeakingWord(''));
+                    } catch (err) {
+                        setSpeakingWord('');
+                    }
+                };
+
+                if ('speechSynthesis' in window && window.speechSynthesis) {
+                    try {
+                        window.speechSynthesis.cancel();
+                        if (rate <= 0.35 && text.length > 1) {
+                            let index = 0;
+                            const speakChar = () => {
+                                if (index >= text.length) {
+                                    setSpeakingWord('');
+                                    return;
+                                }
+                                const char = text[index];
+                                const charUtterance = new SpeechSynthesisUtterance(char);
+                                charUtterance.lang = 'ko-KR';
+                                charUtterance.rate = 0.5;
+                                charUtterance.pitch = 1.0;
+                                charUtterance.onend = () => {
+                                    index++;
+                                    setTimeout(speakChar, 450);
+                                };
+                                charUtterance.onerror = () => setSpeakingWord('');
+                                window.speechSynthesis.speak(charUtterance);
+                            };
+                            speakChar();
+                        } else {
+                            const utterance = new SpeechSynthesisUtterance(text);
+                            utterance.lang = 'ko-KR';
+                            utterance.rate = rate;
+                            utterance.pitch = 1.0;
+                            utterance.onend = () => setSpeakingWord('');
+                            utterance.onerror = () => playFallback();
+                            window.speechSynthesis.speak(utterance);
                         }
-                        const char = text[index];
-                        const charUtterance = new SpeechSynthesisUtterance(char);
-                        charUtterance.lang = 'ko-KR';
-                        charUtterance.rate = 0.5;
-                        charUtterance.pitch = 1.0;
-                        charUtterance.onend = () => {
-                            index++;
-                            setTimeout(speakChar, 450);
-                        };
-                        charUtterance.onerror = () => setSpeakingWord('');
-                        window.speechSynthesis.speak(charUtterance);
-                    };
-                    speakChar();
+                        return;
+                    } catch (e) {
+                        playFallback();
+                    }
                 } else {
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'ko-KR';
-                    utterance.rate = rate;
-                    utterance.pitch = 1.05;
-                    utterance.onend = () => setSpeakingWord('');
-                    utterance.onerror = () => setSpeakingWord('');
-                    window.speechSynthesis.speak(utterance);
+                    playFallback();
                 }
             }, []);
 
@@ -508,9 +528,9 @@
                     <div className="ambient-glow-3"></div>
 
                     <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-6 relative z-10">
-                        {/* Toast 提示條 */}
+                        {/* Toast 提示條：改至螢幕底部居中，採用柔和深色毛玻璃，絕不遮擋上方內容 */}
                         {toastMessage && (
-                            <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-rose-600 text-white px-5 py-2.5 rounded-full text-xs md:text-sm font-bold shadow-xl flex items-center gap-2 animate-bounce">
+                            <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 text-white px-5 py-2.5 rounded-full text-xs md:text-sm font-bold shadow-2xl backdrop-blur-md flex items-center gap-2 transition-all">
                                 <span>✨</span>
                                 <span>{toastMessage}</span>
                             </div>
