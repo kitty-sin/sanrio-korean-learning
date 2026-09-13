@@ -112,24 +112,26 @@
     - 頂部導航列與搜尋區注入 `backdrop-blur-md` 柔光毛玻璃與暖琥珀邊框（`border-amber-200/50`）。
     - 6,277 筆單字卡、3D 翻卡測驗、471 單音節矩陣及外來語卡片邊框/標籤全面調和為溫潤護眼的琥珀暖木棕色調。
     - 專屬圖標全面升級為泰迪熊 `🧸`，變更已成功推播至 GitHub Pages。
-- **2026-09-12 22:48 PT**：
+- **2026-09-12 23:13 PT**：
   - **📱 Android 原生 App 升級封裝《KITTY 韓語積木大冒險 🌟》**：
     - **RDQ 規格確立**：完成 RDQ 需求訪談與規格卡簽核（[`rdq/RDQ-spec-android-app-capacitor-20260912.md`](file:///c:/Users/PC/Documents/Google-Antigravity/2026-Miscellaneous/Korean-Learning/rdq/RDQ-spec-android-app-capacitor-20260912.md)）。
     - **App 活潑命名**：正式命名為 **《KITTY 韓語積木大冒險 🌟》** (`KITTY Korean Adventure`，Package ID: `com.kittysin.koreanlearning`)。
-    - **零重複打包架構**：採用 **Capacitor 6.x 雲端熱更新 + 本地 Service Worker 離線快取 (`sw.js`)**，實現一次安裝 APK、未來增詞改版手機自動靜默同步、0 Token 浪費。
+    - **零重複打包架構**：採用 **Capacitor 6.x 雲端熱更新 + 本地 Service Worker 離線快取 (`sw.js` v1.0.2)**，實現一次安裝 APK、未來增詞改版手機自動靜默同步、0 Token 浪費。
     - **拼豆 Yoda 寶寶圖標適配**：透過 PIL 自動去背並生成 48x48 ~ 512x512 Android Adaptive Icons 與啟動 Splash Screen，搭配柔和馬卡龍漸層底色與微圓角。
     - **Android 原生返回鍵與直屏優化**：鎖定 `portrait` 直屏單手體驗，注入 `app_mobile_bridge.js` 實現子頁面返回與主頁雙擊防誤觸退出。
-    - **GitHub Actions 自動編譯工作流**：建立 `.github/workflows/build-apk.yml`，推送到 GitHub 即由雲端自動編譯產出 `app-debug.apk` 並建立 Release 下載。
+    - **GitHub Actions 自動編譯工作流**：建立 `.github/workflows/build-apk.yml`，推送到 GitHub 雲端自動編譯產出 `app-debug.apk` 並成功發布至 GitHub Releases ([v1.0.0-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.0-apk))。
+    - **行動端 Header 佈局重構**：將 Firebase 連線膠囊與主標題徹底重構為純垂直彈性盒模型 (Pure Flexbox Column)，全面消除絕對定位重疊問題，手機直屏文字 100% 完整清晰呈現。
 - **➡️ 下一步**：
-  1. 執行 Git Push 觸發 GitHub Actions 自動編譯出第一個 Android APK 安裝檔供手機安裝。
-  2. 持續豐富漢字詞庫之生活例句與成語聯想。
+  1. 持續豐富漢字詞庫之生活例句與成語聯想。
+  2. 依學習反饋擴充更多漢字部首與音變口訣。
   3. 待使用者有空時，依其自訂的拼音規則批次修改 `hangul_sanrio_deck.html` 中的諧音標籤，並重新匯出覆蓋 `hangul_sanrio_deck_20p.pdf`。
   4. 依學習進度持續擴充進階文法句型或主題練習題庫。
 
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-12 22:48 PT
+- **更新時間**：2026-09-12 23:13 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
+
 

@@ -18,11 +18,18 @@
 
 ```
 Korean-Learning/
+├── .github/workflows/
+│   └── build-apk.yml            # GitHub Actions Android APK 自動編譯與 Release 工作流
+├── android/                     # Android 原生專案代碼 (Capacitor 6.x Gradle 專案)
+├── assets/                      # 拼豆 Yoda 寶寶 App Icon 與 Splash 啟動畫面圖資
 ├── rdq/
-│   └── RDQ-spec-hanja-theme-redesign-20260911.md # RDQ 需求規格卡 (漢字大辭典暖杏視覺改版)
+│   ├── RDQ-spec-android-app-capacitor-20260912.md # RDQ 規格卡 (Android 原生 App 封裝)
+│   └── RDQ-spec-hanja-theme-redesign-20260911.md # RDQ 規格卡 (漢字大辭典暖杏視覺改版)
 ├── scripts/
 │   ├── manage_vocab.py          # 韓語核心詞庫自動化管理 CLI (查重+拼音+5檔同步+Git部署)
 │   ├── build_hanja_dataset.py   # 韓語漢字大辭典資料集建置管線
+│   ├── generate_app_assets.py   # 拼豆 Yoda 圖標精修與 Adaptive Icon 生成器
+│   ├── deploy_android_icons.py  # Android mipmap 各尺寸圖標部署腳本
 │   └── loanword_translations.py # 242 筆外來語繁體中文對照字典
 ├── index.html                   # 主應用 SPA (React 18 + Tailwind + Firebase + Web Speech)
 ├── korean_vocab_dictionary.html # 韓語核心詞庫大字典 (TOPIK 全量速查 + 萌趣單字卡 + 結構拆解)
@@ -36,6 +43,10 @@ Korean-Learning/
 ├── sanrio_korean_food_100.md    # 100 種常見食物 Markdown 清單
 ├── korean_vocab_5666.csv        # 5,673 筆 TOPIK 核心詞庫總表
 ├── korean_vocab_5666.md         # 5,673 筆核心詞庫 Markdown 字典
+├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
+├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
+├── sw.js                        # Service Worker 離線快取核心 (v1.0.2)
+├── package.json                 # 專案套件管理與 Capacitor 依賴
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔
 └── README.md                    # 專案公開說明文件
