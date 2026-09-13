@@ -30,6 +30,11 @@ jobs:
       - name: 📦 Install Node Dependencies
         run: npm install --no-audit
 
+      - name: 📁 Ensure Assets Directory Exists
+        run: |
+          mkdir -p android/app/src/main/assets
+          mkdir -p www
+
       - name: 🔄 Sync Capacitor Android
         run: npx cap sync android
 
