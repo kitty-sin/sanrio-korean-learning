@@ -1,0 +1,22 @@
+﻿{
+  "name": "sanrio-korean-learning",
+  "version": "1.0.0",
+  "description": "KITTY 韓語積木大冒險 (KITTY Korean Adventure) - Android App",
+  "main": "index.html",
+  "scripts": {
+    "cap:sync": "cap sync",
+    "cap:build": "cap copy android",
+    "cap:open": "cap open android"
+  },
+  "keywords": ["korean", "learning", "sanrio", "android", "capacitor"],
+  "author": "kitty-sin",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/app": "^6.0.2",
+    "@capacitor/core": "^6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}

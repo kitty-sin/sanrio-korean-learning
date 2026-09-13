@@ -2,3 +2,20 @@ firebase-debug.log
 .DS_Store
 Thumbs.db
 
+# Node.js
+node_modules/
+package-lock.json
+
+# Android Build Caches & Outputs
+.gradle/
+android/.gradle/
+android/build/
+android/app/build/
+android/captures/
+android/.idea/
+android/*.iml
+android/app/*.iml
+local.properties
+*.apk
+*.aab
+www/

@@ -1,0 +1,70 @@
+﻿name: 📱 Build Android APK (KITTY 韓語積木大冒險)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ☕ Setup Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: 🟢 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Node Dependencies
+        run: npm install --no-audit
+
+      - name: 🔄 Sync Capacitor Android
+        run: npx cap sync android
+
+      - name: 🛠️ Setup Gradle Permissions
+        run: chmod +x android/gradlew
+
+      - name: 🚀 Build Debug APK with Gradle
+        run: |
+          cd android
+          ./gradlew assembleDebug --stacktrace
+
+      - name: 📤 Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KITTY-Korean-Adventure-Debug-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+
+      - name: 🏷️ Create / Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0-apk
+          name: "🌟 KITTY 韓語積木大冒險 Android App (v1.0.0)"
+          body: |
+            ## 📱 KITTY 韓語積木大冒險 🌟 (Android APK)
+            
+            - **版本**：v1.0.0
+            - **同步架構**：Capacitor 雲端即時熱更新 + 本地 Service Worker 離線快取
+            - **特色**：
+              - 🧸 拼豆 Yoda 寶寶萌趣圖示
+              - 📚 5,673 筆核心詞庫 + 6,519 筆漢字大辭典
+              - 🔊 韓語發音、3D 單字卡、拼音積木屋
+              - ⚡ 未來增字 0 重新打包，打開手機自動同步
+          files: android/app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -59,6 +59,7 @@ Korean-Learning/
 - [x] **全生態圈雙向無縫互聯** (主站、核心大字典、漢字大辭典、美食清單、PDF 講義與積木屋跨頁參數傳遞)
 - [x] **自動化詞庫管理管線** (`scripts/manage_vocab.py` + `scripts/build_hanja_dataset.py` + `korean-vocab-manager` Agent Skill，支援「查加 XX」全自動秒級查重、拼音生成、5 檔同步與 Git 自動部署)
 - [x] **RDQ Method 需求探索規格卡體系** (完成韓語漢字辭典視覺改版需求訪談、規格卡落地與執行驗證)
+- [x] **📱 Android 原生 App 封裝《KITTY 韓語積木大冒險 🌟》** (Capacitor 6.x + 雲端即時熱更新 + Service Worker 離線快取 + 拼豆 Yoda 寶寶萌趣 Adaptive 圖示 + 原生返回鍵防護 + GitHub Actions 自動編譯 APK 工作流)
 
 ---
 
