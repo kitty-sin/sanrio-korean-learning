@@ -1,5 +1,5 @@
-﻿// KITTY 韓語積木大冒險 - Service Worker 離線快取
-const CACHE_NAME = 'kitty-korean-v1.0.0';
+﻿// KITTY 韓語積木大冒險 - Service Worker 離線快取 v1.0.2
+const CACHE_NAME = 'kitty-korean-v1.0.2';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -13,10 +13,11 @@ const STATIC_ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(STATIC_ASSETS);
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
@@ -31,18 +32,35 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // 對於 HTML / JS / 音頻 / CDN 資源採用 Network First 回退 Cache 策略
+  // 對 HTML 導航請求一律採用 Network First，獲取最新版排版
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // 其他靜態資源採用 Cache First 回退 Network
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        if (response && response.status === 200 && event.request.method === 'GET') {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
-        }
-        return response;
-      })
-      .catch(() => caches.match(event.request))
+    caches.match(event.request).then((cached) => {
+      if (cached) {
+        // 背景更新快取 (Stale-While-Revalidate)
+        fetch(event.request).then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
+          }
+        }).catch(() => {});
+        return cached;
+      }
+      return fetch(event.request);
+    })
   );
 });

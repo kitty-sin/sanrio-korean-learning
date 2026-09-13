@@ -1,10 +1,10 @@
 ﻿// KITTY 韓語積木大冒險 - Mobile & Android 原生橋接與返回鍵防護
 (function() {
-  // 1. 自動註冊 Service Worker 離線快取
+  // 1. 自動註冊並即時更新 Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
       navigator.serviceWorker.register('./sw.js').then(function(reg) {
-        console.log('🌟 [KITTY 樂園] Service Worker 註冊成功，離線快取已就緒！');
+        reg.update(); // 每次開啟 App 強制向雲端檢查是否有最新版本
       }).catch(function(err) {
         console.log('Service Worker 註冊略過:', err);
       });
