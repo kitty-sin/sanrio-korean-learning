@@ -119,7 +119,7 @@
     - **零重複打包架構**：採用 **Capacitor 6.x 雲端熱更新 + 本地 Service Worker 離線快取 (`sw.js` v1.0.2)**，實現一次安裝 APK、未來增詞改版手機自動靜默同步、0 Token 浪費。
     - **拼豆 Yoda 寶寶圖標適配**：透過 PIL 自動去背並生成 48x48 ~ 512x512 Android Adaptive Icons 與啟動 Splash Screen，搭配柔和馬卡龍漸層底色與微圓角。
     - **Android 原生返回鍵與直屏優化**：鎖定 `portrait` 直屏單手體驗，注入 `app_mobile_bridge.js` 實現子頁面返回與主頁雙擊防誤觸退出。
-    - **GitHub Actions 自動編譯工作流**：建立 `.github/workflows/build-apk.yml`，推送到 GitHub 雲端自動編譯產出 `app-debug.apk` 並成功發布至 GitHub Releases ([v1.0.0-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.0-apk))。
+    - **GitHub Actions 自動編譯工作流**：建立 `.github/workflows/build-apk.yml`，推送到 GitHub 雲端自動編譯產出 `app-debug.apk` 與成功發布至 GitHub Releases ([v1.0.0-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.0-apk))。
 - **2026-09-13 00:09 PT**：
   - **🔊 終極全域發音引擎 `KittyVoice` 部署（徹底解決 Samsung Galaxy / S26 Ultra 系統靜音問題）**：
     - **問題根因**：Samsung One UI 預設使用「三星文字轉語音 (Samsung TTS)」，因未預裝韓語包產生「靜默無聲（不發音也不拋錯）」假死現象，且鎖定手勢前音訊通道。
