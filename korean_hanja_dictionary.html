@@ -316,24 +316,31 @@
                 if (bookQ === 'true') setOnlyBookmarks(true);
             }, []);
 
-            // 輸入防手震 (Debounce) 即時搜尋：保護韓語組字 (IME Composition)，流暢不卡頓
+            // 輸入防手震 (Debounce) 即時搜尋
             useEffect(() => {
                 const timer = setTimeout(() => {
-                    if (!isComposingRef.current) {
-                        setSearchTerm(inputVal);
-                    }
-                }, 200);
+                    setSearchTerm(inputVal.trim());
+                }, 180);
                 return () => clearTimeout(timer);
             }, [inputVal]);
 
             const handleSearchSubmit = (e) => {
                 if (e) e.preventDefault();
-                setSearchTerm(inputVal);
+                const q = inputVal.trim();
+                setSearchTerm(q);
+                setCurrentPage(1);
+                setTimeout(() => {
+                    const el = document.getElementById('hanja-results-section');
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 60);
             };
 
             const handleClearSearch = () => {
                 setInputVal('');
                 setSearchTerm('');
+                setCurrentPage(1);
             };
 
             // 儲存收藏至 LocalStorage 與 Firebase
@@ -660,16 +667,10 @@
                                             spellCheck="false"
                                             value={inputVal}
                                             onChange={e => setInputVal(e.target.value)}
-                                            onCompositionStart={() => { isComposingRef.current = true; }}
-                                            onCompositionEnd={(e) => {
-                                                isComposingRef.current = false;
-                                                setInputVal(e.target.value);
-                                                setSearchTerm(e.target.value);
-                                            }}
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter') {
                                                     e.preventDefault();
-                                                    setSearchTerm(inputVal);
+                                                    handleSearchSubmit();
                                                 }
                                             }}
                                             placeholder={
@@ -738,17 +739,31 @@
                         {/* ==================== 1. 漢字詞速查字典視圖 ==================== */}
                         {viewMode === 'dictionary' && (
                             <div>
-                                <div className="flex items-center justify-between mb-4 px-2">
-                                    <p className="text-xs text-stone-500 font-bold">
-                                        共檢索到 <span className="text-amber-700 font-black">{filteredHanjaList.length}</span> 筆漢字詞
-                                        {selectedLetter !== 'ALL' && ` (首字母: ${selectedLetter})`}
-                                    </p>
+                                <div id="hanja-results-section" className="flex items-center justify-between mb-4 px-3 py-2 bg-white/60 rounded-2xl border border-amber-100/80 flex-wrap gap-2 scroll-mt-4">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <p className="text-xs text-stone-500 font-bold">
+                                            共檢索到 <span className="text-amber-700 font-black">{filteredHanjaList.length}</span> 筆漢字詞
+                                            {selectedLetter !== 'ALL' && ` (首字母: ${selectedLetter})`}
+                                        </p>
+                                        {searchTerm && (
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 shadow-2xs">
+                                                <span>🔍 關鍵字：「{searchTerm}」</span>
+                                                <button 
+                                                    onClick={handleClearSearch}
+                                                    className="hover:text-amber-950 text-amber-700 font-extrabold cursor-pointer bg-white/70 hover:bg-white w-4 h-4 rounded-full flex items-center justify-center text-[10px]"
+                                                    title="清除關鍵字"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </span>
+                                        )}
+                                    </div>
                                     <div className="flex items-center gap-2">
                                         <span className="text-xs text-stone-400">每頁顯示:</span>
                                         <select
                                             value={pageSize}
                                             onChange={e => setPageSize(Number(e.target.value))}
-                                            className="text-xs border border-amber-200 rounded-xl px-2 py-1 bg-white text-stone-700 focus:outline-none"
+                                            className="text-xs border border-amber-200 rounded-xl px-2 py-1 bg-white text-stone-700 focus:outline-none font-bold"
                                         >
                                             <option value={20}>20 筆</option>
                                             <option value={50}>50 筆</option>

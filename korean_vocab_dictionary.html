@@ -330,24 +330,31 @@
                 if (bookQ === 'true') setOnlyBookmarks(true);
             }, []);
 
-            // 輸入防手震 (Debounce) 即時搜尋：保護韓語注音/組字 (IME Composition)，避免每次擊鍵卡頓掉字
+            // 輸入防手震 (Debounce) 即時搜尋
             useEffect(() => {
                 const timer = setTimeout(() => {
-                    if (!isComposingRef.current) {
-                        setSearchTerm(inputVal);
-                    }
-                }, 200);
+                    setSearchTerm(inputVal.trim());
+                }, 180);
                 return () => clearTimeout(timer);
             }, [inputVal]);
 
             const handleSearchSubmit = (e) => {
                 if (e) e.preventDefault();
-                setSearchTerm(inputVal);
+                const q = inputVal.trim();
+                setSearchTerm(q);
+                setCurrentPage(1);
+                setTimeout(() => {
+                    const el = document.getElementById('search-results-section');
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 60);
             };
 
             const handleClearSearch = () => {
                 setInputVal('');
                 setSearchTerm('');
+                setCurrentPage(1);
             };
 
             // 儲存收藏至 LocalStorage
@@ -644,16 +651,10 @@
                                         spellCheck="false"
                                         value={inputVal}
                                         onChange={(e) => setInputVal(e.target.value)}
-                                        onCompositionStart={() => { isComposingRef.current = true; }}
-                                        onCompositionEnd={(e) => {
-                                            isComposingRef.current = false;
-                                            setInputVal(e.target.value);
-                                            setSearchTerm(e.target.value);
-                                        }}
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
                                                 e.preventDefault();
-                                                setSearchTerm(inputVal);
+                                                handleSearchSubmit();
                                             }
                                         }}
                                         placeholder="輸入韓文、中文釋義、羅馬拼音或英文速查（如：사람、人、saram、person）..."
@@ -754,11 +755,25 @@
                     {viewMode === 'dictionary' && (
                         <div className="space-y-4">
                             {/* 統計與分頁列 */}
-                            <div className="flex flex-col sm:flex-row justify-between items-center bg-white px-5 py-3 rounded-2xl border border-rose-100 gap-3">
-                                <p className="text-xs text-gray-500 font-medium">
-                                    共篩選出 <strong className="text-rose-600 font-bold text-sm">{filteredList.length}</strong> 個詞彙
-                                    {filteredList.length > 0 && ` (第 ${(currentPage-1)*pageSize + 1} - ${Math.min(currentPage*pageSize, filteredList.length)} 個)`}
-                                </p>
+                            <div id="search-results-section" className="flex flex-col sm:flex-row justify-between items-center bg-white px-5 py-3.5 rounded-2xl border border-rose-100 gap-3 shadow-xs scroll-mt-4">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <p className="text-xs text-gray-500 font-medium">
+                                        共篩選出 <strong className="text-rose-600 font-bold text-sm">{filteredList.length}</strong> 個詞彙
+                                        {filteredList.length > 0 && ` (第 ${(currentPage-1)*pageSize + 1} - ${Math.min(currentPage*pageSize, filteredList.length)} 個)`}
+                                    </p>
+                                    {searchTerm && (
+                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700 border border-rose-200 shadow-2xs">
+                                            <span>🔍 關鍵字：「{searchTerm}」</span>
+                                            <button 
+                                                onClick={handleClearSearch}
+                                                className="hover:text-rose-900 text-rose-500 font-extrabold cursor-pointer bg-white/70 hover:bg-white w-4 h-4 rounded-full flex items-center justify-center text-[10px]"
+                                                title="清除關鍵字"
+                                            >
+                                                ✕
+                                            </button>
+                                        </span>
+                                    )}
+                                </div>
 
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs text-gray-400">每頁:</span>
