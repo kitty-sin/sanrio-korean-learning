@@ -172,9 +172,10 @@
                 </div>
 
                 <!-- Search Input -->
-                <div class="relative">
-                    <input type="text" id="searchInput" oninput="filterWords()" placeholder="搜尋食物 / 韓文 / 拼音..." class="w-36 md:w-48 pl-8 pr-3 py-2 text-xs bg-gray-50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 font-medium">
-                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-gray-400 text-xs"></i>
+                <div class="relative flex items-center">
+                    <input type="search" id="searchInput" oninput="filterWords()" placeholder="搜尋食物 / 韓文 / 拼音..." class="w-36 md:w-56 pl-8 pr-7 py-2 text-xs bg-gray-50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 font-bold kr-font text-gray-800">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-pink-400 text-xs pointer-events-none"></i>
+                    <button id="clearSearchBtn" onclick="document.getElementById('searchInput').value=''; filterWords(); this.classList.add('hidden');" class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-gray-200 hover:bg-gray-300 rounded-full text-[10px] text-gray-600 font-bold flex items-center justify-center">✕</button>
                 </div>
 
                 <!-- Print to PDF Button -->
@@ -618,13 +619,19 @@
 
         // Filter words across all pages
         function filterWords() {
-            const query = document.getElementById("searchInput").value.trim().toLowerCase();
+            const input = document.getElementById("searchInput");
+            const query = input.value.trim().toLowerCase();
+            const clearBtn = document.getElementById("clearSearchBtn");
+            if (clearBtn) {
+                if (query) clearBtn.classList.remove('hidden');
+                else clearBtn.classList.add('hidden');
+            }
             const rows = document.querySelectorAll(".food-row");
             
             rows.forEach(row => {
-                const kr = row.getAttribute("data-kr").toLowerCase();
-                const py = row.getAttribute("data-py").toLowerCase();
-                const zh = row.getAttribute("data-zh").toLowerCase();
+                const kr = (row.getAttribute("data-kr") || "").toLowerCase();
+                const py = (row.getAttribute("data-py") || "").toLowerCase();
+                const zh = (row.getAttribute("data-zh") || "").toLowerCase();
                 
                 if (kr.includes(query) || py.includes(query) || zh.includes(query)) {
                     row.style.display = "";
