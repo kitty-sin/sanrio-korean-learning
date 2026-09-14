@@ -38,6 +38,7 @@ Korean-Learning/
 ├── korean_hanja.csv             # 6,519 筆漢字詞與外來語 CSV 總表
 ├── korean_hanja.md              # 漢字詞對照 Markdown 字典
 ├── korean_vocab_5666_data.js    # 5,673 筆高壓縮常數數據集
+├── kitty_search_engine.js       # 全域智慧多語言搜尋引擎 (繁簡雙向通搜 + 韓語 NFC/初聲 + 英文拼音)
 ├── hangul_sanrio_deck_20p.pdf   # 20 頁超大字 Sanrio 拼音總表 (PDF 直連瀏覽)
 ├── sanrio_korean_food_100.html  # 100 種常見食物發音打卡學習手札 (含 0.3x 口型)
 ├── sanrio_korean_food_100.md    # 100 種常見食物 Markdown 清單

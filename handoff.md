@@ -130,6 +130,17 @@
   - **🚀 Android 原生 `TextToSpeech` 底層直連成功 (v1.0.1-apk 驗證通過)**：
     - 在 `MainActivity.java` 成功注入 Android 官方原生 `TextToSpeech` JavascriptInterface。
     - 成功直連 Samsung S26 Ultra 系統底層 Samsung TTS 韓語語音引擎，使用者實機測試發音響亮、清晰、零延遲，全量 5,673 詞庫與 6,519 漢字辭典完美發音！
+- **2026-09-13 22:42 PT**：
+  - **🔍 全域智慧多語言搜尋引擎 `KittySearch` 研發與全站部署 (`kitty_search_engine.js`)**：
+    - **問題根因**：
+      1. **簡繁體中文失配**：詞庫資料集均以繁體中文建立，當使用者輸入簡體字（如「时间」、「买」、「书」、「鸡」）時，字元編碼不同導致 0 筆匹配；而英文（如 "time"、"buy"、"chicken"）因英文字串精確匹配而正常。
+      2. **韓語 Unicode 編碼差異**：手機輸入法（Samsung / Gboard / iOS）輸出之韓語可能帶有 NFD 拆解形式，與資料庫之 NFC 預組字元無法直接 `includes`。
+      3. **美食清單缺乏自動跳轉與折疊**：搜尋時未自動將畫面平滑滾動至匹配卡片，且整頁空白未隱藏。
+    - **架構升級**：
+      - 開發 `kitty_search_engine.js`，內建 3,882 組完整簡繁雙向對照字典、韓語 Unicode NFC 正規化比對、韓語初聲（Choseong，如 `ㅅㄹ` 搜 `사람`）比對演算法。
+      - `korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`sanrio_korean_food_100.html` 全面接入 `KittySearch`，支援繁體、簡體、韓文全字、韓文初聲、羅馬拼音、英文全方位秒級通搜！
+      - 美食清單新增實體「🔍 搜尋」按鈕與 Enter 送出、無結果頁面自動折疊、搜尋後自動平滑滾動定位至第一筆結果。
+      - Service Worker 升級至 `v1.0.9`，全面同步快取。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -139,9 +150,10 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-13 21:20 PT
+- **更新時間**：2026-09-13 22:42 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
+
 
 
 
