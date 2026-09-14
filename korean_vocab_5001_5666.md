@@ -1,7 +1,5 @@
 # 韓語常用 5001-5666 詞彙表 (Korean Core Vocabulary 5001-5666)
 
-| 編號 | 韓文 | 羅馬拼音 | 中文 | 英文 |
-| :---: | :--- | :--- | :--- | :--- |
 | 5001 | 상금 | sanggeum | 獎金、賞金 | Prize money |
 | 5002 | 수저 | sujeo | 湯匙和筷子、餐具 | A spoon |
 | 5003 | 식욕 | sigyok | 食慾、胃口 | appetite,desire |
@@ -668,10 +666,3 @@
 | 5664 | 호주 | hoju | 澳洲、澳大利亞 | Australia |
 | 5665 | 남대문시장 | namdaemunsijang | 南大門市場 | Shopping center in seoul |
 | 5666 | 남산 | namsan | 南山 | Mountain in south central seoul |
-| 5667 | 홍콩 | hongkong | 香港 | Hong Kong |
-| 5668 | 대만 | daeman | 台灣（臺灣） | Taiwan |
-| 5669 | 로스앤젤레스 | roseuaenjellesseu | 洛杉磯（LA） | Los Angeles (LA) |
-| 5670 | 잘자 | jalja | 早唞、晚安（平語/非敬語，對朋友晚輩） | Good night, sleep tight (informal) |
-| 5671 | 잘 자요 | jal jayo | 晚安、早唞（日常敬語 / 해요體） | Good night (polite / informal polite) |
-| 5672 | 안녕히 주무세요 | annyeonghi jumuseyo | 祝您晚安安睡、早唞（長輩/上司尊稱敬語） | Good night, sleep peacefully (formal honorific / respectful) |
-| 5673 | 초급 | chogeup | 初級、初階 | Beginner level, elementary grade |

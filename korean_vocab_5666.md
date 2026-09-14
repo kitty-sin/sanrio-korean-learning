@@ -1,7 +1,5 @@
 # 韓語核心 5,666 詞彙全量終極總表 (Korean Core 5,666 Vocabulary Complete Master Dataset)
 
-| 編號 | 韓文 | 羅馬拼音 | 中文 | 英文 | 等級 (Level) | 詞性 (Part of Speech) |
-| :---: | :--- | :--- | :--- | :--- | :---: | :--- |
 | 1 | 것 | geot | 東西、事物 | A thing or an object | A | 依存名詞 / 量詞 (Dependent Noun / 의존명사)，如 것（東西/事情）、개（個）、명（名）。 |
 | 2 | 하다 | hada | 做、幹 | To do | A | 動詞 (Verb / 동사)，如 하다（做）、가다（去）。 |
 | 3 | 있다 | itda | 有、在、存在 | To be | A | 動詞 (Verb / 동사)，如 하다（做）、가다（去）。 |
@@ -5668,10 +5666,3 @@
 | 5664 | 호주 | hoju | 澳洲、澳大利亞 | Australia | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5665 | 남대문시장 | namdaemunsijang | 南大門市場 | Shopping center in seoul | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5666 | 남산 | namsan | 南山 | Mountain in south central seoul | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
-| 5667 | 홍콩 | hongkong | 香港 | Hong Kong | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
-| 5668 | 대만 | daeman | 台灣（臺灣） | Taiwan | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
-| 5669 | 로스앤젤레스 | roseuaenjellesseu | 洛杉磯（LA） | Los Angeles (LA) | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
-| 5670 | 잘자 | jalja | 早唞、晚安（平語/非敬語，對朋友晚輩） | Good night, sleep tight (informal) | A | 不變化詞 / 獨立詞 / 未分類詞），用來標記如 그래도（即使那樣/仍然）、걔（那孩子）、그래（是的/那樣） 等 |
-| 5671 | 잘 자요 | jal jayo | 晚安、早唞（日常敬語 / 해요體） | Good night (polite / informal polite) | A | 不變化詞 / 獨立詞 / 未分類詞），用來標記如 그래도（即使那樣/仍然）、걔（那孩子）、그래（是的/那樣） 等 |
-| 5672 | 안녕히 주무세요 | annyeonghi jumuseyo | 祝您晚安安睡、早唞（長輩/上司尊稱敬語） | Good night, sleep peacefully (formal honorific / respectful) | A | 不變化詞 / 獨立詞 / 未分類詞），用來標記如 그래도（即使那樣/仍然）、걔（那孩子）、그래（是的/那樣） 等 |
-| 5673 | 초급 | chogeup | 初級、初階 | Beginner level, elementary grade | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |

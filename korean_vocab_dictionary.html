@@ -24,6 +24,8 @@
     <script src="kitty_search_engine.js"></script>
     <!-- 5,666 筆大數據常數 -->
     <script src="korean_vocab_5666_data.js"></script>
+    <!-- Kitty 自訂新增詞庫常數 (#5667 及之後) -->
+    <script src="korean_vocab_kitty_add_data.js"></script>
     <!-- 移動端橋接與終極發音引擎 -->
     <script src="app_mobile_bridge.js"></script>
 
@@ -328,14 +330,24 @@
             return result;
         }
 
+        // 取得完整雙庫詞彙列表 (5,666 基準庫 + Kitty 自訂新增庫)
+        function getCombinedVocabList() {
+            const base = window.KOREAN_VOCAB_5666 || [];
+            const added = window.KOREAN_VOCAB_KITTY_ADD || [];
+            return [...base, ...added];
+        }
+
         // ==================== 主應用組件 ====================
         function App() {
-            const [vocabList, setVocabList] = useState(() => window.KOREAN_VOCAB_5666 || []);
-            const rawVocab = vocabList.length > 0 ? vocabList : (window.KOREAN_VOCAB_5666 || []);
+            const [vocabList, setVocabList] = useState(() => getCombinedVocabList());
+            const rawVocab = vocabList.length > 0 ? vocabList : getCombinedVocabList();
 
             useEffect(() => {
-                if (vocabList.length === 0 && window.KOREAN_VOCAB_5666 && window.KOREAN_VOCAB_5666.length > 0) {
-                    setVocabList(window.KOREAN_VOCAB_5666);
+                if (vocabList.length === 0) {
+                    const combined = getCombinedVocabList();
+                    if (combined.length > 0) {
+                        setVocabList(combined);
+                    }
                 }
             }, [vocabList.length]);
 

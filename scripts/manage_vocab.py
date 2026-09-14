@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 """
 KITTY 韓語核心詞庫自動化管理工具 (Korean Vocab Manager CLI)
-支援：
-1. 全量即時查重 (search)
-2. 音節拆解與標準羅馬拼音自動生成
-3. 5 大資料檔原子化同步寫入 (JS / 2個CSV / 2個MD)
-4. 自動 Git Commit & Push 部署
+架構約定：
+1. 基準 5,666 詞庫 (korean_vocab_5666_data.js / csv / md) 保持純淨固定，不主動寫入。
+2. 自訂新增詞彙 (#5667 起) 寫入專屬自訂資料集：
+   - korean_vocab_kitty_add_data.js
+   - korean_vocab_kitty_add.csv
+   - korean_vocab_kitty_add.md
+3. 查重 (search) 與 ID 計算跨 5,666 基準庫與自訂庫全量合併比對。
 """
 
 import sys
@@ -19,11 +21,10 @@ import subprocess
 sys.stdout.reconfigure(encoding='utf-8')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-JS_PATH = os.path.join(BASE_DIR, "korean_vocab_5666_data.js")
-CSV_5666_PATH = os.path.join(BASE_DIR, "korean_vocab_5666.csv")
-MD_5666_PATH = os.path.join(BASE_DIR, "korean_vocab_5666.md")
-CSV_5001_PATH = os.path.join(BASE_DIR, "korean_vocab_5001_5666.csv")
-MD_5001_PATH = os.path.join(BASE_DIR, "korean_vocab_5001_5666.md")
+JS_5666_PATH = os.path.join(BASE_DIR, "korean_vocab_5666_data.js")
+JS_KITTY_PATH = os.path.join(BASE_DIR, "korean_vocab_kitty_add_data.js")
+CSV_KITTY_PATH = os.path.join(BASE_DIR, "korean_vocab_kitty_add.csv")
+MD_KITTY_PATH = os.path.join(BASE_DIR, "korean_vocab_kitty_add.md")
 
 # 韓語 Unicode 常數
 CHOSEONG = ['g', 'kk', 'n', 'd', 'tt', 'r', 'm', 'b', 'pp', 's', 'ss', '', 'j', 'jj', 'ch', 'k', 't', 'p', 'h']
@@ -68,21 +69,37 @@ def romanize_hangul(text):
             res.append(char)
     return ''.join(res).strip()
 
-def load_vocab_data():
-    """讀取當前 JS 詞庫數據"""
-    if not os.path.exists(JS_PATH):
+def load_json_array_from_file(file_path):
+    """從 JS 檔案中解析 JSON 陣列"""
+    if not os.path.exists(file_path):
         return []
-    with open(JS_PATH, 'r', encoding='utf-8') as f:
+    with open(file_path, 'r', encoding='utf-8') as f:
         text = f.read()
     start = text.find('[')
     end = text.rfind(']')
     if start == -1 or end == -1:
         return []
-    return json.loads(text[start:end+1])
+    try:
+        return json.loads(text[start:end+1])
+    except Exception as e:
+        print(f"Warning: Failed to parse {file_path}: {e}")
+        return []
+
+def load_base_5666_data():
+    """讀取 5,666 基準詞庫"""
+    return load_json_array_from_file(JS_5666_PATH)
+
+def load_kitty_add_data():
+    """讀取 Kitty 自訂新增詞庫"""
+    return load_json_array_from_file(JS_KITTY_PATH)
+
+def load_all_vocab_data():
+    """讀取全量合併詞庫 (基準 5,666 + Kitty 自訂新增)"""
+    return load_base_5666_data() + load_kitty_add_data()
 
 def search_vocab(query, exact=False):
-    """檢索詞庫"""
-    data = load_vocab_data()
+    """跨全量詞庫進行檢索"""
+    data = load_all_vocab_data()
     q = query.strip().lower()
     matches = []
     for item in data:
@@ -99,8 +116,34 @@ def search_vocab(query, exact=False):
                 matches.append(item)
     return matches
 
+def save_kitty_add_files(kitty_data):
+    """原子化寫入 3 大 Kitty 自訂新增詞庫檔案"""
+    # 1. 寫入 JS 常數
+    js_content = "// 🎀 KITTY 自訂新增韓語核心詞彙資料庫 (#5667 及之後)\nwindow.KOREAN_VOCAB_KITTY_ADD = " + json.dumps(kitty_data, ensure_ascii=False, indent=2) + ";\n"
+    with open(JS_KITTY_PATH, "w", encoding="utf-8") as f:
+        f.write(js_content)
+        
+    # 2. 寫入 CSV 總表
+    csv_lines = ["序號,韓文單字,羅馬拼音,中文解釋,英文釋義,TOPIK等級,詞性說明\n"]
+    for it in kitty_data:
+        csv_lines.append(f"{it['id']},{it['k']},{it['r']},{it['c']},{it['e']},{it['l']},{it['pd']}\n")
+    with open(CSV_KITTY_PATH, "w", encoding="utf-8") as f:
+        f.writelines(csv_lines)
+        
+    # 3. 寫入 Markdown 總表
+    md_lines = [
+        "# 🎀 KITTY 自訂新增韓語核心詞彙庫 (Custom Added Korean Vocabulary)\n\n",
+        "> 本清單為使用者自訂擴充之韓語常用詞彙（編號 #5667 起），與 TOPIK 基準 5,666 詞庫無縫整合。\n\n",
+        "| 序號 | 韓文單字 | 羅馬拼音 | 中文解釋 | 英文釋義 | 等級 | 詞性說明 |\n",
+        "| :--- | :--- | :--- | :--- | :--- | :---: | :--- |\n"
+    ]
+    for it in kitty_data:
+        md_lines.append(f"| {it['id']} | {it['k']} | {it['r']} | {it['c']} | {it['e']} | {it['l']} | {it['pd']} |\n")
+    with open(MD_KITTY_PATH, "w", encoding="utf-8") as f:
+        f.writelines(md_lines)
+
 def add_vocab(korean, chinese, english="", level="A", pos="名詞", pos_desc=None, roman=None, auto_push=True):
-    """新增詞彙並同步寫入 5 大檔案"""
+    """新增詞彙並寫入 Kitty 自訂新增詞庫 (保持基準 5666 檔案不更動)"""
     korean = korean.strip()
     chinese = chinese.strip()
     english = english.strip() if english else f"Korean expression: {korean}"
@@ -113,10 +156,11 @@ def add_vocab(korean, chinese, english="", level="A", pos="名詞", pos_desc=Non
     if not roman:
         roman = romanize_hangul(korean)
         
-    data = load_vocab_data()
+    all_data = load_all_vocab_data()
+    kitty_data = load_kitty_add_data()
     
-    # 查重防呆
-    for item in data:
+    # 查重防呆 (跨全量雙庫比對)
+    for item in all_data:
         if item.get('k') == korean:
             return {
                 "success": False,
@@ -125,9 +169,9 @@ def add_vocab(korean, chinese, english="", level="A", pos="名詞", pos_desc=Non
                 "existing_item": item
             }
             
-    # 計算最新 ID
-    max_id = max((item['id'] for item in data), default=0)
-    new_id = max_id + 1
+    # 計算最新 ID (起始於 5667)
+    max_id = max((item['id'] for item in all_data), default=5666)
+    new_id = max(5666, max_id) + 1
     
     new_entry = {
         "id": new_id,
@@ -140,57 +184,14 @@ def add_vocab(korean, chinese, english="", level="A", pos="名詞", pos_desc=Non
         "pd": pos_desc
     }
     
-    # 1. 更新 korean_vocab_5666_data.js
-    data.append(new_entry)
-    new_js = "window.KOREAN_VOCAB_5666 = " + json.dumps(data, ensure_ascii=False) + ";\n"
-    with open(JS_PATH, "w", encoding="utf-8") as f:
-        f.write(new_js)
-        
-    # 2. 更新 korean_vocab_5666.csv
-    with open(CSV_5666_PATH, "r", encoding="utf-8") as f:
-        csv_lines = f.readlines()
-    if csv_lines and not csv_lines[-1].endswith("\n"):
-        csv_lines[-1] += "\n"
-    csv_line = f"{new_id},{korean},{roman},{chinese},{english},{level},{pos_desc}\n"
-    csv_lines.append(csv_line)
-    with open(CSV_5666_PATH, "w", encoding="utf-8") as f:
-        f.writelines(csv_lines)
-        
-    # 3. 更新 korean_vocab_5666.md
-    with open(MD_5666_PATH, "r", encoding="utf-8") as f:
-        md_lines = f.readlines()
-    if md_lines and not md_lines[-1].endswith("\n"):
-        md_lines[-1] += "\n"
-    md_line = f"| {new_id} | {korean} | {roman} | {chinese} | {english} | {level} | {pos_desc} |\n"
-    md_lines.append(md_line)
-    with open(MD_5666_PATH, "w", encoding="utf-8") as f:
-        f.writelines(md_lines)
-        
-    # 4. 更新 korean_vocab_5001_5666.csv
-    with open(CSV_5001_PATH, "r", encoding="utf-8") as f:
-        csv_5001_lines = f.readlines()
-    if csv_5001_lines and not csv_5001_lines[-1].endswith("\n"):
-        csv_5001_lines[-1] += "\n"
-    csv_5001_line = f"{new_id},{korean},{roman},{chinese},{english}\n"
-    csv_5001_lines.append(csv_5001_line)
-    with open(CSV_5001_PATH, "w", encoding="utf-8") as f:
-        f.writelines(csv_5001_lines)
-        
-    # 5. 更新 korean_vocab_5001_5666.md
-    with open(MD_5001_PATH, "r", encoding="utf-8") as f:
-        md_5001_lines = f.readlines()
-    if md_5001_lines and not md_5001_lines[-1].endswith("\n"):
-        md_5001_lines[-1] += "\n"
-    md_5001_line = f"| {new_id} | {korean} | {roman} | {chinese} | {english} |\n"
-    md_5001_lines.append(md_5001_line)
-    with open(MD_5001_PATH, "w", encoding="utf-8") as f:
-        f.writelines(md_5001_lines)
+    kitty_data.append(new_entry)
+    save_kitty_add_files(kitty_data)
         
     git_result = None
     if auto_push:
         try:
-            subprocess.run(["git", "add", "korean_vocab_5666_data.js", "korean_vocab_5666.csv", "korean_vocab_5666.md", "korean_vocab_5001_5666.csv", "korean_vocab_5001_5666.md"], cwd=BASE_DIR, check=True)
-            commit_msg = f"feat(vocab): add entry #{new_id} {korean} ({chinese})"
+            subprocess.run(["git", "add", "korean_vocab_kitty_add_data.js", "korean_vocab_kitty_add.csv", "korean_vocab_kitty_add.md"], cwd=BASE_DIR, check=True)
+            commit_msg = f"feat(vocab): add entry #{new_id} {korean} ({chinese}) to kitty_add"
             subprocess.run(["git", "commit", "-m", commit_msg], cwd=BASE_DIR, check=True)
             push_proc = subprocess.run(["git", "push", "origin", "main"], cwd=BASE_DIR, capture_output=True, text=True)
             git_result = "Pushed successfully" if push_proc.returncode == 0 else f"Push failed: {push_proc.stderr}"
@@ -200,7 +201,8 @@ def add_vocab(korean, chinese, english="", level="A", pos="名詞", pos_desc=Non
     return {
         "success": True,
         "new_entry": new_entry,
-        "total_count": len(data),
+        "total_count": len(all_data) + 1,
+        "kitty_count": len(kitty_data),
         "git_result": git_result
     }
 
@@ -245,7 +247,8 @@ def main():
         else:
             print(f"🔍 搜尋「{args.query}」結果 (共 {len(results)} 筆)：")
             for r in results:
-                print(f"  • [#{r['id']}] {r['k']} [{r['r']}] - {r['c']} ({r['p']} • {r['l']}級)")
+                source_tag = "🌸 基準庫" if r['id'] <= 5666 else "✨ Kitty自訂庫"
+                print(f"  • [#{r['id']}] {r['k']} [{r['r']}] - {r['c']} ({r['p']} • {r['l']}級 • {source_tag})")
                 
     elif args.command == "add" or args.command == "check-and-add":
         if args.command == "check-and-add":
@@ -279,14 +282,15 @@ def main():
         else:
             if res["success"]:
                 e = res["new_entry"]
-                print(f"🎉 成功新增詞彙！")
+                print(f"🎉 成功新增詞彙至 Kitty 自訂庫！")
                 print(f"  • 編號：#{e['id']}")
                 print(f"  • 韓文：{e['k']}")
                 print(f"  • 拼音：[{e['r']}]")
                 print(f"  • 釋義：{e['c']}")
                 print(f"  • 英文：{e['e']}")
                 print(f"  • 級別：{e['l']} 級 • {e['p']}")
-                print(f"  • 詞庫總量：{res['total_count']} 筆")
+                print(f"  • 自訂庫累計：{res['kitty_count']} 筆")
+                print(f"  • 全庫總量：{res['total_count']} 筆")
                 print(f"  • Git 狀態：{res['git_result']}")
             else:
                 print(f"⚠️ 新增失敗：{res['message']}")
