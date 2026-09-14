@@ -24,6 +24,8 @@
     <script src="kitty_search_engine.js"></script>
     <!-- 5,666 筆大數據常數 -->
     <script src="korean_vocab_5666_data.js"></script>
+    <!-- 移動端橋接與終極發音引擎 -->
+    <script src="app_mobile_bridge.js"></script>
 
     <style>
         body {
@@ -473,15 +475,35 @@
                 if (window.KittyVoice && window.KittyVoice.speak) {
                     window.KittyVoice.speak(text, targetRate, () => setSpeakingWord(''));
                 } else {
-                    try {
-                        const cleanText = encodeURIComponent(text.trim());
-                        const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`);
-                        audio.playbackRate = targetRate || 1.0;
-                        audio.onended = () => setSpeakingWord('');
-                        audio.onerror = () => setSpeakingWord('');
-                        audio.play().catch(() => setSpeakingWord(''));
-                    } catch (e) {
-                        setSpeakingWord('');
+                    if (targetRate <= 0.35) {
+                        const raw = text.split(/[\(\/]/)[0].trim();
+                        const chars = Array.from(raw).filter(ch => ch.trim().length > 0 && /[\uac00-\ud7a3\u1100-\u11ff\u3130-\u318f]/.test(ch));
+                        const targetChars = chars.length > 0 ? chars : Array.from(text.trim()).filter(ch => ch.trim().length > 0);
+                        (async () => {
+                            for (let i = 0; i < targetChars.length; i++) {
+                                await new Promise(res => {
+                                    try {
+                                        const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${encodeURIComponent(targetChars[i])}`);
+                                        audio.onended = () => res();
+                                        audio.onerror = () => res();
+                                        audio.play().catch(() => res());
+                                    } catch(e) { res(); }
+                                });
+                                if (i < targetChars.length - 1) await new Promise(r => setTimeout(r, 380));
+                            }
+                            setSpeakingWord('');
+                        })();
+                    } else {
+                        try {
+                            const cleanText = encodeURIComponent(text.trim());
+                            const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${cleanText}`);
+                            audio.playbackRate = Math.max(0.75, Math.min(1.25, targetRate || 1.0));
+                            audio.onended = () => setSpeakingWord('');
+                            audio.onerror = () => setSpeakingWord('');
+                            audio.play().catch(() => setSpeakingWord(''));
+                        } catch (e) {
+                            setSpeakingWord('');
+                        }
                     }
                 }
             }, [speechRate]);
@@ -1424,7 +1446,7 @@
                                                             第 {idx + 1} 字：{syl.char}
                                                         </span>
                                                         <button
-                                                            onClick={() => playAudio(syl.char)}
+                                                            onClick={() => playAudio(syl.char, 1.0)}
                                                             className="px-2.5 py-1 rounded-lg bg-white text-purple-700 text-xs font-bold border border-purple-200 hover:bg-purple-100 flex items-center gap-1 shadow-2xs active:scale-95 transition-transform"
                                                         >
                                                             <span>🔊</span>

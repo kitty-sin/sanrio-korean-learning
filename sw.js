@@ -1,5 +1,5 @@
-// KITTY 韓語積木大冒險 - Service Worker 離線快取 v1.0.9
-const CACHE_NAME = 'kitty-korean-v1.0.9';
+// KITTY 韓語積木大冒險 - Service Worker 離線快取 v1.0.10
+const CACHE_NAME = 'kitty-korean-v1.0.10';
 const STATIC_ASSETS = [
   './',
   './index.html',

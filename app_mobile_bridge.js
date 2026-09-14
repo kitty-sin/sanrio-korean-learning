@@ -42,13 +42,51 @@
       }
       this.unlock();
       const speechRate = rate || 1.0;
+
+      // 🦥 0.3x 極慢逐字口型朗讀：自動拆解獨立音節 + 380ms 清晰間隔 + 標準音高
+      if (speechRate <= 0.35) {
+        this.speakSyllables(text, onEnd);
+        return;
+      }
+
+      this.speakSingle(text, speechRate, onEnd);
+    },
+
+    // 逐字音節朗讀核心
+    speakSyllables: async function(text, onEnd) {
+      const raw = text.split(/[\(\/]/)[0].trim();
+      const chars = Array.from(raw).filter(ch => ch.trim().length > 0 && /[\uac00-\ud7a3\u1100-\u11ff\u3130-\u318f]/.test(ch));
+      const targetChars = chars.length > 0 ? chars : Array.from(text.trim()).filter(ch => ch.trim().length > 0);
+      if (targetChars.length === 0) {
+        if (onEnd) onEnd();
+        return;
+      }
+      for (let i = 0; i < targetChars.length; i++) {
+        const char = targetChars[i];
+        await new Promise((resolve) => {
+          this.speakSingle(char, 0.9, resolve);
+        });
+        if (i < targetChars.length - 1) {
+          await new Promise(r => setTimeout(r, 380));
+        }
+      }
+      if (onEnd) onEnd();
+    },
+
+    // 單音節 / 單詞發音核心
+    speakSingle: function(text, rate, onEnd) {
+      if (!text) {
+        if (onEnd) onEnd();
+        return;
+      }
+      const speechRate = rate || 1.0;
       
       // 0. 最高優先級：若處於 Android 原生 App 內，直調系統底層 TextToSpeech (Samsung/Google 原生引擎)
       if (window.AndroidNativeTTS && typeof window.AndroidNativeTTS.speak === 'function') {
         try {
           window.AndroidNativeTTS.speak(text, speechRate);
           if (onEnd) {
-            const estTime = Math.max(500, (text.length * 320) / speechRate);
+            const estTime = Math.max(450, (text.length * 350) / speechRate);
             setTimeout(onEnd, estTime);
           }
           return;
@@ -64,10 +102,11 @@
         hasKoreanVoice = voices.some(v => v.lang && (v.lang.toLowerCase().startsWith('ko') || v.lang.toLowerCase().includes('korean')));
       }
       
-      // 若系統明確裝有韓語語音包且不是極慢速
-      if (hasKoreanVoice && window.speechSynthesis && speechRate > 0.35) {
+      // 若系統明確裝有韓語語音包
+      if (hasKoreanVoice && window.speechSynthesis) {
         try {
           window.speechSynthesis.resume();
+          window.speechSynthesis.cancel();
           const utter = new SpeechSynthesisUtterance(text);
           utter.lang = 'ko-KR';
           utter.rate = speechRate;
@@ -87,7 +126,7 @@
           };
           window.speechSynthesis.speak(utter);
           
-          // 保護定時器：如果 400ms 內沒在播放且未完成，自動換雲端發音
+          // 保護定時器：如果 450ms 內沒在播放且未完成，自動換雲端發音
           setTimeout(() => {
             if (!window.speechSynthesis.speaking && !finished) {
               finished = true;
@@ -100,7 +139,7 @@
         }
       }
       
-      // 直接使用極速真人雲端發音 (Samsung S26 / S24 / WebView 100% 響亮)
+      // 2. 極速真人雲端發音 (Samsung S26 / S24 / WebView 100% 響亮)
       this.playCloud(text, speechRate, onEnd);
     },
     
@@ -109,21 +148,37 @@
         const clean = encodeURIComponent(text.trim());
         const googleUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=' + clean;
         const audio = new Audio(googleUrl);
-        audio.playbackRate = rate || 1.0;
-        audio.onended = () => { if (onEnd) onEnd(); };
+        // HTML5 Audio playbackRate 限制安全範圍 (0.75 ~ 1.25)，防止底層解碼器崩潰
+        const safeRate = Math.max(0.75, Math.min(1.25, rate || 1.0));
+        audio.playbackRate = safeRate;
+        let ended = false;
+        const triggerEnd = () => {
+          if (!ended) {
+            ended = true;
+            if (onEnd) onEnd();
+          }
+        };
+        audio.onended = triggerEnd;
         audio.onerror = () => {
           // 二級備援：Baidu TTS 韓語頻道
-          const baiduUrl = 'https://tts.baidu.com/text2audio?tex=' + clean + '&cuid=baike&lan=kor&ctp=1&pdt=301&vol=9&rate=32';
-          const audio2 = new Audio(baiduUrl);
-          audio2.playbackRate = rate || 1.0;
-          audio2.onended = () => { if (onEnd) onEnd(); };
-          audio2.onerror = () => { if (onEnd) onEnd(); };
-          audio2.play().catch(() => { if (onEnd) onEnd(); });
+          try {
+            const baiduUrl = 'https://tts.baidu.com/text2audio?tex=' + clean + '&cuid=baike&lan=kor&ctp=1&pdt=301&vol=9&rate=32';
+            const audio2 = new Audio(baiduUrl);
+            audio2.playbackRate = safeRate;
+            audio2.onended = triggerEnd;
+            audio2.onerror = triggerEnd;
+            audio2.play().catch(triggerEnd);
+          } catch(e) {
+            triggerEnd();
+          }
         };
-        audio.play().catch(err => {
-          console.warn('Audio play blocked, retry unlock:', err);
-          if (onEnd) onEnd();
-        });
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.warn('Audio play blocked or error, trying fallback:', err);
+            if (audio.onerror) audio.onerror();
+          });
+        }
       } catch(err) {
         if (onEnd) onEnd();
       }
