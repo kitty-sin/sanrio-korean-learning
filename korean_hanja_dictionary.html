@@ -326,15 +326,20 @@
 
             const handleSearchSubmit = (e) => {
                 if (e) e.preventDefault();
+                if (document.activeElement && typeof document.activeElement.blur === 'function') {
+                    document.activeElement.blur();
+                }
                 const q = inputVal.trim();
                 setSearchTerm(q);
                 setCurrentPage(1);
                 setTimeout(() => {
                     const el = document.getElementById('hanja-results-section');
                     if (el) {
-                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        const y = el.getBoundingClientRect().top + window.pageYOffset - 15;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
+                        try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(err) {}
                     }
-                }, 60);
+                }, 100);
             };
 
             const handleClearSearch = () => {
