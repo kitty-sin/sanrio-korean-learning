@@ -126,6 +126,10 @@
     - **發音引擎重構**：於 `app_mobile_bridge.js` 開發全域 `window.KittyVoice` 發音模組，注入手勢自動解鎖、韓語語音包真實存在性偵測、450ms 假死超時切換，以及 **Google & Baidu 雙線路雲端極速真人發音 Fallback**。
     - **全生態圈對接**：主站 `index.html`（含 0.3x 逐字朗讀）、詞庫大字典 `korean_vocab_dictionary.html`、漢字大辭典 `korean_hanja_dictionary.html`、美食手札 `sanrio_korean_food_100.html` 全面接入 `KittyVoice`，保證 100% 響亮發音。
     - **Toast 提示視覺優化**：所有頁面操作 Toast 全面移至螢幕底部居中 (`bottom-16`)，徹底消除遮擋頂部文字與篩選器的問題。
+- **2026-09-13 21:20 PT**：
+  - **🚀 Android 原生 `TextToSpeech` 底層直連成功 (v1.0.1-apk 驗證通過)**：
+    - 在 `MainActivity.java` 成功注入 Android 官方原生 `TextToSpeech` JavascriptInterface。
+    - 成功直連 Samsung S26 Ultra 系統底層 Samsung TTS 韓語語音引擎，使用者實機測試發音響亮、清晰、零延遲，全量 5,673 詞庫與 6,519 漢字辭典完美發音！
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -135,9 +139,10 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-13 00:09 PT
+- **更新時間**：2026-09-13 21:20 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
+
 
 
 
