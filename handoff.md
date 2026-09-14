@@ -175,6 +175,15 @@
       3. 矩陣新增「🌟 全部音節 (1,037)」、「🌸 漢字音節 (471)」、「🇰🇷 固有/常用音節 (566)」次級分類篩選器。
       4. 點擊任一固有音節例詞標籤可一鍵反向檢索該詞彙；點擊發音支援 3 段速朗讀；點擊積木屋直達拼組。
     - **同步檔案**：`korean_hanja_data.js`、`korean_hanja.csv`、`korean_hanja.md`、`korean_hanja_dictionary.html`、`scripts/build_hanja_dataset.py`，Service Worker 升級至 `kitty-korean-v1.0.13`。
+- **2026-09-14 14:58 PT**：
+  - **🔗 音節矩陣代表詞「智慧跨庫跳轉」與搜尋框同步修復 (`handleSampleWordClick`)**：
+    - **問題根因**：
+      1. 使用者在「單音節矩陣」點擊純韓語固有詞例詞（如 `곧`、`잘자`）時，原邏輯僅切換至本地漢字詞速查頁籤，但因 `HANJA_VOCAB_LIST` 僅含漢字詞，導致畫面顯示「共檢索到 0 筆漢字詞」。
+      2. 點擊例詞或漢字標籤時未同步更新搜尋輸入框之 `inputVal`，導致輸入框仍殘留舊搜尋字詞。
+    - **修復方案**：
+      1. 開發 `handleSampleWordClick` 智慧分流函數：若為漢字詞/外來語則在本地漢字辭典檢索並同步 `inputVal`；若為純韓語固有詞（如 `곧`、`잘`、`꽃`、`눈`）則**自動智慧跳轉至【韓語核心詞庫大字典 (`korean_vocab_dictionary.html?search=XX`)】**，立即呈現完整單字卡、發音與拆解。
+      2. 常用例詞按鈕加入視覺圖標區分：`🧸`（本地漢字詞）與 `📚`（核心大詞庫），並優化 Tooltip 提示文字。
+      3. Service Worker 升級至 `kitty-korean-v1.0.14`。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -184,7 +193,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-14 14:44 PT
+- **更新時間**：2026-09-14 14:58 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
