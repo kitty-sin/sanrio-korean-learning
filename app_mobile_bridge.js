@@ -1,10 +1,21 @@
 // KITTY 韓語積木大冒險 - Mobile & Android 原生橋接與返回鍵防護 + 終極發音引擎
 (function() {
-  // 1. 自動註冊並即時更新 Service Worker
+  // 1. 自動註冊並即時更新 Service Worker 與快取自動重整
   if ('serviceWorker' in navigator) {
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+      if (!refreshing) {
+        refreshing = true;
+        window.location.reload();
+      }
+    });
+
     window.addEventListener('load', function() {
       navigator.serviceWorker.register('./sw.js').then(function(reg) {
         reg.update();
+        if (reg.waiting) {
+          reg.waiting.postMessage({ action: 'skipWaiting' });
+        }
       }).catch(function(err) {
         console.log('Service Worker 註冊略過:', err);
       });

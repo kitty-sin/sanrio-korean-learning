@@ -1,5 +1,5 @@
-// KITTY 韓語積木大冒險 - Service Worker 離線快取 v1.0.6
-const CACHE_NAME = 'kitty-korean-v1.0.6';
+// KITTY 韓語積木大冒險 - Service Worker 離線快取 v1.0.8
+const CACHE_NAME = 'kitty-korean-v1.0.8';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -11,6 +11,12 @@ const STATIC_ASSETS = [
   './assets/icon.png',
   './app_mobile_bridge.js'
 ];
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -25,15 +31,28 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log('[SW] 正在清除舊版快取:', key);
+            return caches.delete(key);
+          }
+        })
       );
     }).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', (event) => {
-  // 對 HTML 導航請求一律採用 Network First，獲取最新版排版
-  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+  const url = new URL(event.request.url);
+  const isHtmlOrData = 
+    event.request.mode === 'navigate' || 
+    event.request.destination === 'document' ||
+    url.pathname.endsWith('.html') ||
+    url.pathname.endsWith('data.js') ||
+    url.pathname.endsWith('bridge.js');
+
+  // 對 HTML 導航及核心數據請求一律採用 Network First，獲取最新版修復代碼
+  if (isHtmlOrData) {
     event.respondWith(
       fetch(event.request)
         .then((networkResponse) => {

@@ -161,10 +161,68 @@
     </style>
 </head>
 <body class="min-h-screen pb-20">
-    <div id="root"></div>
+    <div id="root">
+        <div class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+            <div class="w-16 h-16 rounded-3xl bg-pink-100 text-rose-500 flex items-center justify-center text-3xl mb-4 animate-bounce shadow-md">
+                🎀
+            </div>
+            <h2 class="text-lg font-bold text-gray-800 mb-2">正在載入韓語核心詞庫大字典...</h2>
+            <p class="text-xs text-gray-500 mb-4">5,673 筆 TOPIK 單字與發音載入中 ✨</p>
+            <button 
+                onclick="if ('caches' in window) { caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).then(() => location.reload(true)); } else { location.reload(true); }"
+                class="text-xs text-rose-500 bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-xl font-bold hover:bg-rose-100 transition-all cursor-pointer"
+            >
+                🔄 若超過 5 秒未載入，點此強制更新快取
+            </button>
+        </div>
+    </div>
 
     <script type="text/babel">
         const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+        // 全域錯誤保護邊界 (Error Boundary)
+        class ErrorBoundary extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { hasError: false, error: null };
+            }
+            static getDerivedStateFromError(error) {
+                return { hasError: true, error };
+            }
+            componentDidCatch(error, info) {
+                console.error("ErrorBoundary caught error:", error, info);
+            }
+            render() {
+                if (this.state.hasError) {
+                    return (
+                        <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+                            <div className="bg-white p-8 rounded-3xl border-2 border-rose-200 shadow-xl max-w-md w-full">
+                                <div className="text-4xl mb-3">⚠️</div>
+                                <h2 className="text-lg font-bold text-rose-600 mb-2">頁面載入異常或需要更新快取</h2>
+                                <p className="text-xs text-gray-500 mb-4">
+                                    {this.state.error?.message || '發生未知錯誤，可能因本地快取過期'}
+                                </p>
+                                <button
+                                    onClick={() => {
+                                        if ('caches' in window) {
+                                            caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).then(() => {
+                                                window.location.reload(true);
+                                            });
+                                        } else {
+                                            window.location.reload(true);
+                                        }
+                                    }}
+                                    className="w-full py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-sm rounded-2xl shadow-md hover:from-rose-600 hover:to-pink-600 active:scale-95 transition-all"
+                                >
+                                    🔄 清除離線快取並重新整理
+                                </button>
+                            </div>
+                        </div>
+                    );
+                }
+                return this.props.children;
+            }
+        }
 
         // Firebase Configuration
         const firebaseConfig = {
@@ -268,7 +326,14 @@
 
         // ==================== 主應用組件 ====================
         function App() {
-            const rawVocab = window.KOREAN_VOCAB_5666 || [];
+            const [vocabList, setVocabList] = useState(() => window.KOREAN_VOCAB_5666 || []);
+            const rawVocab = vocabList.length > 0 ? vocabList : (window.KOREAN_VOCAB_5666 || []);
+
+            useEffect(() => {
+                if (vocabList.length === 0 && window.KOREAN_VOCAB_5666 && window.KOREAN_VOCAB_5666.length > 0) {
+                    setVocabList(window.KOREAN_VOCAB_5666);
+                }
+            }, [vocabList.length]);
 
             // 狀態管理
             const [viewMode, setViewMode] = useState('dictionary'); // 'dictionary' | 'flashcard'
@@ -1438,7 +1503,11 @@
             );
         }
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+        ReactDOM.createRoot(document.getElementById('root')).render(
+            <ErrorBoundary>
+                <App />
+            </ErrorBoundary>
+        );
     </script>
   <script src="./app_mobile_bridge.js"></script>
 </body>
