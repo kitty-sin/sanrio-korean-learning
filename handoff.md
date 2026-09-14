@@ -158,6 +158,14 @@
     - 已將 **#5616 회사 (hoesa)** 的中文解釋正式由「公司」擴充更新為「**公司、會社**」。
     - 全面原子化同步更新 5 大資料集檔案：`korean_vocab_5666_data.js`、`korean_vocab_5666.csv`、`korean_vocab_5666.md`、`korean_vocab_5001_5666.csv`、`korean_vocab_5001_5666.md`。
     - Service Worker 升級至 `kitty-korean-v1.0.11`，確保使用者端離線快取立即自動刷新生效。
+- **2026-09-14 14:24 PT**：
+  - **🗂️ 韓語核心詞庫架構重大重構：基準 5,666 庫封裝與 Kitty 自訂新增庫模組化分離**：
+    - **架構調整**：
+      1. **基準 5,666 詞庫完全封裝**：`korean_vocab_5666_data.js`、`korean_vocab_5666.csv/md`、`korean_vocab_5001_5666.csv/md` 精準鎖定保留 **#1 ~ #5666** 筆資料。
+      2. **自訂新增詞庫專屬資料集**：新增 `korean_vocab_kitty_add_data.js`（`window.KOREAN_VOCAB_KITTY_ADD`）、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，獨立收錄使用者新增的詞彙（初始收錄 #5667 ~ #5673 共 7 筆）。
+      3. **前端雙庫無縫合併**：`korean_vocab_dictionary.html` 同步加載兩份數據常數並於 React 初始化時自動合併，全量 5,673 筆即時檢索、3D 單字卡、發音完全無縫。
+      4. **管理工具升級**：`scripts/manage_vocab.py` 與 `korean-vocab-manager` 技能自動將未來所有新詞彙寫入 `korean_vocab_kitty_add.*`，保持 5,666 基準檔穩定純淨。
+      5. **Service Worker 升級**：將 `korean_vocab_kitty_add_data.js` 加入靜態資源快取列表，版本升級至 `kitty-korean-v1.0.12`。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -167,7 +175,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-14 14:02 PT
+- **更新時間**：2026-09-14 14:24 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
