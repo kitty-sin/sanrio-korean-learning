@@ -141,6 +141,18 @@
       - `korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`sanrio_korean_food_100.html` 全面接入 `KittySearch`，支援繁體、簡體、韓文全字、韓文初聲、羅馬拼音、英文全方位秒級通搜！
       - 美食清單新增實體「🔍 搜尋」按鈕與 Enter 送出、無結果頁面自動折疊、搜尋後自動平滑滾動定位至第一筆結果。
       - Service Worker 升級至 `v1.0.9`，全面同步快取。
+- **2026-09-14 12:47 PT**：
+  - **🔊 韓語辭典 0.3x 極慢口型發音與結構拆解單音節發音全面修復升級**：
+    - **問題根因**：
+      1. `korean_vocab_dictionary.html` 與 `korean_hanja_dictionary.html` 的 `<head>` 原先遺漏引入 `app_mobile_bridge.js`，導致發音回退至純 HTML5 `<audio>` 直連。
+      2. 瀏覽器 HTML5 Audio 解碼器在設定極端慢速 `playbackRate = 0.3` 時會拋錯或掛起，觸發 `audio.onerror` 導致按鈕僅閃動一下而沒有聲音。
+      3. 在「結構拆解」彈窗中，單音節發音按鈕未明確傳入 `1.0x` 語速，若頂部導航欄預設選中 0.3x，拆解彈窗的單音節發音也會繼承 0.3x 進而引發靜音。
+    - **修復方案**：
+      - `<head>` 頂部正式引入 `app_mobile_bridge.js`。
+      - `window.KittyVoice` 全面升級：當語速 `<= 0.35x` 時，自動觸發「**逐音節分解朗讀核心 (`speakSyllables`)**」，以飽滿清晰的 `0.9x` 音質逐字朗讀，字與字之間加入 `380ms` 舒適停頓。
+      - HTML5 Audio `playbackRate` 安全鉗制在 `0.75x ~ 1.25x`，防止音訊引擎崩潰。
+      - 結構拆解彈窗內的所有單音節發音按鈕明確鎖定 `1.0x` 標準發音。
+      - Service Worker 快取版本升級至 `kitty-korean-v1.0.10`，自動清除舊快取並即時生效。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -150,9 +162,10 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-13 22:42 PT
+- **更新時間**：2026-09-14 12:47 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
+
 
 
 
