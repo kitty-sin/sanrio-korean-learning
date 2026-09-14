@@ -1,4 +1,4 @@
-﻿// KITTY 韓語積木大冒險 - Mobile & Android 原生橋接與返回鍵防護 + 終極發音引擎
+// KITTY 韓語積木大冒險 - Mobile & Android 原生橋接與返回鍵防護 + 終極發音引擎
 (function() {
   // 1. 自動註冊並即時更新 Service Worker
   if ('serviceWorker' in navigator) {
@@ -32,7 +32,21 @@
       this.unlock();
       const speechRate = rate || 1.0;
       
-      // 檢查系統是否有韓語語音包
+      // 0. 最高優先級：若處於 Android 原生 App 內，直調系統底層 TextToSpeech (Samsung/Google 原生引擎)
+      if (window.AndroidNativeTTS && typeof window.AndroidNativeTTS.speak === 'function') {
+        try {
+          window.AndroidNativeTTS.speak(text, speechRate);
+          if (onEnd) {
+            const estTime = Math.max(500, (text.length * 320) / speechRate);
+            setTimeout(onEnd, estTime);
+          }
+          return;
+        } catch(e) {
+          console.warn('AndroidNativeTTS invocation failed, trying fallback:', e);
+        }
+      }
+
+      // 1. 檢查瀏覽器 Web Speech 是否有韓語語音包
       let hasKoreanVoice = false;
       if (window.speechSynthesis) {
         const voices = window.speechSynthesis.getVoices();

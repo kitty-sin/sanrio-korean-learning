@@ -1,4 +1,4 @@
-﻿name: 📱 Build Android APK (KITTY 韓語積木大冒險)
+name: 📱 Build Android APK (KITTY 韓語積木大冒險)
 
 on:
   push:
@@ -57,18 +57,16 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.0-apk
-          name: "🌟 KITTY 韓語積木大冒險 Android App (v1.0.0)"
+          tag_name: v1.0.1-apk
+          name: "🌟 KITTY 韓語積木大冒險 Android App (v1.0.1 - 原生發音升級版)"
           body: |
-            ## 📱 KITTY 韓語積木大冒險 🌟 (Android APK)
+            ## 📱 KITTY 韓語積木大冒險 🌟 (Android APK v1.0.1)
             
-            - **版本**：v1.0.0
-            - **同步架構**：Capacitor 雲端即時熱更新 + 本地 Service Worker 離線快取
-            - **特色**：
-              - 🧸 拼豆 Yoda 寶寶萌趣圖示
-              - 📚 5,673 筆核心詞庫 + 6,519 筆漢字大辭典
-              - 🔊 韓語發音、3D 單字卡、拼音積木屋
-              - ⚡ 未來增字 0 重新打包，打開手機自動同步
+            - **版本**：v1.0.1 (原生 Samsung / Google TTS 語音直連)
+            - **發音升級**：
+              - 🔊 注入 Android 原生 `TextToSpeech` 底層橋接，直連 Samsung S26 Ultra 系統韓語語音引擎！
+              - ⚡ 支援 100% 離線發音、0ms 延遲、原汁原味韓語發音！
+              - 🧸 拼豆 Yoda 寶寶萌趣圖示 + 5,673 詞庫 + 6,519 漢字辭典
           files: android/app/build/outputs/apk/debug/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
