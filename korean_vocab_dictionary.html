@@ -272,6 +272,8 @@
 
             // 狀態管理
             const [viewMode, setViewMode] = useState('dictionary'); // 'dictionary' | 'flashcard'
+            const [searchTerm, setSearchTerm] = useState('');
+            const [inputVal, setInputVal] = useState('');
             const [showFilters, setShowFilters] = useState(false); // 手機端進階分類標籤折疊控制
             const [selectedLevel, setSelectedLevel] = useState('ALL'); // 'ALL', 'A', 'B', 'C'
             const [selectedPos, setSelectedPos] = useState('ALL');
