@@ -153,6 +153,11 @@
       - HTML5 Audio `playbackRate` 安全鉗制在 `0.75x ~ 1.25x`，防止音訊引擎崩潰。
       - 結構拆解彈窗內的所有單音節發音按鈕明確鎖定 `1.0x` 標準發音。
       - Service Worker 快取版本升級至 `kitty-korean-v1.0.10`，自動清除舊快取並即時生效。
+- **2026-09-14 14:02 PT**：
+  - **📝 韓語核心詞庫大字典詞彙釋義更新**：
+    - 已將 **#5616 회사 (hoesa)** 的中文解釋正式由「公司」擴充更新為「**公司、會社**」。
+    - 全面原子化同步更新 5 大資料集檔案：`korean_vocab_5666_data.js`、`korean_vocab_5666.csv`、`korean_vocab_5666.md`、`korean_vocab_5001_5666.csv`、`korean_vocab_5001_5666.md`。
+    - Service Worker 升級至 `kitty-korean-v1.0.11`，確保使用者端離線快取立即自動刷新生效。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -162,7 +167,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-14 12:47 PT
+- **更新時間**：2026-09-14 14:02 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
