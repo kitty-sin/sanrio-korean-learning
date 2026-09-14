@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎀 韓語漢字音變大辭典 (Glossika 6,277 漢字詞 & 471 音節矩陣)</title>
+    <title>🎀 韓語漢字音變大辭典 (Glossika 6,277 漢字詞 & 1,037 全量音節矩陣)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React 18 & ReactDOM -->
@@ -328,6 +328,7 @@
             const [inputVal, setInputVal] = useState('');
             const isComposingRef = useRef(false);
             const [selectedLetter, setSelectedLetter] = useState('ALL'); // 'ALL' | 'A'...'Z'
+            const [sylFilter, setSylFilter] = useState('all'); // 'all' | 'hanja' | 'native'
             const [onlyBookmarks, setOnlyBookmarks] = useState(false);
             const [speakingWord, setSpeakingWord] = useState('');
 
@@ -520,23 +521,38 @@
 
             // 單音節矩陣過濾
             const filteredSyllables = useMemo(() => {
-                if (!searchTerm.trim()) return rawSyllables;
+                let list = rawSyllables;
+                if (sylFilter === 'hanja') {
+                    list = list.filter(item => item.type === 'hanja');
+                } else if (sylFilter === 'native') {
+                    list = list.filter(item => item.type === 'native');
+                }
+
+                if (!searchTerm.trim()) return list;
+
                 if (window.KittySearch) {
                     const pq = window.KittySearch.prepareQuery(searchTerm);
-                    return rawSyllables.filter(item => 
+                    return list.filter(item => 
                         window.KittySearch.matchSmart(item.k, pq) ||
                         window.KittySearch.matchSmart(item.r, pq) ||
-                        window.KittySearch.matchSmart(item.hanja_str, pq)
+                        (item.hanja_str && window.KittySearch.matchSmart(item.hanja_str, pq)) ||
+                        (item.sample_words && item.sample_words.some(w => 
+                            window.KittySearch.matchSmart(w.k, pq) || window.KittySearch.matchSmart(w.c, pq)
+                        ))
                     );
                 } else {
                     const q = searchTerm.trim().normalize('NFC').toLowerCase();
-                    return rawSyllables.filter(item => 
+                    return list.filter(item => 
                         (item.k && item.k.normalize('NFC').toLowerCase().includes(q)) ||
                         (item.r && item.r.toLowerCase().includes(q)) ||
-                        (item.hanja_str && item.hanja_str.includes(q))
+                        (item.hanja_str && item.hanja_str.includes(q)) ||
+                        (item.sample_words && item.sample_words.some(w => 
+                            (w.k && w.k.normalize('NFC').toLowerCase().includes(q)) ||
+                            (w.c && w.c.toLowerCase().includes(q))
+                        ))
                     );
                 }
-            }, [rawSyllables, searchTerm]);
+            }, [rawSyllables, sylFilter, searchTerm]);
 
             // 外來語列表過濾
             const filteredLoanwords = useMemo(() => {
@@ -664,7 +680,7 @@
                                             </span>
                                         </div>
                                         <p className="text-xs text-stone-500 mt-0.5">
-                                            Sanrio 萌趣漢字根速查 • 6,277 核心漢字詞 • 471 音節矩陣 • 3段速語音 ✨
+                                            Sanrio 萌趣漢字根速查 • 6,277 核心漢字詞 • 1,037 音節矩陣 • 3段速語音 ✨
                                         </p>
                                     </div>
                                 </div>
@@ -1170,64 +1186,163 @@
                         {/* ==================== 3. 單音節 ↔ 漢字矩陣視圖 ==================== */}
                         {viewMode === 'syllable' && (
                             <div className="mb-12">
-                                <div className="bg-amber-100/50 border border-amber-200/80 rounded-2xl p-4 mb-5 text-xs text-amber-950 leading-relaxed">
-                                    💡 <strong>矩陣使用小技巧</strong>：以下收錄 <strong>471 個韓文單音節</strong> 對應的所有漢字庫。點擊任一<strong>韓文音節</strong>可聽發音；點擊任一<strong>漢字標籤</strong>可「一鍵反向檢索」所有包含該漢字的詞彙！
+                                <div className="bg-amber-100/50 border border-amber-200/80 rounded-2xl p-4 mb-4 text-xs text-amber-950 leading-relaxed">
+                                    💡 <strong>全量矩陣小技巧</strong>：以下收錄 <strong>{rawSyllables.length} 個韓語全量單音節</strong>（含 471 個漢字音節與 {rawSyllables.length - 471} 個固有/常用音節）。點擊任一<strong>韓文音節</strong>可聽發音；點擊任一<strong>漢字標籤</strong>或<strong>例詞標籤</strong>可「一鍵反向檢索」！
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {filteredSyllables.map(syl => (
-                                        <div 
-                                            key={syl.id}
-                                            className="sanrio-card bg-white/95 rounded-3xl p-5 border border-emerald-100/80 shadow-sm flex flex-col justify-between"
+                                {/* 次級分類篩選標籤 */}
+                                <div className="flex items-center justify-between flex-wrap gap-3 mb-5 px-1">
+                                    <div className="flex bg-amber-100/50 p-1 rounded-2xl border border-amber-200/70 flex-wrap gap-1">
+                                        <button
+                                            onClick={() => setSylFilter('all')}
+                                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                                                sylFilter === 'all'
+                                                ? 'bg-amber-600 text-white shadow-xs'
+                                                : 'text-stone-700 hover:text-amber-800'
+                                            }`}
                                         >
-                                            <div>
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <div className="flex items-center gap-2">
-                                                        <button 
-                                                            onClick={() => playAudio(syl.k, 1.0)}
-                                                            className="text-2xl font-black text-emerald-800 kr-font hover:text-emerald-950 transition-colors flex items-center gap-1.5"
-                                                        >
-                                                            <span>{syl.k}</span>
-                                                            <span className="text-base text-emerald-600">🔊</span>
-                                                        </button>
-                                                        <span className="text-sm font-bold text-amber-700 font-mono">
-                                                            [{syl.r}]
-                                                        </span>
-                                                    </div>
-                                                    <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                                                        {syl.count} 個對應漢字
-                                                    </span>
-                                                </div>
-
-                                                {/* 漢字群標籤 */}
-                                                <div className="flex flex-wrap gap-1.5 mt-3">
-                                                    {syl.hanjas.map((hChar, idx) => (
-                                                        <button
-                                                            key={idx}
-                                                            onClick={() => handleHanjaChipClick(hChar)}
-                                                            className="px-2 py-1 bg-amber-50/40 hover:bg-amber-100 hover:text-amber-900 text-stone-800 rounded-lg text-sm font-bold border border-amber-200/60 transition-all active:scale-95"
-                                                            title={`點擊檢索包含「${hChar}」的漢字詞`}
-                                                        >
-                                                            {hChar}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-400">
-                                                <span>音節序號 #{syl.id}</span>
-                                                <a 
-                                                    href={`index.html?block=${encodeURIComponent(syl.k)}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-amber-700 hover:text-amber-900 font-bold flex items-center gap-1"
-                                                >
-                                                    <span>🏠 積木屋拼組</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    ))}
+                                            🌟 全部音節 ({rawSyllables.length})
+                                        </button>
+                                        <button
+                                            onClick={() => setSylFilter('hanja')}
+                                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                                                sylFilter === 'hanja'
+                                                ? 'bg-emerald-600 text-white shadow-xs'
+                                                : 'text-stone-700 hover:text-emerald-800'
+                                            }`}
+                                        >
+                                            🌸 漢字音節 ({rawSyllables.filter(s => s.type === 'hanja').length})
+                                        </button>
+                                        <button
+                                            onClick={() => setSylFilter('native')}
+                                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                                                sylFilter === 'native'
+                                                ? 'bg-sky-600 text-white shadow-xs'
+                                                : 'text-stone-700 hover:text-sky-800'
+                                            }`}
+                                        >
+                                            🇰🇷 固有/常用音節 ({rawSyllables.filter(s => s.type === 'native').length})
+                                        </button>
+                                    </div>
+                                    <span className="text-xs text-stone-500 font-bold">
+                                        已顯示 {filteredSyllables.length} 個音節
+                                    </span>
                                 </div>
+
+                                {filteredSyllables.length === 0 ? (
+                                    <div className="bg-white/95 rounded-3xl p-8 text-center border border-amber-200 shadow-sm my-6">
+                                        <div className="text-3xl mb-2">🔍</div>
+                                        <p className="text-sm font-bold text-stone-700 mb-1">
+                                            未找到與「{searchTerm}」匹配的音節
+                                        </p>
+                                        <p className="text-xs text-stone-400">
+                                            請嘗試輸入韓文字音、羅馬拼音、漢字或例詞進行搜尋
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {filteredSyllables.map(syl => {
+                                            const isHanja = syl.type === 'hanja';
+                                            return (
+                                                <div 
+                                                    key={syl.id}
+                                                    className={`sanrio-card bg-white/95 rounded-3xl p-5 border shadow-sm flex flex-col justify-between ${
+                                                        isHanja ? 'border-emerald-100/80' : 'border-amber-200/80'
+                                                    }`}
+                                                >
+                                                    <div>
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <div className="flex items-center gap-2">
+                                                                <button 
+                                                                    onClick={() => playAudio(syl.k, 1.0)}
+                                                                    className={`text-2xl font-black kr-font transition-colors flex items-center gap-1.5 ${
+                                                                        isHanja ? 'text-emerald-800 hover:text-emerald-950' : 'text-amber-900 hover:text-amber-950'
+                                                                    }`}
+                                                                    title="點擊聽標準發音"
+                                                                >
+                                                                    <span>{syl.k}</span>
+                                                                    <span className={`text-base ${isHanja ? 'text-emerald-600' : 'text-amber-600'}`}>🔊</span>
+                                                                </button>
+                                                                <span className="text-sm font-bold text-amber-700 font-mono">
+                                                                    [{syl.r}]
+                                                                </span>
+                                                            </div>
+                                                            {isHanja ? (
+                                                                <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                                                                    🌸 {syl.count} 個對應漢字
+                                                                </span>
+                                                            ) : (
+                                                                <span className="text-xs font-bold text-sky-800 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-200">
+                                                                    🇰🇷 韓語固有 / 常用音節
+                                                                </span>
+                                                            )}
+                                                        </div>
+
+                                                        {/* 漢字群標籤 (漢字音節專用) */}
+                                                        {isHanja && syl.hanjas && syl.hanjas.length > 0 && (
+                                                            <div className="flex flex-wrap gap-1.5 mt-3">
+                                                                {syl.hanjas.map((hChar, idx) => (
+                                                                    <button
+                                                                        key={idx}
+                                                                        onClick={() => handleHanjaChipClick(hChar)}
+                                                                        className="px-2 py-1 bg-amber-50/40 hover:bg-amber-100 hover:text-amber-900 text-stone-800 rounded-lg text-sm font-bold border border-amber-200/60 transition-all active:scale-95"
+                                                                        title={`點擊檢索包含「${hChar}」的漢字詞`}
+                                                                    >
+                                                                        {hChar}
+                                                                    </button>
+                                                                ))}
+                                                            </div>
+                                                        )}
+
+                                                        {/* 常用例詞標籤 (固有音節與漢字音節均支援) */}
+                                                        {syl.sample_words && syl.sample_words.length > 0 && (
+                                                            <div className={`mt-3 ${isHanja ? 'pt-2 border-t border-amber-100/60' : ''}`}>
+                                                                <div className="text-[11px] font-bold text-stone-500 mb-1.5 flex items-center gap-1">
+                                                                    <span>📚</span>
+                                                                    <span>常用例詞 ({syl.sample_words.length})：</span>
+                                                                </div>
+                                                                <div className="flex flex-wrap gap-1.5">
+                                                                    {syl.sample_words.map((sw, sIdx) => (
+                                                                        <button
+                                                                            key={sIdx}
+                                                                            onClick={() => {
+                                                                                setSearchTerm(sw.k);
+                                                                                setViewMode('dictionary');
+                                                                                showToast(`已為您在詞庫中檢索「${sw.k}」✨`);
+                                                                            }}
+                                                                            className="px-2.5 py-1 bg-amber-50/80 hover:bg-amber-100 hover:text-amber-900 text-stone-800 rounded-xl text-xs font-bold border border-amber-200/70 transition-all active:scale-95 flex items-center gap-1"
+                                                                            title={`點擊於詞庫檢索「${sw.k}」`}
+                                                                        >
+                                                                            <span className="kr-font">{sw.k}</span>
+                                                                            {sw.c && (
+                                                                                <span className="text-[10px] text-stone-500 font-normal">
+                                                                                    ({sw.c})
+                                                                                </span>
+                                                                            )}
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-400">
+                                                        <span>音節序號 #{syl.id}</span>
+                                                        <a 
+                                                            href={`index.html?block=${encodeURIComponent(syl.k)}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-amber-700 hover:text-amber-900 font-bold flex items-center gap-1"
+                                                            title="在積木屋中合成此字"
+                                                        >
+                                                            <span>🏠 積木屋拼組</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </div>
                         )}
 

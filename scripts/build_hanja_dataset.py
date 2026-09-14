@@ -237,19 +237,137 @@ def parse_glossika_md():
 
     return syllables, hanja_words, loanwords
 
+def extract_all_syllables(glossika_syllables, hanja_words, loanwords):
+    """
+    匯總所有來源中的韓語單音節，生成包含 471 漢字音節 + 566 固有/常用音節的 1,037 全量矩陣
+    """
+    vocab_kitty_js = os.path.join(BASE_DIR, "korean_vocab_kitty_add_data.js")
+    
+    existing_vocab = []
+    if os.path.exists(VOCAB_5666_JS):
+        try:
+            with open(VOCAB_5666_JS, 'r', encoding='utf-8') as f:
+                t = f.read()
+            start = t.find('[')
+            end = t.rfind(']')
+            if start != -1 and end != -1:
+                existing_vocab.extend(json.loads(t[start:end+1]))
+        except Exception as e:
+            print("Error loading 5666 vocab:", e)
+
+    if os.path.exists(vocab_kitty_js):
+        try:
+            with open(vocab_kitty_js, 'r', encoding='utf-8') as f:
+                t = f.read()
+            start = t.find('[')
+            end = t.rfind(']')
+            if start != -1 and end != -1:
+                existing_vocab.extend(json.loads(t[start:end+1]))
+        except Exception as e:
+            print("Error loading kitty add vocab:", e)
+
+    # 彙整所有詞彙以提取例詞
+    all_vocab_pool = []
+    seen_k = set()
+    for item in existing_vocab:
+        k = item.get('k', '')
+        if k and k not in seen_k:
+            all_vocab_pool.append({'k': k, 'c': item.get('c', ''), 'e': item.get('e', '')})
+            seen_k.add(k)
+            
+    for item in hanja_words:
+        k = item.get('k', '')
+        if k and k not in seen_k:
+            all_vocab_pool.append({'k': k, 'c': item.get('c', ''), 'e': item.get('e', '')})
+            seen_k.add(k)
+
+    for item in loanwords:
+        k = item.get('k', '')
+        if k and k not in seen_k:
+            all_vocab_pool.append({'k': k, 'c': item.get('c', ''), 'e': item.get('e', '')})
+            seen_k.add(k)
+
+    # 建立每個音節的例詞索引
+    char_to_samples = {}
+    all_chars_in_vocab = set()
+
+    for w in all_vocab_pool:
+        word_k = w['k']
+        raw_c = w['c']
+        # 簡化中文釋義，保留前 1~2 個主要意思
+        clean_c = raw_c.split('、')[0].split('/')[0].split('(')[0].split('（')[0].strip()
+        
+        for ch in word_k:
+            if 0xAC00 <= ord(ch) <= 0xD7A3:
+                all_chars_in_vocab.add(ch)
+                if ch not in char_to_samples:
+                    char_to_samples[ch] = []
+                
+                # 若該詞尚未加入且長度未達上限
+                if not any(x['k'] == word_k for x in char_to_samples[ch]):
+                    if len(char_to_samples[ch]) < 6:
+                        # 優先將單音節本身的詞排在最前
+                        if word_k == ch:
+                            char_to_samples[ch].insert(0, {'k': word_k, 'c': clean_c})
+                        else:
+                            char_to_samples[ch].append({'k': word_k, 'c': clean_c})
+
+    # 1. 處理 471 個漢字音節
+    final_syllables = []
+    hanja_syl_chars = set()
+
+    for idx, syl in enumerate(glossika_syllables, start=1):
+        k = syl['k']
+        hanja_syl_chars.add(k)
+        samples = char_to_samples.get(k, [])
+        final_syllables.append({
+            "id": idx,
+            "k": k,
+            "r": syl.get('r') or romanize_hangul(k),
+            "type": "hanja",
+            "hanjas": syl.get('hanjas', []),
+            "count": len(syl.get('hanjas', [])),
+            "hanja_str": syl.get('hanja_str', ''),
+            "sample_words": samples[:5]
+        })
+
+    # 2. 處理新增的固有 / 常用音節 (566 個)
+    native_chars = sorted(list(all_chars_in_vocab - hanja_syl_chars))
+    print(f"📌 發現固有/常用新音節: {len(native_chars)} 個")
+
+    start_native_id = len(final_syllables) + 1
+    for idx, k in enumerate(native_chars, start=start_native_id):
+        samples = char_to_samples.get(k, [])
+        final_syllables.append({
+            "id": idx,
+            "k": k,
+            "r": romanize_hangul(k),
+            "type": "native",
+            "hanjas": [],
+            "count": len(samples),
+            "hanja_str": "",
+            "sample_words": samples[:6]
+        })
+
+    return final_syllables
+
 def main():
     print("🚀 開始解析 Glossika 韓文漢字對照工具書...")
-    syllables, hanja_words, loanwords = parse_glossika_md()
+    glossika_syllables, hanja_words, loanwords = parse_glossika_md()
     
-    print(f"✅ 第一部分 單音節數: {len(syllables)}")
+    print(f"✅ 第一部分 Glossika 漢字音節數: {len(glossika_syllables)}")
     print(f"✅ 第二部分 漢字詞數: {len(hanja_words)}")
     print(f"✅ 第三部分 外來語數: {len(loanwords)}")
+
+    # 擴充全量音節矩陣
+    all_syllables = extract_all_syllables(glossika_syllables, hanja_words, loanwords)
+    print(f"🌟 全量擴充後音節總數: {len(all_syllables)} (漢字音節: 471, 固有/常用音節: {len(all_syllables) - 471})")
 
     # 1. 寫入 JS 檔案
     print(f"📦 寫入 JS 常數檔: {OUT_JS}")
     with open(OUT_JS, 'w', encoding='utf-8') as f:
-        f.write("// KITTY 韓語漢字大辭典與外來語常數數據集\n")
-        f.write(f"window.HANJA_SYLLABLE_LIST = {json.dumps(syllables, ensure_ascii=False)};\n")
+        f.write("// KITTY 韓語漢字大辭典與外來語常數數據集 (含 1,037 全量音節矩陣)\n")
+        f.write(f"window.HANJA_SYLLABLE_LIST = {json.dumps(all_syllables, ensure_ascii=False)};\n")
         f.write(f"window.HANJA_VOCAB_LIST = {json.dumps(hanja_words, ensure_ascii=False)};\n")
         f.write(f"window.LOANWORD_LIST = {json.dumps(loanwords, ensure_ascii=False)};\n")
 
@@ -267,7 +385,7 @@ def main():
     print(f"📝 寫入 Markdown 字典: {OUT_MD}")
     with open(OUT_MD, 'w', encoding='utf-8') as f:
         f.write("# 🎀 韓語漢字詞與外來語大辭典 (Hanja & Loanwords Dictionary)\n\n")
-        f.write(f"> 收錄 **{len(hanja_words):,} 筆** 核心漢字詞、**{len(syllables)} 組** 單音節漢字矩陣與 **{len(loanwords)} 筆** 常用外來語。\n\n")
+        f.write(f"> 收錄 **{len(hanja_words):,} 筆** 核心漢字詞、**{len(all_syllables):,} 組** 全量單音節矩陣 (471 漢字音節 + {len(all_syllables)-471} 固有音節) 與 **{len(loanwords)} 筆** 常用外來語。\n\n")
         f.write("## 🧸 核心漢字詞列表\n\n")
         f.write("| 編號 | 韓文 | 羅馬拼音 | 中文 | 英文 | 漢語拼音 | IPA 音標 |\n")
         f.write("| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n")
@@ -275,7 +393,8 @@ def main():
             f.write(f"| {item['id']} | **{item['k']}** | `{item['r']}` | {item['c']} | *{item['e']}* | {item['py']} | `{item['ipa']}` |\n")
         f.write(f"\n*(其餘 {len(hanja_words)-500} 筆請參閱完整資料集 `korean_hanja_data.js` 與 `korean_hanja.csv`)*\n\n")
 
-    print("🎉 資料建置圓滿完成！")
+    print("🎉 全量資料集建置圓滿完成！")
 
 if __name__ == '__main__':
     main()
+
