@@ -20,6 +20,8 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+KR:wght@500;700;900&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
     
+    <!-- 全域智慧搜尋引擎 (繁簡雙向通搜 + 韓語初聲/NFC + 羅馬拼音 + 英文) -->
+    <script src="kitty_search_engine.js"></script>
     <!-- 漢字大辭典與音節矩陣數據集 -->
     <script src="korean_hanja_data.js"></script>
 
@@ -469,15 +471,27 @@
                     });
                 }
                 if (searchTerm.trim()) {
-                    const q = searchTerm.trim().toLowerCase();
-                    list = list.filter(item => 
-                        (item.k && item.k.toLowerCase().includes(q)) ||
-                        (item.c && item.c.toLowerCase().includes(q)) ||
-                        (item.r && item.r.toLowerCase().includes(q)) ||
-                        (item.py && item.py.toLowerCase().includes(q)) ||
-                        (item.e && item.e.toLowerCase().includes(q)) ||
-                        (item.ipa && item.ipa.toLowerCase().includes(q))
-                    );
+                    if (window.KittySearch) {
+                        const pq = window.KittySearch.prepareQuery(searchTerm);
+                        list = list.filter(item => 
+                            window.KittySearch.matchSmart(item.k, pq) ||
+                            window.KittySearch.matchSmart(item.c, pq) ||
+                            window.KittySearch.matchSmart(item.r, pq) ||
+                            window.KittySearch.matchSmart(item.py, pq) ||
+                            window.KittySearch.matchSmart(item.e, pq) ||
+                            window.KittySearch.matchSmart(item.ipa, pq)
+                        );
+                    } else {
+                        const q = searchTerm.trim().normalize('NFC').toLowerCase();
+                        list = list.filter(item => 
+                            (item.k && item.k.normalize('NFC').toLowerCase().includes(q)) ||
+                            (item.c && item.c.normalize('NFC').toLowerCase().includes(q)) ||
+                            (item.r && item.r.toLowerCase().includes(q)) ||
+                            (item.py && item.py.toLowerCase().includes(q)) ||
+                            (item.e && item.e.toLowerCase().includes(q)) ||
+                            (item.ipa && item.ipa.toLowerCase().includes(q))
+                        );
+                    }
                 }
                 return list;
             }, [rawHanjaVocab, onlyBookmarks, bookmarks, selectedLetter, searchTerm]);
@@ -485,25 +499,44 @@
             // 單音節矩陣過濾
             const filteredSyllables = useMemo(() => {
                 if (!searchTerm.trim()) return rawSyllables;
-                const q = searchTerm.trim().toLowerCase();
-                return rawSyllables.filter(item => 
-                    item.k.toLowerCase().includes(q) ||
-                    item.r.toLowerCase().includes(q) ||
-                    item.hanja_str.includes(q)
-                );
+                if (window.KittySearch) {
+                    const pq = window.KittySearch.prepareQuery(searchTerm);
+                    return rawSyllables.filter(item => 
+                        window.KittySearch.matchSmart(item.k, pq) ||
+                        window.KittySearch.matchSmart(item.r, pq) ||
+                        window.KittySearch.matchSmart(item.hanja_str, pq)
+                    );
+                } else {
+                    const q = searchTerm.trim().normalize('NFC').toLowerCase();
+                    return rawSyllables.filter(item => 
+                        (item.k && item.k.normalize('NFC').toLowerCase().includes(q)) ||
+                        (item.r && item.r.toLowerCase().includes(q)) ||
+                        (item.hanja_str && item.hanja_str.includes(q))
+                    );
+                }
             }, [rawSyllables, searchTerm]);
 
             // 外來語列表過濾
             const filteredLoanwords = useMemo(() => {
                 let list = rawLoanwords;
                 if (!searchTerm.trim()) return list;
-                const q = searchTerm.trim().toLowerCase();
-                return list.filter(item => 
-                    item.k.toLowerCase().includes(q) ||
-                    item.r.toLowerCase().includes(q) ||
-                    item.e.toLowerCase().includes(q) ||
-                    item.c.toLowerCase().includes(q)
-                );
+                if (window.KittySearch) {
+                    const pq = window.KittySearch.prepareQuery(searchTerm);
+                    return list.filter(item => 
+                        window.KittySearch.matchSmart(item.k, pq) ||
+                        window.KittySearch.matchSmart(item.c, pq) ||
+                        window.KittySearch.matchSmart(item.r, pq) ||
+                        window.KittySearch.matchSmart(item.e, pq)
+                    );
+                } else {
+                    const q = searchTerm.trim().normalize('NFC').toLowerCase();
+                    return list.filter(item => 
+                        (item.k && item.k.normalize('NFC').toLowerCase().includes(q)) ||
+                        (item.c && item.c.normalize('NFC').toLowerCase().includes(q)) ||
+                        (item.r && item.r.toLowerCase().includes(q)) ||
+                        (item.e && item.e.toLowerCase().includes(q))
+                    );
+                }
             }, [rawLoanwords, searchTerm]);
 
             // 分頁計算

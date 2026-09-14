@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+KR:wght@500;700;900&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+    <!-- 全域智慧搜尋引擎 (繁簡雙向通搜 + 韓語初聲/NFC + 羅馬拼音 + 英文) -->
+    <script src="kitty_search_engine.js"></script>
     
     <style>
         body {
@@ -171,12 +173,18 @@
                     </button>
                 </div>
 
-                <!-- Search Input -->
-                <div class="relative flex items-center">
-                    <input type="search" id="searchInput" oninput="filterWords()" placeholder="搜尋食物 / 韓文 / 拼音..." class="w-36 md:w-56 pl-8 pr-7 py-2 text-xs bg-gray-50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 font-bold kr-font text-gray-800">
-                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-pink-400 text-xs pointer-events-none"></i>
-                    <button id="clearSearchBtn" onclick="document.getElementById('searchInput').value=''; filterWords(); this.classList.add('hidden');" class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-gray-200 hover:bg-gray-300 rounded-full text-[10px] text-gray-600 font-bold flex items-center justify-center">✕</button>
-                </div>
+                <!-- Search Input with Dedicated Submit Button -->
+                <form onsubmit="handleFoodSearch(event)" action="javascript:void(0);" class="flex items-center gap-1.5">
+                    <div class="relative flex items-center">
+                        <input type="search" id="searchInput" oninput="filterWords(false)" placeholder="搜尋食物 / 韓文 / 繁簡中文 / 拼音..." class="w-36 md:w-56 pl-8 pr-7 py-2 text-xs bg-gray-50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 font-bold kr-font text-gray-800">
+                        <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-pink-400 text-xs pointer-events-none"></i>
+                        <button type="button" id="clearSearchBtn" onclick="document.getElementById('searchInput').value=''; filterWords(false); this.classList.add('hidden');" class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-gray-200 hover:bg-gray-300 rounded-full text-[10px] text-gray-600 font-bold flex items-center justify-center">✕</button>
+                    </div>
+                    <button type="submit" class="px-3 py-2 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center gap-1">
+                        <span>🔍</span>
+                        <span>搜尋</span>
+                    </button>
+                </form>
 
                 <!-- Print to PDF Button -->
                 <button onclick="window.print()" class="px-3.5 py-2 bg-gradient-to-r from-pink-500 to-rose-400 hover:from-pink-600 hover:to-rose-500 text-white text-xs font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-1.5">
@@ -617,28 +625,74 @@
             }
         }
 
-        // Filter words across all pages
-        function filterWords() {
+        // Search form submit handler
+        function handleFoodSearch(e) {
+            if (e) e.preventDefault();
+            if (document.activeElement && typeof document.activeElement.blur === 'function') {
+                document.activeElement.blur();
+            }
+            filterWords(true);
+        }
+
+        // Filter words across all pages (with KittySearch smart matching & auto-scroll)
+        function filterWords(shouldScroll = false) {
             const input = document.getElementById("searchInput");
-            const query = input.value.trim().toLowerCase();
+            const rawVal = input.value;
+            const query = rawVal.trim();
             const clearBtn = document.getElementById("clearSearchBtn");
             if (clearBtn) {
                 if (query) clearBtn.classList.remove('hidden');
                 else clearBtn.classList.add('hidden');
             }
+
+            const pq = window.KittySearch ? window.KittySearch.prepareQuery(query) : null;
             const rows = document.querySelectorAll(".food-row");
-            
+            let firstMatchedRow = null;
+
             rows.forEach(row => {
-                const kr = (row.getAttribute("data-kr") || "").toLowerCase();
-                const py = (row.getAttribute("data-py") || "").toLowerCase();
-                const zh = (row.getAttribute("data-zh") || "").toLowerCase();
+                const kr = row.getAttribute("data-kr") || "";
+                const py = row.getAttribute("data-py") || "";
+                const zh = row.getAttribute("data-zh") || "";
                 
-                if (kr.includes(query) || py.includes(query) || zh.includes(query)) {
+                let isMatch = true;
+                if (query) {
+                    if (pq) {
+                        isMatch = window.KittySearch.matchSmart(kr, pq) ||
+                                  window.KittySearch.matchSmart(py, pq) ||
+                                  window.KittySearch.matchSmart(zh, pq);
+                    } else {
+                        const q = query.toLowerCase();
+                        isMatch = kr.toLowerCase().includes(q) || py.toLowerCase().includes(q) || zh.toLowerCase().includes(q);
+                    }
+                }
+
+                if (isMatch) {
                     row.style.display = "";
+                    if (!firstMatchedRow) firstMatchedRow = row;
                 } else {
                     row.style.display = "none";
                 }
             });
+
+            // 若整頁沒有任何符合項目，自動折疊該頁容器
+            foodPagesData.forEach(pData => {
+                const pageEl = document.getElementById(`page-${pData.page}`);
+                if (pageEl) {
+                    if (!query) {
+                        pageEl.style.display = "";
+                    } else {
+                        const visibleInPage = pageEl.querySelectorAll('.food-row:not([style*="display: none"])');
+                        pageEl.style.display = visibleInPage.length > 0 ? "" : "none";
+                    }
+                }
+            });
+
+            // 若觸發搜尋且有匹配項目，自動平滑滾動至第一個匹配項目
+            if (shouldScroll && firstMatchedRow) {
+                setTimeout(() => {
+                    firstMatchedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 80);
+            }
         }
 
         // Render All 10 Pages

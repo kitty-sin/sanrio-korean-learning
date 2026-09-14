@@ -20,6 +20,8 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+KR:wght@500;700;900&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
     
+    <!-- 全域智慧搜尋引擎 (繁簡雙向通搜 + 韓語初聲/NFC + 羅馬拼音 + 英文) -->
+    <script src="kitty_search_engine.js"></script>
     <!-- 5,666 筆大數據常數 -->
     <script src="korean_vocab_5666_data.js"></script>
 
@@ -503,17 +505,27 @@
                     list = list.filter(item => item.p === selectedPos || item.pd.includes(selectedPos));
                 }
 
-                // 搜尋關鍵字過濾（支援韓、中、拼音、英、詞性）
+                // 搜尋關鍵字過濾（支援繁簡中文通搜、韓語 NFC/初聲、羅馬拼音、英文與詞性）
                 if (searchTerm.trim()) {
-                    const q = searchTerm.trim().toLowerCase();
-                    list = list.filter(item => 
-                        item.k.toLowerCase().includes(q) ||
-                        item.c.toLowerCase().includes(q) ||
-                        item.r.toLowerCase().includes(q) ||
-                        item.e.toLowerCase().includes(q) ||
-                        item.p.toLowerCase().includes(q) ||
-                        item.pd.toLowerCase().includes(q)
-                    );
+                    if (window.KittySearch) {
+                        const pq = window.KittySearch.prepareQuery(searchTerm);
+                        list = list.filter(item => 
+                            window.KittySearch.matchSmart(item.k, pq) ||
+                            window.KittySearch.matchSmart(item.c, pq) ||
+                            window.KittySearch.matchSmart(item.r, pq) ||
+                            window.KittySearch.matchSmart(item.e, pq) ||
+                            window.KittySearch.matchSmart(item.p, pq)
+                        );
+                    } else {
+                        const q = searchTerm.trim().normalize('NFC').toLowerCase();
+                        list = list.filter(item => 
+                            (item.k && item.k.normalize('NFC').toLowerCase().includes(q)) ||
+                            (item.c && item.c.normalize('NFC').toLowerCase().includes(q)) ||
+                            (item.r && item.r.toLowerCase().includes(q)) ||
+                            (item.e && item.e.toLowerCase().includes(q)) ||
+                            (item.p && item.p.includes(q))
+                        );
+                    }
                 }
 
                 return list;
