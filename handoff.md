@@ -196,6 +196,10 @@
       2. 在 `HANJA_VOCAB_LIST` 漢字詞庫中正式收錄 **`#6278 요가 (瑜伽、瑜珈 / Yoga)`**。
       3. 重新執行 `build_hanja_dataset.py` 全量建置管線，同步更新 `korean_hanja_data.js`、`korean_hanja.csv`、`korean_hanja.md`。
       4. Service Worker 快取升級至 `v1.0.15`。
+- **2026-09-15 14:41 PT**：
+  - **新增日常核心高頻口語動詞**：已將 `#5675 봐 (睇下、睇睇、看、看吧 / Look, see)`（Level A 動詞，動詞 `보다` 之平語/現在式/命令形口語）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **9 筆**，全庫總量達到 **5,675 筆**。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `425a4d5`）。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -205,7 +209,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-14 17:53 PT
+- **更新時間**：2026-09-15 14:41 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
