@@ -13,3 +13,4 @@
 | 5673 | 초급 | chogeup | 初級、初階 | Beginner level, elementary grade | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
 | 5674 | 요가 | yoga | 瑜珈（瑜伽） | Yoga | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
 | 5675 | 봐 | bwa | 睇下、睇睇、看、看吧（動詞 보다 平語口語形） | Look, see, watch (informal spoken form of 보다) | A | 動詞 (Verb / 동사)，如 하다（做）、가다（去）。 |
+| 5676 | 회 | hoe | 生魚片、生肉片（膾） | Raw fish, sashimi, raw meat dish (hoe) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |

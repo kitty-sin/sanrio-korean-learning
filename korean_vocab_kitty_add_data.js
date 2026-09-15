@@ -89,5 +89,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "動詞",
     "pd": "動詞 (Verb / 동사)，如 하다（做）、가다（去）。"
+  },
+  {
+    "id": 5676,
+    "k": "회",
+    "r": "hoe",
+    "c": "生魚片、生肉片（膾）",
+    "e": "Raw fish, sashimi, raw meat dish (hoe)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
