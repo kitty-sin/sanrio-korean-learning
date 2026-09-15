@@ -216,6 +216,16 @@
   - **查重確認**：`진짜`（#2151）、`정말`（#313）、`아니`（#688）已完整存在於既有詞庫中，無需重複建檔。
   - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **16 筆**，全庫總量達到 **5,682 筆**。
   - **Git 部署**：已推播至 GitHub Pages（Commit `bcaf094`）。
+- **2026-09-15 16:08 PT**：
+  - **✨ 大字典分頁控制列全面升級（自由跳頁 / 頁首 / 頁尾）**：
+    1. **韓語核心詞庫大字典 (`korean_vocab_dictionary.html`)**：
+       - 頂部與底部分頁列新增「`⏮ 頁首`」與「`頁尾 ⏭`」按鈕，具備首頁/末頁自動半透明防誤觸。
+       - 中間頁碼升級為「**第 [ X ▾ ] / N 頁**」互動式下拉選擇器，支援電腦下拉選單與手機 (iOS/Android) 原生滾輪選擇器，可自由秒跳任意頁數（如第 8 頁）。
+       - 新增 `handlePageChange` 函數，切換頁面後平滑置頂至 `#search-results-section`。
+    2. **韓語漢字音變大辭典 (`korean_hanja_dictionary.html`)**：
+       - 同步升級頂部與底部分頁列，套用暖杏奶茶琥珀色系，加入頁首、頁尾、下拉跳頁與平滑置頂。
+    3. **離線快取更新**：`sw.js` 升級至 `kitty-korean-v1.0.16`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `82eb635`）。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -225,7 +235,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-15 15:55 PT
+- **更新時間**：2026-09-15 16:08 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
