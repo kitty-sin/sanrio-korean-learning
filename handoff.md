@@ -184,6 +184,10 @@
       1. 開發 `handleSampleWordClick` 智慧分流函數：若為漢字詞/外來語則在本地漢字辭典檢索並同步 `inputVal`；若為純韓語固有詞（如 `곧`、`잘`、`꽃`、`눈`）則**自動智慧跳轉至【韓語核心詞庫大字典 (`korean_vocab_dictionary.html?search=XX`)】**，立即呈現完整單字卡、發音與拆解。
       2. 常用例詞按鈕加入視覺圖標區分：`🧸`（本地漢字詞）與 `📚`（核心大詞庫），並優化 Tooltip 提示文字。
       3. Service Worker 升級至 `kitty-korean-v1.0.14`。
+- **2026-09-14 17:13 PT**：
+  - **新增生活運動休閒詞彙**：已將 `#5674 요가 (瑜珈 / Yoga)`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **8 筆**，全庫總量達到 **5,674 筆**。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `624deb5`）。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -193,7 +197,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-14 14:58 PT
+- **更新時間**：2026-09-14 17:13 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
