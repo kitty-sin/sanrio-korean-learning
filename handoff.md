@@ -200,6 +200,11 @@
   - **新增日常核心高頻口語動詞**：已將 `#5675 봐 (睇下、睇睇、看、看吧 / Look, see)`（Level A 動詞，動詞 `보다` 之平語/現在式/命令形口語）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
   - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **9 筆**，全庫總量達到 **5,675 筆**。
   - **Git 部署**：已推播至 GitHub Pages（Commit `425a4d5`）。
+- **2026-09-15 15:03 PT**：
+  - **新增常見飲食名詞**：已將 `#5676 회 (生魚片、生肉片（膾） / Raw fish, sashimi, hoe)`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **支援同音異性詞擴充**：升級 `manage_vocab.py` 查重機制，精準區分 #691 量詞 `회 (次/回/局)` 與 #5676 飲食名詞 `회 (生魚片/膾)`。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **10 筆**，全庫總量達到 **5,676 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `2eb71d9`）。
 - **➡️ 下一步**：
   1. 持續豐富漢字詞庫之生活例句與成語聯想。
   2. 依學習反饋擴充更多漢字部首與音變口訣。
@@ -209,7 +214,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-15 14:41 PT
+- **更新時間**：2026-09-15 15:03 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 

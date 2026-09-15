@@ -142,7 +142,7 @@ def save_kitty_add_files(kitty_data):
     with open(MD_KITTY_PATH, "w", encoding="utf-8") as f:
         f.writelines(md_lines)
 
-def add_vocab(korean, chinese, english="", level="A", pos="名詞", pos_desc=None, roman=None, auto_push=True):
+def add_vocab(korean, chinese, english="", level="A", pos="名詞", pos_desc=None, roman=None, auto_push=True, force=False):
     """新增詞彙並寫入 Kitty 自訂新增詞庫 (保持基準 5666 檔案不更動)"""
     korean = korean.strip()
     chinese = chinese.strip()
@@ -159,15 +159,16 @@ def add_vocab(korean, chinese, english="", level="A", pos="名詞", pos_desc=Non
     all_data = load_all_vocab_data()
     kitty_data = load_kitty_add_data()
     
-    # 查重防呆 (跨全量雙庫比對)
-    for item in all_data:
-        if item.get('k') == korean:
-            return {
-                "success": False,
-                "reason": "duplicate",
-                "message": f"詞彙已存在！ID: #{item['id']} {item['k']} ({item['c']})",
-                "existing_item": item
-            }
+    # 查重防呆 (若韓文與詞性均完全相同且未開啟 force，則判定重複)
+    if not force:
+        for item in all_data:
+            if item.get('k') == korean and (item.get('p') == pos or item.get('c') == chinese):
+                return {
+                    "success": False,
+                    "reason": "duplicate",
+                    "message": f"詞彙已存在！ID: #{item['id']} {item['k']} [{item.get('p', '')}] ({item['c']})",
+                    "existing_item": item
+                }
             
     # 計算最新 ID (起始於 5667)
     max_id = max((item['id'] for item in all_data), default=5666)
@@ -225,6 +226,7 @@ def main():
     p_add.add_argument("--pos", "-p", default="名詞", help="詞性 (如 名詞/動詞/形容詞/副詞/獨立詞)")
     p_add.add_argument("--pos-desc", default="", help="詳細詞性說明")
     p_add.add_argument("--roman", "-r", default="", help="自訂羅馬拼音 (若不填則自動生成)")
+    p_add.add_argument("--force", "-f", action="store_true", help="強制新增同音異義詞")
     p_add.add_argument("--no-push", action="store_true", help="不自動執行 git push")
     p_add.add_argument("--json", action="store_true", help="輸出 JSON 格式")
     
@@ -235,6 +237,7 @@ def main():
     p_check.add_argument("--english", "-e", default="", help="英文釋義")
     p_check.add_argument("--level", "-l", default="A", help="TOPIK 級別")
     p_check.add_argument("--pos", "-p", default="名詞", help="詞性")
+    p_check.add_argument("--force", "-f", action="store_true", help="強制新增同音異義詞")
     p_check.add_argument("--no-push", action="store_true", help="不自動執行 git push")
     p_check.add_argument("--json", action="store_true", help="輸出 JSON 格式")
     
