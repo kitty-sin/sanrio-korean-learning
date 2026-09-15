@@ -100,6 +100,10 @@ def parse_glossika_md():
             part3_lines.append(l)
 
     # 1. 解析第一部分 (單音節 ↔ 漢字群)
+    EXTRA_HANJA_FOR_SYLLABLE = {
+        "요": ["瑜"]  # 瑜伽 / 瑜珈 (Yoga)
+    }
+
     syllables = []
     for l in part1_lines:
         if l.startswith('|') and not l.startswith('| :') and not l.startswith('| 韓文音節'):
@@ -108,6 +112,10 @@ def parse_glossika_md():
                 hangul = re.sub(r'\*+', '', parts[0]).strip()
                 roman = parts[1]
                 hanjas = parts[2].split()
+                if hangul in EXTRA_HANJA_FOR_SYLLABLE:
+                    for extra_h in EXTRA_HANJA_FOR_SYLLABLE[hangul]:
+                        if extra_h not in hanjas:
+                            hanjas.append(extra_h)
                 if hangul:
                     syllables.append({
                         "id": len(syllables) + 1,
@@ -190,6 +198,24 @@ def parse_glossika_md():
                     "p": pos
                 })
                 word_id += 1
+
+    EXTRA_HANJA_WORDS = [
+        {"k": "요가", "c": "瑜伽、瑜珈", "e": "Yoga", "py": "yújiā", "ipa": "jo.ɡa.", "p": "名詞"}
+    ]
+    for ew in EXTRA_HANJA_WORDS:
+        if not any(hw['k'] == ew['k'] for hw in hanja_words):
+            hanja_words.append({
+                "id": word_id,
+                "k": ew['k'],
+                "r": romanize_hangul(ew['k']),
+                "c": ew['c'],
+                "e": ew['e'],
+                "py": ew['py'],
+                "ipa": ew['ipa'],
+                "l": "Hanja",
+                "p": ew['p']
+            })
+            word_id += 1
 
     # 3. 解析第三部分 (外來語對照)
     try:
@@ -320,6 +346,8 @@ def extract_all_syllables(glossika_syllables, hanja_words, loanwords):
         k = syl['k']
         hanja_syl_chars.add(k)
         samples = char_to_samples.get(k, [])
+        # 依詞長排序，優先呈現精煉代表詞
+        sorted_samples = sorted(samples, key=lambda x: (len(x['k']) > 1, len(x['k'])))
         final_syllables.append({
             "id": idx,
             "k": k,
@@ -328,7 +356,7 @@ def extract_all_syllables(glossika_syllables, hanja_words, loanwords):
             "hanjas": syl.get('hanjas', []),
             "count": len(syl.get('hanjas', [])),
             "hanja_str": syl.get('hanja_str', ''),
-            "sample_words": samples[:5]
+            "sample_words": sorted_samples[:6]
         })
 
     # 2. 處理新增的固有 / 常用音節 (566 個)
@@ -338,15 +366,16 @@ def extract_all_syllables(glossika_syllables, hanja_words, loanwords):
     start_native_id = len(final_syllables) + 1
     for idx, k in enumerate(native_chars, start=start_native_id):
         samples = char_to_samples.get(k, [])
+        sorted_samples = sorted(samples, key=lambda x: (len(x['k']) > 1, len(x['k'])))
         final_syllables.append({
             "id": idx,
             "k": k,
             "r": romanize_hangul(k),
             "type": "native",
             "hanjas": [],
-            "count": len(samples),
+            "count": len(sorted_samples),
             "hanja_str": "",
-            "sample_words": samples[:6]
+            "sample_words": sorted_samples[:6]
         })
 
     return final_syllables
