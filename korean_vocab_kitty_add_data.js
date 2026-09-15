@@ -79,5 +79,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5675,
+    "k": "봐",
+    "r": "bwa",
+    "c": "睇下、睇睇、看、看吧（動詞 보다 平語口語形）",
+    "e": "Look, see, watch (informal spoken form of 보다)",
+    "l": "A",
+    "p": "動詞",
+    "pd": "動詞 (Verb / 동사)，如 하다（做）、가다（去）。"
   }
 ];
