@@ -65,7 +65,7 @@
       this.speakSingle(text, speechRate, onEnd);
     },
 
-    // 逐字音節朗讀核心
+    // 逐字音節朗讀核心 (0.3x 極慢逐字口型)
     speakSyllables: async function(text, onEnd) {
       const raw = text.split(/[\(\/]/)[0].trim();
       const chars = Array.from(raw).filter(ch => ch.trim().length > 0 && /[\uac00-\ud7a3\u1100-\u11ff\u3130-\u318f]/.test(ch));
@@ -77,10 +77,10 @@
       for (let i = 0; i < targetChars.length; i++) {
         const char = targetChars[i];
         await new Promise((resolve) => {
-          this.speakSingle(char, 0.9, resolve);
+          this.speakSingle(char, 0.65, resolve);
         });
         if (i < targetChars.length - 1) {
-          await new Promise(r => setTimeout(r, 380));
+          await new Promise(r => setTimeout(r, 450));
         }
       }
       if (onEnd) onEnd();
@@ -92,14 +92,14 @@
         if (onEnd) onEnd();
         return;
       }
-      const speechRate = rate || 1.0;
+      const speechRate = typeof rate === 'number' ? rate : 1.0;
       
       // 0. 最高優先級：若處於 Android 原生 App 內，直調系統底層 TextToSpeech (Samsung/Google 原生引擎)
       if (window.AndroidNativeTTS && typeof window.AndroidNativeTTS.speak === 'function') {
         try {
           window.AndroidNativeTTS.speak(text, speechRate);
           if (onEnd) {
-            const estTime = Math.max(450, (text.length * 350) / speechRate);
+            const estTime = Math.max(500, (text.length * 400) / speechRate);
             setTimeout(onEnd, estTime);
           }
           return;
@@ -122,7 +122,7 @@
           window.speechSynthesis.cancel();
           const utter = new SpeechSynthesisUtterance(text);
           utter.lang = 'ko-KR';
-          utter.rate = speechRate;
+          utter.rate = Math.max(0.4, Math.min(1.5, speechRate));
           utter.pitch = 1.05;
           let finished = false;
           utter.onend = () => {
@@ -161,8 +161,8 @@
         const clean = encodeURIComponent(text.trim());
         const googleUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=' + clean;
         const audio = new Audio(googleUrl);
-        // HTML5 Audio playbackRate 限制安全範圍 (0.75 ~ 1.25)，防止底層解碼器崩潰
-        const safeRate = Math.max(0.75, Math.min(1.25, rate || 1.0));
+        // HTML5 Audio playbackRate 支援 0.4x ~ 1.5x 真實放慢與加速
+        const safeRate = Math.max(0.4, Math.min(1.5, typeof rate === 'number' ? rate : 1.0));
         audio.playbackRate = safeRate;
         let ended = false;
         const triggerEnd = () => {
