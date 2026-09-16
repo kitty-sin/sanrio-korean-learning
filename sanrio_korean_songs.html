@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 KITTY 韓語名曲歌詞練唱樂園 (李碩珉 DK - Stay With Me 韓劇插曲精讀)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+KR:wght@500;700;900&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+    <!-- React 18 & Babel CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- 行動端與發音橋接 (KittyVoice) -->
+    <script src="app_mobile_bridge.js"></script>
+    <!-- 全域智慧搜尋引擎 (繁簡雙向通搜 + 韓語初聲/NFC + 羅馬拼音 + 英文) -->
+    <script src="kitty_search_engine.js"></script>
+    <!-- 韓語名曲結構化資料集 -->
+    <script src="korean_songs_data.js"></script>
+
+    <style>
+        body {
+            font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+            background-color: #FFF5F8;
+            color: #372A3D;
+            overflow-x: hidden;
+        }
+        .kr-font {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .cute-font {
+            font-family: 'Gaegu', 'Noto Sans TC', cursive, sans-serif;
+        }
+
+        /* 柔和動態光斑背景 */
+        .ambient-glow-1 {
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 45vw;
+            height: 45vw;
+            background: radial-gradient(circle, rgba(254, 205, 211, 0.45) 0%, rgba(255, 245, 248, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseGlow 12s ease-in-out infinite alternate;
+        }
+        .ambient-glow-2 {
+            position: fixed;
+            bottom: -15%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(233, 213, 255, 0.4) 0%, rgba(255, 245, 248, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseGlow 14s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes pulseGlow {
+            0% { transform: scale(0.95) translate(0, 0); opacity: 0.7; }
+            100% { transform: scale(1.1) translate(20px, 20px); opacity: 1; }
+        }
+
+        /* 播放中歌詞高亮光暈 */
+        .playing-lyric-card {
+            border-color: #F43F5E !important;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF1F2 100%) !important;
+            box-shadow: 0 0 25px rgba(244, 63, 94, 0.25), 0 8px 20px rgba(244, 114, 182, 0.15) !important;
+            transform: scale(1.015);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* 自訂滾動條 */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #FFF0F5;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #FDA4AF;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #F43F5E;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative selection:bg-rose-200 selection:text-rose-900 pb-20">
+
+    <!-- 背景氛圍光 -->
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <div id="root" class="relative z-10"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useRef } = React;
+
+        // ==================== 韓語字母拆解核心字典 ====================
+        const CHOSEONG = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+        const JUNGSEONG = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ'];
+        const JONGSEONG = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+
+        // 7 大收音口訣表
+        const BATCHIM_RULES = {
+            'ㄱ': { sound: '[k]', tag: '舌根閉鎖', mnemonic: '呃 (ak)', desc: '喉嚨緊閉急停，像廣東話「握/呃」', color: 'bg-rose-100 text-rose-700 border-rose-300' },
+            'ㄲ': { sound: '[k]', tag: '舌根閉鎖', mnemonic: '呃 (ak)', desc: '喉嚨緊閉急停，歸入 ㄱ 家族', color: 'bg-rose-100 text-rose-700 border-rose-300' },
+            'ㄳ': { sound: '[k]', tag: '舌根閉鎖', mnemonic: '呃 (ak)', desc: '雙收音代表音為 ㄱ', color: 'bg-rose-100 text-rose-700 border-rose-300' },
+            'ㄺ': { sound: '[k]', tag: '舌根閉鎖', mnemonic: '呃 (ak)', desc: '多數情況讀 ㄱ 音', color: 'bg-rose-100 text-rose-700 border-rose-300' },
+            'ㅋ': { sound: '[k]', tag: '舌根閉鎖', mnemonic: '呃 (ak)', desc: '歸入 ㄱ 家族', color: 'bg-rose-100 text-rose-700 border-rose-300' },
+
+            'ㄷ': { sound: '[t]', tag: '舌尖頂齒', mnemonic: '壓 (at)', desc: '舌尖抵住上排牙齒內側，像廣東話「壓/八」', color: 'bg-amber-100 text-amber-700 border-amber-300' },
+            'ㅅ': { sound: '[t]', tag: '舌尖頂齒', mnemonic: '壓 (at)', desc: '收音時發代表音 [t]', color: 'bg-amber-100 text-amber-700 border-amber-300' },
+            'ㅆ': { sound: '[t]', tag: '舌尖頂齒', mnemonic: '壓 (at)', desc: '收音時發代表音 [t]', color: 'bg-amber-100 text-amber-700 border-amber-300' },
+            'ㅈ': { sound: '[t]', tag: '舌尖頂齒', mnemonic: '壓 (at)', desc: '收音時發代表音 [t]', color: 'bg-amber-100 text-amber-700 border-amber-300' },
+            'ㅊ': { sound: '[t]', tag: '舌尖頂齒', mnemonic: '壓 (at)', desc: '收音時發代表音 [t]', color: 'bg-amber-100 text-amber-700 border-amber-300' },
+            'ㅌ': { sound: '[t]', tag: '舌尖頂齒', mnemonic: '壓 (at)', desc: '收音時發代表音 [t]', color: 'bg-amber-100 text-amber-700 border-amber-300' },
+            'ㅎ': { sound: '[t]', tag: '舌尖頂齒', mnemonic: '壓 (at)', desc: '單獨收音時發代表音 [t]', color: 'bg-amber-100 text-amber-700 border-amber-300' },
+
+            'ㅂ': { sound: '[p]', tag: '雙唇緊閉', mnemonic: '鴨 (ap)', desc: '雙唇緊閉不放氣，像廣東話「鴨/十」', color: 'bg-pink-100 text-pink-700 border-pink-300' },
+            'ㅍ': { sound: '[p]', tag: '雙唇緊閉', mnemonic: '鴨 (ap)', desc: '收音時發代表音 [p]', color: 'bg-pink-100 text-pink-700 border-pink-300' },
+            'ㅄ': { sound: '[p]', tag: '雙唇緊閉', mnemonic: '鴨 (ap)', desc: '雙收音代表音為 ㅂ', color: 'bg-pink-100 text-pink-700 border-pink-300' },
+            'ㄿ': { sound: '[p]', tag: '雙唇緊閉', mnemonic: '鴨 (ap)', desc: '收音時發代表音 [p]', color: 'bg-pink-100 text-pink-700 border-pink-300' },
+
+            'ㅇ': { sound: '[ŋ]', tag: '後鼻音', mnemonic: '硬 (ang)', desc: '後鼻音鼻腔共鳴，像廣東話「硬/鶯」', color: 'bg-purple-100 text-purple-700 border-purple-300' },
+            
+            'ㄴ': { sound: '[n]', tag: '前鼻音', mnemonic: '眼 (an)', desc: '舌尖抵上顎鼻音，像廣東話「眼/曼」', color: 'bg-emerald-100 text-emerald-700 border-emerald-300' },
+            'ㄵ': { sound: '[n]', tag: '前鼻音', mnemonic: '眼 (an)', desc: '雙收音代表音為 ㄴ', color: 'bg-emerald-100 text-emerald-700 border-emerald-300' },
+            'ㄶ': { sound: '[n]', tag: '前鼻音', mnemonic: '眼 (an)', desc: '雙收音代表音為 ㄴ', color: 'bg-emerald-100 text-emerald-700 border-emerald-300' },
+
+            'ㅁ': { sound: '[m]', tag: '雙唇鼻音', mnemonic: '岩 (am)', desc: '閉雙唇發鼻音，像廣東話「岩/心」', color: 'bg-teal-100 text-teal-700 border-teal-300' },
+            'ㄻ': { sound: '[m]', tag: '雙唇鼻音', mnemonic: '岩 (am)', desc: '雙收音代表音為 ㅁ', color: 'bg-teal-100 text-teal-700 border-teal-300' },
+
+            'ㄹ': { sound: '[l]', tag: '舌尖彈捲', mnemonic: '捲舌頂上顎 (al)', desc: '舌尖捲起輕貼牙齦，似廣東話「辣 (laat)」尾音', color: 'bg-sky-100 text-sky-700 border-sky-300' },
+            'ㄼ': { sound: '[l]', tag: '舌尖彈捲', mnemonic: '捲舌頂上顎 (al)', desc: '多數情況讀 ㄹ 音', color: 'bg-sky-100 text-sky-700 border-sky-300' },
+            'ㄾ': { sound: '[l]', tag: '舌尖彈捲', mnemonic: '捲舌頂上顎 (al)', desc: '雙收音代表音為 ㄹ', color: 'bg-sky-100 text-sky-700 border-sky-300' },
+            'ㅀ': { sound: '[l]', tag: '舌尖彈捲', mnemonic: '捲舌頂上顎 (al)', desc: '雙收音代表音為 ㄹ', color: 'bg-sky-100 text-sky-700 border-sky-300' }
+        };
+
+        // 韓文字拆解演算法
+        function decomposeHangul(str) {
+            const result = [];
+            for (let i = 0; i < str.length; i++) {
+                const charCode = str.charCodeAt(i);
+                if (charCode >= 0xAC00 && charCode <= 0xD7A3) {
+                    const syllableIndex = charCode - 0xAC00;
+                    const jongIndex = syllableIndex % 28;
+                    const jungIndex = Math.floor((syllableIndex - jongIndex) / 28) % 21;
+                    const choIndex = Math.floor((syllableIndex - jongIndex) / (28 * 21));
+                    
+                    const cho = CHOSEONG[choIndex];
+                    const jung = JUNGSEONG[jungIndex];
+                    const jong = JONGSEONG[jongIndex];
+                    const batchimInfo = jong ? BATCHIM_RULES[jong] : null;
+
+                    result.push({
+                        char: str[i],
+                        cho,
+                        jung,
+                        jong: jong || null,
+                        batchimInfo,
+                        isHangul: true
+                    });
+                } else if (/\S/.test(str[i])) {
+                    result.push({
+                        char: str[i],
+                        isHangul: false
+                    });
+                }
+            }
+            return result;
+        }
+
+        // ==================== 主應用組件 ====================
+        function App() {
+            const songsList = window.KOREAN_SONGS_DATA || [];
+            const [selectedSongId, setSelectedSongId] = useState(songsList[0]?.id || '');
+            const [searchTerm, setSearchTerm] = useState('');
+            const [speedMode, setSpeedMode] = useState(1.0); // 1.0, 0.85, 0.3
+            const [currentPlayingId, setCurrentPlayingId] = useState(null);
+            const [isPlayingAll, setIsPlayingAll] = useState(false);
+            const [autoScroll, setAutoScroll] = useState(true);
+            const [bookmarks, setBookmarks] = useState(() => {
+                try {
+                    return JSON.parse(localStorage.getItem('kitty_song_bookmarks') || '[]');
+                } catch(e) { return []; }
+            });
+            const [deconstructTarget, setDeconstructTarget] = useState(null);
+
+            // 當前選中的歌曲資料
+            const currentSong = useMemo(() => {
+                return songsList.find(s => s.id === selectedSongId) || songsList[0] || null;
+            }, [selectedSongId, songsList]);
+
+            // 全部歌詞扁平列表（用於循序播放）
+            const allLyricsFlat = useMemo(() => {
+                if (!currentSong) return [];
+                const list = [];
+                currentSong.sections.forEach(sec => {
+                    sec.lyrics.forEach(lyric => list.push(lyric));
+                });
+                return list;
+            }, [currentSong]);
+
+            // 收藏切換
+            const toggleBookmark = (lyricId) => {
+                const key = `${selectedSongId}_${lyricId}`;
+                setBookmarks(prev => {
+                    const next = prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key];
+                    try { localStorage.setItem('kitty_song_bookmarks', JSON.stringify(next)); } catch(e){}
+                    return next;
+                });
+            };
+
+            // 語音播放核心
+            const playLyricAudio = async (text, rate, lyricId = null) => {
+                if (lyricId) setCurrentPlayingId(lyricId);
+                const targetRate = rate !== undefined ? rate : speedMode;
+
+                if (window.KittyVoice) {
+                    await window.KittyVoice.speak(text, {
+                        rate: targetRate,
+                        onEnd: () => {
+                            if (!isPlayingAll) setCurrentPlayingId(null);
+                        },
+                        onError: () => {
+                            if (!isPlayingAll) setCurrentPlayingId(null);
+                        }
+                    });
+                } else {
+                    // Fallback
+                    const clean = encodeURIComponent(text.trim());
+                    const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${clean}`);
+                    audio.playbackRate = Math.max(0.75, Math.min(1.25, targetRate));
+                    audio.onended = () => { if (!isPlayingAll) setCurrentPlayingId(null); };
+                    audio.onerror = () => { if (!isPlayingAll) setCurrentPlayingId(null); };
+                    audio.play().catch(() => { if (!isPlayingAll) setCurrentPlayingId(null); });
+                }
+            };
+
+            // 整曲自動循序播放控制
+            const playAllRef = useRef(false);
+            playAllRef.current = isPlayingAll;
+
+            const handleTogglePlayAll = async () => {
+                if (isPlayingAll) {
+                    setIsPlayingAll(false);
+                    setCurrentPlayingId(null);
+                    if (window.speechSynthesis) window.speechSynthesis.cancel();
+                    return;
+                }
+
+                setIsPlayingAll(true);
+                for (let i = 0; i < allLyricsFlat.length; i++) {
+                    if (!playAllRef.current) break;
+                    const item = allLyricsFlat[i];
+                    setCurrentPlayingId(item.id);
+
+                    // 自動滾動置中
+                    if (autoScroll) {
+                        const el = document.getElementById(`lyric-card-${item.id}`);
+                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+
+                    // 播放該句
+                    await new Promise(resolve => {
+                        if (window.KittyVoice) {
+                            window.KittyVoice.speak(item.k, {
+                                rate: speedMode,
+                                onEnd: resolve,
+                                onError: resolve
+                            });
+                        } else {
+                            setTimeout(resolve, 2000);
+                        }
+                    });
+
+                    // 句與句之間間隔
+                    if (playAllRef.current && i < allLyricsFlat.length - 1) {
+                        await new Promise(r => setTimeout(r, 600));
+                    }
+                }
+                setIsPlayingAll(false);
+                setCurrentPlayingId(null);
+            };
+
+            // 搜尋過濾匹配
+            const isMatchSearch = (lyric) => {
+                if (!searchTerm.trim()) return true;
+                if (window.KittySearch) {
+                    const pq = window.KittySearch.prepareQuery(searchTerm);
+                    return (
+                        window.KittySearch.matchSmart(lyric.k, pq) ||
+                        window.KittySearch.matchSmart(lyric.r, pq) ||
+                        window.KittySearch.matchSmart(lyric.c, pq)
+                    );
+                } else {
+                    const q = searchTerm.trim().toLowerCase();
+                    return (
+                        lyric.k.toLowerCase().includes(q) ||
+                        lyric.r.toLowerCase().includes(q) ||
+                        lyric.c.toLowerCase().includes(q)
+                    );
+                }
+            };
+
+            // 當前歌曲過濾後的段落
+            const filteredSections = useMemo(() => {
+                if (!currentSong) return [];
+                if (!searchTerm.trim()) return currentSong.sections;
+
+                return currentSong.sections.map(sec => {
+                    const matchedLyrics = sec.lyrics.filter(isMatchSearch);
+                    return { ...sec, lyrics: matchedLyrics };
+                }).filter(sec => sec.lyrics.length > 0);
+            }, [currentSong, searchTerm]);
+
+            return (
+                <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
+
+                    {/* ==================== 頂部全域導航列 ==================== */}
+                    <header className="flex flex-wrap items-center justify-between gap-3 mb-6 bg-white/90 backdrop-blur-md p-3.5 md:p-4 rounded-3xl border border-rose-200/80 shadow-sm">
+                        <div className="flex items-center gap-2.5">
+                            <span className="text-2xl md:text-3xl animate-bounce">🎀</span>
+                            <div>
+                                <h1 className="text-lg md:text-xl font-extrabold bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                                    KITTY 韓語名曲歌詞練唱樂園
+                                </h1>
+                                <p className="text-[11px] text-gray-500 font-medium">
+                                    一句一框框精讀 • 逐句語音朗讀 • 字母結構拆解 • 積木屋直達 ✨
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* 快捷跨頁導航 */}
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                            <a
+                                href="index.html"
+                                className="px-3 py-1.5 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 text-xs font-bold border border-pink-200 transition flex items-center gap-1"
+                            >
+                                <span>🏠</span>
+                                <span>發音樂園</span>
+                            </a>
+                            <a
+                                href="korean_vocab_dictionary.html"
+                                className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold border border-rose-200 transition flex items-center gap-1"
+                            >
+                                <span>📚</span>
+                                <span>核心大字典</span>
+                            </a>
+                            <a
+                                href="korean_hanja_dictionary.html"
+                                className="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold border border-amber-200 transition flex items-center gap-1"
+                            >
+                                <span>🧸</span>
+                                <span>漢字音變</span>
+                            </a>
+                            <a
+                                href="sanrio_korean_food_100.html"
+                                className="px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-700 text-xs font-bold border border-orange-200 transition flex items-center gap-1"
+                            >
+                                <span>🍲</span>
+                                <span>美食清單</span>
+                            </a>
+                        </div>
+                    </header>
+
+                    {/* ==================== 歌曲分頁切換 Tabs ==================== */}
+                    <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                        {songsList.map(song => (
+                            <button
+                                key={song.id}
+                                onClick={() => {
+                                    setSelectedSongId(song.id);
+                                    if (isPlayingAll) {
+                                        setIsPlayingAll(false);
+                                        if (window.speechSynthesis) window.speechSynthesis.cancel();
+                                    }
+                                }}
+                                className={`px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap shadow-xs ${
+                                    selectedSongId === song.id
+                                        ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-rose-200 scale-102 ring-2 ring-rose-300'
+                                        : 'bg-white text-gray-700 hover:bg-rose-50 border border-rose-100'
+                                }`}
+                            >
+                                <span>{song.coverEmoji}</span>
+                                <span>{song.title}</span>
+                                <span className="opacity-80 text-[11px] font-normal">({song.artist.split('(')[0].trim()})</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* ==================== 歌曲資訊橫幅 (Hero Banner) ==================== */}
+                    {currentSong && (
+                        <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 md:p-6 border border-rose-200 shadow-md mb-8 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-rose-100 to-transparent rounded-bl-full pointer-events-none opacity-60"></div>
+                            
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <span className="text-2xl">🎤</span>
+                                        <h2 className="text-2xl md:text-3xl font-black text-gray-800 tracking-tight">
+                                            {currentSong.title}
+                                        </h2>
+                                        <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs font-bold border border-rose-200">
+                                            {currentSong.artist}
+                                        </span>
+                                    </div>
+                                    <p className="text-xs md:text-sm text-gray-500 flex items-center gap-2">
+                                        <span>🎬</span>
+                                        <span>{currentSong.source}</span>
+                                    </p>
+                                    <p className="text-xs text-gray-600 max-w-2xl leading-relaxed">
+                                        {currentSong.description}
+                                    </p>
+                                    <div className="flex items-center gap-1.5 pt-1 flex-wrap">
+                                        {currentSong.tags.map((tag, idx) => (
+                                            <span key={idx} className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-pink-50 text-pink-600 border border-pink-100">
+                                                #{tag}
+                                            </span>
+                                        ))}
+                                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-100">
+                                            ⭐ 學習難度：{'★'.repeat(currentSong.difficulty)}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* 右側播放控制器 */}
+                                <div className="flex flex-col gap-2.5 bg-rose-50/70 p-4 rounded-2xl border border-rose-200/80 flex-shrink-0">
+                                    <div className="flex items-center justify-between gap-3">
+                                        <span className="text-xs font-bold text-gray-700">跟唱語速：</span>
+                                        <div className="flex gap-1">
+                                            {[
+                                                { rate: 1.0, label: '1.0x' },
+                                                { rate: 0.85, label: '0.85x' },
+                                                { rate: 0.3, label: '0.3x 慢速' }
+                                            ].map(opt => (
+                                                <button
+                                                    key={opt.rate}
+                                                    onClick={() => setSpeedMode(opt.rate)}
+                                                    className={`px-2 py-1 rounded-lg text-[11px] font-bold transition ${
+                                                        speedMode === opt.rate
+                                                            ? 'bg-rose-500 text-white shadow-xs'
+                                                            : 'bg-white text-gray-600 hover:bg-rose-100'
+                                                    }`}
+                                                >
+                                                    {opt.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* 自動循序播放按鈕 */}
+                                    <button
+                                        onClick={handleTogglePlayAll}
+                                        className={`w-full py-2.5 px-4 rounded-xl font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                                            isPlayingAll
+                                                ? 'bg-amber-500 hover:bg-amber-600 text-white animate-pulse'
+                                                : 'bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white'
+                                        }`}
+                                    >
+                                        <span>{isPlayingAll ? '⏹' : '▶️'}</span>
+                                        <span>{isPlayingAll ? '停止播放整曲' : '整首循序跟唱播放'}</span>
+                                    </button>
+
+                                    <div className="flex items-center justify-between text-[11px] text-gray-500 px-1">
+                                        <label className="flex items-center gap-1.5 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={autoScroll}
+                                                onChange={(e) => setAutoScroll(e.target.checked)}
+                                                className="accent-rose-500 rounded"
+                                            />
+                                            <span>畫面自動跟隨高亮</span>
+                                        </label>
+                                        <span>共 {allLyricsFlat.length} 句歌詞</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ==================== 搜尋過濾列 ==================== */}
+                    <div className="mb-6 flex items-center gap-3 bg-white p-3 rounded-2xl border border-rose-100 shadow-xs">
+                        <span className="text-gray-400 pl-2">🔍</span>
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="搜尋歌詞（支援韓文原詞、拼音、中文翻譯）..."
+                            className="w-full bg-transparent text-xs md:text-sm font-semibold text-gray-800 placeholder-gray-400 focus:outline-hidden"
+                        />
+                        {searchTerm && (
+                            <button
+                                onClick={() => setSearchTerm('')}
+                                className="px-2 py-0.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 text-xs font-bold"
+                            >
+                                ✕
+                            </button>
+                        )}
+                    </div>
+
+                    {/* ==================== 歌詞段落與卡片列表 (一句一個框框) ==================== */}
+                    <div className="space-y-8">
+                        {filteredSections.map((section, sIdx) => (
+                            <div key={sIdx} className="space-y-4">
+                                {/* 段落標題徽章 */}
+                                <div className="flex items-center gap-2.5">
+                                    <span className="h-4 w-1.5 bg-rose-500 rounded-full"></span>
+                                    <h3 className="text-sm md:text-base font-extrabold text-gray-800 bg-white/80 px-3.5 py-1 rounded-xl border border-rose-200/70 shadow-2xs">
+                                        {section.label}
+                                    </h3>
+                                    <span className="text-xs text-gray-400 font-medium">({section.lyrics.length} 句)</span>
+                                </div>
+
+                                {/* 一句一個框框 網格/列表 */}
+                                <div className="space-y-3.5">
+                                    {section.lyrics.map(lyric => {
+                                        const isPlaying = currentPlayingId === lyric.id;
+                                        const isBookmarked = bookmarks.includes(`${selectedSongId}_${lyric.id}`);
+
+                                        return (
+                                            <div
+                                                id={`lyric-card-${lyric.id}`}
+                                                key={lyric.id}
+                                                className={`p-4 md:p-5 rounded-2xl bg-white border transition-all duration-200 ${
+                                                    isPlaying
+                                                        ? 'playing-lyric-card ring-2 ring-rose-400'
+                                                        : 'border-rose-100 hover:border-rose-300 hover:shadow-md'
+                                                }`}
+                                            >
+                                                {/* 卡片頂部小標與收藏 */}
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span className="text-[11px] font-bold text-gray-400">
+                                                        #{lyric.id} • {section.tag}
+                                                    </span>
+                                                    <button
+                                                        onClick={() => toggleBookmark(lyric.id)}
+                                                        className={`text-sm transition-transform active:scale-125 cursor-pointer ${
+                                                            isBookmarked ? 'text-purple-500' : 'text-gray-300 hover:text-purple-300'
+                                                        }`}
+                                                        title={isBookmarked ? "取消收藏" : "收藏此句"}
+                                                    >
+                                                        💜
+                                                    </button>
+                                                </div>
+
+                                                {/* 第 1 行：韓文原詞 */}
+                                                <div className="mb-1">
+                                                    <span className="kr-font text-lg md:text-xl font-black text-gray-900 tracking-wide leading-snug">
+                                                        {lyric.k}
+                                                    </span>
+                                                </div>
+
+                                                {/* 第 2 行：羅馬拼音 */}
+                                                <div className="mb-1.5">
+                                                    <span className="text-xs md:text-sm font-semibold text-rose-500 tracking-wide">
+                                                        {lyric.r}
+                                                    </span>
+                                                </div>
+
+                                                {/* 第 3 行：中文歌詞 */}
+                                                <div className="mb-3.5">
+                                                    <p className="text-xs md:text-sm font-medium text-gray-700 leading-relaxed">
+                                                        {lyric.c}
+                                                    </p>
+                                                </div>
+
+                                                {/* 底部操作欄：語速 + 結構拆解 + 積木屋 */}
+                                                <div className="pt-2.5 border-t border-rose-50 flex items-center justify-between gap-2 flex-wrap">
+                                                    {/* 左側發音快捷按鈕 */}
+                                                    <div className="flex items-center gap-1.5">
+                                                        <button
+                                                            onClick={() => playLyricAudio(lyric.k, 1.0, lyric.id)}
+                                                            className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold border border-rose-200/60 transition cursor-pointer active:scale-95"
+                                                            title="1.0x 正常速度朗讀"
+                                                        >
+                                                            1.0x
+                                                        </button>
+                                                        <button
+                                                            onClick={() => playLyricAudio(lyric.k, 0.3, lyric.id)}
+                                                            className="px-2.5 py-1 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-600 text-xs font-bold border border-pink-200/60 transition cursor-pointer active:scale-95"
+                                                            title="0.3x 逐字慢速口型分解朗讀"
+                                                        >
+                                                            0.3x
+                                                        </button>
+                                                    </div>
+
+                                                    {/* 右側功能按鈕：結構拆解 + 積木屋 */}
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            onClick={() => setDeconstructTarget(lyric)}
+                                                            className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                                                            title="即時音節初中終聲拆解與收音口訣"
+                                                        >
+                                                            <span>🧩</span>
+                                                            <span>結構拆解</span>
+                                                        </button>
+                                                        <a
+                                                            href={`index.html?builder=${encodeURIComponent(lyric.k)}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="px-3 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-bold border border-sky-200 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                                                            title="在主站 3 層拼音積木屋中自由拼組"
+                                                        >
+                                                            <span>🏠</span>
+                                                            <span>積木屋</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* ==================== 即時結構拆解彈窗 (Deconstruction Modal) ==================== */}
+                    {deconstructTarget && (() => {
+                        const syllables = decomposeHangul(deconstructTarget.k);
+                        const isMultiGrid = syllables.length >= 3;
+
+                        return (
+                            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+                                <div
+                                    className="bg-white rounded-3xl max-w-2xl w-full border-2 border-purple-200 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {/* 頂部固定 Header */}
+                                    <div className="p-4 md:p-5 bg-gradient-to-r from-purple-50 via-pink-50 to-rose-50 border-b border-purple-100 flex-shrink-0">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-2xl">🧩</span>
+                                                <h3 className="kr-font text-lg md:text-xl font-black text-purple-950">
+                                                    {deconstructTarget.k}
+                                                </h3>
+                                            </div>
+                                            <button
+                                                onClick={() => setDeconstructTarget(null)}
+                                                className="w-8 h-8 rounded-full bg-white/80 hover:bg-white text-gray-500 hover:text-gray-800 flex items-center justify-center font-bold text-sm shadow-xs transition"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                        <p className="text-xs text-rose-600 font-semibold mb-1">[{deconstructTarget.r}]</p>
+                                        <p className="text-xs text-gray-600 font-medium">{deconstructTarget.c}</p>
+
+                                        {/* 發音速控列 */}
+                                        <div className="flex items-center gap-1.5 mt-3 pt-2 border-t border-purple-100/70">
+                                            <span className="text-[11px] font-bold text-purple-700">整句發音：</span>
+                                            <button
+                                                onClick={() => playLyricAudio(deconstructTarget.k, 1.0)}
+                                                className="px-2.5 py-1 rounded-lg bg-purple-600 text-white font-bold text-xs hover:bg-purple-700 active:scale-95 shadow-xs flex items-center gap-1"
+                                            >
+                                                <span>🔊</span>
+                                                <span>標準 (1.0x)</span>
+                                            </button>
+                                            <button
+                                                onClick={() => playLyricAudio(deconstructTarget.k, 0.3)}
+                                                className="px-2.5 py-1 rounded-lg bg-pink-100 text-pink-700 font-bold text-xs hover:bg-pink-200 active:scale-95"
+                                            >
+                                                🦥 極慢口型 (0.3x)
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* 核心滾動區域 (Scrollable Syllables Grid) */}
+                                    <div className="p-4 md:p-5 overflow-y-auto flex-1 custom-scrollbar">
+                                        <div className={`grid ${isMultiGrid ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-3.5`}>
+                                            {syllables.map((syl, idx) => (
+                                                <div key={idx} className="bg-purple-50/60 p-3.5 rounded-2xl border border-purple-100 hover:border-purple-200 transition-colors flex flex-col justify-between">
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <span className="kr-font text-lg font-black text-purple-800 bg-white px-2.5 py-0.5 rounded-xl border border-purple-200 shadow-2xs">
+                                                            第 {idx + 1} 字：{syl.char}
+                                                        </span>
+                                                        {syl.isHangul && (
+                                                            <button
+                                                                onClick={() => playLyricAudio(syl.char, 1.0)}
+                                                                className="px-2.5 py-1 rounded-lg bg-white text-purple-700 text-xs font-bold border border-purple-200 hover:bg-purple-100 flex items-center gap-1 shadow-2xs active:scale-95 transition-transform"
+                                                            >
+                                                                <span>🔊</span>
+                                                                <span>單字發音</span>
+                                                            </button>
+                                                        )}
+                                                    </div>
+
+                                                    {syl.isHangul ? (
+                                                        <>
+                                                            {/* 初聲 / 中聲 / 終聲 積木 */}
+                                                            <div className="grid grid-cols-3 gap-2 text-center my-2">
+                                                                {/* 初聲 */}
+                                                                <div className="bg-sky-50/90 p-2 rounded-xl border-2 border-sky-200">
+                                                                    <span className="text-[10px] font-bold text-sky-600 block">1. 初聲 (聲母)</span>
+                                                                    <span className="kr-font text-2xl font-bold text-sky-800 block my-0.5">{syl.cho}</span>
+                                                                    <span className="text-[10px] text-sky-500 font-semibold">輔音起首</span>
+                                                                </div>
+
+                                                                {/* 中聲 */}
+                                                                <div className="bg-rose-50/90 p-2 rounded-xl border-2 border-rose-200">
+                                                                    <span className="text-[10px] font-bold text-rose-600 block">2. 中聲 (母音)</span>
+                                                                    <span className="kr-font text-2xl font-bold text-rose-800 block my-0.5">{syl.jung}</span>
+                                                                    <span className="text-[10px] text-rose-500 font-semibold">元音音核</span>
+                                                                </div>
+
+                                                                {/* 終聲 */}
+                                                                <div className={`p-2 rounded-xl border-2 ${syl.jong ? 'bg-emerald-50/90 border-emerald-300' : 'bg-gray-50/80 border-gray-200'}`}>
+                                                                    <span className="text-[10px] font-bold text-emerald-700 block">3. 終聲 (收音)</span>
+                                                                    <span className="kr-font text-2xl font-bold text-emerald-800 block my-0.5">{syl.jong ? syl.jong : '—'}</span>
+                                                                    <span className="text-[10px] text-emerald-600 font-semibold">
+                                                                        {syl.jong ? (syl.batchimInfo ? syl.batchimInfo.tag : '有收音') : '無尾音'}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* 收音口訣提示 */}
+                                                            {syl.jong && syl.batchimInfo ? (
+                                                                <div className="bg-white p-2 rounded-xl border border-emerald-200 text-xs flex items-center justify-between mt-1">
+                                                                    <div className="pr-1">
+                                                                        <span className="font-bold text-emerald-800 text-[11px]">⭐ 口訣：</span>
+                                                                        <span className="font-bold text-rose-600 ml-0.5 text-[11px]">{syl.batchimInfo.mnemonic}</span>
+                                                                        <p className="text-[10px] text-gray-500 line-clamp-1">{syl.batchimInfo.desc}</p>
+                                                                    </div>
+                                                                    <span className="text-[11px] bg-emerald-100 text-emerald-800 font-extrabold px-1.5 py-0.5 rounded-md flex-shrink-0">
+                                                                        {syl.batchimInfo.sound}
+                                                                    </span>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="text-[10px] text-gray-400 text-center py-1">
+                                                                    開音節（純母音結尾，無尾音阻氣）
+                                                                </div>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <div className="p-3 bg-gray-50 rounded-xl text-center text-xs text-gray-500 font-bold">
+                                                            非韓語音節字元
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* 底部固定 Footer */}
+                                    <div className="p-3.5 md:p-4 bg-purple-50/50 border-t border-purple-100 flex justify-between items-center flex-shrink-0">
+                                        <button
+                                            onClick={() => setDeconstructTarget(null)}
+                                            className="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 active:scale-95 transition-all cursor-pointer"
+                                        >
+                                            關閉彈窗
+                                        </button>
+                                        <a
+                                            href={`index.html?builder=${encodeURIComponent(deconstructTarget.k)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-xs flex items-center gap-1.5 active:scale-95 transition-all"
+                                        >
+                                            <span>🏠</span>
+                                            <span>在主站 3 層積木屋自由拼組</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })()}
+
+                    {/* ==================== 頁腳 ==================== */}
+                    <footer className="text-center mt-12 text-xs text-rose-300 flex flex-col items-center gap-1">
+                        <p>KITTY 韓語名曲歌詞練唱樂園 • 李碩珉 DK《Stay With Me》✨</p>
+                        <p className="text-[11px] text-gray-400">
+                            與主站發音積木樂園、核心詞庫大字典與漢字辭典全生態圈無縫互聯
+                        </p>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
