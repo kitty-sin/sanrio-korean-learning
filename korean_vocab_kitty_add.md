@@ -20,3 +20,4 @@
 | 5680 | 귀여워요 | gwiyeowoyo | 好可愛、真可愛（해요體現在式，原形 귀엽다） | Cute, so cute (polite present of 귀엽다) | A | 形容詞 (Adjective / 형용사)，如 크다（大）、좋다（好）。 |
 | 5681 | 괜찮아요 | gwaenchanhayo | 沒關係、還可以、沒事（해요體日常敬語，原形 괜찮다） | It's okay, alright, no problem (polite) | A | 形容詞 (Adjective / 형용사)，如 크다（大）、좋다（好）。 |
 | 5682 | 알았어 | alasseo | 知道了、明白、好（動詞 알다 平語口語形） | Got it, I understand, okay (informal) | A | 動詞 (Verb / 동사)，如 하다（做）、가다（去）。 |
+| 5683 | 돌솥 | dolsot | 石鍋、石釜（如石鍋拌飯 돌솥비빔밥） | Stone pot, stone bowl (hot stone pot for bibimbap) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |

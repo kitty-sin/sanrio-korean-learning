@@ -159,5 +159,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "動詞",
     "pd": "動詞 (Verb / 동사)，如 하다（做）、가다（去）。"
+  },
+  {
+    "id": 5683,
+    "k": "돌솥",
+    "r": "dolsot",
+    "c": "石鍋、石釜（如石鍋拌飯 돌솥비빔밥）",
+    "e": "Stone pot, stone bowl (hot stone pot for bibimbap)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
