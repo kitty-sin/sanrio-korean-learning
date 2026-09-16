@@ -16,6 +16,7 @@ android/.idea/
 android/*.iml
 android/app/*.iml
 local.properties
-*.apk
-*.aab
-
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
