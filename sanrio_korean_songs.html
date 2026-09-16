@@ -561,15 +561,15 @@
                                             <div
                                                 id={`lyric-card-${lyric.id}`}
                                                 key={lyric.id}
-                                                className={`p-5 md:p-6 rounded-2xl bg-white/95 backdrop-blur-xs border transition-all duration-200 ${
+                                                className={`p-4 md:p-5 rounded-2xl bg-white/95 backdrop-blur-xs border transition-all duration-200 ${
                                                     isPlaying
                                                         ? 'playing-lyric-card ring-2 ring-cyan-400'
                                                         : 'border-teal-100/80 hover:border-cyan-300 hover:shadow-md hover:shadow-teal-100/40'
                                                 }`}
                                             >
                                                 {/* 卡片頂部小標與收藏 */}
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <span className="text-xs md:text-sm font-bold text-gray-400">
+                                                <div className="flex items-center justify-between mb-1.5">
+                                                    <span className="text-xs font-bold text-gray-400">
                                                         #{lyric.id} • {section.tag}
                                                     </span>
                                                     <button
@@ -583,23 +583,23 @@
                                                     </button>
                                                 </div>
 
-                                                {/* 第 1 行：韓文原詞 (超大字排版) */}
-                                                <div className="mb-1.5">
-                                                    <span className="kr-font text-xl md:text-2xl lg:text-3xl font-black text-gray-900 tracking-wide leading-snug block">
+                                                {/* 第 1 行：韓文原詞 */}
+                                                <div className="mb-1">
+                                                    <span className="kr-font text-lg md:text-xl font-black text-gray-900 tracking-wide leading-snug block">
                                                         {lyric.k}
                                                     </span>
                                                 </div>
 
                                                 {/* 第 2 行：羅馬拼音 */}
-                                                <div className="mb-2">
-                                                    <span className="text-sm md:text-base lg:text-lg font-bold text-teal-600 tracking-wide block">
+                                                <div className="mb-1.5">
+                                                    <span className="text-xs md:text-sm font-semibold text-teal-600 tracking-wide block">
                                                         {lyric.r}
                                                     </span>
                                                 </div>
 
                                                 {/* 第 3 行：中文歌詞 */}
-                                                <div className="mb-4">
-                                                    <p className="text-base md:text-lg lg:text-xl font-bold text-gray-800 leading-relaxed">
+                                                <div className="mb-3">
+                                                    <p className="text-sm md:text-base font-semibold text-gray-700 leading-relaxed">
                                                         {lyric.c}
                                                     </p>
                                                 </div>
