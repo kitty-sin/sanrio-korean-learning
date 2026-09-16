@@ -253,6 +253,10 @@
     - 羅馬拼音調為 `text-xs md:text-sm font-semibold`，中文翻譯調為 `text-sm md:text-base font-semibold`。
     - 同步優化卡片內邊距（Padding）與元素間距，視覺更加精緻優雅、緊湊耐看。
     - `sw.js` 升級至 `kitty-korean-v1.0.22`，同步更新至 `www/` 目錄並推播至 GitHub Pages。
+- **2026-09-16 16:56 PT**：
+  - **新增飲食生活名詞**：已將 `#5683 돌솥 (石鍋、石釜（如石鍋拌飯 돌솥비빔밥） / Stone pot, stone bowl (hot stone pot for bibimbap))`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **17 筆**，全庫總量達到 **5,683 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`（收錄 1,039 音節矩陣）。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `45dc67c`）。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -262,7 +266,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-16 16:35 PT
+- **更新時間**：2026-09-16 16:56 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
