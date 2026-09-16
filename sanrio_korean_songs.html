@@ -255,28 +255,23 @@
             };
 
             // 語音播放核心
-            const playLyricAudio = async (text, rate, lyricId = null) => {
+            const playLyricAudio = (text, rate, lyricId = null) => {
+                if (!text) return;
                 if (lyricId) setCurrentPlayingId(lyricId);
-                const targetRate = rate !== undefined ? rate : speedMode;
+                const targetRate = typeof rate === 'number' ? rate : speedMode;
 
-                if (window.KittyVoice) {
-                    await window.KittyVoice.speak(text, {
-                        rate: targetRate,
-                        onEnd: () => {
-                            if (!isPlayingAll) setCurrentPlayingId(null);
-                        },
-                        onError: () => {
-                            if (!isPlayingAll) setCurrentPlayingId(null);
-                        }
+                if (window.KittyVoice && window.KittyVoice.speak) {
+                    window.KittyVoice.speak(text, targetRate, () => {
+                        if (!playAllRef.current) setCurrentPlayingId(null);
                     });
                 } else {
                     // Fallback
                     const clean = encodeURIComponent(text.trim());
                     const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${clean}`);
                     audio.playbackRate = Math.max(0.75, Math.min(1.25, targetRate));
-                    audio.onended = () => { if (!isPlayingAll) setCurrentPlayingId(null); };
-                    audio.onerror = () => { if (!isPlayingAll) setCurrentPlayingId(null); };
-                    audio.play().catch(() => { if (!isPlayingAll) setCurrentPlayingId(null); });
+                    audio.onended = () => { if (!playAllRef.current) setCurrentPlayingId(null); };
+                    audio.onerror = () => { if (!playAllRef.current) setCurrentPlayingId(null); };
+                    audio.play().catch(() => { if (!playAllRef.current) setCurrentPlayingId(null); });
                 }
             };
 
@@ -306,14 +301,14 @@
 
                     // 播放該句
                     await new Promise(resolve => {
-                        if (window.KittyVoice) {
-                            window.KittyVoice.speak(item.k, {
-                                rate: speedMode,
-                                onEnd: resolve,
-                                onError: resolve
-                            });
+                        if (window.KittyVoice && window.KittyVoice.speak) {
+                            window.KittyVoice.speak(item.k, speedMode, resolve);
                         } else {
-                            setTimeout(resolve, 2000);
+                            const clean = encodeURIComponent(item.k.trim());
+                            const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${clean}`);
+                            audio.onended = resolve;
+                            audio.onerror = resolve;
+                            audio.play().catch(resolve);
                         }
                     });
 
