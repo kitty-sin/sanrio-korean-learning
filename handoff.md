@@ -261,6 +261,10 @@
   - **新增專有名詞（地理/歷史）**：已將 `#5684 로마 (羅馬（義大利首都、古羅馬） / Rome (capital of Italy, ancient Rome))`（Level D 專有名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
   - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **18 筆**，全庫總量達到 **5,684 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
   - **Git 部署**：已推播至 GitHub Pages（Commit `bfd35fa`）。
+- **2026-09-17 14:18 PT**：
+  - **新增生活日用品名詞**：已將 `#5685 우비 (雨衣、雨披（漢字詞：雨衣） / Raincoat, rain poncho)`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **19 筆**，全庫總量達到 **5,685 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `f37bb36`）。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -270,7 +274,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-17 13:53 PT
+- **更新時間**：2026-09-17 14:18 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
