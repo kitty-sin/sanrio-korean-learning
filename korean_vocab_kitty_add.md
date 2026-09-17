@@ -22,3 +22,4 @@
 | 5682 | 알았어 | alasseo | 知道了、明白、好（動詞 알다 平語口語形） | Got it, I understand, okay (informal) | A | 動詞 (Verb / 동사)，如 하다（做）、가다（去）。 |
 | 5683 | 돌솥 | dolsot | 石鍋、石釜（如石鍋拌飯 돌솥비빔밥） | Stone pot, stone bowl (hot stone pot for bibimbap) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
 | 5684 | 로마 | roma | 羅馬（義大利首都、古羅馬） | Rome (capital of Italy, ancient Rome) | D | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
+| 5685 | 우비 | ubi | 雨衣、雨披（漢字詞：雨衣） | Raincoat, rain poncho | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |

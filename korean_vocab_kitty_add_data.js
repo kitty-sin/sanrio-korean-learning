@@ -179,5 +179,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "D",
     "p": "專有名詞",
     "pd": "專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。"
+  },
+  {
+    "id": 5685,
+    "k": "우비",
+    "r": "ubi",
+    "c": "雨衣、雨披（漢字詞：雨衣）",
+    "e": "Raincoat, rain poncho",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
