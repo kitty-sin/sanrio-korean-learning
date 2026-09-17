@@ -189,5 +189,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5686,
+    "k": "티비",
+    "r": "tibi",
+    "c": "電視、TV（電視機，日常高頻口語簡稱）",
+    "e": "TV, television (colloquial abbreviation of 텔레비전)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
