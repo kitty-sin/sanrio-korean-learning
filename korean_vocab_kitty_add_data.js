@@ -169,5 +169,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5684,
+    "k": "로마",
+    "r": "roma",
+    "c": "羅馬（義大利首都、古羅馬）",
+    "e": "Rome (capital of Italy, ancient Rome)",
+    "l": "D",
+    "p": "專有名詞",
+    "pd": "專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。"
   }
 ];
