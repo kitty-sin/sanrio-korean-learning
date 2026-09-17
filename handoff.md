@@ -269,6 +269,10 @@
   - **新增家電口語名詞**：已將 `#5686 티비 (電視、TV（電視機，日常高頻口語簡稱） / TV, television (colloquial abbreviation of 텔레비전))`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
   - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **20 筆**，全庫總量達到 **5,686 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
   - **Git 部署**：已推播至 GitHub Pages（Commit `8472a01`）。
+- **2026-09-17 16:53 PT**：
+  - **新增常見動物名詞**：已將 `#5687 돼지 (豬（家豬、十二生肖之一） / Pig, hog, swine)`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **21 筆**，全庫總量達到 **5,687 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`（全量音節矩陣擴充至 1,040 組）。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `cf494d9`）。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -278,7 +282,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-17 14:43 PT
+- **更新時間**：2026-09-17 16:53 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
