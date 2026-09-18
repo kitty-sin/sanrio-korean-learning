@@ -259,5 +259,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "助詞",
     "pd": "補助詞 (Auxiliary Particle / 보조사) 或其他接尾助詞。"
+  },
+  {
+    "id": 5693,
+    "k": "을/를",
+    "r": "eul/reul",
+    "c": "【受格助詞 / 賓格助詞（목적격 조사）】① 何時用：標記句子受詞（動作直接作用的對象，如 밥을 먹어요 吃飯、커피를 마셔요 喝咖啡、영화를 봐요 看電影）；熟人日常口語中若語意明確常省略。② 怎樣用：前面名詞「有收音」接 을（觸發連音化，例：책을 읽어요 [채글] 看書、음악을 들어요 [으마글] 聽音樂）；名詞「無收音」接 를（例：영화를 봐요 看電影、사과를 사요 買蘋果）。③ 口語代名詞常見縮合：날（我/把我）、절（我/謙稱）、널（你/把你）、뭘（什麼/把什麼）",
+    "e": "Object marker particle (목적격 조사). Attached to nouns to indicate the direct object of an action. '을' after consonants (batchim), '를' after vowels.",
+    "l": "A",
+    "p": "助詞",
+    "pd": "補助詞 (Auxiliary Particle / 보조사) 或其他接尾助詞。"
   }
 ];
