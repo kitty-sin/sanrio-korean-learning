@@ -41,5 +41,11 @@ Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與
   <img src="assets/hangul_alphabet_chart.jpg" alt="韓語字母拼音總表" width="560" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
 </div>
 
+- **🪄 韓語 40 音變速查總表 (Korean 40 Sound Changes Chart)**：[assets/korean_sound_changes_chart.jpg](assets/korean_sound_changes_chart.jpg)
+
+<div align="center" style="margin-top: 16px;">
+  <img src="assets/korean_sound_changes_chart.jpg" alt="韓語 40 音變速查總表" width="560" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
+</div>
+
 ## 🚀 線上即時體驗
 - **GitHub Pages**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
