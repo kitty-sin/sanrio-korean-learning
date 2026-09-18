@@ -229,5 +229,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5690,
+    "k": "습니다",
+    "r": "seupnida",
+    "c": "【格式體最高敬語終結詞尾（하십시오體）】① 何時用：用於正式場合、職場匯報、演講發表、公務會議、初次見面或向長輩/上司表示崇高敬意。② 怎樣用：動詞/形容詞詞幹「有收音」時接 -습니다（如 먹습니다 吃、좋습니다 好）；若詞幹「無收音」則縮合接 -ㅂ니다（如 갑니다 去、합니다 做）；疑問句改為 -습니까?（如 식사하셨습니까? 您用餐了嗎？）。③ 音變：終聲 ㅂ 遇 ㄴ 發生鼻音化，實際讀作 [슴니다]",
+    "e": "Formal polite declarative sentence ending (deferential / 하십시오체). Used in formal/business settings or addressing superiors.",
+    "l": "A",
+    "p": "助詞",
+    "pd": "補助詞 (Auxiliary Particle / 보조사) 或其他接尾助詞。"
   }
 ];
