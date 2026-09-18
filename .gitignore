@@ -2,6 +2,10 @@ firebase-debug.log
 .DS_Store
 Thumbs.db
 
+# 本地歷史存檔目錄（不推播至 GitHub）
+_archive/
+
+
 # Node.js
 node_modules/
 

@@ -18,6 +18,7 @@
 
 ```
 Korean-Learning/
+├── _archive/                    # 本地歷史存檔目錄 (20 個歷史分期詞庫 + 5 個早期交接檔，不推播至 GitHub)
 ├── .github/workflows/
 │   └── build-apk.yml            # GitHub Actions Android APK 自動編譯與 Release 工作流
 ├── android/                     # Android 原生專案代碼 (Capacitor 6.x Gradle 專案)

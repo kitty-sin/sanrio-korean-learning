@@ -291,6 +291,11 @@
     - 於公開說明文件 `README.md`「📚 附屬教材資源」增列直連瀏覽與下載連結。
     - 於主站 `index.html`、詞庫大字典 `korean_vocab_dictionary.html` 與漢字大辭典 `korean_hanja_dictionary.html` 頂部導航列新增「📑 語序敬語時態大解密 (PDF)」快捷按鈕。
     - 同步更新 `www/` 目錄並推播至 GitHub Pages。
+- **2026-09-18 11:56 PT**：
+  - **🧹 GitHub 倉庫精簡化：歷史分期檔案歸檔至本地 `_archive/` 並從 GitHub 移出**：
+    - 依方案 A 將 20 個早期分期詞庫檔（`korean_vocab_1000.*` ~ `korean_vocab_5001_5666.*`）與 5 個早期交接檔（`handoff_vocab_2000.md` ~ `handoff_vocab_5666.md`）全數移入本機 `_archive/` 目錄。
+    - 於 `.gitignore` 增列 `_archive/`，完成本地端 100% 完整保留並從 GitHub 遠端乾淨移除。
+    - 經 `manage_vocab.py` 查重檢驗，5,666 基準庫與 Kitty 自訂庫之查詢與全站運行 100% 正常。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -300,7 +305,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 11:46 PT
+- **更新時間**：2026-09-18 11:56 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
