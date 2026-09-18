@@ -3,7 +3,7 @@
 Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與音變 ✨
 
 <div align="center">
-  <img src="assets/sanrio_vowels_flashcard.jpg" alt="Sanrio 6 大基礎母音視覺記憶卡" width="480" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
+  <img src="assets/sanrio_vowels_flashcard.jpg?v=20260918" alt="Sanrio 6 大基礎母音視覺記憶卡" width="480" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
 </div>
 
 ## ✨ 核心特色
