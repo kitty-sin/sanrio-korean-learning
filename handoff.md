@@ -285,6 +285,12 @@
   - **📊 新增韓語 40 音變速查總表圖資與 README 文件展示**：
     - 已將《韓文40音變_2.jpg》收錄至 `assets/korean_sound_changes_chart.jpg` 與 `assets/韓文40音變_2.jpg`。
     - 於公開說明文件 `README.md`「📚 附屬教材資源」之「📊 韓語字母拼音總表 (Hangul Syllable Chart)」下方正式增列「**🪄 韓語 40 音變速查總表 (Korean 40 Sound Changes Chart)**」之直連連結與置中大圖展示。
+- **2026-09-18 11:46 PT**：
+  - **📑 新增《韓語語序・敬語・時態大解密.pdf》講義與全站導航對接**：
+    - 已將《韓語語序・敬語・時態大解密.pdf》（及相容別名 `korean_grammar_secrets.pdf`）收錄至專案根目錄。
+    - 於公開說明文件 `README.md`「📚 附屬教材資源」增列直連瀏覽與下載連結。
+    - 於主站 `index.html`、詞庫大字典 `korean_vocab_dictionary.html` 與漢字大辭典 `korean_hanja_dictionary.html` 頂部導航列新增「📑 語序敬語時態大解密 (PDF)」快捷按鈕。
+    - 同步更新 `www/` 目錄並推播至 GitHub Pages。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -294,7 +300,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-17 21:48 PT
+- **更新時間**：2026-09-18 11:46 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 

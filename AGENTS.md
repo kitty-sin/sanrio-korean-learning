@@ -51,6 +51,7 @@ Korean-Learning/
 ├── korean_vocab_kitty_add.md    # Kitty 自訂新增詞庫 Markdown 字典 (23 筆)
 ├── kitty_search_engine.js       # 全域智慧多語言搜尋引擎 (繁簡雙向通搜 + 韓語 NFC/初聲 + 英文拼音)
 ├── hangul_sanrio_deck_20p.pdf   # 20 頁超大字 Sanrio 拼音總表 (PDF 直連瀏覽)
+├── 韓語語序・敬語・時態大解密.pdf # 韓語語序・敬語・時態大解密精美講義 (PDF 直連瀏覽)
 ├── sanrio_korean_food_100.html  # 100 種常見食物發音打卡學習手札 (含 0.3x 口型)
 ├── sanrio_korean_food_100.md    # 100 種常見食物 Markdown 清單
 ├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
