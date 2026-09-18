@@ -542,6 +542,16 @@
       - 更新 `index.html`、`korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`sanrio_korean_songs.html`、`sanrio_korean_food_100.html` 頂部導航列。
       - `sw.js` 升級至 `v1.0.24` 快取新頁面，同步部署至 `www/` 鏡像目錄。
   - **Git 部署**：已推播至 GitHub Pages。
+- **2026-09-18 16:55 PT**：
+  - **🔠 全面升級《KITTY 韓語兩大敬語發音積木樂園 (`sanrio_korean_honorifics.html`)》為大字體清晰版**：
+    - **背景**：針對 5 大敬語教學頁面中的各級標題、導航標籤、韓語單字例句、中文字體、表格文字、發音按鈕、PK 對話框及測驗題目進行全域大字體 (Large Typography) 排版重構，全面提升閱讀舒適度與手機端點讀易讀性。
+    - **排版強化細節**：
+      1. **頂部橫幅與導航標籤**：標題擴大為 `text-lg sm:text-xl md:text-2xl font-black`，導航按鈕文字加大為 `text-sm sm:text-base font-black`。
+      2. **Page 1（黃金速查表）**：表頭欄位升級為 `text-sm sm:text-base`，韓語例句加大至 `text-base sm:text-lg font-black`，口訣卡片文字升級為 `text-sm sm:text-base font-bold`。
+      3. **Page 2（습니다 派）& Page 3（해요 派）**：主副標題提升至 `text-2xl md:text-3xl font-black`，母音四大家族拼盤與規則卡文字加大為 `text-sm sm:text-base`，韓語例詞標題放大至 `text-lg sm:text-xl md:text-2xl font-black`。
+      4. **Page 4（PK 對決台）**：場景對話韓語加大至 `text-lg sm:text-xl font-black`，情境翻譯文字加大為 `text-sm sm:text-base font-bold`。
+      5. **Page 5（隨堂測驗）**：測驗題目升級為 `text-sm sm:text-base md:text-lg font-bold`，選項按鈕內距加寬並放大至 `text-xs sm:text-sm md:text-base`，結算結果放大至 `text-lg sm:text-xl md:text-2xl font-black`。
+    - **同步部署**：透過 `scripts/build_honorifics_page.py` 重新編譯生成 `sanrio_korean_honorifics.html`，同步至 `www/sanrio_korean_honorifics.html` 並推播至 GitHub Pages。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -551,6 +561,6 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 16:45 PT
+- **更新時間**：2026-09-18 16:55 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
