@@ -249,5 +249,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "助詞",
     "pd": "補助詞 (Auxiliary Particle / 보조사) 或其他接尾助詞。"
+  },
+  {
+    "id": 5692,
+    "k": "이/가",
+    "r": "i/ga",
+    "c": "【主格助詞（주격 조사）】① 何時用：標記句子主詞（動作或狀態主體，如 비가 와요 下雨、날씨가 좋아요 天氣好）；強調主詞本身（排他焦點，如 내가 했어요 是我做的！）；搭配特定句型必備（~이/가 있다/없다 有/沒有、~이/가 아니다 不是、~이/가 되다 成為、~이/가 좋다/싫다 喜歡/討厭）。② 怎樣用：前面名詞「有收音」接 이（例：선생님이 老師、밥이 맛있어요 飯好吃）；名詞「無收音」接 가（例：친구가 朋友、사과가 달아요 蘋果甜）。③ 代名詞特殊變形：내가（我）、제가（我/謙稱）、네가/니가（你）、누가（誰）",
+    "e": "Subject marker particle (주격 조사). Attached to nouns to indicate the subject of a sentence. '이' after consonants (batchim), '가' after vowels.",
+    "l": "A",
+    "p": "助詞",
+    "pd": "補助詞 (Auxiliary Particle / 보조사) 或其他接尾助詞。"
   }
 ];
