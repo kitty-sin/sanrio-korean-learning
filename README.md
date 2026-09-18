@@ -38,16 +38,16 @@ Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與
 - **🍱 Sanrio 100 個常見食物學習清單 (10頁發音打卡手札 / 支援 A4 列印 PDF)**：
   - 🌐 [線上互動打卡與點讀網頁版 (sanrio_korean_food_100.html)](sanrio_korean_food_100.html)
   - 📝 [完整 Markdown 食物詞表 (sanrio_korean_food_100.md)](sanrio_korean_food_100.md)
-- **📊 韓語字母拼音總表 (Hangul Syllable Chart)**：[assets/hangul_alphabet_chart.jpg](assets/hangul_alphabet_chart.jpg)
+- **🪄 韓語 40 音變速查總表 1 (Korean 40 Sound Changes Chart 1)**：[assets/korean_sound_changes_chart_1.jpg](assets/korean_sound_changes_chart_1.jpg)
 
 <div align="center" style="margin-top: 16px;">
-  <img src="assets/hangul_alphabet_chart.jpg" alt="韓語字母拼音總表" width="560" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
+  <img src="assets/korean_sound_changes_chart_1.jpg" alt="韓語 40 音變速查總表 1" width="560" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
 </div>
 
-- **🪄 韓語 40 音變速查總表 (Korean 40 Sound Changes Chart)**：[assets/korean_sound_changes_chart.jpg](assets/korean_sound_changes_chart.jpg)
+- **🪄 韓語 40 音變速查總表 2 (Korean 40 Sound Changes Chart 2)**：[assets/korean_sound_changes_chart_2.jpg](assets/korean_sound_changes_chart_2.jpg)
 
 <div align="center" style="margin-top: 16px;">
-  <img src="assets/korean_sound_changes_chart.jpg" alt="韓語 40 音變速查總表" width="560" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
+  <img src="assets/korean_sound_changes_chart_2.jpg" alt="韓語 40 音變速查總表 2" width="560" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
 </div>
 
 ## 🚀 線上即時體驗

@@ -302,6 +302,13 @@
     - `#5691 요`（非格式體日常親切敬語終結詞尾 & 助詞 / 해요體 / Level A 助詞，內含何時用、怎樣用、名詞/簡答句後直加瞬間升級敬語與語調升降規則）
   - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **25 筆**，全庫總量達到 **5,691 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
   - **Git 部署**：已推播至 GitHub Pages（Commit `e04f823` & `af7e530`）。
+- **2026-09-18 14:30 PT**：
+  - **📸 圖資資產重整與 PDF 講義同步部署**：
+    - 將音變總表圖資規範升級為《韓語 40 音變速查總表 1 & 2》（`assets/korean_sound_changes_chart_1.jpg` 與 `assets/korean_sound_changes_chart_2.jpg`）。
+    - 同步更新 `README.md`「📚 附屬教材資源」之直連連結與圖片展示排版。
+    - 重新編譯同步最新版《韓語語序・敬語・時態大解密.pdf》及其相容別名 `korean_grammar_secrets.pdf`。
+    - 更新 `assets/sanrio_vowels_flashcard.jpg` 基礎母音記憶卡圖資。
+  - **Git 部署**：已推播至 GitHub Pages。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -311,7 +318,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 13:44 PT
+- **更新時間**：2026-09-18 14:30 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
