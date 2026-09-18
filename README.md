@@ -30,10 +30,10 @@ Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與
 
 ## 📚 附屬教材資源
 - **📖 Sanrio 韓語發音教學簡報 (20頁完整版 PDF)**：
-  - 🌐 [線上即時清晰瀏覽 (GitHub Pages 直連)](https://kitty-sin.github.io/sanrio-korean-learning/hangul_sanrio_deck_20p.pdf)
+  - 🌐 [線上即時清晰閱讀 (免下載直讀)](https://kitty-sin.github.io/sanrio-korean-learning/pdf_viewer.html?doc=deck)
   - 📥 [直接下載 PDF 原檔 (Raw Download)](https://raw.githubusercontent.com/kitty-sin/sanrio-korean-learning/main/hangul_sanrio_deck_20p.pdf)
 - **📑 韓語語序・敬語・時態大解密 (PDF 精美講義)**：
-  - 🌐 [線上即時清晰瀏覽 (GitHub Pages 直連)](https://kitty-sin.github.io/sanrio-korean-learning/韓語語序・敬語・時態大解密.pdf)
+  - 🌐 [線上即時清晰閱讀 (免下載直讀)](https://kitty-sin.github.io/sanrio-korean-learning/pdf_viewer.html?doc=grammar)
   - 📥 [直接下載 PDF 原檔 (Raw Download)](https://raw.githubusercontent.com/kitty-sin/sanrio-korean-learning/main/韓語語序・敬語・時態大解密.pdf)
 - **🍱 Sanrio 100 個常見食物學習清單 (10頁發音打卡手札 / 支援 A4 列印 PDF)**：
   - 🌐 [線上互動打卡與點讀網頁版 (sanrio_korean_food_100.html)](sanrio_korean_food_100.html)

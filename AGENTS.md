@@ -53,11 +53,12 @@ Korean-Learning/
 ├── kitty_search_engine.js       # 全域智慧多語言搜尋引擎 (繁簡雙向通搜 + 韓語 NFC/初聲 + 英文拼音)
 ├── hangul_sanrio_deck_20p.pdf   # 20 頁超大字 Sanrio 拼音總表 (PDF 直連瀏覽)
 ├── 韓語語序・敬語・時態大解密.pdf # 韓語語序・敬語・時態大解密精美講義 (PDF 直連瀏覽)
+├── pdf_viewer.html          # 韓語教材線上互動閱讀器 (Mozilla PDF.js + 免下載直讀 + 手勢翻頁 + 縮放)
 ├── sanrio_korean_food_100.html  # 100 種常見食物發音打卡學習手札 (含 0.3x 口型)
 ├── sanrio_korean_food_100.md    # 100 種常見食物 Markdown 清單
 ├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
 ├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
-├── sw.js                        # Service Worker 離線快取核心 (v1.0.22)
+├── sw.js                        # Service Worker 離線快取核心 (v1.0.23)
 ├── package.json                 # 專案套件管理與 Capacitor 依賴
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔
@@ -79,7 +80,8 @@ Korean-Learning/
 - [x] **100 種常見食物學習手札與 20 頁大字 PDF 講義**
 - [x] **韓語核心詞庫大字典** (korean_vocab_dictionary.html，含 TOPIK 全量即時檢索、12大詞性篩選、3D 單字卡翻卡記憶測驗、Unicode 音節結構即時拆解、❤️ 生詞本與 3 段速語音)
 - [x] **韓語漢字音變大辭典** (korean_hanja_dictionary.html，收錄 Glossika 6,277 漢字詞、1,040 組全量音節矩陣與 242 外來語，支援以字查音/以音查字、單字卡、3段速語音、字母結構拆解、🧸 泰迪熊代表圖標與柔和奶茶暖杏風視覺設計)
-- [x] **🎵 韓語名曲歌詞練唱樂園** (sanrio_korean_songs.html，李碩珉 DK《Stay With Me》一句一框框卡片、北極光淺色典雅系、1.0x/0.7x/0.3x 真放慢速控、整曲循序跟唱、音節初中終聲拆解與全站生態圈互聯)
+- [x] **🎵 韓語名曲歌詞練唱樂園** (sanrio_korean_songs.html，李碩珉 DK《Stay With Me》+ 北極光淺色典雅系 + 一句一框框)
+- [x] **📑 韓語教材線上互動閱讀器** (`pdf_viewer.html`，Mozilla PDF.js 向量高清晰渲染、免下載直讀、單頁翻閱與連續捲動、手勢滑動翻頁與全功能分頁導航列)
 - [x] **大字典全功能極速導航分頁列** (自由跳頁下拉選單、⏮ 頁首、頁尾 ⏭、自適應頁數與平滑置頂)
 - [x] **全生態圈雙向無縫互聯** (主站、核心大字典、漢字大辭典、名曲樂園、美食清單、PDF 講義與積木屋跨頁參數傳遞)
 - [x] **自動化詞庫管理管線** (`scripts/manage_vocab.py` + `scripts/build_hanja_dataset.py` + `korean-vocab-manager` Agent Skill，支援「查加 XX」全自動秒級查重、拼音生成、5 檔同步與 Git 自動部署)

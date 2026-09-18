@@ -308,6 +308,18 @@
     - 同步更新 `README.md`「📚 附屬教材資源」之直連連結與圖片展示排版。
     - 重新編譯同步最新版《韓語語序・敬語・時態大解密.pdf》及其相容別名 `korean_grammar_secrets.pdf`。
     - 更新 `assets/sanrio_vowels_flashcard.jpg` 基礎母音記憶卡圖資。
+- **2026-09-18 14:48 PT**：
+  - **📑 推出《韓語教材線上互動閱讀器 (`pdf_viewer.html`)》告別下載彈窗**：
+    - **背景**：解決手機端/行動瀏覽器點擊 PDF 講義直連時觸發「強制下載」而無法在站內即時閱讀的痛點。
+    - **核心功能**：
+      1. 採用 Mozilla PDF.js (v3.11.174) 進行 Retina 向量超高清 Canvas 渲染。
+      2. 支援 `?doc=grammar`（語序敬語時態大解密）與 `?doc=deck`（20頁拼音總表）等智慧路由。
+      3. 全功能分頁導航列：`⏮ 頁首`、`◀ 上一頁`、`第 [ X ▾ ] / N 頁` 互動下拉選單、`下一頁 ▶`、`頁尾 ⏭`。
+      4. 支援「單頁翻頁模式」（手機左右手勢滑動 / 鍵盤 ← → 鍵）與「連續捲動模式」。
+      5. 支援自適應寬度 (Fit Width)、自適應整頁與手動縮放（50% ~ 250%）。
+      6. 提供一鍵「🔙 返回」與保留「📥 離線下載原檔」按鈕。
+    - **全站互聯升級**：更新 `index.html`、`korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`README.md` 及 `www/` 鏡像目錄。
+    - **離線快取升級**：`sw.js` 納入 `pdf_viewer.html`，版本升至 `v1.0.23`。
   - **Git 部署**：已推播至 GitHub Pages。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
@@ -318,7 +330,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 14:30 PT
+- **更新時間**：2026-09-18 14:48 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
