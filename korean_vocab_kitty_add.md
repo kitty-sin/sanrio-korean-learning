@@ -26,3 +26,4 @@
 | 5686 | 티비 | tibi | 電視、TV（電視機，日常高頻口語簡稱） | TV, television (colloquial abbreviation of 텔레비전) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
 | 5687 | 돼지 | dwaeji | 豬（家豬、十二生肖之一） | Pig, hog, swine | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
 | 5688 | 래퍼 | raepeo | 饒舌歌手、說唱歌手、Rapper（外來語） | Rapper (hip-hop artist) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
+| 5689 | 케이크 | keikeu | 蛋糕、Cake（西點外來語，口語亦常寫作 케익） | Cake | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
