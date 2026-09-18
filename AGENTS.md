@@ -40,15 +40,15 @@ Korean-Learning/
 ├── sanrio_korean_songs.html     # 韓語名曲歌詞練唱樂園 (李碩珉 DK《Stay With Me》+ 北極光淺色系 + 一句一框框)
 ├── korean_songs_data.js         # 韓語歌曲結構化常數數據集
 ├── korean_songs_data.md         # 韓語歌曲 Markdown 對照清單
-├── korean_hanja_data.js         # 6,519 筆漢字詞與 1,037 音節常數數據集
-├── korean_hanja.csv             # 6,519 筆漢字詞與外來語 CSV 總表
+├── korean_hanja_data.js         # 6,520 筆漢字詞與 1,040 音節常數數據集
+├── korean_hanja.csv             # 6,520 筆漢字詞與外來語 CSV 總表
 ├── korean_hanja.md              # 漢字詞對照 Markdown 字典
 ├── korean_vocab_5666_data.js    # 5,666 筆基準高壓縮常數數據集 (#1 ~ #5666)
 ├── korean_vocab_5666.csv        # 5,666 筆 TOPIK 基準詞庫總表
 ├── korean_vocab_5666.md         # 5,666 筆基準詞庫 Markdown 字典
-├── korean_vocab_kitty_add_data.js # Kitty 自訂新增詞庫常數數據集 (#5667 起)
-├── korean_vocab_kitty_add.csv   # Kitty 自訂新增詞庫 CSV 總表
-├── korean_vocab_kitty_add.md    # Kitty 自訂新增詞庫 Markdown 字典
+├── korean_vocab_kitty_add_data.js # Kitty 自訂新增詞庫常數數據集 (#5667 ~ #5689)
+├── korean_vocab_kitty_add.csv   # Kitty 自訂新增詞庫 CSV 總表 (23 筆)
+├── korean_vocab_kitty_add.md    # Kitty 自訂新增詞庫 Markdown 字典 (23 筆)
 ├── kitty_search_engine.js       # 全域智慧多語言搜尋引擎 (繁簡雙向通搜 + 韓語 NFC/初聲 + 英文拼音)
 ├── hangul_sanrio_deck_20p.pdf   # 20 頁超大字 Sanrio 拼音總表 (PDF 直連瀏覽)
 ├── sanrio_korean_food_100.html  # 100 種常見食物發音打卡學習手札 (含 0.3x 口型)
@@ -76,7 +76,7 @@ Korean-Learning/
 - [x] **隨堂星級自我挑戰測驗** (7 大題隨堂評量與分數結算)
 - [x] **100 種常見食物學習手札與 20 頁大字 PDF 講義**
 - [x] **韓語核心詞庫大字典** (korean_vocab_dictionary.html，含 TOPIK 全量即時檢索、12大詞性篩選、3D 單字卡翻卡記憶測驗、Unicode 音節結構即時拆解、❤️ 生詞本與 3 段速語音)
-- [x] **韓語漢字音變大辭典** (korean_hanja_dictionary.html，收錄 Glossika 6,277 漢字詞、1,037 組全量音節矩陣與 242 外來語，支援以字查音/以音查字、單字卡、3段速語音、字母結構拆解、🧸 泰迪熊代表圖標與柔和奶茶暖杏風視覺設計)
+- [x] **韓語漢字音變大辭典** (korean_hanja_dictionary.html，收錄 Glossika 6,277 漢字詞、1,040 組全量音節矩陣與 242 外來語，支援以字查音/以音查字、單字卡、3段速語音、字母結構拆解、🧸 泰迪熊代表圖標與柔和奶茶暖杏風視覺設計)
 - [x] **🎵 韓語名曲歌詞練唱樂園** (sanrio_korean_songs.html，李碩珉 DK《Stay With Me》一句一框框卡片、北極光淺色典雅系、1.0x/0.7x/0.3x 真放慢速控、整曲循序跟唱、音節初中終聲拆解與全站生態圈互聯)
 - [x] **大字典全功能極速導航分頁列** (自由跳頁下拉選單、⏮ 頁首、頁尾 ⏭、自適應頁數與平滑置頂)
 - [x] **全生態圈雙向無縫互聯** (主站、核心大字典、漢字大辭典、名曲樂園、美食清單、PDF 講義與積木屋跨頁參數傳遞)
