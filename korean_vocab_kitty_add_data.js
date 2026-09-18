@@ -239,5 +239,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "助詞",
     "pd": "補助詞 (Auxiliary Particle / 보조사) 或其他接尾助詞。"
+  },
+  {
+    "id": 5691,
+    "k": "요",
+    "r": "yo",
+    "c": "【非格式體日常敬語終結詞尾 & 助詞（해요體）】① 何時用：日常生活中最常用、最親切自然的敬語。用於同事、朋友、店員、一般社交或長輩（非極正式場合），禮貌客氣兼具親和力。② 怎樣用：接於動詞/形容詞平語詞幹後（陽性母音接 -아요 如 가요 去、좋아요 好；陰性母音接 -어요 如 먹어요 吃；하다 變 해요）；亦可直接接在名詞、副詞或簡答句後瞬間升級為禮貌敬語（如 저요! 是我！、진짜요? 真的嗎？、네/아니요 是/不是）。③ 語調：降調表示陳述/命令，升調表示疑問",
+    "e": "Informal polite sentence ending / honorific particle (해요체). The most common polite ending in daily Korean life for friendly yet respectful conversation.",
+    "l": "A",
+    "p": "助詞",
+    "pd": "補助詞 (Auxiliary Particle / 보조사) 或其他接尾助詞。"
   }
 ];
