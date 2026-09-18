@@ -21,7 +21,7 @@ Korean-Learning/
 ├── .github/workflows/
 │   └── build-apk.yml            # GitHub Actions Android APK 自動編譯與 Release 工作流
 ├── android/                     # Android 原生專案代碼 (Capacitor 6.x Gradle 專案)
-├── assets/                      # 拼豆 Yoda 寶寶 App Icon 與 Splash 啟動畫面圖資
+├── assets/                      # 拼豆 Yoda 寶寶 App Icon、Splash、韓語拼音總表與 40 音變速查總表圖資
 ├── rdq/
 │   ├── RDQ-spec-android-app-capacitor-20260912.md # RDQ 規格卡 (Android 原生 App 封裝)
 │   ├── RDQ-spec-hanja-theme-redesign-20260911.md # RDQ 規格卡 (漢字大辭典暖杏視覺改版)
