@@ -325,11 +325,210 @@
   - **新增韓語兩大核心格助詞與深度語法解說**：
     - `#5692 이/가`（主格助詞 / 주격 조사 / Level A 助詞，內含主詞標記、排他焦點、`있다/없다/아니다/되다/좋다` 等特定句型接續、收音接 `이`/無收音接 `가`、及代名詞變形 `내가/제가/네가/누가` 完整解析）
     - `#5693 을/를`（受格/賓格助詞 / 목적격 조사 / Level A 助詞，內含動作受詞標記、口語省略慣例、收音接 `을`/無收音接 `를`、及代名詞縮合 `날/절/널/뭘` 完整解析）
+- **2026-09-13 22:42 PT**：
+  - **🔍 全域智慧多語言搜尋引擎 `KittySearch` 研發與全站部署 (`kitty_search_engine.js`)**：
+    - **問題根因**：
+      1. **簡繁體中文失配**：詞庫資料集均以繁體中文建立，當使用者輸入簡體字（如「时间」、「买」、「书」、「鸡」）時，字元編碼不同導致 0 筆匹配；而英文（如 "time"、"buy"、"chicken"）因英文字串精確匹配而正常。
+      2. **韓語 Unicode 編碼差異**：手機輸入法（Samsung / Gboard / iOS）輸出之韓語可能帶有 NFD 拆解形式，與資料庫之 NFC 預組字元無法直接 `includes`。
+      3. **美食清單缺乏自動跳轉與折疊**：搜尋時未自動將畫面平滑滾動至匹配卡片，且整頁空白未隱藏。
+    - **架構升級**：
+      - 開發 `kitty_search_engine.js`，內建 3,882 組完整簡繁雙向對照字典、韓語 Unicode NFC 正規化比對、韓語初聲（Choseong，如 `ㅅㄹ` 搜 `사람`）比對演算法。
+      - `korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`sanrio_korean_food_100.html` 全面接入 `KittySearch`，支援繁體、簡體、韓文全字、韓文初聲、羅馬拼音、英文全方位秒級通搜！
+      - 美食清單新增實體「🔍 搜尋」按鈕與 Enter 送出、無結果頁面自動折疊、搜尋後自動平滑滾動定位至第一筆結果。
+      - Service Worker 升級至 `v1.0.9`，全面同步快取。
+- **2026-09-14 12:47 PT**：
+  - **🔊 韓語辭典 0.3x 極慢口型發音與結構拆解單音節發音全面修復升級**：
+    - **問題根因**：
+      1. `korean_vocab_dictionary.html` 與 `korean_hanja_dictionary.html` 的 `<head>` 原先遺漏引入 `app_mobile_bridge.js`，導致發音回退至純 HTML5 `<audio>` 直連。
+      2. 瀏覽器 HTML5 Audio 解碼器在設定極端慢速 `playbackRate = 0.3` 時會拋錯或掛起，觸發 `audio.onerror` 導致按鈕僅閃動一下而沒有聲音。
+      3. 在「結構拆解」彈窗中，單音節發音按鈕未明確傳入 `1.0x` 語速，若頂部導航欄預設選中 0.3x，拆解彈窗的單音節發音也會繼承 0.3x 進而引發靜音。
+    - **修復方案**：
+      - `<head>` 頂部正式引入 `app_mobile_bridge.js`。
+      - `window.KittyVoice` 全面升級：當語速 `<= 0.35x` 時，自動觸發「**逐音節分解朗讀核心 (`speakSyllables`)**」，以飽滿清晰的 `0.9x` 音質逐字朗讀，字與字之間加入 `380ms` 舒適停頓。
+      - HTML5 Audio `playbackRate` 安全鉗制在 `0.75x ~ 1.25x`，防止音訊引擎崩潰。
+      - 結構拆解彈窗內的所有單音節發音按鈕明確鎖定 `1.0x` 標準發音。
+      - Service Worker 快取版本升級至 `kitty-korean-v1.0.10`，自動清除舊快取並即時生效。
+- **2026-09-14 14:02 PT**：
+  - **📝 韓語核心詞庫大字典詞彙釋義更新**：
+    - 已將 **#5616 회사 (hoesa)** 的中文解釋正式由「公司」擴充更新為「**公司、會社**」。
+    - 全面原子化同步更新 5 大資料集檔案：`korean_vocab_5666_data.js`、`korean_vocab_5666.csv`、`korean_vocab_5666.md`、`korean_vocab_5001_5666.csv`、`korean_vocab_5001_5666.md`。
+    - Service Worker 升級至 `kitty-korean-v1.0.11`，確保使用者端離線快取立即自動刷新生效。
+- **2026-09-14 14:24 PT**：
+  - **🗂️ 韓語核心詞庫架構重大重構：基準 5,666 庫封裝與 Kitty 自訂新增庫模組化分離**：
+    - **架構調整**：
+      1. **基準 5,666 詞庫完全封裝**：`korean_vocab_5666_data.js`、`korean_vocab_5666.csv/md`、`korean_vocab_5001_5666.csv/md` 精準鎖定保留 **#1 ~ #5666** 筆資料。
+      2. **自訂新增詞庫專屬資料集**：新增 `korean_vocab_kitty_add_data.js`（`window.KOREAN_VOCAB_KITTY_ADD`）、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，獨立收錄使用者新增的詞彙（初始收錄 #5667 ~ #5673 共 7 筆）。
+      3. **前端雙庫無縫合併**：`korean_vocab_dictionary.html` 同步加載兩份數據常數並於 React 初始化時自動合併，全量 5,673 筆即時檢索、3D 單字卡、發音完全無縫。
+      4. **管理工具升級**：`scripts/manage_vocab.py` 與 `korean-vocab-manager` 技能自動將未來所有新詞彙寫入 `korean_vocab_kitty_add.*`，保持 5,666 基準檔穩定純淨。
+      5. **Service Worker 升級**：將 `korean_vocab_kitty_add_data.js` 加入靜態資源快取列表，版本升級至 `kitty-korean-v1.0.12`。
+- **2026-09-14 14:44 PT**：
+  - **🔤 韓語漢字音變大辭典「單音節 ↔ 漢字矩陣」全量擴充 (1,037 音節)**：
+    - **問題根因**：原矩陣僅收錄源自 Glossika 的 471 個漢字音節，導致學習者搜尋「잘」（出自 `잘자`、`잘하다`）等高頻固有語音節時查無結果。
+    - **全量矩陣擴充**：
+      1. 萃取全站 6,277 漢字詞、242 外來語、5,666 基準詞與 Kitty 自訂新增詞，擴充收錄 **566 個純韓語固有/常用音節**（矩陣總數由 471 提升至 **1,037 個音節**）。
+      2. 每個固有音節（如 `잘 [jal]`、`꽃 [kkoch]`、`눈 [nun]`）均完整關聯標準拼音、高頻代表詞（如 `[잘 (好)]`、`[잘자 (早唞)]`）與釋義。
+      3. 矩陣新增「🌟 全部音節 (1,037)」、「🌸 漢字音節 (471)」、「🇰🇷 固有/常用音節 (566)」次級分類篩選器。
+      4. 點擊任一固有音節例詞標籤可一鍵反向檢索該詞彙；點擊發音支援 3 段速朗讀；點擊積木屋直達拼組。
+    - **同步檔案**：`korean_hanja_data.js`、`korean_hanja.csv`、`korean_hanja.md`、`korean_hanja_dictionary.html`、`scripts/build_hanja_dataset.py`，Service Worker 升級至 `kitty-korean-v1.0.13`。
+- **2026-09-14 14:58 PT**：
+  - **🔗 音節矩陣代表詞「智慧跨庫跳轉」與搜尋框同步修復 (`handleSampleWordClick`)**：
+    - **問題根因**：
+      1. 使用者在「單音節矩陣」點擊純韓語固有詞例詞（如 `곧`、`잘자`）時，原邏輯僅切換至本地漢字詞速查頁籤，但因 `HANJA_VOCAB_LIST` 僅含漢字詞，導致畫面顯示「共檢索到 0 筆漢字詞」。
+      2. 點擊例詞或漢字標籤時未同步更新搜尋輸入框之 `inputVal`，導致輸入框仍殘留舊搜尋字詞。
+    - **修復方案**：
+      1. 開發 `handleSampleWordClick` 智慧分流函數：若為漢字詞/外來語則在本地漢字辭典檢索並同步 `inputVal`；若為純韓語固有詞（如 `곧`、`잘`、`꽃`、`눈`）則**自動智慧跳轉至【韓語核心詞庫大字典 (`korean_vocab_dictionary.html?search=XX`)】**，立即呈現完整單字卡、發音與拆解。
+      2. 常用例詞按鈕加入視覺圖標區分：`🧸`（本地漢字詞）與 `📚`（核心大詞庫），並優化 Tooltip 提示文字。
+      3. Service Worker 升級至 `kitty-korean-v1.0.14`。
+- **2026-09-14 17:13 PT**：
+  - **新增生活運動休閒詞彙**：已將 `#5674 요가 (瑜珈 / Yoga)`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **8 筆**，全庫總量達到 **5,674 筆**。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `624deb5`）。
+- **2026-09-14 17:53 PT**：
+  - **🔤 漢字大辭典「요」音節漢字擴充「瑜」與「요가」對照收錄**：
+    - **背景原因**：傳統韓語漢字字典中「瑜」字主要標音為 `유 (yu)`（如傳統佛經「瑜伽」讀 `유가`）；但在現代韓語日常生活中，「Yoga / 瑜伽 / 瑜珈」讀作 **`요가 (yoga)`**。因此學習者在矩陣「요」下搜尋「瑜」時容易撲空。
+    - **升級改進**：
+      1. 在音節 **`요`**（音節 #278）的漢字庫中，正式擴充補入漢字 **「瑜」**（使「요」對應漢字數提升至 38 個，同時保留「유」下的傳統對照）。
+      2. 在 `HANJA_VOCAB_LIST` 漢字詞庫中正式收錄 **`#6278 요가 (瑜伽、瑜珈 / Yoga)`**。
+      3. 重新執行 `build_hanja_dataset.py` 全量建置管線，同步更新 `korean_hanja_data.js`、`korean_hanja.csv`、`korean_hanja.md`。
+      4. Service Worker 快取升級至 `v1.0.15`。
+- **2026-09-15 14:41 PT**：
+  - **新增日常核心高頻口語動詞**：已將 `#5675 봐 (睇下、睇睇、看、看吧 / Look, see)`（Level A 動詞，動詞 `보다` 之平語/現在式/命令形口語）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **9 筆**，全庫總量達到 **5,675 筆**。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `425a4d5`）。
+- **2026-09-15 15:03 PT**：
+  - **新增常見飲食名詞**：已將 `#5676 회 (生魚片、生肉片（膾） / Raw fish, sashimi, hoe)`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **支援同音異性詞擴充**：升級 `manage_vocab.py` 查重機制，精準區分 #691 量詞 `회 (次/回/局)` 與 #5676 飲食名詞 `회 (生魚片/膾)`。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **10 筆**，全庫總量達到 **5,676 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `2eb71d9`）。
+- **2026-09-15 15:55 PT**：
+  - **批次擴充 6 大高頻日常敬語/口語詞彙**：
+    - `#5677 안녕하세요`（您好、你好 / 日常最常用敬語問候）
+    - `#5678 감사합니다`（感謝您、謝謝 / 正式最高敬語）
+    - `#5679 고마워요`（謝謝你、多謝 / 해요體親切敬語，原形 고맙다）
+    - `#5680 귀여워요`（好可愛、真可愛 / 해요體現在式，原形 귀엽다）
+    - `#5681 괜찮아요`（沒關係、還可以、沒事 / 해요體日常敬語，原形 괜찮다）
+    - `#5682 알았어`（知道了、明白、好 / 動詞 알다 平語口語形）
+  - **查重確認**：`진짜`（#2151）、`정말`（#313）、`아니`（#688）已完整存在於既有詞庫中，無需重複建檔。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **16 筆**，全庫總量達到 **5,682 筆**。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `bcaf094`）。
+- **2026-09-15 16:08 PT**：
+  - **✨ 大字典分頁控制列全面升級（自由跳頁 / 頁首 / 頁尾）**：
+    1. **韓語核心詞庫大字典 (`korean_vocab_dictionary.html`)**：
+       - 頂部與底部分頁列新增「`⏮ 頁首`」與「`頁尾 ⏭`」按鈕，具備首頁/末頁自動半透明防誤觸。
+       - 中間頁碼升級為「**第 [ X ▾ ] / N 頁**」互動式下拉選擇器，支援電腦下拉選單與手機 (iOS/Android) 原生滾輪選擇器，可自由秒跳任意頁數（如第 8 頁）。
+       - 新增 `handlePageChange` 函數，切換頁面後平滑置頂至 `#search-results-section`。
+    2. **韓語漢字音變大辭典 (`korean_hanja_dictionary.html`)**：
+       - 同步升級頂部與底部分頁列，套用暖杏奶茶琥珀色系，加入頁首、頁尾、下拉跳頁與平滑置頂。
+    3. **離線快取更新**：`sw.js` 升級至 `kitty-korean-v1.0.16`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `82eb635`）。
+- **2026-09-16 14:14 PT**：
+  - **🌟 頂部資源導航橫幅文案與圖標升級**：
+    1. 將首頁頂部海報區塊由原先的「6 大基礎母音視覺記憶海報」升級為「**🌟 KITTY 韓語學習資源導航站**」，圖標由 `🖼️` 升級為 `🌟`。
+    2. 副標題升級為「**萌趣視覺海報 • 核心大詞庫 • 漢字辭典 • 名曲樂園**」，精準呈現該橫幅作為全站學習捷徑導航之核心定位。
+    3. 同步落地 RDQ 規格卡 `rdq/RDQ-spec-top-banner-copy-20260916.md`。
+  - **Git 部署**：已推播至 GitHub Pages。
+- **2026-09-16 14:20 PT**：
+  - **🎵 全新推出《KITTY 韓語名曲歌詞練唱樂園》與「北極光 淺色系 (Aurora Light Theme)」視覺升級**：
+    1. **全新頁面與架構**：完成 `sanrio_korean_songs.html`，首發收錄 **李碩珉 DK《Stay With Me》**（韓劇《毛骨悚然的戀愛》插曲），支援「一首歌一個分頁」與自動切換。
+    2. **一句一個框框獨立卡片**：每句歌詞呈現韓文大字、標準羅馬拼音、繁體中文翻譯，搭配 `1.0x / 0.3x` 雙速發音、`🧩 結構拆解` 音節初中終聲與收音口訣、`🏠 積木屋` 傳送門與愛心收藏。
+    3. **北極光 淺色系視覺風格 (Aurora Light Theme)**：整體背景採用溫潤柔和的薄荷青、夢幻紫、冰川藍與晨曦粉微光漸層，搭配 4 層呼吸式北極光光暈（Aurora Blobs）與青紫極光播放高亮特效，清新典雅兼具高對比文字辨識。
+- **2026-09-16 14:31 PT**：
+  - **🔊 發音無聲排查修復、真放慢語速（1.0x / 0.7x / 0.3x）與大字體全面升級**：
+    1. **點擊無聲排查與修復**：修復 `app_mobile_bridge.js` 中 `KittyVoice.speak` 參數傳遞時對多載物件與純數值型態之解析邏輯，避免傳入非數值導致 `playbackRate` 出現 `NaN` 或靜音；並在 `playLyricAudio` 增加音訊錯誤保護。
+    2. **真實放慢語速重構 (0.7x 慢速跟唱 / 0.3x 口型分解)**：
+       - 解決雲端發音原本底層 `Math.max(0.75, ...)` 截斷問題，解除限制並支援 `0.4x ~ 1.5x` 真實放慢。
+       - 將原本僅慢 15% 難以察覺的 `0.85x` 升級為明顯舒適的 `0.7x`（慢 30%），與核心大字典規範一致。
+       - `0.3x` 逐字音節朗讀核心升級：單字音節以 `0.65x` 朗讀，字與字之間加入 `450ms` 明顯停頓，完美達成極慢口型分解效果。
+    3. **大字體排版全面優化 (大字體版)**：歌詞韓文原詞升級為 `text-xl md:text-2xl lg:text-3xl font-black`，拼音、中文翻譯與按鈕字體全面等比放大，確保閱讀清晰不費力。
+    4. **卡片與彈窗 3 速按鈕齊全**：每句歌詞卡片底部與結構拆解彈窗內均直接提供 `1.0x`（標準）、`0.7x`（慢速跟唱）、`0.3x`（逐字分解）按鈕。
+    5. **離線快取更新**：`sw.js` 升級至 `kitty-korean-v1.0.21`，同步更新 `www/` 目錄。
+- **2026-09-16 14:36 PT**：
+  - **✨ 歌詞卡片字體精緻化調整（縮小一號至適中平衡尺寸）**：
+    - 依使用者反饋將每句歌詞框框的韓文原詞由 `text-3xl` 調回適中大字 `text-lg md:text-xl font-black`。
+    - 羅馬拼音調為 `text-xs md:text-sm font-semibold`，中文翻譯調為 `text-sm md:text-base font-semibold`。
+    - 同步優化卡片內邊距（Padding）與元素間距，視覺更加精緻優雅、緊湊耐看。
+    - `sw.js` 升級至 `kitty-korean-v1.0.22`，同步更新至 `www/` 目錄並推播至 GitHub Pages。
+- **2026-09-16 16:56 PT**：
+  - **新增飲食生活名詞**：已將 `#5683 돌솥 (石鍋、石釜（如石鍋拌飯 돌솥비빔밥） / Stone pot, stone bowl (hot stone pot for bibimbap))`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **17 筆**，全庫總量達到 **5,683 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`（收錄 1,039 音節矩陣）。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `45dc67c`）。
+- **2026-09-17 13:53 PT**：
+  - **新增專有名詞（地理/歷史）**：已將 `#5684 로마 (羅馬（義大利首都、古羅馬） / Rome (capital of Italy, ancient Rome))`（Level D 專有名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **18 筆**，全庫總量達到 **5,684 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `bfd35fa`）。
+- **2026-09-17 14:18 PT**：
+  - **新增生活日用品名詞**：已將 `#5685 우비 (雨衣、雨披（漢字詞：雨衣） / Raincoat, rain poncho)`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **19 筆**，全庫總量達到 **5,685 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `f37bb36`）。
+- **2026-09-17 14:43 PT**：
+  - **新增家電口語名詞**：已將 `#5686 티비 (電視、TV（電視機，日常高頻口語簡稱） / TV, television (colloquial abbreviation of 텔레비전))`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **20 筆**，全庫總量達到 **5,686 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `8472a01`）。
+- **2026-09-17 16:53 PT**：
+  - **新增常見動物名詞**：已將 `#5687 돼지 (豬（家豬、十二生肖之一） / Pig, hog, swine)`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **21 筆**，全庫總量達到 **5,687 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`（全量音節矩陣擴充至 1,040 組）。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `cf494d9`）。
+- **2026-09-17 17:05 PT**：
+  - **新增流行音樂職業名詞**：已將 `#5688 래퍼 (饒舌歌手、說唱歌手、Rapper（外來語） / Rapper (hip-hop artist))`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **22 筆**，全庫總量達到 **5,688 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `130b83d`）。
+- **2026-09-17 17:43 PT**：
+  - **新增飲食甜點名詞**：已將 `#5689 케이크 (蛋糕、Cake（西點外來語，口語亦常寫作 케익） / Cake)`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **23 筆**，全庫總量達到 **5,689 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `3d6e299`）。
+- **2026-09-17 21:47 PT**：
+  - **📊 新增韓語 40 音變速查總表圖資與 README 文件展示**：
+    - 已將《韓文40音變_2.jpg》收錄至 `assets/korean_sound_changes_chart.jpg` 與 `assets/韓文40音變_2.jpg`。
+    - 於公開說明文件 `README.md`「📚 附屬教材資源」之「📊 韓語字母拼音總表 (Hangul Syllable Chart)」下方正式增列「**🪄 韓語 40 音變速查總表 (Korean 40 Sound Changes Chart)**」之直連連結與置中大圖展示。
+- **2026-09-18 11:46 PT**：
+  - **📑 新增《韓語語序・敬語・時態大解密.pdf》講義與全站導航對接**：
+    - 已將《韓語語序・敬語・時態大解密.pdf》（及相容別名 `korean_grammar_secrets.pdf`）收錄至專案根目錄。
+    - 於公開說明文件 `README.md`「📚 附屬教材資源」增列直連瀏覽與下載連結。
+    - 於主站 `index.html`、詞庫大字典 `korean_vocab_dictionary.html` 與漢字大辭典 `korean_hanja_dictionary.html` 頂部導航列新增「📑 語序敬語時態大解密 (PDF)」快捷按鈕。
+    - 同步更新 `www/` 目錄並推播至 GitHub Pages。
+- **2026-09-18 11:56 PT**：
+  - **🧹 GitHub 倉庫精簡化：歷史分期檔案歸檔至本地 `_archive/` 並從 GitHub 移出**：
+    - 依方案 A 將 20 個早期分期詞庫檔（`korean_vocab_1000.*` ~ `korean_vocab_5001_5666.*`）與 5 個早期交接檔（`handoff_vocab_2000.md` ~ `handoff_vocab_5666.md`）全數移入本機 `_archive/` 目錄。
+    - 於 `.gitignore` 增列 `_archive/`，完成本地端 100% 完整保留並從 GitHub 遠端乾淨移除。
+    - 經 `manage_vocab.py` 查重檢驗，5,666 基準庫與 Kitty 自訂庫之查詢與全站運行 100% 正常。
+- **2026-09-18 13:44 PT**：
+  - **新增韓語兩大核心敬語語尾與深度語法解說**：
+    - `#5690 습니다`（格式體最高敬語終結詞尾 / 하십시오體 / Level A 助詞，內含何時用、怎樣用、縮合接 `-ㅂ니다`、疑問句 `-습니까?` 與鼻音化音變 `[슴니다]` 完整解析）
+    - `#5691 요`（非格式體日常親切敬語終結詞尾 & 助詞 / 해요體 / Level A 助詞，內含何時用、怎樣用、名詞/簡答句後直加瞬間升級敬語與語調升降規則）
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **25 筆**，全庫總量達到 **5,691 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `e04f823` & `af7e530`）。
+- **2026-09-18 14:30 PT**：
+  - **📸 圖資資產重整與 PDF 講義同步部署**：
+    - 將音變總表圖資規範升級為《韓語 40 音變速查總表 1 & 2》（`assets/korean_sound_changes_chart_1.jpg` 與 `assets/korean_sound_changes_chart_2.jpg`）。
+    - 同步更新 `README.md`「📚 附屬教材資源」之直連連結與圖片展示排版。
+    - 重新編譯同步最新版《韓語語序・敬語・時態大解密.pdf》及其相容別名 `korean_grammar_secrets.pdf`。
+    - 更新 `assets/sanrio_vowels_flashcard.jpg` 基礎母音記憶卡圖資。
+- **2026-09-18 14:48 PT**：
+  - **📑 推出《韓語教材線上互動閱讀器 (`pdf_viewer.html`)》告別下載彈窗**：
+    - **背景**：解決手機端/行動瀏覽器點擊 PDF 講義直連時觸發「強制下載」而無法在站內即時閱讀的痛點。
+    - **核心功能**：
+      1. 採用 Mozilla PDF.js (v3.11.174) 進行 Retina 向量超高清 Canvas 渲染。
+      2. 支援 `?doc=grammar`（語序敬語時態大解密）與 `?doc=deck`（20頁拼音總表）等智慧路由。
+      3. 全功能分頁導航列：`⏮ 頁首`、`◀ 上一頁`、`第 [ X ▾ ] / N 頁` 互動下拉選單、`下一頁 ▶`、`頁尾 ⏭`。
+      4. 支援「單頁翻頁模式」（手機左右手勢滑動 / 鍵盤 ← → 鍵）與「連續捲動模式」。
+      5. 支援自適應寬度 (Fit Width)、自適應整頁與手動縮放（50% ~ 250%）。
+      6. 提供一鍵「🔙 返回」與保留「📥 離線下載原檔」按鈕。
+    - **全站互聯升級**：更新 `index.html`、`korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`README.md` 及 `www/` 鏡像目錄。
+    - **離線快取升級**：`sw.js` 納入 `pdf_viewer.html`，版本升至 `v1.0.23`。
+  - **Git 部署**：已推播至 GitHub Pages。
+- **2026-09-18 15:05 PT**：
+  - **新增韓語兩大核心格助詞與深度語法解說**：
+    - `#5692 이/가`（主格助詞 / 주격 조사 / Level A 助詞，內含主詞標記、排他焦點、`있다/없다/아니다/되다/좋다` 等特定句型接續、收音接 `이`/無收音接 `가`、及代名詞變形 `내가/제가/네가/누가` 完整解析）
+    - `#5693 을/를`（受格/賓格助詞 / 목적격 조사 / Level A 助詞，內含動作受詞標記、口語省略慣例、收音接 `을`/無收音接 `를`、及代名詞縮合 `날/절/널/뭘` 完整解析）
   - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **27 筆**，全庫總量達到 **5,693 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
 - **2026-09-18 15:15 PT**：
   - **精簡 #5690 습니다 與 #5691 요 中文解釋（移除 ② 怎樣用）**：
     - `#5690 습니다`：精簡為「【格式體最高敬語終結詞尾（하십시오體）】① 何時用：用於正式場合、職場匯報、演講發表、公務會議、初次見面或向長輩/上司表示崇高敬意。② 音變：終聲 ㅂ 遇 ㄴ 發生鼻音化，實際讀作 [슴니다]」。
     - `#5691 요`：精簡為「【非格式體日常敬語終結詞尾 & 助詞（해요體）】① 何時用：日常生活中最常用、最親切自然的敬語。用於同事、朋友、店員、一般社交或長輩（非極正式場合），禮貌客氣兼具親和力。② 語調：降調表示陳述/命令，升調表示疑問」。
+- **2026-09-18 15:22 PT**：
+  - **精簡 #5692 이/가 與 #5693 을/를 中文解釋（提煉核心接法與角色）**：
+    - `#5692 이/가`：精簡為「【主格助詞（주격 조사）】標記句子主詞（誰做的/什麼狀態）。名詞「有收音」接 이（如 밥이、선생님이），「無收音」接 가（如 비가、친구가）。」。
+    - `#5693 을/를`：精簡為「【受格助詞 / 賓格助詞（목적격 조사）】標記句子受詞（做什麼/動作對象）。名詞「有收音」接 을（如 밥을、책을），「無收音」接 를（如 커피를、영화를）。」。
   - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`、`korean_hanja_data.js/csv/md`，以及 `www/` 鏡像目錄。
   - **Git 部署**：已推播至 GitHub Pages。
 - **➡️ 下一步**：
@@ -341,6 +540,6 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 15:15 PT
+- **更新時間**：2026-09-18 15:22 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
