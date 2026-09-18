@@ -277,6 +277,10 @@
   - **新增流行音樂職業名詞**：已將 `#5688 래퍼 (饒舌歌手、說唱歌手、Rapper（外來語） / Rapper (hip-hop artist))`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
   - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **22 筆**，全庫總量達到 **5,688 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
   - **Git 部署**：已推播至 GitHub Pages（Commit `130b83d`）。
+- **2026-09-17 17:43 PT**：
+  - **新增飲食甜點名詞**：已將 `#5689 케이크 (蛋糕、Cake（西點外來語，口語亦常寫作 케익） / Cake)`（Level A 名詞）透過自動化管線新增至 Kitty 自訂詞庫與大字典中。
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **23 筆**，全庫總量達到 **5,689 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `3d6e299`）。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -286,7 +290,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-17 17:05 PT
+- **更新時間**：2026-09-17 17:43 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
