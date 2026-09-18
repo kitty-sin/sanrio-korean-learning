@@ -1,0 +1,1188 @@
+# -*- coding: utf-8 -*-
+"""
+Generator for sanrio_korean_honorifics.html
+KITTY 韓語兩大敬語發音積木樂園 (Sanrio 萌趣多頁面版)
+"""
+import os
+
+HTML_CONTENT = """<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 KITTY 韓語兩大敬語發音積木樂園 (Sanrio 萌趣多頁面版)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+KR:wght@500;700;900&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- React 18 & Babel CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- 行動端與發音橋接 (KittyVoice) -->
+    <script src="app_mobile_bridge.js"></script>
+    <!-- 全域智慧搜尋引擎 -->
+    <script src="kitty_search_engine.js"></script>
+
+    <style>
+        body {
+            font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+            background: linear-gradient(150deg, #FFF9F5 0%, #F5F3FF 35%, #F0FDF4 70%, #FFF0F5 100%);
+            background-attachment: fixed;
+            color: #2D3748;
+            overflow-x: hidden;
+        }
+        .kr-font {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .cute-font {
+            font-family: 'Gaegu', 'Noto Sans TC', cursive, sans-serif;
+        }
+
+        /* 柔和動態光斑背景 (Ambient Glows) */
+        .ambient-glow-1 {
+            position: fixed;
+            top: -10%;
+            left: -8%;
+            width: 45vw;
+            height: 45vw;
+            background: radial-gradient(circle, rgba(254, 215, 170, 0.28) 0%, rgba(255, 247, 237, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: glowFloat1 14s ease-in-out infinite alternate;
+        }
+        .ambient-glow-2 {
+            position: fixed;
+            bottom: -12%;
+            right: -8%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(196, 181, 253, 0.25) 0%, rgba(245, 243, 255, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: glowFloat2 16s ease-in-out infinite alternate-reverse;
+        }
+        .ambient-glow-3 {
+            position: fixed;
+            top: 30%;
+            right: -10%;
+            width: 38vw;
+            height: 38vw;
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.18) 0%, rgba(255, 240, 245, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: glowFloat1 18s ease-in-out infinite alternate;
+        }
+
+        @keyframes glowFloat1 {
+            0% { transform: scale(0.95) translate(0, 0); opacity: 0.7; }
+            50% { transform: scale(1.05) translate(25px, -15px); opacity: 0.95; }
+            100% { transform: scale(0.98) translate(-10px, 20px); opacity: 0.8; }
+        }
+        @keyframes glowFloat2 {
+            0% { transform: scale(1.02) translate(0, 0); opacity: 0.75; }
+            50% { transform: scale(0.92) translate(-20px, 15px); opacity: 0.95; }
+            100% { transform: scale(1.08) translate(15px, -20px); opacity: 0.7; }
+        }
+
+        .sanrio-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(243, 232, 255, 0.8);
+            box-shadow: 0 10px 30px -5px rgba(147, 51, 234, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sanrio-card:hover {
+            box-shadow: 0 20px 35px -5px rgba(147, 51, 234, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        /* 隱藏滾動條但保持滾動 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative selection:bg-pink-200 selection:text-pink-900">
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+    <div class="ambient-glow-3"></div>
+
+    <div id="root" class="relative z-10"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // 發音播放輔助函數
+        const playVoice = (text, speed = 1.0) => {
+            if (window.KittyVoice && typeof window.KittyVoice.speak === 'function') {
+                window.KittyVoice.speak(text, speed);
+            } else if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ko-KR';
+                utterance.rate = speed;
+                window.speechSynthesis.speak(utterance);
+            }
+        };
+
+        // 音訊按鈕組件
+        const AudioBtn = ({ text, label = '', speed = 1.0, color = 'pink', size = 'sm' }) => {
+            const [isPlaying, setIsPlaying] = useState(false);
+
+            const handleClick = (e) => {
+                e.stopPropagation();
+                setIsPlaying(true);
+                playVoice(text, speed);
+                setTimeout(() => setIsPlaying(false), 1200);
+            };
+
+            const colorMap = {
+                pink: 'bg-pink-100 hover:bg-pink-200 text-pink-700 border-pink-200',
+                amber: 'bg-amber-100 hover:bg-amber-200 text-amber-800 border-amber-200',
+                purple: 'bg-purple-100 hover:bg-purple-200 text-purple-700 border-purple-200',
+                emerald: 'bg-emerald-100 hover:bg-emerald-200 text-emerald-800 border-emerald-200',
+                blue: 'bg-blue-100 hover:bg-blue-200 text-blue-800 border-blue-200'
+            };
+
+            const sizeMap = {
+                xs: 'px-2 py-0.5 text-xs',
+                sm: 'px-2.5 py-1 text-xs md:text-sm',
+                md: 'px-3 py-1.5 text-sm md:text-base font-bold'
+            };
+
+            return (
+                <button
+                    onClick={handleClick}
+                    className={`inline-flex items-center gap-1.5 font-bold rounded-xl border transition-all active:scale-95 shadow-sm ${colorMap[color] || colorMap.pink} ${sizeMap[size] || sizeMap.sm}`}
+                    title={`點擊聽發音 (${speed}x)`}
+                >
+                    <i className={`fas fa-volume-up ${isPlaying ? 'animate-bounce text-pink-500' : ''}`}></i>
+                    {label && <span>{label}</span>}
+                    <span className="text-[10px] opacity-75 font-normal">{speed}x</span>
+                </button>
+            );
+        };
+
+        // 主應用
+        const App = () => {
+            const [activeTab, setActiveTab] = useState(1);
+            const [pkMode, setPkMode] = useState('both');
+            const [quizAnswers, setQuizAnswers] = useState({});
+            const [quizSubmitted, setQuizSubmitted] = useState(false);
+
+            const tabs = [
+                { id: 1, title: "🌟 樂園總覽", icon: "fa-star", desc: "兩大體系全景速查總表" },
+                { id: 2, title: "👑 습니다 莊重派", icon: "fa-crown", desc: "職場商務 • 格式體最高敬語" },
+                { id: 3, title: "🌸 해요 親切派", icon: "fa-heart", desc: "日常社交 • 非格式體親切敬語" },
+                { id: 4, title: "🥊 實戰 PK 對決", icon: "fa-bolt", desc: "生活情境雙敬語模擬切換" },
+                { id: 5, title: "🎮 隨堂星級測驗", icon: "fa-gamepad", desc: "5 題互動闖關測驗" },
+            ];
+
+            const fireConfetti = () => {
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 80,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+            };
+
+            const quizQuestions = [
+                {
+                    id: 1,
+                    q: "在職場正式會議中向長官報告時，動詞「먹다 (吃)」應該轉換為哪種最高敬語？",
+                    options: [
+                        { text: "먹어요", isCorrect: false },
+                        { text: "먹습니다", isCorrect: true, explanation: "먹다 詞幹有收音 ㄱ，接 -습니다！" },
+                        { text: "먹ㅂ니다", isCorrect: false },
+                        { text: "먹게요", isCorrect: false }
+                    ]
+                },
+                {
+                    id: 2,
+                    q: "母音「ㅐ」(如 보내다 寄送) 在變換日常敬語 (해요體) 時，屬於哪種母音家族？該如何接？",
+                    options: [
+                        { text: "陽性母音，接 -아요 變 보내아요", isCorrect: false },
+                        { text: "陰性/複合母音，接 -어요 融合為 보내요", isCorrect: true, explanation: "ㅐ 是陰性/複合母音，接 -어요 直接融合為 보내요！" },
+                        { text: "中性母音，直接脫落變 본요", isCorrect: false },
+                        { text: "하다 家族，變 보내해요", isCorrect: false }
+                    ]
+                },
+                {
+                    id: 3,
+                    q: "名詞「학생 (學生，有收音)」要表達「是學生嗎？」的日常敬語 (해요體) 疑問句，該如何表達？",
+                    options: [
+                        { text: "학생입니까?", isCorrect: false, explanation: "這是最高敬語形式" },
+                        { text: "학생이에요? (語調升調 ⤴️)", isCorrect: true, explanation: "名詞有收音接 -이에요，語調升調即為疑問句！" },
+                        { text: "학생예요?", isCorrect: false },
+                        { text: "학생습니까?", isCorrect: false }
+                    ]
+                },
+                {
+                    id: 4,
+                    q: "「습니다」在發音時，因為終聲 ㅂ 遇到 ㄴ 發生了什麼音變，實際讀音為何？",
+                    options: [
+                        { text: "流音化，讀作 [슬니다]", isCorrect: false },
+                        { text: "鼻音化，讀作 [슴니다]", isCorrect: true, explanation: "終聲 ㅂ 遇 ㄴ 發生鼻音化，發音為 [슴니다]！" },
+                        { text: "硬音化，讀作 [씁니다]", isCorrect: false },
+                        { text: "激音化，讀作 [픞니다]", isCorrect: false }
+                    ]
+                },
+                {
+                    id: 5,
+                    q: "在名詞、副詞或簡答句後，想要一秒瞬間升級為禮貌敬語，直接加哪一個字即可？",
+                    options: [
+                        { text: "다", isCorrect: false },
+                        { text: "요 (如: 저요! / 진짜요? / 아니요)", isCorrect: true, explanation: "名詞/副詞後加 요 即可瞬間升級為禮貌敬語！" },
+                        { text: "까", isCorrect: false },
+                        { text: "네", isCorrect: false }
+                    ]
+                }
+            ];
+
+            const handleOptionSelect = (qId, optIdx) => {
+                setQuizAnswers(prev => ({ ...prev, [qId]: optIdx }));
+            };
+
+            const handleQuizSubmit = () => {
+                setQuizSubmitted(true);
+                const score = quizQuestions.reduce((acc, q) => {
+                    const ans = quizAnswers[q.id];
+                    return (ans !== undefined && q.options[ans]?.isCorrect) ? acc + 1 : acc;
+                }, 0);
+                if (score >= 4) {
+                    fireConfetti();
+                }
+            };
+
+            const resetQuiz = () => {
+                setQuizAnswers({});
+                setQuizSubmitted(false);
+            };
+
+            return (
+                <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 md:py-10">
+                    {/* 頂部全站導航列 */}
+                    <header className="mb-6">
+                        <div className="flex flex-wrap items-center justify-between gap-3 bg-white/85 backdrop-blur-md px-4 py-3 rounded-2xl border border-purple-100 shadow-sm">
+                            <div className="flex items-center gap-2">
+                                <span className="text-2xl">👑</span>
+                                <div>
+                                    <h1 className="text-base sm:text-lg font-black text-gray-800 tracking-tight flex items-center gap-1.5">
+                                        KITTY 韓語兩大敬語發音積木樂園
+                                        <span className="text-xs px-2 py-0.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-full shadow-sm">Sanrio 版</span>
+                                    </h1>
+                                    <p className="text-[11px] sm:text-xs text-purple-600 font-medium">
+                                        最高敬語 (습니다) ✕ 日常敬語 (해요) • 輕鬆秒殺韓語兩大支柱
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div className="flex flex-wrap items-center gap-1.5 text-xs font-bold">
+                                <a href="index.html" className="px-2.5 py-1.5 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl transition-all flex items-center gap-1">
+                                    <i className="fas fa-home"></i> 首頁
+                                </a>
+                                <a href="korean_vocab_dictionary.html" className="px-2.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl transition-all flex items-center gap-1">
+                                    <i className="fas fa-book"></i> 詞庫大字典
+                                </a>
+                                <a href="korean_hanja_dictionary.html" className="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-xl transition-all flex items-center gap-1">
+                                    <i className="fas fa-cubes"></i> 漢字大辭典
+                                </a>
+                                <a href="sanrio_korean_songs.html" className="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-xl transition-all flex items-center gap-1">
+                                    <i className="fas fa-music"></i> 名曲樂園
+                                </a>
+                                <a href="pdf_viewer.html?doc=grammar" className="px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl transition-all flex items-center gap-1">
+                                    <i className="fas fa-file-pdf"></i> 語法 PDF
+                                </a>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* 5 大分頁切換導航 */}
+                    <div className="flex overflow-x-auto no-scrollbar gap-2 pb-2 mb-6 sm:justify-center">
+                        {tabs.map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-sm whitespace-nowrap transition-all duration-200 shadow-sm ${
+                                    activeTab === tab.id
+                                        ? 'bg-gradient-to-r from-purple-600 via-pink-500 to-rose-400 text-white shadow-purple-200 shadow-lg scale-105 ring-2 ring-purple-300'
+                                        : 'bg-white/90 hover:bg-white text-gray-600 hover:text-purple-600 border border-purple-50'
+                                }`}
+                            >
+                                <i className={`fas ${tab.icon}`}></i>
+                                <span>{tab.title}</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* ======================= PAGE 1: 🌟 樂園總覽與黃金對照表 ======================= */}
+                    {activeTab === 1 && (
+                        <div className="space-y-6 animate-fadeIn">
+                            {/* 兩大角色陣營卡 */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="sanrio-card rounded-3xl p-5 border-l-8 border-amber-400 bg-gradient-to-br from-amber-50/70 to-white">
+                                    <div className="flex items-start justify-between">
+                                        <div>
+                                            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-900 rounded-full text-xs font-black mb-2">
+                                                👔 職場正式小紳士 • 布丁狗派
+                                            </div>
+                                            <h3 className="text-xl font-black text-amber-900 kr-font">👑 最高敬語 (하십시오體)</h3>
+                                            <p className="text-xs font-bold text-amber-700 mt-1">代表語尾：<span className="kr-font text-sm bg-amber-200/70 px-2 py-0.5 rounded-md">-습니다 / -ㅂ니다</span></p>
+                                        </div>
+                                        <span className="text-4xl">🐶🎩</span>
+                                    </div>
+                                    <div className="mt-3 text-xs text-gray-700 space-y-1 bg-white/80 p-3 rounded-2xl border border-amber-100">
+                                        <p><strong>🎯 何時用：</strong>正式場合、職場匯報、演講發表、公務會議、新聞播報、長輩/長官。</p>
+                                        <p><strong>🎭 語氣感受：</strong>莊重、嚴肅、專業、崇高尊敬、適度距離感。</p>
+                                    </div>
+                                </div>
+
+                                <div className="sanrio-card rounded-3xl p-5 border-l-8 border-pink-400 bg-gradient-to-br from-pink-50/70 to-white">
+                                    <div className="flex items-start justify-between">
+                                        <div>
+                                            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-pink-100 text-pink-900 rounded-full text-xs font-black mb-2">
+                                                ☕ 咖啡館甜心 • Hello Kitty 派
+                                            </div>
+                                            <h3 className="text-xl font-black text-pink-900 kr-font">🌸 日常敬語 (해요體)</h3>
+                                            <p className="text-xs font-bold text-pink-700 mt-1">代表語尾：<span className="kr-font text-sm bg-pink-200/70 px-2 py-0.5 rounded-md">-아요 / -어요 / -요</span></p>
+                                        </div>
+                                        <span className="text-4xl">🐱🎀</span>
+                                    </div>
+                                    <div className="mt-3 text-xs text-gray-700 space-y-1 bg-white/80 p-3 rounded-2xl border border-pink-100">
+                                        <p><strong>🎯 何時用：</strong>日常生活中最常用。朋友、同事、店員、一般社交或非極正式之長輩。</p>
+                                        <p><strong>🎭 語氣感受：</strong>親切、溫和、自然、生活化、禮貌客氣兼具親和力。</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 黃金全景快速對照表 */}
+                            <div className="sanrio-card rounded-3xl p-5 md:p-6 overflow-hidden">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-2xl">📊</span>
+                                        <h3 className="text-lg md:text-xl font-black text-gray-800">兩大敬語體系黃金速查總表</h3>
+                                    </div>
+                                    <span className="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">💡 點擊語音按鈕即可聽示範</span>
+                                </div>
+
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                                        <thead>
+                                            <tr className="border-b-2 border-purple-100 bg-purple-50/50">
+                                                <th className="py-3 px-3 font-black text-purple-900 w-1/4">語法維度</th>
+                                                <th className="py-3 px-3 font-black text-amber-900 bg-amber-50/70 w-[37.5%]">👑 最高敬語 (습니다 派)</th>
+                                                <th className="py-3 px-3 font-black text-pink-900 bg-pink-50/70 w-[37.5%]">🌸 日常敬語 (해요 派)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-purple-50">
+                                            {/* 1. 動詞/形容詞 肯定句 */}
+                                            <tr className="hover:bg-purple-50/30 transition-colors">
+                                                <td className="py-3 px-3 font-black text-gray-800">
+                                                    🏃 動詞/形容詞<br/><span className="text-xs font-normal text-purple-600">【肯定句】</span>
+                                                </td>
+                                                <td className="py-3 px-3 bg-amber-50/20 space-y-1.5">
+                                                    <div>• <strong>有收音</strong>接 <span className="kr-font font-bold text-amber-800">-습니다</span></div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="kr-font font-bold">먹습니다</span> (吃)
+                                                        <AudioBtn text="먹습니다" speed={1.0} color="amber" size="xs" />
+                                                    </div>
+                                                    <div>• <strong>無收音</strong>接 <span className="kr-font font-bold text-amber-800">-ㅂ니다</span></div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="kr-font font-bold">갑니다</span> (去)
+                                                        <AudioBtn text="갑니다" speed={1.0} color="amber" size="xs" />
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 px-3 bg-pink-50/20 space-y-1.5">
+                                                    <div>• <strong>陽性母音(ㅏ,ㅗ)</strong>接 <span className="kr-font font-bold text-pink-700">-아요</span></div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="kr-font font-bold">가요</span> / <span className="kr-font font-bold">좋아요</span>
+                                                        <AudioBtn text="가요, 좋아요" speed={1.0} color="pink" size="xs" />
+                                                    </div>
+                                                    <div>• <strong>陰性/中性/複合(ㅐ,ㅖ,ㅢ)</strong>接 <span className="kr-font font-bold text-pink-700">-어요</span></div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="kr-font font-bold">먹어요</span> / <span className="kr-font font-bold">보내요</span>
+                                                        <AudioBtn text="먹어요, 보내요" speed={1.0} color="pink" size="xs" />
+                                                    </div>
+                                                    <div>• <strong>하다</strong> 一律變 <span className="kr-font font-bold text-pink-700">해요</span> (공부해요)</div>
+                                                </td>
+                                            </tr>
+
+                                            {/* 2. 動詞/形容詞 疑問句 */}
+                                            <tr className="hover:bg-purple-50/30 transition-colors">
+                                                <td className="py-3 px-3 font-black text-gray-800">
+                                                    ❓ 動詞/形容詞<br/><span className="text-xs font-normal text-purple-600">【疑問句】</span>
+                                                </td>
+                                                <td className="py-3 px-3 bg-amber-50/20 space-y-1">
+                                                    <div>• 有收音：<span className="kr-font font-bold text-amber-800">-습니까?</span></div>
+                                                    <div>• 無收音：<span className="kr-font font-bold text-amber-800">-ㅂ니까?</span></div>
+                                                    <div className="flex items-center gap-2 mt-1">
+                                                        <span className="kr-font font-bold text-xs">식사하셨습니까?</span>
+                                                        <AudioBtn text="식사하셨습니까?" speed={1.0} color="amber" size="xs" />
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 px-3 bg-pink-50/20 space-y-1">
+                                                    <div>• <strong>詞形完全不變</strong>，句尾語調「<strong>升調 ⤴️</strong>」即可！</div>
+                                                    <div className="flex items-center gap-2 mt-1">
+                                                        <span className="kr-font font-bold text-xs">밥 먹어요? ⤴️</span>
+                                                        <AudioBtn text="밥 먹어요?" speed={1.0} color="pink" size="xs" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            {/* 3. 名詞肯定句 */}
+                                            <tr className="hover:bg-purple-50/30 transition-colors">
+                                                <td className="py-3 px-3 font-black text-gray-800">
+                                                    🏷️ 名詞肯定句<br/><span className="text-xs font-normal text-purple-600">【是...】</span>
+                                                </td>
+                                                <td className="py-3 px-3 bg-amber-50/20 space-y-1">
+                                                    <div>• 不論有無收音，一律接 <span className="kr-font font-bold text-amber-800">-입니다</span></div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="kr-font font-bold">학생입니다 / 의사입니다</span>
+                                                        <AudioBtn text="학생입니다, 의사입니다" speed={1.0} color="amber" size="xs" />
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 px-3 bg-pink-50/20 space-y-1">
+                                                    <div>• <strong>有收音</strong>接 <span className="kr-font font-bold text-pink-700">-이에요</span> (학생이에요)</div>
+                                                    <div>• <strong>無收音</strong>接 <span className="kr-font font-bold text-pink-700">-예요</span> (의사예요)</div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="kr-font font-bold">학생이에요 / 의사예요</span>
+                                                        <AudioBtn text="학생이에요, 의사예요" speed={1.0} color="pink" size="xs" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            {/* 4. 名詞疑問句 */}
+                                            <tr className="hover:bg-purple-50/30 transition-colors">
+                                                <td className="py-3 px-3 font-black text-gray-800">
+                                                    ❓ 名詞疑問句<br/><span className="text-xs font-normal text-purple-600">【是...嗎?】</span>
+                                                </td>
+                                                <td className="py-3 px-3 bg-amber-50/20 space-y-1">
+                                                    <div>• 不論有無收音，一律接 <span className="kr-font font-bold text-amber-800">-입니까?</span> <span className="text-[10px] text-red-500 font-bold">(非 습니까)</span></div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="kr-font font-bold">학생입니까? / 의사입니까?</span>
+                                                        <AudioBtn text="학생입니까? 의사입니까?" speed={1.0} color="amber" size="xs" />
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 px-3 bg-pink-50/20 space-y-1">
+                                                    <div>• 詞形不變，句尾語調「<strong>升調 ⤴️</strong>」</div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="kr-font font-bold">학생이에요? ⤴️ / 의사예요? ⤴️</span>
+                                                        <AudioBtn text="학생이에요? 의사예요?" speed={1.0} color="pink" size="xs" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            {/* 5. 名詞否定句 */}
+                                            <tr className="hover:bg-purple-50/30 transition-colors">
+                                                <td className="py-3 px-3 font-black text-gray-800">
+                                                    🚫 名詞否定句<br/><span className="text-xs font-normal text-purple-600">【不是...】</span>
+                                                </td>
+                                                <td className="py-3 px-3 bg-amber-50/20 space-y-1">
+                                                    <div>• 有收音：<span className="kr-font font-bold text-amber-800">-이 아닙니다</span></div>
+                                                    <div>• 無收音：<span className="kr-font font-bold text-amber-800">-가 아닙니다</span></div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="kr-font font-bold">학생이 아닙니다 / 의사가 아닙니다</span>
+                                                        <AudioBtn text="학생이 아닙니다, 의사가 아닙니다" speed={1.0} color="amber" size="xs" />
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 px-3 bg-pink-50/20 space-y-1">
+                                                    <div>• 有收音：<span className="kr-font font-bold text-pink-700">-이 아니에요</span></div>
+                                                    <div>• 無收音：<span className="kr-font font-bold text-pink-700">-가 아니에요</span></div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="kr-font font-bold">학생이 아니에요 / 의사가 아니에요</span>
+                                                        <AudioBtn text="학생이 아니에요, 의사가 아니에요" speed={1.0} color="pink" size="xs" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            {/* 6. 音變與魔法 */}
+                                            <tr className="hover:bg-purple-50/30 transition-colors">
+                                                <td className="py-3 px-3 font-black text-gray-800">
+                                                    🪄 音變與魔法
+                                                </td>
+                                                <td className="py-3 px-3 bg-amber-50/20 space-y-1">
+                                                    <div>• <strong>鼻音化音變：</strong>終聲 ㅂ 遇 ㄴ 讀作 <span className="kr-font font-bold text-amber-800">[ㅁ]</span></div>
+                                                    <div className="text-xs text-amber-900">습니다 讀作 <strong>[슴니다]</strong>、입니다 讀作 <strong>[임니다]</strong></div>
+                                                </td>
+                                                <td className="py-3 px-3 bg-pink-50/20 space-y-1">
+                                                    <div>• <strong>瞬間禮貌魔法：</strong>名詞/簡答直接加 <span className="kr-font font-bold text-pink-700">요</span>！</div>
+                                                    <div className="text-xs text-pink-900">저요! (是我！)、진짜요? (真的嗎？)、네/아니요</div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            {/* 三秒記憶神口訣卡 */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="sanrio-card rounded-3xl p-5 bg-gradient-to-r from-amber-100/60 to-amber-50/60 border border-amber-200">
+                                    <h4 className="font-black text-amber-900 text-sm flex items-center gap-1.5 mb-2">
+                                        <span className="text-lg">🏢</span> 【最高敬語 습니다 派神口訣】
+                                    </h4>
+                                    <p className="text-xs md:text-sm font-bold text-amber-800 leading-relaxed">
+                                        「正式場合用 <span className="text-amber-900 underline">습니다</span>，有收音加 <span className="text-amber-900 font-black">습</span>、無收音塞 <span className="text-amber-900 font-black">ㅂ</span>，名詞疑問是 <span className="text-amber-900 font-black">입니까?</span>，統統鼻音念 [슴/임]！」
+                                    </p>
+                                </div>
+
+                                <div className="sanrio-card rounded-3xl p-5 bg-gradient-to-r from-pink-100/60 to-pink-50/60 border border-pink-200">
+                                    <h4 className="font-black text-pink-900 text-sm flex items-center gap-1.5 mb-2">
+                                        <span className="text-lg">☕</span> 【日常敬語 요 派神口訣】
+                                    </h4>
+                                    <p className="text-xs md:text-sm font-bold text-pink-800 leading-relaxed">
+                                        「生活聊天加個 <span className="text-pink-900 underline">요</span>，陽性 <span className="text-pink-900 font-black">아요</span> 陰 <span className="text-pink-900 font-black">어요</span>，<span className="text-pink-900 font-black">ㅐ/ㅖ/ㅢ</span> 全接 어，하다 變 <span className="text-pink-900 font-black">해요</span> 名詞 <span className="text-pink-900 font-black">이에요/예요</span>！」
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ======================= PAGE 2: 👑 職場精英「습니다 莊重派」 ======================= */}
+                    {activeTab === 2 && (
+                        <div className="space-y-6 animate-fadeIn">
+                            <div className="sanrio-card rounded-3xl p-6 bg-gradient-to-br from-amber-50/80 via-white to-amber-50/40 border border-amber-200">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-amber-200 flex items-center justify-center text-2xl shadow-sm">
+                                        👔
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-black text-amber-900">👑 格式體最高敬語 (하십시오體) 深度樂園</h3>
+                                        <p className="text-xs text-amber-700">專為職場匯報、商務會議、公開演講與向長輩表達最高敬意而生</p>
+                                    </div>
+                                </div>
+
+                                {/* 動詞/形容詞規則 */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                                    <div className="p-4 rounded-2xl bg-white border border-amber-100 shadow-sm">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg text-xs font-black">情況 ①：詞幹有收音</span>
+                                            <span className="text-xs font-bold text-amber-600">接 -습니다</span>
+                                        </div>
+                                        <div className="space-y-2 mt-3">
+                                            <div className="flex items-center justify-between bg-amber-50/50 p-2 rounded-xl">
+                                                <div>
+                                                    <span className="text-gray-500 line-through text-xs">먹다</span> → <span className="kr-font font-bold text-amber-900">먹습니다</span>
+                                                    <span className="text-xs text-gray-500 ml-1.5">(吃)</span>
+                                                </div>
+                                                <AudioBtn text="먹습니다" color="amber" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between bg-amber-50/50 p-2 rounded-xl">
+                                                <div>
+                                                    <span className="text-gray-500 line-through text-xs">좋다</span> → <span className="kr-font font-bold text-amber-900">좋습니다</span>
+                                                    <span className="text-xs text-gray-500 ml-1.5">(好)</span>
+                                                </div>
+                                                <AudioBtn text="좋습니다" color="amber" size="xs" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-4 rounded-2xl bg-white border border-amber-100 shadow-sm">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg text-xs font-black">情況 ②：詞幹無收音</span>
+                                            <span className="text-xs font-bold text-amber-600">詞幹底插 ㅂ + 니다</span>
+                                        </div>
+                                        <div className="space-y-2 mt-3">
+                                            <div className="flex items-center justify-between bg-amber-50/50 p-2 rounded-xl">
+                                                <div>
+                                                    <span className="text-gray-500 line-through text-xs">가다</span> → <span className="kr-font font-bold text-amber-900">갑니다</span>
+                                                    <span className="text-xs text-gray-500 ml-1.5">(去)</span>
+                                                </div>
+                                                <AudioBtn text="갑니다" color="amber" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between bg-amber-50/50 p-2 rounded-xl">
+                                                <div>
+                                                    <span className="text-gray-500 line-through text-xs">하다</span> → <span className="kr-font font-bold text-amber-900">합니다</span>
+                                                    <span className="text-xs text-gray-500 ml-1.5">(做)</span>
+                                                </div>
+                                                <AudioBtn text="합니다" color="amber" size="xs" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 疑問句與名詞三大金律 */}
+                                <div className="mt-6 p-4 rounded-2xl bg-amber-100/40 border border-amber-200">
+                                    <h4 className="font-black text-amber-900 text-sm mb-3 flex items-center gap-2">
+                                        <span>📜</span> 名詞句三大黃金公式（格式體）
+                                    </h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                        <div className="bg-white p-3 rounded-xl border border-amber-100">
+                                            <div className="text-xs font-black text-amber-800 mb-1">① 肯定句【是...】</div>
+                                            <div className="text-xs text-gray-600 mb-2">不論收音，一律接 <strong>-입니다</strong></div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="kr-font font-bold text-xs text-gray-800">의사입니다</span>
+                                                <AudioBtn text="의사입니다" color="amber" size="xs" />
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-white p-3 rounded-xl border border-amber-100">
+                                            <div className="text-xs font-black text-amber-800 mb-1">② 疑問句【是...嗎?】</div>
+                                            <div className="text-xs text-gray-600 mb-2">不論收音，一律接 <strong>-입니까?</strong></div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="kr-font font-bold text-xs text-gray-800">학생입니까?</span>
+                                                <AudioBtn text="학생입니까?" color="amber" size="xs" />
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-white p-3 rounded-xl border border-amber-100">
+                                            <div className="text-xs font-black text-amber-800 mb-1">③ 否定句【不是...】</div>
+                                            <div className="text-xs text-gray-600 mb-2">有收音 <strong>이 아닙니다</strong> / 無 <strong>가 아닙니다</strong></div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="kr-font font-bold text-xs text-gray-800">학생이 아닙니다</span>
+                                                <AudioBtn text="학생이 아닙니다" color="amber" size="xs" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 鼻音化音變透視鏡 */}
+                                <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-amber-200/50 to-orange-100/50 border border-amber-300">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-xl">🪄</span>
+                                        <h4 className="font-black text-amber-950 text-sm">終聲 ㅂ 鼻音化音變透視鏡（書寫 vs 實際發音）</h4>
+                                    </div>
+                                    <p className="text-xs text-amber-900 leading-relaxed">
+                                        韓文規則中，終聲 <strong>ㅂ</strong> 遇到後方初聲 <strong>ㄴ</strong> 時，為了讓發音順暢，終聲 <strong>ㅂ</strong> 會自然轉化為鼻音 <strong>[ㅁ]</strong>：
+                                    </p>
+                                    <div className="flex flex-wrap gap-3 mt-3">
+                                        <div className="bg-white px-3 py-1.5 rounded-xl border border-amber-200 text-xs flex items-center gap-2">
+                                            <span>습니다 實際讀作 <strong>[슴니다]</strong></span>
+                                            <AudioBtn text="습니다" speed={0.7} color="amber" size="xs" />
+                                        </div>
+                                        <div className="bg-white px-3 py-1.5 rounded-xl border border-amber-200 text-xs flex items-center gap-2">
+                                            <span>입니다 實際讀作 <strong>[임니다]</strong></span>
+                                            <AudioBtn text="입니다" speed={0.7} color="amber" size="xs" />
+                                        </div>
+                                        <div className="bg-white px-3 py-1.5 rounded-xl border border-amber-200 text-xs flex items-center gap-2">
+                                            <span>감사합니다 實際讀作 <strong>[감사함니다]</strong></span>
+                                            <AudioBtn text="감사합니다" speed={0.7} color="amber" size="xs" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ======================= PAGE 3: 🌸 生活甜心「해요 親切派」 ======================= */}
+                    {activeTab === 3 && (
+                        <div className="space-y-6 animate-fadeIn">
+                            <div className="sanrio-card rounded-3xl p-6 bg-gradient-to-br from-pink-50/80 via-white to-purple-50/40 border border-pink-200">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-pink-200 flex items-center justify-center text-2xl shadow-sm">
+                                        ☕
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-black text-pink-900">🌸 非格式體日常敬語 (해요體) 深度樂園</h3>
+                                        <p className="text-xs text-pink-700">日常韓語出鏡率最高！掌握母音四大拼盤，輕鬆搞定日常會話</p>
+                                    </div>
+                                </div>
+
+                                {/* 母音四大家族分類拼盤 */}
+                                <h4 className="font-black text-gray-800 text-sm mt-6 mb-3 flex items-center gap-2">
+                                    <span>🎨</span> 動詞/形容詞詞幹母音四大家族分類拼盤
+                                </h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {/* 1. 陽性母音 */}
+                                    <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-200">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="px-2.5 py-1 bg-rose-500 text-white rounded-lg text-xs font-black">🔴 陽性母音家族</span>
+                                            <span className="text-xs font-bold text-rose-700">接 -아요</span>
+                                        </div>
+                                        <p className="text-xs text-gray-600 mb-2">包含字母：<strong>ㅏ、ㅑ、ㅗ、ㅛ</strong> (筆畫向右、向上)</p>
+                                        <div className="space-y-1.5 text-xs bg-white p-2.5 rounded-xl border border-rose-100">
+                                            <div className="flex items-center justify-between">
+                                                <span>가다 → <strong className="kr-font text-rose-700">가요</strong> (去)</span>
+                                                <AudioBtn text="가요" color="pink" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span>좋다 → <strong className="kr-font text-rose-700">좋아요</strong> (好)</span>
+                                                <AudioBtn text="좋아요" color="pink" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span>살다 → <strong className="kr-font text-rose-700">살아요</strong> (住)</span>
+                                                <AudioBtn text="살아요" color="pink" size="xs" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 2. 陰性 & 複合母音 (包含 ㅐ, ㅖ, ㅢ) */}
+                                    <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-200">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="px-2.5 py-1 bg-indigo-500 text-white rounded-lg text-xs font-black">🔵 陰性 & 複合母音家族</span>
+                                            <span className="text-xs font-bold text-indigo-700">一律接 -어요</span>
+                                        </div>
+                                        <p className="text-xs text-gray-600 mb-2">包含字母：<strong>ㅓ、ㅕ、ㅜ、ㅠ 及 ㅐ、ㅖ、ㅢ、ㅔ、ㅟ</strong></p>
+                                        <div className="space-y-1.5 text-xs bg-white p-2.5 rounded-xl border border-indigo-100">
+                                            <div className="flex items-center justify-between">
+                                                <span>먹다 (ㅓ) → <strong className="kr-font text-indigo-700">먹어요</strong> (吃)</span>
+                                                <AudioBtn text="먹어요" color="purple" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span>보내다 (ㅐ) → <strong className="kr-font text-indigo-700">보내요</strong> (寄/過)</span>
+                                                <AudioBtn text="보내요" color="purple" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span>계시다 (ㅖ) → <strong className="kr-font text-indigo-700">계세요</strong> (在)</span>
+                                                <AudioBtn text="계세요" color="purple" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span>희다 (ㅢ) → <strong className="kr-font text-indigo-700">희어요/희요</strong> (白)</span>
+                                                <AudioBtn text="희어요" color="purple" size="xs" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 3. 中性母音 (ㅡ, ㅣ) */}
+                                    <div className="p-4 rounded-2xl bg-teal-50/60 border border-teal-200">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="px-2.5 py-1 bg-teal-600 text-white rounded-lg text-xs font-black">⚪ 中性母音家族 (ㅡ, ㅣ)</span>
+                                            <span className="text-xs font-bold text-teal-700">接 -어요 (脫落/縮合)</span>
+                                        </div>
+                                        <p className="text-xs text-gray-600 mb-2"><strong>ㅡ 脫落</strong>、<strong>ㅣ + 어 → ㅕ 縮合</strong></p>
+                                        <div className="space-y-1.5 text-xs bg-white p-2.5 rounded-xl border border-teal-100">
+                                            <div className="flex items-center justify-between">
+                                                <span>쓰다 (ㅡ) → <strong className="kr-font text-teal-800">써요</strong> (寫/用)</span>
+                                                <AudioBtn text="써요" color="emerald" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span>예쁘다 (ㅡ) → <strong className="kr-font text-teal-800">예뻐요</strong> (漂亮)</span>
+                                                <AudioBtn text="예뻐요" color="emerald" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span>마시다 (ㅣ) → <strong className="kr-font text-teal-800">마셔요</strong> (喝)</span>
+                                                <AudioBtn text="마셔요" color="emerald" size="xs" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 4. 하다 家族 */}
+                                    <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-black">🟢 하다 家族</span>
+                                            <span className="text-xs font-bold text-emerald-700">一律變 -해요</span>
+                                        </div>
+                                        <p className="text-xs text-gray-600 mb-2">凡是 <strong>~하다</strong> 結尾，乾脆俐落直接變 <strong>해요</strong>！</p>
+                                        <div className="space-y-1.5 text-xs bg-white p-2.5 rounded-xl border border-emerald-100">
+                                            <div className="flex items-center justify-between">
+                                                <span>공부하다 → <strong className="kr-font text-emerald-800">공부해요</strong> (學習)</span>
+                                                <AudioBtn text="공부해요" color="emerald" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span>일하다 → <strong className="kr-font text-emerald-800">일해요</strong> (工作)</span>
+                                                <AudioBtn text="일해요" color="emerald" size="xs" />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span>사랑하다 → <strong className="kr-font text-emerald-800">사랑해요</strong> (愛)</span>
+                                                <AudioBtn text="사랑해요" color="emerald" size="xs" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 日常敬語名詞四大接法 */}
+                                <div className="mt-6 p-4 rounded-2xl bg-pink-100/40 border border-pink-200">
+                                    <h4 className="font-black text-pink-900 text-sm mb-3 flex items-center gap-2">
+                                        <span>🏷️</span> 日常敬語名詞接法四大公式
+                                    </h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div className="bg-white p-3 rounded-xl border border-pink-100">
+                                            <div className="text-xs font-black text-pink-800 mb-1">① 肯定句【是...】</div>
+                                            <div className="text-xs text-gray-600 mb-2">有收音 <strong>-이에요</strong> / 無收音 <strong>-예요</strong></div>
+                                            <div className="space-y-1">
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span>학생 + 이에요 = <strong className="kr-font text-pink-700">학생이에요</strong></span>
+                                                    <AudioBtn text="학생이에요" color="pink" size="xs" />
+                                                </div>
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span>의사 + 예요 = <strong className="kr-font text-pink-700">의사예요</strong></span>
+                                                    <AudioBtn text="의사예요" color="pink" size="xs" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-white p-3 rounded-xl border border-pink-100">
+                                            <div className="text-xs font-black text-pink-800 mb-1">② 否定句【不是...】</div>
+                                            <div className="text-xs text-gray-600 mb-2">有收音 <strong>-이 아니에요</strong> / 無收音 <strong>-가 아니에요</strong></div>
+                                            <div className="space-y-1">
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span>학생 + 이 아니에요 = <strong className="kr-font text-pink-700">학생이 아니에요</strong></span>
+                                                    <AudioBtn text="학생이 아니에요" color="pink" size="xs" />
+                                                </div>
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span>의사 + 가 아니에요 = <strong className="kr-font text-pink-700">의사가 아니에요</strong></span>
+                                                    <AudioBtn text="의사가 아니에요" color="pink" size="xs" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 魔法 요 瞬間升級卡 */}
+                                <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-purple-100/60 to-pink-100/60 border border-purple-200">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-xl">✨</span>
+                                        <h4 className="font-black text-purple-900 text-sm">魔法「요」瞬間禮貌升級卡（名詞/簡答直接加）</h4>
+                                    </div>
+                                    <p className="text-xs text-purple-800 leading-relaxed mb-3">
+                                        日常聊天時，即使不是完整句子，只要在單字、代名詞或回答後加上 <strong>요</strong>，就能瞬間變成客氣禮貌的日常敬語！
+                                    </p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                                        <div className="bg-white p-2.5 rounded-xl border border-purple-100 flex items-center justify-between">
+                                            <div><strong>저요!</strong> (是我！)</div>
+                                            <AudioBtn text="저요!" color="purple" size="xs" />
+                                        </div>
+                                        <div className="bg-white p-2.5 rounded-xl border border-purple-100 flex items-center justify-between">
+                                            <div><strong>진짜요?</strong> (真的嗎？)</div>
+                                            <AudioBtn text="진짜요?" color="purple" size="xs" />
+                                        </div>
+                                        <div className="bg-white p-2.5 rounded-xl border border-purple-100 flex items-center justify-between">
+                                            <div><strong>아니요~</strong> (不是喔~)</div>
+                                            <AudioBtn text="아니요" color="purple" size="xs" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ======================= PAGE 4: 🥊 實戰 PK 對決台 ======================= */}
+                    {activeTab === 4 && (
+                        <div className="space-y-6 animate-fadeIn">
+                            <div className="sanrio-card rounded-3xl p-6 border border-purple-200">
+                                <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-200 to-pink-200 flex items-center justify-center text-2xl shadow-sm">
+                                            🥊
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-black text-gray-800">生活情境雙敬語實戰 PK 對決台</h3>
+                                            <p className="text-xs text-purple-600 font-medium">切換情境模式，體會莊重職場 vs 親切社交的韓語魅力</p>
+                                        </div>
+                                    </div>
+
+                                    {/* 模式切換開關 */}
+                                    <div className="flex items-center p-1 bg-purple-50 rounded-2xl border border-purple-200 text-xs font-bold">
+                                        <button
+                                            onClick={() => setPkMode('both')}
+                                            className={`px-3 py-1.5 rounded-xl transition-all ${pkMode === 'both' ? 'bg-purple-600 text-white shadow-sm' : 'text-gray-600 hover:text-purple-600'}`}
+                                        >
+                                            🌟 雙向對照
+                                        </button>
+                                        <button
+                                            onClick={() => setPkMode('formal')}
+                                            className={`px-3 py-1.5 rounded-xl transition-all ${pkMode === 'formal' ? 'bg-amber-500 text-white shadow-sm' : 'text-gray-600 hover:text-amber-600'}`}
+                                        >
+                                            👔 職場模式
+                                        </button>
+                                        <button
+                                            onClick={() => setPkMode('polite')}
+                                            className={`px-3 py-1.5 rounded-xl transition-all ${pkMode === 'polite' ? 'bg-pink-500 text-white shadow-sm' : 'text-gray-600 hover:text-pink-600'}`}
+                                        >
+                                            ☕ 咖啡廳模式
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* PK 對決卡片清單 */}
+                                <div className="space-y-4">
+                                    {/* 情境 1 */}
+                                    <div className="p-4 rounded-2xl bg-white border border-purple-100 shadow-sm space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-black text-xs text-purple-900 bg-purple-100 px-3 py-1 rounded-full">情境 ①：自我介紹（我是學生 / 我是醫生）</span>
+                                            <span className="text-[11px] text-gray-500">面試發表 vs 朋友聚會</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            {(pkMode === 'both' || pkMode === 'formal') && (
+                                                <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
+                                                    <div className="text-xs font-bold text-amber-800 mb-1 flex items-center justify-between">
+                                                        <span>👑 職場/大會：最高敬語</span>
+                                                        <span className="text-[10px] bg-amber-200 px-1.5 py-0.5 rounded">庄重</span>
+                                                    </div>
+                                                    <div className="kr-font text-sm md:text-base font-black text-gray-800">저는 학생입니다.</div>
+                                                    <div className="text-xs text-gray-500 mt-1 flex items-center justify-between">
+                                                        <span>我是學生。</span>
+                                                        <AudioBtn text="저는 학생입니다." color="amber" size="xs" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {(pkMode === 'both' || pkMode === 'polite') && (
+                                                <div className="p-3 rounded-xl bg-pink-50/70 border border-pink-200">
+                                                    <div className="text-xs font-bold text-pink-800 mb-1 flex items-center justify-between">
+                                                        <span>🌸 社交/聊天：日常敬語</span>
+                                                        <span className="text-[10px] bg-pink-200 px-1.5 py-0.5 rounded">親切</span>
+                                                    </div>
+                                                    <div className="kr-font text-sm md:text-base font-black text-gray-800">저는 학생이에요.</div>
+                                                    <div className="text-xs text-gray-500 mt-1 flex items-center justify-between">
+                                                        <span>我是學生。</span>
+                                                        <AudioBtn text="저는 학생이에요." color="pink" size="xs" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* 情境 2 */}
+                                    <div className="p-4 rounded-2xl bg-white border border-purple-100 shadow-sm space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-black text-xs text-purple-900 bg-purple-100 px-3 py-1 rounded-full">情境 ②：用餐詢問（您吃飯了嗎？）</span>
+                                            <span className="text-[11px] text-gray-500">對長官上司 vs 對同事好友</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            {(pkMode === 'both' || pkMode === 'formal') && (
+                                                <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
+                                                    <div className="text-xs font-bold text-amber-800 mb-1 flex items-center justify-between">
+                                                        <span>👑 尊貴長輩：最高敬語</span>
+                                                        <span className="text-[10px] bg-amber-200 px-1.5 py-0.5 rounded">崇敬</span>
+                                                    </div>
+                                                    <div className="kr-font text-sm md:text-base font-black text-gray-800">식사하셨습니까?</div>
+                                                    <div className="text-xs text-gray-500 mt-1 flex items-center justify-between">
+                                                        <span>您用餐了嗎？</span>
+                                                        <AudioBtn text="식사하셨습니까?" color="amber" size="xs" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {(pkMode === 'both' || pkMode === 'polite') && (
+                                                <div className="p-3 rounded-xl bg-pink-50/70 border border-pink-200">
+                                                    <div className="text-xs font-bold text-pink-800 mb-1 flex items-center justify-between">
+                                                        <span>🌸 同事朋友：日常敬語</span>
+                                                        <span className="text-[10px] bg-pink-200 px-1.5 py-0.5 rounded">溫暖</span>
+                                                    </div>
+                                                    <div className="kr-font text-sm md:text-base font-black text-gray-800">밥 먹었어요? ⤴️</div>
+                                                    <div className="text-xs text-gray-500 mt-1 flex items-center justify-between">
+                                                        <span>吃飯了嗎？</span>
+                                                        <AudioBtn text="밥 먹었어요?" color="pink" size="xs" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* 情境 3 */}
+                                    <div className="p-4 rounded-2xl bg-white border border-purple-100 shadow-sm space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-black text-xs text-purple-900 bg-purple-100 px-3 py-1 rounded-full">情境 ③：否定句子（不是醫生 / 不是學生）</span>
+                                            <span className="text-[11px] text-gray-500">正式澄清 vs 口語解釋</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            {(pkMode === 'both' || pkMode === 'formal') && (
+                                                <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
+                                                    <div className="text-xs font-bold text-amber-800 mb-1 flex items-center justify-between">
+                                                        <span>👑 正式澄清：最高敬語</span>
+                                                        <span className="text-[10px] bg-amber-200 px-1.5 py-0.5 rounded">嚴謹</span>
+                                                    </div>
+                                                    <div className="kr-font text-sm md:text-base font-black text-gray-800">의사가 아닙니다.</div>
+                                                    <div className="text-xs text-gray-500 mt-1 flex items-center justify-between">
+                                                        <span>不是醫生。</span>
+                                                        <AudioBtn text="의사가 아닙니다." color="amber" size="xs" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {(pkMode === 'both' || pkMode === 'polite') && (
+                                                <div className="p-3 rounded-xl bg-pink-50/70 border border-pink-200">
+                                                    <div className="text-xs font-bold text-pink-800 mb-1 flex items-center justify-between">
+                                                        <span>🌸 日常聊天：日常敬語</span>
+                                                        <span className="text-[10px] bg-pink-200 px-1.5 py-0.5 rounded">隨和</span>
+                                                    </div>
+                                                    <div className="kr-font text-sm md:text-base font-black text-gray-800">의사가 아니에요.</div>
+                                                    <div className="text-xs text-gray-500 mt-1 flex items-center justify-between">
+                                                        <span>不是醫生喔。</span>
+                                                        <AudioBtn text="의사가 아니에요." color="pink" size="xs" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ======================= PAGE 5: 🎮 隨堂星級小測驗 ======================= */}
+                    {activeTab === 5 && (
+                        <div className="space-y-6 animate-fadeIn">
+                            <div className="sanrio-card rounded-3xl p-6 border border-purple-200">
+                                <div className="flex items-center justify-between mb-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 rounded-2xl bg-purple-200 flex items-center justify-center text-2xl shadow-sm">
+                                            🎮
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-black text-purple-950">隨堂星級自我挑戰測驗</h3>
+                                            <p className="text-xs text-purple-600 font-medium">5 道經典考題，測測你的韓語雙敬語功力！</p>
+                                        </div>
+                                    </div>
+                                    {quizSubmitted && (
+                                        <button
+                                            onClick={resetQuiz}
+                                            className="px-3 py-1.5 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-xl text-xs font-bold transition-all"
+                                        >
+                                            <i className="fas fa-redo mr-1"></i> 重新測驗
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* 測驗題目清單 */}
+                                <div className="space-y-5">
+                                    {quizQuestions.map((q, qIndex) => {
+                                        const selected = quizAnswers[q.id];
+                                        return (
+                                            <div key={q.id} className="p-4 rounded-2xl bg-white border border-purple-100 shadow-sm">
+                                                <div className="flex items-start gap-2 mb-3">
+                                                    <span className="w-6 h-6 rounded-full bg-purple-500 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5">
+                                                        {qIndex + 1}
+                                                    </span>
+                                                    <h4 className="text-sm font-bold text-gray-800 leading-snug">{q.q}</h4>
+                                                </div>
+
+                                                {/* 選項清單 */}
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                                                    {q.options.map((opt, optIndex) => {
+                                                        const isChosen = selected === optIndex;
+                                                        let btnStyle = "bg-purple-50/50 hover:bg-purple-100/50 text-gray-700 border-purple-100";
+                                                        
+                                                        if (quizSubmitted) {
+                                                            if (opt.isCorrect) {
+                                                                btnStyle = "bg-emerald-100 text-emerald-900 border-emerald-300 font-black";
+                                                            } else if (isChosen && !opt.isCorrect) {
+                                                                btnStyle = "bg-rose-100 text-rose-900 border-rose-300 line-through";
+                                                            }
+                                                        } else if (isChosen) {
+                                                            btnStyle = "bg-purple-600 text-white border-purple-600 font-bold shadow-md";
+                                                        }
+
+                                                        return (
+                                                            <button
+                                                                key={optIndex}
+                                                                disabled={quizSubmitted}
+                                                                onClick={() => handleOptionSelect(q.id, optIndex)}
+                                                                className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${btnStyle}`}
+                                                            >
+                                                                <span className="kr-font">{opt.text}</span>
+                                                                {quizSubmitted && opt.isCorrect && <i className="fas fa-check text-emerald-600"></i>}
+                                                                {quizSubmitted && isChosen && !opt.isCorrect && <i className="fas fa-times text-rose-500"></i>}
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+
+                                                {/* 解題說明 */}
+                                                {quizSubmitted && (
+                                                    <div className="mt-3 p-2.5 rounded-xl bg-purple-50/70 border border-purple-100 text-xs text-purple-900">
+                                                        <strong>💡 解密：</strong> {q.options.find(o => o.isCorrect)?.explanation || '正確答案如綠色標記所示'}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* 結算區 */}
+                                <div className="mt-6 pt-4 border-t border-purple-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                    {!quizSubmitted ? (
+                                        <button
+                                            onClick={handleQuizSubmit}
+                                            disabled={Object.keys(quizAnswers).length < quizQuestions.length}
+                                            className={`w-full sm:w-auto px-8 py-3 rounded-2xl font-black text-sm transition-all shadow-lg ${
+                                                Object.keys(quizAnswers).length === quizQuestions.length
+                                                    ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-purple-200 cursor-pointer active:scale-95'
+                                                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                            }`}
+                                        >
+                                            {Object.keys(quizAnswers).length === quizQuestions.length ? '✨ 送出答案並結算成績' : `請完成所有題目 (${Object.keys(quizAnswers).length}/${quizQuestions.length})`}
+                                        </button>
+                                    ) : (
+                                        <div className="w-full bg-gradient-to-r from-purple-100 via-pink-100 to-amber-100 p-4 rounded-2xl border border-purple-200 flex flex-wrap items-center justify-between gap-3">
+                                            <div>
+                                                <div className="text-xs font-bold text-purple-800">🎉 測驗結算</div>
+                                                <div className="text-lg font-black text-purple-950">
+                                                    得分：{quizQuestions.reduce((acc, q) => (quizAnswers[q.id] !== undefined && q.options[quizAnswers[q.id]]?.isCorrect ? acc + 1 : acc), 0)} / {quizQuestions.length} 題
+                                                    <span className="text-sm font-normal text-purple-700 ml-2">
+                                                        {quizQuestions.reduce((acc, q) => (quizAnswers[q.id] !== undefined && q.options[quizAnswers[q.id]]?.isCorrect ? acc + 1 : acc), 0) >= 4 ? '🌟 太棒了！您已徹底掌握兩大敬語！' : '💪 繼續加油！多看幾次口訣就會熟練囉！'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={resetQuiz}
+                                                className="px-4 py-2 bg-white hover:bg-purple-50 text-purple-700 font-bold rounded-xl text-xs border border-purple-200 shadow-sm"
+                                            >
+                                                再玩一次 🔄
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 底部前後翻頁導航列 */}
+                    <footer className="mt-8 pt-4 border-t border-purple-100 flex items-center justify-between text-xs font-bold">
+                        <button
+                            disabled={activeTab === 1}
+                            onClick={() => setActiveTab(prev => Math.max(1, prev - 1))}
+                            className={`px-4 py-2 rounded-xl border flex items-center gap-1.5 transition-all ${
+                                activeTab === 1
+                                    ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50'
+                                    : 'bg-white hover:bg-purple-50 text-purple-700 border-purple-200 shadow-sm'
+                            }`}
+                        >
+                            <i className="fas fa-chevron-left"></i> 上一頁
+                        </button>
+
+                        <div className="flex items-center gap-1">
+                            {tabs.map(tab => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`w-2.5 h-2.5 rounded-full transition-all ${
+                                        activeTab === tab.id ? 'bg-purple-600 w-6' : 'bg-purple-200 hover:bg-purple-300'
+                                    }`}
+                                    title={tab.title}
+                                />
+                            ))}
+                        </div>
+
+                        <button
+                            disabled={activeTab === tabs.length}
+                            onClick={() => setActiveTab(prev => Math.min(tabs.length, prev + 1))}
+                            className={`px-4 py-2 rounded-xl border flex items-center gap-1.5 transition-all ${
+                                activeTab === tabs.length
+                                    ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50'
+                                    : 'bg-white hover:bg-purple-50 text-purple-700 border-purple-200 shadow-sm'
+                            }`}
+                        >
+                            下一頁 <i className="fas fa-chevron-right"></i>
+                        </button>
+                    </footer>
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
+"""
+
+def main():
+    target_path = os.path.join(os.path.dirname(__file__), "..", "sanrio_korean_honorifics.html")
+    with open(target_path, "w", encoding="utf-8") as f:
+        f.write(HTML_CONTENT.strip())
+    print("[SUCCESS] Generated sanrio_korean_honorifics.html successfully!")
+
+if __name__ == "__main__":
+    main()
