@@ -209,5 +209,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5688,
+    "k": "래퍼",
+    "r": "raepeo",
+    "c": "饒舌歌手、說唱歌手、Rapper（外來語）",
+    "e": "Rapper (hip-hop artist)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
