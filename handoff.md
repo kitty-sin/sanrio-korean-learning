@@ -321,6 +321,12 @@
     - **全站互聯升級**：更新 `index.html`、`korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`README.md` 及 `www/` 鏡像目錄。
     - **離線快取升級**：`sw.js` 納入 `pdf_viewer.html`，版本升至 `v1.0.23`。
   - **Git 部署**：已推播至 GitHub Pages。
+- **2026-09-18 15:05 PT**：
+  - **新增韓語兩大核心格助詞與深度語法解說**：
+    - `#5692 이/가`（主格助詞 / 주격 조사 / Level A 助詞，內含主詞標記、排他焦點、`있다/없다/아니다/되다/좋다` 等特定句型接續、收音接 `이`/無收音接 `가`、及代名詞變形 `내가/제가/네가/누가` 完整解析）
+    - `#5693 을/를`（受格/賓格助詞 / 목적격 조사 / Level A 助詞，內含動作受詞標記、口語省略慣例、收音接 `을`/無收音接 `를`、及代名詞縮合 `날/절/널/뭘` 完整解析）
+  - **全量同步**：`korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫擴充至 **27 筆**，全庫總量達到 **5,693 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+  - **Git 部署**：已推播至 GitHub Pages（Commit `151e70b` & `a8e43ed`）。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -330,7 +336,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 14:48 PT
+- **更新時間**：2026-09-18 15:05 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
