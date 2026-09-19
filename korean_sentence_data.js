@@ -724,3 +724,10 @@ if (typeof window !== 'undefined') {
     window.HangulEngine = HangulEngine;
     window.PRESET_TRAIN_ROUTES = PRESET_TRAIN_ROUTES;
 }
+if (typeof global !== 'undefined') {
+    global.SENTENCE_SUBJECTS = SENTENCE_SUBJECTS;
+    global.SENTENCE_OBJECTS = SENTENCE_OBJECTS;
+    global.SENTENCE_VERBS = SENTENCE_VERBS;
+    global.HangulEngine = HangulEngine;
+    global.PRESET_TRAIN_ROUTES = PRESET_TRAIN_ROUTES;
+}

@@ -175,29 +175,41 @@
                 setTimeout(() => setToastMessage(""), 2800);
             };
 
-            // 語音播放核心 (Web Speech API with 0.3x, 0.7x, 1.0x)
+            // 語音播放核心：全面對接全域 KittyVoice 引擎 (支援 0.3x 逐字口型、0.7x 慢速跟讀、1.0x 正常速 + 雙線路雲端真人發音 Fallback)
             const speakKorean = (text, rate = currentSpeechRate) => {
-                if (!('speechSynthesis' in window)) {
-                    showToast("您的瀏覽器暫不支援語音合成！");
-                    return;
-                }
-                window.speechSynthesis.cancel();
+                if (!text) return;
                 setIsSpeaking(true);
 
-                const cleanText = text.replace(/\[.*?\]/g, '').replace(/[^\uAC00-\uD7A3\s.,?!]/g, '').trim();
-                const utterance = new SpeechSynthesisUtterance(cleanText);
-                utterance.lang = 'ko-KR';
-                utterance.rate = rate; // 0.3x, 0.7x, 1.0x
-                utterance.pitch = 1.05;
+                // 清理標記文字
+                const cleanText = text.replace(/\[.*?\]/g, '').replace(/[^\uAC00-\uD7A3\u1100-\u11FF\u3130-\u318F\s.,?!]/g, '').trim();
 
-                // 優先挑選高品質韓語語音
-                const voices = window.speechSynthesis.getVoices();
-                const koVoice = voices.find(v => v.lang.includes('ko') || v.lang.includes('KR'));
-                if (koVoice) utterance.voice = koVoice;
+                if (window.KittyVoice && typeof window.KittyVoice.speak === 'function') {
+                    window.KittyVoice.speak(cleanText, rate, () => {
+                        setIsSpeaking(false);
+                    });
+                } else if ('speechSynthesis' in window) {
+                    try {
+                        window.speechSynthesis.cancel();
+                        const utterance = new SpeechSynthesisUtterance(cleanText);
+                        utterance.lang = 'ko-KR';
+                        utterance.rate = Math.max(0.3, Math.min(1.5, rate));
+                        utterance.pitch = 1.05;
 
-                utterance.onend = () => setIsSpeaking(false);
-                utterance.onerror = () => setIsSpeaking(false);
-                window.speechSynthesis.speak(utterance);
+                        const voices = window.speechSynthesis.getVoices();
+                        const koVoice = voices.find(v => v.lang && (v.lang.toLowerCase().includes('ko') || v.lang.toLowerCase().includes('kr')));
+                        if (koVoice) utterance.voice = koVoice;
+
+                        utterance.onend = () => setIsSpeaking(false);
+                        utterance.onerror = () => setIsSpeaking(false);
+                        window.speechSynthesis.speak(utterance);
+                    } catch (e) {
+                        console.warn('SpeechSynthesis error:', e);
+                        setIsSpeaking(false);
+                    }
+                } else {
+                    setIsSpeaking(false);
+                    showToast("您的設備暫不支援音訊合成！");
+                }
             };
 
             // 發車動畫與音效
