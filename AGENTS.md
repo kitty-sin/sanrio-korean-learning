@@ -32,6 +32,8 @@ Korean-Learning/
 │   ├── manage_vocab.py          # 韓語核心詞庫自動化管理 CLI (查重+拼音+5檔同步+Git部署)
 │   ├── build_hanja_dataset.py   # 韓語漢字大辭典資料集建置管線
 │   ├── build_songs_dataset.py   # 韓語歌詞 Excel 解析與資料集建置腳本
+│   ├── build_honorifics_page.py # 韓語兩大敬語樂園頁面建置腳本
+│   ├── build_particles_page.py  # 韓語兩大助詞樂園頁面建置腳本
 │   ├── generate_app_assets.py   # 拼豆 Yoda 圖標精修與 Adaptive Icon 生成器
 │   ├── deploy_android_icons.py  # Android mipmap 各尺寸圖標部署腳本
 │   └── loanword_translations.py # 242 筆外來語繁體中文對照字典
