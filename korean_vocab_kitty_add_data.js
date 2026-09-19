@@ -329,5 +329,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "B",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5700,
+    "k": "핥다",
+    "r": "haltda",
+    "c": "舔、舔舐（雙收音 ㄾ 代表音 ㄹ，如 고양이가 손을 핥다 貓舔手、아이스크림을 핥다 舔冰淇淋）",
+    "e": "To lick, lap up (e.g. cat licking paws, licking ice cream)",
+    "l": "A",
+    "p": "動詞",
+    "pd": "動詞 (Verb / 동사)，如 하다（做）、가다（去）。"
   }
 ];
