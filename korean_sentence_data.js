@@ -632,26 +632,75 @@ const HangulEngine = {
         return informal.slice(0, -1) + withSsangSiot;
     },
 
-    // 生成羅馬音標 (Romanization with Sound Rules)
+    // 生成羅馬音標 (Romanization with Sound Rules & Smart Syllable Fallback)
     romanize(text) {
         if (!text) return "";
         const map = {
             '저는': 'Jeo-neun', '나는': 'Na-neun', '내가': 'Nae-ga', '제가': 'Je-ga',
+            '너는': 'Neo-neun', '네가': 'Ne-ga', '당신은': 'Dang-sin-eun', '당신이': 'Dang-sin-i',
+            '친구는': 'Chin-gu-neun', '친구가': 'Chin-gu-ga', '키티는': 'Ki-ti-neun', '키티가': 'Ki-ti-ga',
+            '엄마는': 'Eom-ma-neun', '엄마가': 'Eom-ma-ga', '선생님은': 'Seon-saeng-nim-eun', '선생님이': 'Seon-saeng-nim-i',
+            '동생은': 'Dong-saeng-eun', '동생이': 'Dong-saeng-i',
             '커피를': 'keo-pi-reul', '밥을': 'ba-beul', '물을': 'mu-reul', '한국어를': 'han-gu-geo-reul',
+            '책을': 'chae-geul', '영화를': 'yeong-hwa-reul', '음악을': 'eu-ma-geul', '사과를': 'sa-gwa-reul',
+            '빵을': 'ppang-eul', '옷을': 'o-seul', '학교에': 'hak-gyo-e', '카페에서': 'ka-pe-e-seo',
+            '집에': 'ji-be', '회사에': 'hoe-sa-e', '서울에': 'seo-u-re',
+            // 現在式
             '마십니다': 'ma-sim-ni-da', '마셔요': 'ma-syeo-yo', '마셔': 'ma-syeo',
-            '마셨습니다': 'ma-syeot-seum-ni-da', '마셨어요': 'ma-syeo-sseo-yo', '마셨어': 'ma-syeo-sseo',
-            '마실 겁니다': 'ma-sil geom-ni-da', '마실 거예요': 'ma-sil geo-ye-yo', '마실 거야': 'ma-sil geo-ya',
-            '마시고 있어요': 'ma-si-go it-seo-yo', '마시고 있습니다': 'ma-si-go it-seum-ni-da',
             '먹습니다': 'meok-seum-ni-da', '먹어요': 'meo-geo-yo', '먹어': 'meo-geo',
-            '먹었습니다': 'meo-geot-seum-ni-da', '먹었어요': 'meo-geo-sseo-yo',
-            '먹을 거예요': 'meo-geul geo-ye-yo', '먹고 있어요': 'meok-go it-seo-yo',
-            '봅니다': 'bom-ni-da', '봐요': 'bwa-yo', '봤어요': 'bwa-sseo-yo', '볼 거예요': 'bol geo-ye-yo',
-            '공부합니다': 'gong-bu-ham-ni-da', '공부해요': 'gong-bu-hae-yo', '공부했어요': 'gong-bu-haet-seo-yo'
+            '봅니다': 'bom-ni-da', '봐요': 'bwa-yo', '봐': 'bwa',
+            '공부합니다': 'gong-bu-ham-ni-da', '공부해요': 'gong-bu-hae-yo', '공부해': 'gong-bu-hae',
+            '듣습니다': 'deut-seum-ni-da', '들어요': 'deu-reo-yo', '들어': 'deu-reo',
+            '읽습니다': 'ik-seum-ni-da', '읽어요': 'il-geo-yo', '읽어': 'il-geo',
+            '삽니다': 'sam-ni-da', '사요': 'sa-yo', '사': 'sa',
+            '잡니다': 'jam-ni-da', '자요': 'ja-yo', '자': 'ja',
+            '갑니다': 'gam-ni-da', '가요': 'ga-yo', '가': 'ga',
+            '옵니다': 'om-ni-da', '와요': 'wa-yo', '와': 'wa',
+            '만납니다': 'man-nam-ni-da', '만나요': 'man-na-yo', '만나': 'man-na',
+            '만듭니다': 'man-deum-ni-da', '만들어요': 'man-deu-reo-yo', '만들어': 'man-deu-reo',
+            // 現在進行式 詞組
+            '마시고': 'ma-si-go', '먹고': 'meok-go', '보고': 'bo-go', '공부하고': 'gong-bu-ha-go',
+            '듣고': 'deut-go', '읽고': 'ik-go', '사고': 'sa-go', '자고': 'ja-go',
+            '가고': 'ga-go', '오고': 'o-go', '만나고': 'man-na-go', '만들고': 'man-deul-go',
+            '있습니다': 'ik-seum-ni-da', '있어요': 'it-seo-yo', '있어': 'it-seo',
+            '있습니까': 'ik-seum-ni-kka', '있어요?': 'it-seo-yo?', '있어?': 'it-seo?',
+            // 過去式
+            '마셨습니다': 'ma-syeot-seum-ni-da', '마셨어요': 'ma-syeo-sseo-yo', '마셨어': 'ma-syeo-sseo',
+            '먹었습니다': 'meo-geot-seum-ni-da', '먹었어요': 'meo-geo-sseo-yo', '먹었어': 'meo-geo-sseo',
+            '봤습니다': 'bwat-seum-ni-da', '봤어요': 'bwa-sseo-yo', '봤어': 'bwa-sseo',
+            '공부했습니다': 'gong-bu-haet-seum-ni-da', '공부했어요': 'gong-bu-haet-seo-yo', '공부했어': 'gong-bu-haet-seo',
+            '들었습니다': 'deu-reot-seum-ni-da', '들었어요': 'deu-reo-sseo-yo', '들었어': 'deu-reo-sseo',
+            '잤습니다': 'jat-seum-ni-da', '잤어요': 'ja-sseo-yo', '잤어': 'ja-sseo',
+            '갔습니다': 'gat-seum-ni-da', '갔어요': 'ga-sseo-yo', '갔어': 'ga-sseo',
+            '왔습니다': 'wat-seum-ni-da', '왔어요': 'wa-sseo-yo', '왔어': 'wa-sseo',
+            // 未來式
+            '마실': 'ma-sil', '먹을': 'meo-geul', '볼': 'bol', '공부할': 'gong-bu-hal',
+            '들을': 'deu-reul', '잘': 'jal', '갈': 'gal', '올': 'ol', '읽을': 'il-geul', '살': 'sal',
+            '만날': 'man-nal', '만들': 'man-deul',
+            '겁니다': 'geom-ni-da', '거예요': 'geo-ye-yo', '거야': 'geo-ya',
+            '겁니까': 'geom-ni-kka', '거예요?': 'geo-ye-yo?', '거야?': 'geo-ya?'
         };
 
-        // 簡易拆詞轉譯
+        // 拆詞轉譯，若單詞有在字典則直接輸出，否則做字元級羅馬化轉換
         const words = text.replace(/[.?!]/g, '').trim().split(/\s+/);
-        const romWords = words.map(w => map[w] || w);
+        const romWords = words.map(w => {
+            if (map[w]) return map[w];
+            // 若沒有精確詞，嘗試逐音節拼音
+            let charRoms = [];
+            for (let i = 0; i < w.length; i++) {
+                const c = w[i];
+                const d = this.decomposeChar(c);
+                if (!d.isHangul) {
+                    charRoms.push(c);
+                    continue;
+                }
+                const choRom = ['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'][d.choIdx] || '';
+                const jungRom = ['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'][d.jungIdx] || '';
+                const jongRom = ['','k','k','k','n','n','n','t','l','k','m','p','l','t','p','l','m','p','p','t','t','ng','t','t','k','t','p','t'][d.jongIdx] || '';
+                charRoms.push(choRom + jungRom + jongRom);
+            }
+            return charRoms.join('-');
+        });
         return romWords.join(' ');
     }
 };

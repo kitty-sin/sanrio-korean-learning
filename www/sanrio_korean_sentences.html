@@ -396,15 +396,13 @@
                         zh: `${subjectZh}${verbZh}${objectZh}。`,
                         formal: { kr: presFormal, rom: engine.romanize(presFormal), label: "最高敬語 (습니다/ㅂ니다)" },
                         informal: { kr: presInformal, rom: engine.romanize(presInformal), label: "日常敬語 (해요體)" },
-                        casual: { kr: presCasual, rom: engine.romanize(presCasual), label: "平語/半語 (반말)" },
-                        continuous: {
-                            zh: `${subjectZh}正在${verbZh}${objectZh}。`,
-                            kr: contInformal,
-                            formalKr: contFormal,
-                            casualKr: contCasual,
-                            rom: engine.romanize(contInformal),
-                            label: "現在進行式 (-고 있어요)"
-                        }
+                        casual: { kr: presCasual, rom: engine.romanize(presCasual), label: "平語/半語 (반말)" }
+                    },
+                    continuous: {
+                        zh: `${subjectZh}正在${verbZh}${objectZh}。`,
+                        formal: { kr: contFormal, rom: engine.romanize(contFormal), label: "最高敬語 (습니다)" },
+                        informal: { kr: contInformal, rom: engine.romanize(contInformal), label: "日常敬語 (해요體)" },
+                        casual: { kr: contCasual, rom: engine.romanize(contCasual), label: "平語/半語 (반말)" }
                     },
                     past: {
                         zh: `${subjectZh}${verbZh}了${objectZh}。`,
@@ -880,7 +878,8 @@
                         <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 text-xs sm:text-sm font-black">
                             {[
                                 { id: "all", label: "🌟 全部時態一覽", icon: "fa-cubes" },
-                                { id: "present", label: "☀️ 現在式 (一般 ✕ 進行)", icon: "fa-sun" },
+                                { id: "present", label: "☀️ 現在式 (一般)", icon: "fa-sun" },
+                                { id: "continuous", label: "⏳ 現在進行式 (-고 있다)", icon: "fa-hourglass-half" },
                                 { id: "past", label: "🌙 過去式 (-았/었어요)", icon: "fa-moon" },
                                 { id: "future", label: "🚀 未來式 (-(으)ㄹ 거예요)", icon: "fa-rocket" },
                                 { id: "explore", label: "🪄 否定與疑問句探索", icon: "fa-wand-magic-sparkles" },
@@ -938,7 +937,7 @@
                                     </div>
                                 )}
 
-                                {/* ☀️ 1. 現在式卡片 (Present Tense & Continuous) */}
+                                {/* ☀️ 1. 現在式卡片 (Present Tense Simple) */}
                                 {(activeTenseTab === "all" || activeTenseTab === "present") && (
                                     <div className="train-card rounded-3xl p-6 sm:p-7 space-y-5">
                                         <div className="flex items-center justify-between pb-3 border-b border-amber-200">
@@ -1055,36 +1054,127 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                )}
 
-                                        {/* ⏳ 現在進行式專題框 (-고 있어요) */}
-                                        <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-2xl p-4 border border-teal-200">
-                                            <div className="flex flex-wrap items-center justify-between gap-3">
+                                {/* ⏳ 2. 現在進行式獨立專題卡片 (Continuous Tense -고 있다) */}
+                                {(activeTenseTab === "all" || activeTenseTab === "continuous") && (
+                                    <div className="train-card rounded-3xl p-6 sm:p-7 space-y-5 bg-gradient-to-b from-teal-50/30 via-white to-emerald-50/20 border-2 border-teal-200 shadow-sm">
+                                        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-teal-200/80">
+                                            <div className="flex items-center gap-2.5">
+                                                <div className="w-10 h-10 rounded-2xl bg-teal-100 border border-teal-300 flex items-center justify-center text-xl shadow-xs">
+                                                    ⏳
+                                                </div>
                                                 <div>
-                                                    <div className="flex items-center gap-2 mb-1">
-                                                        <span className="text-xs font-black bg-teal-600 text-white px-2 py-0.5 rounded-full">
-                                                            ⏳ 現在進行式 (Continuous -ing)
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        <span className="text-xs font-black bg-teal-600 text-white px-2.5 py-0.5 rounded-full shadow-2xs">
+                                                            現在進行式 (Continuous -ing)
                                                         </span>
-                                                        <span className="text-xs text-teal-800 font-bold">
-                                                            中文：{generatedSentences.present.continuous.zh}
+                                                        <span className="text-xs sm:text-sm text-teal-900 font-extrabold">
+                                                            中文：{generatedSentences.continuous.zh}
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-xl font-black kr-font text-teal-950">
-                                                        {generatedSentences.present.continuous.kr}
+                                                    <h3 className="text-lg sm:text-xl font-black text-teal-950 mt-0.5">
+                                                        現在進行式 (Continuous Tense)
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <span className="text-xs font-black bg-teal-100 text-teal-900 px-3 py-1 rounded-full border border-teal-300">
+                                                公式：動詞語幹 + -고 있다
+                                            </span>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            {/* 最高敬語 (습니다) */}
+                                            <div className="bg-indigo-50/70 rounded-2xl p-4 border border-indigo-200 flex flex-col justify-between">
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <span className="text-xs font-black text-indigo-900 bg-indigo-100 px-2 py-0.5 rounded-full">
+                                                            👑 最高敬語 (습니다)
+                                                        </span>
                                                     </div>
-                                                    <div className="text-xs text-teal-700 font-bold">
-                                                        [讀音] {generatedSentences.present.continuous.rom} • 最高敬語: {generatedSentences.present.continuous.formalKr}
+                                                    <div className="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1">
+                                                        {generatedSentences.continuous.formal.kr}
+                                                    </div>
+                                                    <div className="text-xs text-indigo-700 font-bold mb-2">
+                                                        [讀音] {generatedSentences.continuous.formal.rom}
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2 pt-2 border-t border-indigo-200/60">
                                                     <button
-                                                        onClick={() => speakKorean(generatedSentences.present.continuous.kr)}
-                                                        className="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-black shadow-xs flex items-center gap-1"
+                                                        onClick={() => speakKorean(generatedSentences.continuous.formal.kr)}
+                                                        className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
                                                     >
                                                         <i className="fas fa-volume-high"></i> 朗讀
                                                     </button>
                                                     <button
-                                                        onClick={() => copyToClipboard(generatedSentences.present.continuous.kr)}
-                                                        className="px-3 py-1.5 bg-white hover:bg-teal-100 text-teal-900 border border-teal-300 rounded-xl text-xs font-black shadow-xs flex items-center gap-1"
+                                                        onClick={() => copyToClipboard(generatedSentences.continuous.formal.kr)}
+                                                        className="px-2.5 py-1 bg-white hover:bg-indigo-100 text-indigo-800 rounded-lg text-xs font-bold border border-indigo-200"
+                                                    >
+                                                        <i className="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* 日常敬語 (해요體) [最常用推薦 ⭐] */}
+                                            <div className="bg-amber-50/80 rounded-2xl p-4 border-2 border-amber-400 shadow-xs flex flex-col justify-between relative">
+                                                <span className="absolute -top-2.5 right-4 bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs">
+                                                    最常用推薦 ⭐
+                                                </span>
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <span className="text-xs font-black text-amber-950 bg-amber-200 px-2 py-0.5 rounded-full">
+                                                            🌸 日常敬語 (해요體)
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-base sm:text-lg font-black kr-font text-amber-950 mb-1">
+                                                        {generatedSentences.continuous.informal.kr}
+                                                    </div>
+                                                    <div className="text-xs text-amber-800 font-bold mb-2">
+                                                        [讀音] {generatedSentences.continuous.informal.rom}
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2 pt-2 border-t border-amber-200">
+                                                    <button
+                                                        onClick={() => speakKorean(generatedSentences.continuous.informal.kr)}
+                                                        className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                    >
+                                                        <i className="fas fa-volume-high"></i> 朗讀
+                                                    </button>
+                                                    <button
+                                                        onClick={() => copyToClipboard(generatedSentences.continuous.informal.kr)}
+                                                        className="px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-900 rounded-lg text-xs font-bold border border-amber-300"
+                                                    >
+                                                        <i className="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* 平語 / 半語 (반말) */}
+                                            <div className="bg-rose-50/70 rounded-2xl p-4 border border-rose-200 flex flex-col justify-between">
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <span className="text-xs font-black text-rose-900 bg-rose-100 px-2 py-0.5 rounded-full">
+                                                            👫 平語/半語 (반말)
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-base sm:text-lg font-black kr-font text-rose-950 mb-1">
+                                                        {generatedSentences.continuous.casual.kr}
+                                                    </div>
+                                                    <div className="text-xs text-rose-700 font-bold mb-2">
+                                                        [讀音] {generatedSentences.continuous.casual.rom}
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2 pt-2 border-t border-rose-200/60">
+                                                    <button
+                                                        onClick={() => speakKorean(generatedSentences.continuous.casual.kr)}
+                                                        className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                    >
+                                                        <i className="fas fa-volume-high"></i> 朗讀
+                                                    </button>
+                                                    <button
+                                                        onClick={() => copyToClipboard(generatedSentences.continuous.casual.kr)}
+                                                        className="px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-800 rounded-lg text-xs font-bold border border-rose-200"
                                                     >
                                                         <i className="fas fa-copy"></i>
                                                     </button>
@@ -1094,7 +1184,7 @@
                                     </div>
                                 )}
 
-                                {/* 🌙 2. 過去式卡片 (Past Tense -았/었/했-) */}
+                                {/* 🌙 3. 過去式卡片 (Past Tense -았/었/했-) */}
                                 {(activeTenseTab === "all" || activeTenseTab === "past") && (
                                     <div className="train-card rounded-3xl p-6 sm:p-7 space-y-5">
                                         <div className="flex items-center justify-between pb-3 border-b border-amber-200">
@@ -1205,7 +1295,7 @@
                                     </div>
                                 )}
 
-                                {/* 🚀 3. 未來式卡片 (Future Tense -(으)ㄹ 거예요) */}
+                                {/* 🚀 4. 未來式卡片 (Future Tense -(으)ㄹ 거예요) */}
                                 {(activeTenseTab === "all" || activeTenseTab === "future") && (
                                     <div className="train-card rounded-3xl p-6 sm:p-7 space-y-5">
                                         <div className="flex items-center justify-between pb-3 border-b border-amber-200">
@@ -1316,7 +1406,7 @@
                                     </div>
                                 )}
 
-                                {/* 🪄 4. 否定句與疑問句探索 (Negative & Questions) */}
+                                {/* 🪄 5. 否定句與疑問句探索 (Negative & Questions) */}
                                 {(activeTenseTab === "all" || activeTenseTab === "explore") && (
                                     <div className="train-card rounded-3xl p-6 sm:p-7 space-y-5">
                                         <div className="flex items-center justify-between pb-3 border-b border-amber-200">
