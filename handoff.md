@@ -571,10 +571,23 @@
     - **優勢**：學習者能逐一針對單一韓語單字/例詞單獨點擊發音與反覆跟讀，徹底消除過去連讀多詞的干擾，發音體驗更精準清晰。
     - **同步部署**：更新 `scripts/build_particles_page.py`、`scripts/build_honorifics_page.py`、`sanrio_korean_particles.html`、`sanrio_korean_honorifics.html` 及 `www/` 鏡像目錄。
 - **2026-09-18 18:22 PT**：
-  - **🚀 韓語兩大敬語「四大時態時光機」線上互動分頁正式上線**：
-    - **背景**：將四大時態黃金全景對照體系（原形、現在式、過去式、未來式）直接整合至線上互動頁面《KITTY 韓語兩大敬語發音積木樂園》（`sanrio_korean_honorifics.html`），新增「**Tab 4: ⏳ 四大時態時光機**」互動分頁。
-    - **亮點**：全網頁大字體排版、全量代表詞彙獨立發音按鈕（🔊 支援 1.0x / 0.7x 慢速聽讀）、無收音/有收音/하다/形容詞/名詞全景拆解與神口訣。
-    - **線上直連**：[`https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_honorifics.html`](https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_honorifics.html)
+  - **🚀 韓語兩大敬語「四大時態時光機」線上互動分頁初期整合**：
+    - 將四大時態黃金全景對照體系整合至敬語樂園分頁中進行初步驗證。
+- **2026-09-18 22:30 PT**：
+  - **⏳ 全新推出獨立專屬頁面《KITTY 韓語四大時態發音積木樂園 (`sanrio_korean_tenses.html`)》雙子星時光機版**：
+    - **背景**：依使用者要求將「韓語四大時態全景對照」自敬語樂園中完全獨立出來，打造專屬的全新獨立互動頁面（`sanrio_korean_tenses.html`）。
+    - **5 大專屬分頁**：
+      1. **Tab 1: 🌟 時態總覽**（四大時態黃金全景總表、最高敬語 vs 日常敬語核心公式、三秒神口訣卡片、發音音變小叮嚀）。
+      2. **Tab 2: 🏃 動詞時態館**（無收音動詞 `가다/오다/보다/사다/마시다/자다`、有收音動詞 `먹다/읽다/듣다(ㄷ不規則)/찾다/앉다`、하다 動詞 `공부하다/일하다` 完整四時態切換，每字附中文翻譯括號與獨立 🔊 1.0x / 0.7x 慢速發音按鈕）。
+      3. **Tab 3: 🎨 形容詞時態館**（陽性形容詞 `좋다/작다`、陰性/複合形容詞 `예쁘다(ㅡ脫落)/바쁘다/맛있다`、母音判斷步驟、四時態完整對照與獨立發音）。
+      4. **Tab 4: 🏷️ 名詞句時態館**（肯定句 `이다`：有收音 `학생` vs 無收音 `의사`；否定句 `아니다`：`학생이 아닙니다 / 아니에요 / 아니었습니다 / 아니었어요 / 아닐 것입니다 / 아닐 거예요`，詳細接法拆解與獨立發音）。
+      5. **Tab 5: 🎮 隨堂星級測驗**（5 題精選時態變換測驗 + 答對撒花 Confetti + 星級成績單與即時詳解）。
+    - **敬語樂園回歸專注**：
+      - `sanrio_korean_honorifics.html` 恢復為 5 大核心分頁（樂園總覽、습니다 派、해요 派、實戰 PK、隨堂測驗），並於頂部導航列無縫接入「⏳ 時態樂園」。
+    - **全站導航無縫互聯與離線升級**：
+      - 全生態圈（`index.html`、`korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`sanrio_korean_honorifics.html`、`sanrio_korean_particles.html`、`sanrio_korean_songs.html`、`sanrio_korean_food_100.html`、`README.md`）全量更新頂部導航列。
+      - `sw.js` 升級至 `v1.0.26` 快取新頁面，同步部署鏡像至 `www/` 目錄。
+    - **線上直連**：[`https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_tenses.html`](https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_tenses.html)
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -583,7 +596,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 18:22 PT
+- **更新時間**：2026-09-18 22:30 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 
