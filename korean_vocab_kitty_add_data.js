@@ -279,5 +279,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5695,
+    "k": "패스트",
+    "r": "paeseuteu",
+    "c": "快速、Fast（外來語借詞，常見於 패스트 패션 快時尚、패스트 트랙 快速通道）",
+    "e": "Fast (loanword from English 'fast', used in fast fashion, fast track, etc.)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
