@@ -6,9 +6,13 @@
 
 ## ⏯️ 目前做到哪
 
-1. **🍔 自訂詞庫擴充**：
-   - 新增外來語名詞 `#5694 패스트푸드`、`#5695 패스트`、`#5696 푸드` 與複數名詞 `#5697 친구들 (朋友們（朋友「친구」+ 複數後綴「들」，表示複數個朋友/大家） / Friends (plural of 친구))` 至 Kitty 自訂詞庫與核心大字典。
-   - 全量同步 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫累計達 **31 筆**，全庫總量達到 **5,697 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
+1. **🧩 雙收音 (겹받침) 核心代表詞彙庫擴充與查重盤點**：
+   - **已存在於基準詞庫 (4 筆)**：`#162 앉다` (坐 / ㄵ)、`#5586 여덟` (八 / ㄼ)、`#707 값` (價錢 / ㅄ)、`#7 없다` (沒有 / ㅄ)。
+   - **新收錄至 Kitty 自訂庫 (3 筆)**：
+     - `#5698 넋 (魂、靈魂、心神 / 雙收音 ㄳ 代表音 ㄱ)`
+     - `#5699 외곬 (單一途徑、專一、死心眼 / 雙收音 ㄽ 代表音 ㄹ)`
+     - `#5700 핥다 (舔、舔舐 / 雙收音 ㄾ 代表音 ㄹ)`
+   - 全量同步 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫累計達 **34 筆**，全庫總量正式突破 **5,700 筆**；單音節矩陣重構擴充至 **1,043 組**（新增 `넋`, `곬`, `핥` 3 組音節）。
 2. **🚂 韓語造句發音積木列車全功能進化** (`sanrio_korean_sentences.html` + `korean_sentence_data.js`)：
    - **單一萬能輸入框**：整合中/韓/英/粵語拼音智慧即時解析，支援繁簡雙向、電腦端與手機端完整自適應、Enter 鍵即時確認。
    - **2 排自適應車卡排版**：第一行（車頭 🐧 + 車卡1 主語 + 車卡2 地點）、第二行（車卡3 受語 + 車卡4 動詞），解決手機與平板空間擠壓問題。
@@ -23,7 +27,7 @@
 
 - **運行狀態**：全功能正常運作，無報錯，可直接於瀏覽器與 Capacitor 移動端離線體驗。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/korean_vocab_dictionary.html](https://kitty-sin.github.io/sanrio-korean-learning/korean_vocab_dictionary.html)
-- **最新 Git Commit**：`ab27e73` (`feat(vocab): add entry #5697 친구를`)
+- **最新 Git Commit**：`3ae3a01` (`feat(vocab): add entry #5700 핥다`)
 
 ---
 
@@ -44,6 +48,6 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-09-19 13:40 PT
+- **時間**：2026-09-19 15:30 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 已推 (`main` 分支)
