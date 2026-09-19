@@ -1596,7 +1596,8 @@
 
         // ==================== 3. 主應用程式組件 ====================
         function App() {
-            const [activeTab, setActiveTab] = useState('basic-vowels');
+            const [masterTab, setMasterTab] = useState('alphabet'); // 'alphabet' | 'builder' | 'verbs' | 'sound-rules' | 'wordbank' | 'quiz'
+            const [alphabetSubTab, setAlphabetSubTab] = useState('basic-vowels'); // 'basic-vowels' | 'compound-vowels' | 'plain-consonants' | 'aspirated-consonants' | 'tense-consonants' | 'batchim-guide'
 
             // 拼音積木屋狀態
             const [selectedC, setSelectedC] = useState('ㅂ');
@@ -1654,9 +1655,18 @@
                 const params = new URLSearchParams(window.location.search);
                 const builderParam = params.get('builder');
                 const tabParam = params.get('tab');
-                if (tabParam) setActiveTab(tabParam);
+                if (tabParam) {
+                    if (['basic-vowels', 'compound-vowels', 'plain-consonants', 'aspirated-consonants', 'tense-consonants', 'batchim-guide'].includes(tabParam)) {
+                        setMasterTab('alphabet');
+                        setAlphabetSubTab(tabParam);
+                    } else if (tabParam === 'builder') {
+                        setMasterTab('builder');
+                    } else {
+                        setMasterTab(tabParam);
+                    }
+                }
                 if (builderParam) {
-                    setActiveTab('builder');
+                    setMasterTab('builder');
                     const firstChar = builderParam.trim()[0];
                     if (firstChar) {
                         const charCode = firstChar.charCodeAt(0);
@@ -1939,18 +1949,22 @@
             });
 
 
-            const navTabs = [
-                { id: 'basic-vowels', label: '🐱 基礎母音', color: 'bg-rose-400' },
-                { id: 'compound-vowels', label: '🐰 複合母音', color: 'bg-pink-400' },
-                { id: 'plain-consonants', label: '🐶 基礎平音', color: 'bg-amber-400' },
-                { id: 'aspirated-consonants', label: '⚡ 激音 (送氣)', color: 'bg-cyan-500' },
-                { id: 'tense-consonants', label: '💥 硬音 (雙子音)', color: 'bg-red-400' },
-                { id: 'batchim-guide', label: '🧱 7大收音教學', color: 'bg-emerald-500' },
+            const masterTabs = [
+                { id: 'alphabet', label: '🔤 40音發音積木', color: 'bg-rose-500' },
                 { id: 'builder', label: '🧩 3層拼音積木屋', color: 'bg-sky-500' },
-                { id: 'verbs', label: '🏃 60核心動詞與時態', color: 'bg-teal-500' },
+                { id: 'verbs', label: '🏃 60核心生活動詞', color: 'bg-teal-500' },
                 { id: 'sound-rules', label: '🪄 6大音變透視鏡', color: 'bg-violet-500' },
                 { id: 'wordbank', label: '☁️ 雲端自學單字庫', color: 'bg-indigo-500' },
                 { id: 'quiz', label: '⭐ 隨堂星級挑戰', color: 'bg-purple-400' },
+            ];
+
+            const alphabetSubTabs = [
+                { id: 'basic-vowels', label: '🐱 基礎母音 (10)', color: 'bg-rose-500' },
+                { id: 'compound-vowels', label: '🐰 複合母音 (11)', color: 'bg-pink-500' },
+                { id: 'plain-consonants', label: '🐶 基礎平音 (10)', color: 'bg-amber-500' },
+                { id: 'aspirated-consonants', label: '⚡ 激音 (送氣) (4)', color: 'bg-cyan-600' },
+                { id: 'tense-consonants', label: '💥 硬音 (雙子音) (5)', color: 'bg-red-500' },
+                { id: 'batchim-guide', label: '🧱 7大收音教學', color: 'bg-emerald-600' },
             ];
 
             return (
@@ -2061,84 +2075,50 @@
                         </div>
                     </div>
 
-                    {/* Navigation Tabs */}
-                    <nav className="flex justify-center gap-1.5 md:gap-2.5 mb-8 flex-wrap">
-                        {navTabs.map(tab => (
+                    {/* 第一層：6 大核心大分頁導航列 */}
+                    <nav className="flex justify-center gap-1.5 md:gap-2.5 mb-4 flex-wrap">
+                        {masterTabs.map(tab => (
                             <button
                                 key={tab.id}
                                 onClick={() => {
                                     stopAllAudio();
-                                    setActiveTab(tab.id);
+                                    setMasterTab(tab.id);
                                 }}
-                                className={`px-3.5 py-2 rounded-2xl text-xs md:text-sm font-semibold transition-all duration-200 shadow-xs ${
-                                    activeTab === tab.id 
-                                    ? `${tab.color} text-white scale-105 shadow-md font-bold` 
-                                    : 'bg-white text-gray-600 hover:bg-rose-50'
+                                className={`px-4 py-2.5 rounded-2xl text-xs md:text-sm font-semibold transition-all duration-200 shadow-xs ${
+                                    masterTab === tab.id 
+                                    ? `${tab.color} text-white scale-105 shadow-md font-bold ring-2 ring-rose-200` 
+                                    : 'bg-white text-gray-600 hover:bg-rose-50 border border-gray-100'
                                 }`}
                             >
                                 {tab.label}
                             </button>
                         ))}
-                        <a
-                            href="korean_vocab_dictionary.html"
-                            className="px-3.5 py-2 rounded-2xl text-xs md:text-sm font-bold transition-all duration-200 shadow-md bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white flex items-center gap-1.5 active:scale-95"
-                            title="開啟韓語核心詞庫大字典與萌趣單字卡"
-                        >
-                            <span>📚</span>
-                            <span>核心大詞庫</span>
-                        </a>
-                        <a
-                            href="korean_hanja_dictionary.html"
-                            className="px-3.5 py-2 rounded-2xl text-xs md:text-sm font-bold transition-all duration-200 shadow-md bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600 text-white flex items-center gap-1.5 active:scale-95"
-                            title="開啟 6,277 韓語漢字音變大辭典"
-                        >
-                            <span>🧸</span>
-                            <span>漢字大辭典</span>
-                        </a>
-                        <a
-                            href="sanrio_korean_honorifics.html"
-                            className="px-3.5 py-2 rounded-2xl text-xs md:text-sm font-bold transition-all duration-200 shadow-md bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 hover:from-purple-700 hover:to-amber-600 text-white flex items-center gap-1.5 active:scale-95"
-                            title="開啟 韓語兩大敬語體系發音積木樂園 (습니다 ✕ 해요)"
-                        >
-                            <span>👑</span>
-                            <span>敬語樂園</span>
-                        </a>
-                        <a
-                            href="sanrio_korean_tenses.html"
-                            className="px-3.5 py-2 rounded-2xl text-xs md:text-sm font-bold transition-all duration-200 shadow-md bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 hover:from-indigo-700 hover:to-pink-600 text-white flex items-center gap-1.5 active:scale-95 ring-2 ring-indigo-300"
-                            title="開啟 韓語四大時態發音積木樂園 (原形 ➔ 現在 ➔ 過去 ➔ 未來)"
-                        >
-                            <span>⏳</span>
-                            <span>時態樂園</span>
-                        </a>
-                        <a
-                            href="sanrio_korean_particles.html"
-                            className="px-3.5 py-2 rounded-2xl text-xs md:text-sm font-bold transition-all duration-200 shadow-md bg-gradient-to-r from-rose-500 via-pink-500 to-sky-500 hover:from-rose-600 hover:to-sky-600 text-white flex items-center gap-1.5 active:scale-95"
-                            title="開啟 韓語兩大核心助詞發音積木樂園 (主格 이/가 ✕ 受格 을/를)"
-                        >
-                            <span>🌸</span>
-                            <span>助詞樂園</span>
-                        </a>
-                        <a
-                            href="sanrio_korean_songs.html"
-                            className="px-3.5 py-2 rounded-2xl text-xs md:text-sm font-bold transition-all duration-200 shadow-md bg-gradient-to-r from-pink-500 via-rose-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white flex items-center gap-1.5 active:scale-95"
-                            title="開啟 KITTY 韓語名曲歌詞練唱樂園"
-                        >
-                            <span>🎵</span>
-                            <span>名曲樂園</span>
-                        </a>
-                        <a
-                            href="sanrio_korean_food_100.html"
-                            className="px-3.5 py-2 rounded-2xl text-xs md:text-sm font-bold transition-all duration-200 shadow-md bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white flex items-center gap-1.5 active:scale-95"
-                            title="開啟 100 個美食發音學習清單"
-                        >
-                            <span>🍲</span>
-                            <span>100種美食</span>
-                        </a>
                     </nav>
 
+                    {/* 第二層：🔤 40音發音積木 子分頁導航膠囊列 (僅在 40音發音積木 時展開顯示) */}
+                    {masterTab === 'alphabet' && (
+                        <div className="mb-6 p-2 bg-rose-50/80 border border-rose-200 rounded-2xl flex justify-center gap-1.5 md:gap-2 flex-wrap shadow-2xs">
+                            {alphabetSubTabs.map(subTab => (
+                                <button
+                                    key={subTab.id}
+                                    onClick={() => {
+                                        stopAllAudio();
+                                        setAlphabetSubTab(subTab.id);
+                                    }}
+                                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-150 ${
+                                        alphabetSubTab === subTab.id
+                                            ? `${subTab.color} text-white shadow-xs scale-105`
+                                            : 'bg-white/90 text-gray-600 hover:bg-white border border-rose-100 hover:border-rose-200'
+                                    }`}
+                                >
+                                    {subTab.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
                     {/* ==================== 頁面 1: 🐱 基礎母音 ==================== */}
-                    {activeTab === 'basic-vowels' && (
+                    {masterTab === 'alphabet' && alphabetSubTab === 'basic-vowels' && (
                         <div className="space-y-6">
                             {showPoster && (
                                 <div 
@@ -2204,7 +2184,7 @@
                     )}
 
                     {/* ==================== 頁面 2: 🐰 複合母音 ==================== */}
-                    {activeTab === 'compound-vowels' && (
+                    {masterTab === 'alphabet' && alphabetSubTab === 'compound-vowels' && (
                         <div className="space-y-6">
                             <div className="bg-pink-50 border border-pink-200 rounded-3xl p-4 text-center">
                                 <h3 className="font-bold text-pink-600 text-base mb-1">🎨 11 大複合母音（雙母音調色盤）</h3>
@@ -2248,7 +2228,7 @@
                     )}
 
                     {/* ==================== 頁面 3: 🐶 基礎平音 ==================== */}
-                    {activeTab === 'plain-consonants' && (
+                    {masterTab === 'alphabet' && alphabetSubTab === 'plain-consonants' && (
                         <div className="space-y-6">
                             <div className="bg-amber-50 border border-amber-200 rounded-3xl p-4 text-center">
                                 <h3 className="font-bold text-amber-700 text-base mb-1">🐶 10 大基礎平音子音積木</h3>
@@ -2292,7 +2272,7 @@
                     )}
 
                     {/* ==================== 頁面 4: ⚡ 激音 (送氣音) ==================== */}
-                    {activeTab === 'aspirated-consonants' && (
+                    {masterTab === 'alphabet' && alphabetSubTab === 'aspirated-consonants' && (
                         <div className="space-y-6">
                             <div className="bg-cyan-50 border border-cyan-200 rounded-3xl p-4 text-center">
                                 <h3 className="font-bold text-cyan-800 text-base mb-1">⚡ 4 大激音（送氣音・噴氣爆破）</h3>
@@ -2336,7 +2316,7 @@
                     )}
 
                     {/* ==================== 頁面 5: 💥 硬音 (雙子音) ==================== */}
-                    {activeTab === 'tense-consonants' && (
+                    {masterTab === 'alphabet' && alphabetSubTab === 'tense-consonants' && (
                         <div className="space-y-6">
                             <div className="bg-red-50 border border-red-200 rounded-3xl p-4 text-center">
                                 <h3 className="font-bold text-red-700 text-base mb-1">💥 5 大硬音（雙子音・緊喉不送氣）</h3>
@@ -2380,7 +2360,7 @@
                     )}
 
                     {/* ==================== 頁面 6: 🧱 7 大代表收音教學 ==================== */}
-                    {activeTab === 'batchim-guide' && (
+                    {masterTab === 'alphabet' && alphabetSubTab === 'batchim-guide' && (
                         <div className="space-y-6">
                             <div className="bg-emerald-50 border border-emerald-200 rounded-3xl p-5 text-center shadow-xs">
                                 <h3 className="font-bold text-emerald-800 text-base md:text-lg mb-1">🧱 7 大代表收音（Batchim 받침）粵語諧音口訣速記</h3>
@@ -2465,7 +2445,7 @@
                     )}
 
                     {/* ==================== 頁面 7: 🧩 3層拼音積木屋 ==================== */}
-                    {activeTab === 'builder' && (
+                    {masterTab === 'builder' && (
                         <div className="space-y-6">
                             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-sky-100">
                                 <h2 className="text-xl font-bold text-sky-600 text-center mb-2 flex items-center justify-center gap-2">
@@ -2755,7 +2735,7 @@
                     )}
 
                     {/* ==================== 頁面 7.5: 🏃 60 核心生活動詞與時態變化 (Kitty 精選指引) ==================== */}
-                    {activeTab === 'verbs' && (
+                    {masterTab === 'verbs' && (
                         <div className="space-y-6">
                             {/* 頂部引導橫幅 */}
                             <div className="bg-gradient-to-r from-teal-100 via-emerald-50 to-teal-50 border border-teal-200 rounded-3xl p-6 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
@@ -2974,7 +2954,7 @@
                     )}
 
                     {/* ==================== 頁面 7.6: 🪄 6 大音變透視鏡 (40音變精華) ==================== */}
-                    {activeTab === 'sound-rules' && (
+                    {masterTab === 'sound-rules' && (
                         <div className="space-y-6">
                             {/* 頂部引導橫幅 */}
                             <div className="bg-gradient-to-r from-violet-100 via-purple-50 to-pink-50 border border-violet-200 rounded-3xl p-6 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
@@ -3132,7 +3112,7 @@
                     )}
 
                     {/* ==================== 頁面 8: ☁️ 雲端自學單字庫 (深度升級版) ==================== */}
-                    {activeTab === 'wordbank' && (
+                    {masterTab === 'wordbank' && (
                         <div className="space-y-6">
                             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-indigo-100">
                                 <div className="flex justify-between items-center mb-6 flex-wrap gap-2">
@@ -3588,7 +3568,7 @@
                     )}
 
                     {/* ==================== 頁面 9: ⭐ 隨堂星級挑戰 (純自我評量) ==================== */}
-                    {activeTab === 'quiz' && (
+                    {masterTab === 'quiz' && (
                         <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-purple-100 max-w-xl mx-auto">
                             {!quizFinished ? (
                                 <>

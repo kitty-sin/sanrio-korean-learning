@@ -588,6 +588,29 @@
       - 全生態圈（`index.html`、`korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`sanrio_korean_honorifics.html`、`sanrio_korean_particles.html`、`sanrio_korean_songs.html`、`sanrio_korean_food_100.html`、`README.md`）全量更新頂部導航列。
       - `sw.js` 升級至 `v1.0.26` 快取新頁面，同步部署鏡像至 `www/` 目錄。
     - **線上直連**：[`https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_tenses.html`](https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_tenses.html)
+- **2026-09-18 23:05 PT**：
+  - **🔤 首頁分頁階層架構優化（RDQ 方案 A 實施：40音發音積木大分頁 + 6 大二級子分頁膠囊）**：
+    - **背景**：首頁（`index.html`）原本將「基礎母音」、「複合母音」、「基礎平音」、「激音」、「硬音」、「7大收音」直接平鋪於頂部導航列，加上全生態圈連結按鈕過多，顯得擁擠混亂。
+    - **架構重構（方案 A + 保留積木屋為獨立大分頁）**：
+      - **第一層：6 大核心 Master Tabs**：
+        1. `🔤 40音發音積木` (`alphabet`)
+        2. `🧩 3層拼音積木屋` (`builder`)
+        3. `🏃 60核心生活動詞` (`verbs`)
+        4. `🪄 6大音變透視鏡` (`sound-rules`)
+        5. `☁️ 雲端自學單字庫` (`wordbank`)
+        6. `⭐ 隨堂星級挑戰` (`quiz`)
+      - **第二層：Sub-tabs (僅在選中 `40音發音積木` 時展開膠囊導航列)**：
+        1. `🐱 基礎母音 (10)` (`basic-vowels`)
+        2. `🐰 複合母音 (11)` (`compound-vowels`)
+        3. `🐶 基礎平音 (10)` (`plain-consonants`)
+        4. `⚡ 激音 (送氣) (4)` (`aspirated-consonants`)
+        5. `💥 硬音 (雙子音) (5)` (`tense-consonants`)
+        6. `🧱 7大收音教學` (`batchim-guide`)
+    - **外部資源整頓**：頂部「🌟 KITTY 韓語學習資源導航站」維持常駐全生態圈直通按鈕，主導航列專注於頁面功能，視覺極致清爽明瞭。
+    - **同步與快取升級**：
+      - 產出 RDQ 規格卡 `rdq/RDQ-spec-hangul-master-tab-20260918.md`。
+      - `sw.js` 升級至 `v1.0.28`。
+      - 同步鏡像至 `www/` 目錄，推播至 GitHub Pages。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -596,7 +619,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 22:30 PT
+- **更新時間**：2026-09-18 23:05 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
 

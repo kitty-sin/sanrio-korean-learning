@@ -27,7 +27,8 @@ Korean-Learning/
 │   ├── RDQ-spec-android-app-capacitor-20260912.md # RDQ 規格卡 (Android 原生 App 封裝)
 │   ├── RDQ-spec-hanja-theme-redesign-20260911.md # RDQ 規格卡 (漢字大辭典暖杏視覺改版)
 │   ├── RDQ-spec-korean-songs-page-20260916.md    # RDQ 規格卡 (韓語名曲歌詞練唱樂園)
-│   └── RDQ-spec-top-banner-copy-20260916.md      # RDQ 規格卡 (頂部導航站橫幅文案優化)
+│   ├── RDQ-spec-top-banner-copy-20260916.md      # RDQ 規格卡 (頂部導航站橫幅文案優化)
+│   └── RDQ-spec-hangul-master-tab-20260918.md    # RDQ 規格卡 (首頁 40音發音積木 大分頁與子分頁階層整合)
 ├── scripts/
 │   ├── manage_vocab.py          # 韓語核心詞庫自動化管理 CLI (查重+拼音+5檔同步+Git部署)
 │   ├── build_hanja_dataset.py   # 韓語漢字大辭典資料集建置管線
@@ -64,7 +65,7 @@ Korean-Learning/
 ├── sanrio_korean_food_100.md    # 100 種常見食物 Markdown 清單
 ├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
 ├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
-├── sw.js                        # Service Worker 離線快取核心 (v1.0.26)
+├── sw.js                        # Service Worker 離線快取核心 (v1.0.28)
 ├── package.json                 # 專案套件管理與 Capacitor 依賴
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔
@@ -75,6 +76,7 @@ Korean-Learning/
 
 ## 🗺️ 功能模組與進度 Checklist
 
+- [x] **🔤 40 音發音積木大分頁與子分頁階層架構** (整合 10 基礎母音、11 複合母音、10 基礎平音、4 激音、5 硬音、7 大收音為統一母分頁，支援二級膠囊導航與 URL 參數直達)
 - [x] **10 大基礎母音與 11 大複合母音教學** (Sanrio 圖像聯想 + 粵語諧音)
 - [x] **10 大基礎平音、4 大激音、5 大硬音教學**
 - [x] **7 大代表收音 (Batchim) 教學** (整合「呃/壓/鴨/硬/眼/岩/捲舌頂上顎」口訣)
