@@ -381,10 +381,12 @@
                 // 否定句 (안 ~)
                 const negFormal = buildSentence(subFormal, objPart, engine.conjugate(matchedVrb, "present", "formal", false, true));
                 const negInformal = buildSentence(subInformal, objPart, engine.conjugate(matchedVrb, "present", "informal", false, true));
+                const negCasual = buildSentence(subCasual, objPart, engine.conjugate(matchedVrb, "present", "casual", false, true));
 
                 // 疑問句 (~?)
                 const qFormal = buildSentence(subFormal, objPart, engine.conjugate(matchedVrb, "present", "formal", true));
                 const qInformal = buildSentence(subInformal, objPart, engine.conjugate(matchedVrb, "present", "informal", true));
+                const qCasual = buildSentence(subCasual, objPart, engine.conjugate(matchedVrb, "present", "casual", true));
 
                 return {
                     baseForm: {
@@ -419,13 +421,15 @@
                     explore: {
                         negative: {
                             zh: `${subjectZh}不${verbZh}${objectZh}。（否定句）`,
-                            formal: { kr: negFormal, rom: engine.romanize(negFormal) },
-                            informal: { kr: negInformal, rom: engine.romanize(negInformal) }
+                            formal: { kr: negFormal, rom: engine.romanize(negFormal), label: "最高敬語 (습니다)" },
+                            informal: { kr: negInformal, rom: engine.romanize(negInformal), label: "日常敬語 (해요體)" },
+                            casual: { kr: negCasual, rom: engine.romanize(negCasual), label: "平語/半語 (반말)" }
                         },
                         question: {
                             zh: `要${verbZh}${objectZh}嗎？（疑問句）`,
-                            formal: { kr: qFormal, rom: engine.romanize(qFormal) },
-                            informal: { kr: qInformal, rom: engine.romanize(qInformal) }
+                            formal: { kr: qFormal, rom: engine.romanize(qFormal), label: "最高敬語 (습니까)" },
+                            informal: { kr: qInformal, rom: engine.romanize(qInformal), label: "日常敬語 (해요體)" },
+                            casual: { kr: qCasual, rom: engine.romanize(qCasual), label: "平語/半語 (반말)" }
                         }
                     }
                 };
@@ -1406,84 +1410,253 @@
                                     </div>
                                 )}
 
-                                {/* 🪄 5. 否定句與疑問句探索 (Negative & Questions) */}
+                                {/* 🛑 5. 否定句卡片 (Negative Form - 안 ~) */}
                                 {(activeTenseTab === "all" || activeTenseTab === "explore") && (
-                                    <div className="train-card rounded-3xl p-6 sm:p-7 space-y-5">
-                                        <div className="flex items-center justify-between pb-3 border-b border-amber-200">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-2xl">🪄</span>
+                                    <div className="train-card rounded-3xl p-6 sm:p-7 space-y-5 bg-gradient-to-b from-red-50/40 via-white to-rose-50/20 border-2 border-red-200 shadow-sm">
+                                        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-red-200/80">
+                                            <div className="flex items-center gap-2.5">
+                                                <div className="w-10 h-10 rounded-2xl bg-red-100 border border-red-300 flex items-center justify-center text-xl shadow-xs">
+                                                    🛑
+                                                </div>
                                                 <div>
-                                                    <h3 className="text-lg sm:text-xl font-black text-amber-950">
-                                                        否定句與疑問句切換探索
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        <span className="text-xs font-black bg-red-600 text-white px-2.5 py-0.5 rounded-full shadow-2xs">
+                                                            否定句 (Negative - 안 ~)
+                                                        </span>
+                                                        <span className="text-xs sm:text-sm text-red-900 font-extrabold">
+                                                            中文：{generatedSentences.explore.negative.zh}
+                                                        </span>
+                                                    </div>
+                                                    <h3 className="text-lg sm:text-xl font-black text-red-950 mt-0.5">
+                                                        否定句 (Negative Sentences)
                                                     </h3>
-                                                    <p className="text-xs text-amber-700 font-bold">
-                                                        一秒切換「不做...」與「要做...嗎？」
-                                                    </p>
                                                 </div>
                                             </div>
+                                            <span className="text-xs font-black bg-red-100 text-red-900 px-3 py-1 rounded-full border border-red-300">
+                                                公式：안 + 動詞 / 形容詞
+                                            </span>
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {/* 否定句卡 */}
-                                            <div className="bg-red-50/70 rounded-2xl p-4 border border-red-200 space-y-3">
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-xs font-black bg-red-600 text-white px-2.5 py-0.5 rounded-full">
-                                                        🛑 否定句 (안 ~)
-                                                    </span>
-                                                    <span className="text-xs text-red-800 font-bold">{generatedSentences.explore.negative.zh}</span>
-                                                </div>
-                                                <div className="space-y-1.5 bg-white/80 p-3 rounded-xl border border-red-100">
-                                                    <div className="text-sm sm:text-base font-black kr-font text-red-950">
-                                                        🌸 {generatedSentences.explore.negative.informal.kr}
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            {/* 最高敬語 (습니다) */}
+                                            <div className="bg-indigo-50/70 rounded-2xl p-4 border border-indigo-200 flex flex-col justify-between">
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <span className="text-xs font-black text-indigo-900 bg-indigo-100 px-2 py-0.5 rounded-full">
+                                                            👑 最高敬語 (습니다)
+                                                        </span>
                                                     </div>
-                                                    <div className="text-xs text-red-700 font-medium">
-                                                        👑 {generatedSentences.explore.negative.formal.kr}
+                                                    <div className="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1">
+                                                        {generatedSentences.explore.negative.formal.kr}
+                                                    </div>
+                                                    <div className="text-xs text-indigo-700 font-bold mb-2">
+                                                        [讀音] {generatedSentences.explore.negative.formal.rom}
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2 pt-2 border-t border-indigo-200/60">
+                                                    <button
+                                                        onClick={() => speakKorean(generatedSentences.explore.negative.formal.kr)}
+                                                        className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                    >
+                                                        <i className="fas fa-volume-high"></i> 朗讀
+                                                    </button>
+                                                    <button
+                                                        onClick={() => copyToClipboard(generatedSentences.explore.negative.formal.kr)}
+                                                        className="px-2.5 py-1 bg-white hover:bg-indigo-100 text-indigo-800 rounded-lg text-xs font-bold border border-indigo-200"
+                                                    >
+                                                        <i className="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* 日常敬語 (해요體) [最常用推薦 ⭐] */}
+                                            <div className="bg-amber-50/80 rounded-2xl p-4 border-2 border-amber-400 shadow-xs flex flex-col justify-between relative">
+                                                <span className="absolute -top-2.5 right-4 bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs">
+                                                    最常用推薦 ⭐
+                                                </span>
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <span className="text-xs font-black text-amber-950 bg-amber-200 px-2 py-0.5 rounded-full">
+                                                            🌸 日常敬語 (해요體)
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-base sm:text-lg font-black kr-font text-amber-950 mb-1">
+                                                        {generatedSentences.explore.negative.informal.kr}
+                                                    </div>
+                                                    <div className="text-xs text-amber-800 font-bold mb-2">
+                                                        [讀音] {generatedSentences.explore.negative.informal.rom}
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2 pt-2 border-t border-amber-200">
                                                     <button
                                                         onClick={() => speakKorean(generatedSentences.explore.negative.informal.kr)}
-                                                        className="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                        className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
                                                     >
                                                         <i className="fas fa-volume-high"></i> 朗讀
                                                     </button>
                                                     <button
                                                         onClick={() => copyToClipboard(generatedSentences.explore.negative.informal.kr)}
-                                                        className="px-2.5 py-1 bg-white hover:bg-red-100 text-red-900 rounded-lg text-xs font-bold border border-red-200"
+                                                        className="px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-900 rounded-lg text-xs font-bold border border-amber-300"
                                                     >
-                                                        <i className="fas fa-copy"></i> 複製
+                                                        <i className="fas fa-copy"></i>
                                                     </button>
                                                 </div>
                                             </div>
 
-                                            {/* 疑問句卡 */}
-                                            <div className="bg-sky-50/70 rounded-2xl p-4 border border-sky-200 space-y-3">
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-xs font-black bg-sky-600 text-white px-2.5 py-0.5 rounded-full">
-                                                        ❓ 疑問句 (~?)
-                                                    </span>
-                                                    <span className="text-xs text-sky-800 font-bold">{generatedSentences.explore.question.zh}</span>
-                                                </div>
-                                                <div className="space-y-1.5 bg-white/80 p-3 rounded-xl border border-sky-100">
-                                                    <div className="text-sm sm:text-base font-black kr-font text-sky-950">
-                                                        🌸 {generatedSentences.explore.question.informal.kr}
+                                            {/* 平語 / 半語 (반말) */}
+                                            <div className="bg-rose-50/70 rounded-2xl p-4 border border-rose-200 flex flex-col justify-between">
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <span className="text-xs font-black text-rose-900 bg-rose-100 px-2 py-0.5 rounded-full">
+                                                            👫 平語/半語 (반말)
+                                                        </span>
                                                     </div>
-                                                    <div className="text-xs text-sky-700 font-medium">
-                                                        👑 {generatedSentences.explore.question.formal.kr}
+                                                    <div className="text-base sm:text-lg font-black kr-font text-rose-950 mb-1">
+                                                        {generatedSentences.explore.negative.casual.kr}
+                                                    </div>
+                                                    <div className="text-xs text-rose-700 font-bold mb-2">
+                                                        [讀音] {generatedSentences.explore.negative.casual.rom}
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2 pt-2 border-t border-rose-200/60">
+                                                    <button
+                                                        onClick={() => speakKorean(generatedSentences.explore.negative.casual.kr)}
+                                                        className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                    >
+                                                        <i className="fas fa-volume-high"></i> 朗讀
+                                                    </button>
+                                                    <button
+                                                        onClick={() => copyToClipboard(generatedSentences.explore.negative.casual.kr)}
+                                                        className="px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-800 rounded-lg text-xs font-bold border border-rose-200"
+                                                    >
+                                                        <i className="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* ❓ 6. 疑問句卡片 (Question Form - ~?) */}
+                                {(activeTenseTab === "all" || activeTenseTab === "explore") && (
+                                    <div className="train-card rounded-3xl p-6 sm:p-7 space-y-5 bg-gradient-to-b from-sky-50/40 via-white to-blue-50/20 border-2 border-sky-200 shadow-sm">
+                                        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-sky-200/80">
+                                            <div className="flex items-center gap-2.5">
+                                                <div className="w-10 h-10 rounded-2xl bg-sky-100 border border-sky-300 flex items-center justify-center text-xl shadow-xs">
+                                                    ❓
+                                                </div>
+                                                <div>
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        <span className="text-xs font-black bg-sky-600 text-white px-2.5 py-0.5 rounded-full shadow-2xs">
+                                                            疑問句 (Question ~?)
+                                                        </span>
+                                                        <span className="text-xs sm:text-sm text-sky-900 font-extrabold">
+                                                            中文：{generatedSentences.explore.question.zh}
+                                                        </span>
+                                                    </div>
+                                                    <h3 className="text-lg sm:text-xl font-black text-sky-950 mt-0.5">
+                                                        疑問句 (Questions)
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <span className="text-xs font-black bg-sky-100 text-sky-900 px-3 py-1 rounded-full border border-sky-300">
+                                                語調：問句語尾升調 (↗)
+                                            </span>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            {/* 最高敬語 (습니까) */}
+                                            <div className="bg-indigo-50/70 rounded-2xl p-4 border border-indigo-200 flex flex-col justify-between">
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <span className="text-xs font-black text-indigo-900 bg-indigo-100 px-2 py-0.5 rounded-full">
+                                                            👑 最高敬語 (습니까)
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1">
+                                                        {generatedSentences.explore.question.formal.kr}
+                                                    </div>
+                                                    <div className="text-xs text-indigo-700 font-bold mb-2">
+                                                        [讀音] {generatedSentences.explore.question.formal.rom}
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2 pt-2 border-t border-indigo-200/60">
+                                                    <button
+                                                        onClick={() => speakKorean(generatedSentences.explore.question.formal.kr)}
+                                                        className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                    >
+                                                        <i className="fas fa-volume-high"></i> 朗讀
+                                                    </button>
+                                                    <button
+                                                        onClick={() => copyToClipboard(generatedSentences.explore.question.formal.kr)}
+                                                        className="px-2.5 py-1 bg-white hover:bg-indigo-100 text-indigo-800 rounded-lg text-xs font-bold border border-indigo-200"
+                                                    >
+                                                        <i className="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* 日常敬語 (해요體) [最常用推薦 ⭐] */}
+                                            <div className="bg-amber-50/80 rounded-2xl p-4 border-2 border-amber-400 shadow-xs flex flex-col justify-between relative">
+                                                <span className="absolute -top-2.5 right-4 bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs">
+                                                    最常用推薦 ⭐
+                                                </span>
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <span className="text-xs font-black text-amber-950 bg-amber-200 px-2 py-0.5 rounded-full">
+                                                            🌸 日常敬語 (해요體)
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-base sm:text-lg font-black kr-font text-amber-950 mb-1">
+                                                        {generatedSentences.explore.question.informal.kr}
+                                                    </div>
+                                                    <div className="text-xs text-amber-800 font-bold mb-2">
+                                                        [讀音] {generatedSentences.explore.question.informal.rom}
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2 pt-2 border-t border-amber-200">
                                                     <button
                                                         onClick={() => speakKorean(generatedSentences.explore.question.informal.kr)}
-                                                        className="px-2.5 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                        className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
                                                     >
                                                         <i className="fas fa-volume-high"></i> 朗讀
                                                     </button>
                                                     <button
                                                         onClick={() => copyToClipboard(generatedSentences.explore.question.informal.kr)}
-                                                        className="px-2.5 py-1 bg-white hover:bg-sky-100 text-sky-900 rounded-lg text-xs font-bold border border-sky-200"
+                                                        className="px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-900 rounded-lg text-xs font-bold border border-amber-300"
                                                     >
-                                                        <i className="fas fa-copy"></i> 複製
+                                                        <i className="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* 平語 / 半語 (반말) */}
+                                            <div className="bg-rose-50/70 rounded-2xl p-4 border border-rose-200 flex flex-col justify-between">
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <span className="text-xs font-black text-rose-900 bg-rose-100 px-2 py-0.5 rounded-full">
+                                                            👫 平語/半語 (반말)
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-base sm:text-lg font-black kr-font text-rose-950 mb-1">
+                                                        {generatedSentences.explore.question.casual.kr}
+                                                    </div>
+                                                    <div className="text-xs text-rose-700 font-bold mb-2">
+                                                        [讀音] {generatedSentences.explore.question.casual.rom}
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2 pt-2 border-t border-rose-200/60">
+                                                    <button
+                                                        onClick={() => speakKorean(generatedSentences.explore.question.casual.kr)}
+                                                        className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                    >
+                                                        <i className="fas fa-volume-high"></i> 朗讀
+                                                    </button>
+                                                    <button
+                                                        onClick={() => copyToClipboard(generatedSentences.explore.question.casual.kr)}
+                                                        className="px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-800 rounded-lg text-xs font-bold border border-rose-200"
+                                                    >
+                                                        <i className="fas fa-copy"></i>
                                                     </button>
                                                 </div>
                                             </div>

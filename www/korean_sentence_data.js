@@ -672,7 +672,12 @@ const HangulEngine = {
             '들었습니다': 'deu-reot-seum-ni-da', '들었어요': 'deu-reo-sseo-yo', '들었어': 'deu-reo-sseo',
             '잤습니다': 'jat-seum-ni-da', '잤어요': 'ja-sseo-yo', '잤어': 'ja-sseo',
             '갔습니다': 'gat-seum-ni-da', '갔어요': 'ga-sseo-yo', '갔어': 'ga-sseo',
-            '왔습니다': 'wat-seum-ni-da', '왔어요': 'wa-sseo-yo', '왔어': 'wa-sseo',
+            // 否定與疑問句
+            '안': 'an',
+            '마십니까': 'ma-sim-ni-kka', '먹습니까': 'meok-seum-ni-kka', '봅니까': 'bom-ni-kka',
+            '공부합니까': 'gong-bu-ham-ni-kka', '듣습니까': 'deut-seum-ni-kka', '읽습니까': 'ik-seum-ni-kka',
+            '삽니까': 'sam-ni-kka', '잡니까': 'jam-ni-kka', '갑니까': 'gam-ni-kka',
+            '옵니까': 'om-ni-kka', '만납니까': 'man-nam-ni-kka', '만듭니까': 'man-deum-ni-kka',
             // 未來式
             '마실': 'ma-sil', '먹을': 'meo-geul', '볼': 'bol', '공부할': 'gong-bu-hal',
             '들을': 'deu-reul', '잘': 'jal', '갈': 'gal', '올': 'ol', '읽을': 'il-geul', '살': 'sal',
