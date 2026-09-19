@@ -1955,7 +1955,6 @@
                 { id: 'verbs', label: '🏃 60核心生活動詞', color: 'bg-teal-500' },
                 { id: 'sound-rules', label: '🪄 6大音變透視鏡', color: 'bg-violet-500' },
                 { id: 'wordbank', label: '☁️ 雲端自學單字庫', color: 'bg-indigo-500' },
-                { id: 'quiz', label: '⭐ 隨堂星級挑戰', color: 'bg-purple-400' },
             ];
 
             const alphabetSubTabs = [
@@ -3567,82 +3566,7 @@
                         </div>
                     )}
 
-                    {/* ==================== 頁面 9: ⭐ 隨堂星級挑戰 (純自我評量) ==================== */}
-                    {masterTab === 'quiz' && (
-                        <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-purple-100 max-w-xl mx-auto">
-                            {!quizFinished ? (
-                                <>
-                                    <div className="flex justify-between items-center mb-6">
-                                        <span className="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full border border-purple-200">
-                                            第 {quizIndex + 1} / {quizQuestions.length} 題
-                                        </span>
-                                        <span className="text-xs font-bold text-amber-500 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                                            ⭐ 目前得分：{score}
-                                        </span>
-                                    </div>
 
-                                    <h3 className="text-base md:text-lg font-bold text-gray-800 mb-6 text-center">
-                                        {quizQuestions[quizIndex].q}
-                                    </h3>
-
-                                    <div className="space-y-3 mb-6">
-                                        {quizQuestions[quizIndex].options.map((opt, idx) => (
-                                            <button
-                                                key={idx}
-                                                onClick={() => handleQuizOption(idx)}
-                                                disabled={quizAnswered}
-                                                className={`w-full text-left px-5 py-3 rounded-2xl text-sm font-semibold transition-all border ${
-                                                    quizAnswered
-                                                        ? idx === quizQuestions[quizIndex].correct
-                                                            ? 'bg-emerald-50 border-emerald-400 text-emerald-700 font-bold'
-                                                            : idx === selectedOption
-                                                                ? 'bg-rose-50 border-rose-400 text-rose-700'
-                                                                : 'bg-gray-50 border-gray-200 text-gray-400'
-                                                        : 'bg-white hover:bg-purple-50 border-gray-200 hover:border-purple-300 text-gray-700'
-                                                }`}
-                                            >
-                                                <span className="inline-block w-6 text-purple-400 font-mono">{String.fromCharCode(65 + idx)}.</span>
-                                                {opt}
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    {quizAnswered && (
-                                        <div className="text-center space-y-4">
-                                            <p className="text-sm font-bold text-purple-600 animate-bounce">{feedback}</p>
-                                            <button
-                                                onClick={nextQuestion}
-                                                className="px-6 py-2.5 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-2xl text-sm shadow-md transition-all active:scale-95"
-                                            >
-                                                {quizIndex < quizQuestions.length - 1 ? '下一題 ➔' : '查看學習總結 🏆'}
-                                            </button>
-                                        </div>
-                                    )}
-                                </>
-                            ) : (
-                                <div className="text-center py-6 space-y-6">
-                                    <div className="text-6xl animate-bounce">🎀</div>
-                                    <h3 className="text-2xl font-bold text-purple-600">測驗完成！學習成果</h3>
-                                    
-                                    <div className="bg-purple-50 p-6 rounded-3xl border border-purple-200 max-w-sm mx-auto">
-                                        <p className="text-xs text-gray-500 mb-1">本次自學得分</p>
-                                        <span className="text-5xl font-bold text-purple-600">{score}</span>
-                                        <span className="text-gray-400 text-sm"> / {quizQuestions.length * 20} 分</span>
-                                        <p className="text-xs text-purple-700 mt-3 font-semibold">
-                                            {score === quizQuestions.length * 20 ? '🌟 完美滿分！你是韓語發音小博士！' : '💖 很棒的嘗試！多拼幾次積木就全記住囉！'}
-                                        </p>
-                                    </div>
-
-                                    <button
-                                        onClick={restartQuiz}
-                                        className="px-6 py-2.5 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-2xl text-sm shadow-md transition-all active:scale-95"
-                                    >
-                                        🔄 再挑戰一次
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    )}
 
                     {/* Footer */}
                     <footer className="text-center mt-12 text-xs text-rose-300 flex flex-col items-center gap-1">
