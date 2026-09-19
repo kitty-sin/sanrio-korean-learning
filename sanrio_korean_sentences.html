@@ -138,21 +138,27 @@
         const { useState, useEffect, useMemo, useRef } = React;
 
         function KoreanSentenceTrainApp() {
-            // ================= 狀態管理 =================
+            // ================= 狀態管理 (單一萬能輸入框 + 多語言智慧解析) =================
+            const [subjectRaw, setSubjectRaw] = useState("동생");
             const [subjectInput, setSubjectInput] = useState("동생");
             const [subjectZh, setSubjectZh] = useState("弟弟");
             const [subjectParticleType, setSubjectParticleType] = useState("topic"); // 'topic' (은/는) or 'subject' (이/가)
             
+            const [placeRaw, setPlaceRaw] = useState("우주관");
             const [placeInput, setPlaceInput] = useState("우주관");
             const [placeZh, setPlaceZh] = useState("太空館");
             const [placeParticleType, setPlaceParticleType] = useState("actionPlace"); // 'actionPlace' (에서) or 'destPlace' (에) or 'none'
 
+            const [objectRaw, setObjectRaw] = useState("달");
             const [objectInput, setObjectInput] = useState("달");
             const [objectZh, setObjectZh] = useState("月亮");
             const [objectParticleType, setObjectParticleType] = useState("object"); // 'object' (을/를) or 'none'
 
+            const [verbRaw, setVerbRaw] = useState("보다");
             const [verbInput, setVerbInput] = useState("보다");
             const [verbZh, setVerbZh] = useState("看");
+
+            const [isComposing, setIsComposing] = useState(false);
             
             // 語法與發音設定
             const [currentSpeechRate, setCurrentSpeechRate] = useState(0.7); // 0.3x, 0.7x, 1.0x
@@ -241,30 +247,36 @@
                 const vrb = window.SENTENCE_VERBS ? window.SENTENCE_VERBS.find(v => v.id === route.verbId) : null;
 
                 if (sub) {
+                    setSubjectRaw(sub.kr);
                     setSubjectInput(sub.kr);
                     setSubjectZh(sub.zh);
                 }
                 if (plc) {
+                    setPlaceRaw(plc.kr);
                     setPlaceInput(plc.kr);
                     setPlaceZh(plc.zh);
                     if (plc.id === 'plc_none' || !plc.kr) setPlaceParticleType('none');
                     else setPlaceParticleType('actionPlace');
                 } else {
+                    setPlaceRaw("");
                     setPlaceInput("");
                     setPlaceZh("");
                     setPlaceParticleType('none');
                 }
                 if (obj) {
+                    setObjectRaw(obj.kr);
                     setObjectInput(obj.kr);
                     setObjectZh(obj.zh);
                     if (obj.category === 'none' || !obj.kr) setObjectParticleType('none');
                     else setObjectParticleType('object');
                 } else {
+                    setObjectRaw("");
                     setObjectInput("");
                     setObjectZh("");
                     setObjectParticleType('none');
                 }
                 if (vrb) {
+                    setVerbRaw(vrb.kr);
                     setVerbInput(vrb.kr);
                     setVerbZh(vrb.zh);
                 }
@@ -294,53 +306,80 @@
                 localStorage.setItem("kitty_saved_sentences", JSON.stringify(updated));
             };
 
-            // 智慧中文即時自動轉譯韓文處理器 (支援繁簡雙向)
-            const handleSubjectZhChange = (val) => {
-                setSubjectZh(val);
-                if (window.HangulEngine && window.HangulEngine.translateZhToKr) {
-                    const match = window.HangulEngine.translateZhToKr(val, "subject");
-                    if (match && match.kr) {
-                        setSubjectInput(match.kr);
-                    }
-                }
-            };
-
-            const handlePlaceZhChange = (val) => {
-                setPlaceZh(val);
-                if (window.HangulEngine && window.HangulEngine.translateZhToKr) {
-                    const match = window.HangulEngine.translateZhToKr(val, "place");
-                    if (match && match.kr) {
-                        setPlaceInput(match.kr);
-                        setPlaceParticleType("actionPlace");
-                    }
-                }
-            };
-
-            const handleObjectZhChange = (val) => {
-                setObjectZh(val);
-                if (window.HangulEngine && window.HangulEngine.translateZhToKr) {
-                    const match = window.HangulEngine.translateZhToKr(val, "object");
-                    if (match && match.kr) {
-                        setObjectInput(match.kr);
-                        if (match.particleType) setObjectParticleType(match.particleType);
-                        else setObjectParticleType("object");
-                    }
-                }
-            };
-
-            const handleVerbZhChange = (val) => {
-                setVerbZh(val);
-                if (window.HangulEngine && window.HangulEngine.translateZhToKr) {
-                    const match = window.HangulEngine.translateZhToKr(val, "verb");
-                    if (match && match.kr) {
-                        setVerbInput(match.kr);
-                        // 若輸入「看月亮」等複合動詞，自動將受詞提取至受語車卡
-                        if (match.autoObject && (!objectInput || objectInput === "")) {
-                            setObjectZh(match.autoObject.zh);
-                            setObjectInput(match.autoObject.kr);
-                            setObjectParticleType("object");
+            // 全能多語言智慧即時輸入處理器 (支援 中文繁簡 / 韓文 / 英文 + 複合詞拆分)
+            const handleUniversalInputChange = (type, val) => {
+                if (type === 'subject') {
+                    setSubjectRaw(val);
+                    if (window.HangulEngine && window.HangulEngine.universalTranslate) {
+                        const match = window.HangulEngine.universalTranslate(val, "subject");
+                        if (match) {
+                            setSubjectInput(match.kr);
+                            setSubjectZh(match.zh);
+                        } else {
+                            setSubjectInput(val);
+                            setSubjectZh(val);
                         }
                     }
+                } else if (type === 'place') {
+                    setPlaceRaw(val);
+                    if (window.HangulEngine && window.HangulEngine.universalTranslate) {
+                        const match = window.HangulEngine.universalTranslate(val, "place");
+                        if (match) {
+                            setPlaceInput(match.kr);
+                            setPlaceZh(match.zh);
+                            if (match.kr && match.kr !== "✨") setPlaceParticleType("actionPlace");
+                        } else {
+                            setPlaceInput(val);
+                            setPlaceZh(val);
+                        }
+                    }
+                } else if (type === 'object') {
+                    setObjectRaw(val);
+                    if (window.HangulEngine && window.HangulEngine.universalTranslate) {
+                        const match = window.HangulEngine.universalTranslate(val, "object");
+                        if (match) {
+                            setObjectInput(match.kr);
+                            setObjectZh(match.zh);
+                            if (match.particleType) setObjectParticleType(match.particleType);
+                            else setObjectParticleType(match.kr ? "object" : "none");
+                        } else {
+                            setObjectInput(val);
+                            setObjectZh(val);
+                        }
+                    }
+                } else if (type === 'verb') {
+                    setVerbRaw(val);
+                    if (window.HangulEngine && window.HangulEngine.universalTranslate) {
+                        const match = window.HangulEngine.universalTranslate(val, "verb");
+                        if (match) {
+                            setVerbInput(match.kr);
+                            setVerbZh(match.zh);
+                            // 若輸入「看月亮 / watch moon」等複合動詞，自動將受詞提取至受語車卡
+                            if (match.autoObject) {
+                                setObjectRaw(match.autoObject.zh);
+                                setObjectZh(match.autoObject.zh);
+                                setObjectInput(match.autoObject.kr);
+                                setObjectParticleType("object");
+                                showToast(`已自動提取受語：${match.autoObject.zh} (${match.autoObject.kr}) ✨`);
+                            }
+                        } else {
+                            setVerbInput(val);
+                            setVerbZh(val);
+                        }
+                    }
+                }
+            };
+
+            // 確認按鈕或鍵盤 Enter 送出
+            const commitUniversalInput = (type, val) => {
+                handleUniversalInputChange(type, val);
+                showToast("已確認輸入並更新車卡 🚂✨");
+            };
+
+            const handleKeyDown = (type, e) => {
+                if (e.key === 'Enter' && !isComposing) {
+                    e.preventDefault();
+                    commitUniversalInput(type, e.target.value);
                 }
             };
 
@@ -801,23 +840,43 @@
                                                 </button>
                                             </div>
 
-                                            {/* 輸入看板 */}
+                                            {/* 單一萬能輸入看板 */}
                                             <div className="bg-white/95 rounded-2xl p-3.5 sm:p-4 border-2 border-amber-600 shadow-inner space-y-2.5">
-                                                <div className="flex items-center gap-2">
+                                                <div className="relative flex items-center">
+                                                    <span className="absolute left-3.5 text-amber-700/60 text-sm sm:text-base pointer-events-none">
+                                                        <i className="fas fa-keyboard"></i>
+                                                    </span>
                                                     <input
                                                         type="text"
-                                                        value={subjectZh}
-                                                        onChange={(e) => handleSubjectZhChange(e.target.value)}
-                                                        placeholder="中文 (如: 弟弟)"
-                                                        className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                                        value={subjectRaw}
+                                                        onChange={(e) => handleUniversalInputChange('subject', e.target.value)}
+                                                        onKeyDown={(e) => handleKeyDown('subject', e)}
+                                                        onCompositionStart={() => setIsComposing(true)}
+                                                        onCompositionEnd={(e) => { setIsComposing(false); handleUniversalInputChange('subject', e.target.value); }}
+                                                        placeholder="中文/韓文/英文 (如: 弟弟 / John / 동생)"
+                                                        className="w-full pl-9 pr-14 py-2.5 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 placeholder:text-amber-900/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all shadow-inner"
                                                     />
-                                                    <input
-                                                        type="text"
-                                                        value={subjectInput}
-                                                        onChange={(e) => setSubjectInput(e.target.value)}
-                                                        placeholder="韓文 (如: 동생)"
-                                                        className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
-                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => commitUniversalInput('subject', subjectRaw)}
+                                                        title="確認輸入 (Enter)"
+                                                        className="absolute right-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs sm:text-sm font-black shadow-xs transition-all active:scale-95 flex items-center gap-1 cursor-pointer"
+                                                    >
+                                                        <span>↵</span>
+                                                        <span className="hidden sm:inline">確認</span>
+                                                    </button>
+                                                </div>
+
+                                                {/* 即時智慧解析狀態標籤 */}
+                                                <div className="flex items-center justify-between text-xs text-amber-800 font-bold bg-amber-100/70 rounded-lg py-1 px-2.5 border border-amber-200/80">
+                                                    <div className="truncate flex items-center gap-1.5">
+                                                        <span className="text-amber-700">✨ 韓:</span>
+                                                        <span className="kr-font font-black text-amber-950 text-sm">{subjectInput || "—"}</span>
+                                                        <span className="text-amber-400">|</span>
+                                                        <span className="text-amber-700">中:</span>
+                                                        <span className="text-amber-900">{subjectZh || "—"}</span>
+                                                    </div>
+                                                    <span className="text-2xs bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded font-bold shrink-0 ml-1">自動翻譯</span>
                                                 </div>
 
                                                 {/* 快捷點選主語卡 */}
@@ -826,6 +885,7 @@
                                                         <button
                                                             key={sub.id}
                                                             onClick={() => {
+                                                                setSubjectRaw(sub.kr);
                                                                 setSubjectInput(sub.kr);
                                                                 setSubjectZh(sub.zh);
                                                             }}
@@ -868,23 +928,43 @@
                                                 </select>
                                             </div>
 
-                                            {/* 輸入看板 */}
+                                            {/* 單一萬能輸入看板 */}
                                             <div className="bg-white/95 rounded-2xl p-3.5 sm:p-4 border-2 border-amber-600 shadow-inner space-y-2.5">
-                                                <div className="flex items-center gap-2">
+                                                <div className="relative flex items-center">
+                                                    <span className="absolute left-3.5 text-amber-700/60 text-sm sm:text-base pointer-events-none">
+                                                        <i className="fas fa-location-dot"></i>
+                                                    </span>
                                                     <input
                                                         type="text"
-                                                        value={placeZh}
-                                                        onChange={(e) => handlePlaceZhChange(e.target.value)}
-                                                        placeholder="中文 (如: 太空館)"
-                                                        className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                                        value={placeRaw}
+                                                        onChange={(e) => handleUniversalInputChange('place', e.target.value)}
+                                                        onKeyDown={(e) => handleKeyDown('place', e)}
+                                                        onCompositionStart={() => setIsComposing(true)}
+                                                        onCompositionEnd={(e) => { setIsComposing(false); handleUniversalInputChange('place', e.target.value); }}
+                                                        placeholder="中文/韓文/英文 (如: 太空館 / home / 우주관)"
+                                                        className="w-full pl-9 pr-14 py-2.5 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 placeholder:text-amber-900/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all shadow-inner"
                                                     />
-                                                    <input
-                                                        type="text"
-                                                        value={placeInput}
-                                                        onChange={(e) => setPlaceInput(e.target.value)}
-                                                        placeholder="韓文 (如: 우주관)"
-                                                        className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
-                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => commitUniversalInput('place', placeRaw)}
+                                                        title="確認輸入 (Enter)"
+                                                        className="absolute right-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs sm:text-sm font-black shadow-xs transition-all active:scale-95 flex items-center gap-1 cursor-pointer"
+                                                    >
+                                                        <span>↵</span>
+                                                        <span className="hidden sm:inline">確認</span>
+                                                    </button>
+                                                </div>
+
+                                                {/* 即時智慧解析狀態標籤 */}
+                                                <div className="flex items-center justify-between text-xs text-amber-800 font-bold bg-amber-100/70 rounded-lg py-1 px-2.5 border border-amber-200/80">
+                                                    <div className="truncate flex items-center gap-1.5">
+                                                        <span className="text-amber-700">✨ 韓:</span>
+                                                        <span className="kr-font font-black text-amber-950 text-sm">{placeInput || "（無地點）"}</span>
+                                                        <span className="text-amber-400">|</span>
+                                                        <span className="text-amber-700">中:</span>
+                                                        <span className="text-amber-900">{placeZh || "（無地點）"}</span>
+                                                    </div>
+                                                    <span className="text-2xs bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded font-bold shrink-0 ml-1">自動翻譯</span>
                                                 </div>
 
                                                 {/* 快捷點選地點卡 */}
@@ -893,6 +973,7 @@
                                                         <button
                                                             key={plc.id}
                                                             onClick={() => {
+                                                                setPlaceRaw(plc.kr);
                                                                 setPlaceInput(plc.kr);
                                                                 setPlaceZh(plc.zh);
                                                                 if (plc.id === 'plc_none' || !plc.kr) setPlaceParticleType('none');
@@ -941,23 +1022,43 @@
                                                 </select>
                                             </div>
 
-                                            {/* 輸入看板 */}
+                                            {/* 單一萬能輸入看板 */}
                                             <div className="bg-white/95 rounded-2xl p-3.5 sm:p-4 border-2 border-amber-600 shadow-inner space-y-2.5">
-                                                <div className="flex items-center gap-2">
+                                                <div className="relative flex items-center">
+                                                    <span className="absolute left-3.5 text-rose-700/60 text-sm sm:text-base pointer-events-none">
+                                                        <i className="fas fa-cube"></i>
+                                                    </span>
                                                     <input
                                                         type="text"
-                                                        value={objectZh}
-                                                        onChange={(e) => handleObjectZhChange(e.target.value)}
-                                                        placeholder="中文 (如: 月亮)"
-                                                        className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                                        value={objectRaw}
+                                                        onChange={(e) => handleUniversalInputChange('object', e.target.value)}
+                                                        onKeyDown={(e) => handleKeyDown('object', e)}
+                                                        onCompositionStart={() => setIsComposing(true)}
+                                                        onCompositionEnd={(e) => { setIsComposing(false); handleUniversalInputChange('object', e.target.value); }}
+                                                        placeholder="中文/韓文/英文 (如: 月亮 / moon / 달)"
+                                                        className="w-full pl-9 pr-14 py-2.5 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 placeholder:text-amber-900/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all shadow-inner"
                                                     />
-                                                    <input
-                                                        type="text"
-                                                        value={objectInput}
-                                                        onChange={(e) => setObjectInput(e.target.value)}
-                                                        placeholder="韓文 (如: 달)"
-                                                        className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
-                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => commitUniversalInput('object', objectRaw)}
+                                                        title="確認輸入 (Enter)"
+                                                        className="absolute right-1.5 px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-xs sm:text-sm font-black shadow-xs transition-all active:scale-95 flex items-center gap-1 cursor-pointer"
+                                                    >
+                                                        <span>↵</span>
+                                                        <span className="hidden sm:inline">確認</span>
+                                                    </button>
+                                                </div>
+
+                                                {/* 即時智慧解析狀態標籤 */}
+                                                <div className="flex items-center justify-between text-xs text-amber-800 font-bold bg-amber-100/70 rounded-lg py-1 px-2.5 border border-amber-200/80">
+                                                    <div className="truncate flex items-center gap-1.5">
+                                                        <span className="text-amber-700">✨ 韓:</span>
+                                                        <span className="kr-font font-black text-amber-950 text-sm">{objectInput || "（無受詞）"}</span>
+                                                        <span className="text-amber-400">|</span>
+                                                        <span className="text-amber-700">中:</span>
+                                                        <span className="text-amber-900">{objectZh || "（無受詞）"}</span>
+                                                    </div>
+                                                    <span className="text-2xs bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded font-bold shrink-0 ml-1">自動翻譯</span>
                                                 </div>
 
                                                 {/* 快捷點選受詞卡 */}
@@ -966,6 +1067,7 @@
                                                         <button
                                                             key={obj.id}
                                                             onClick={() => {
+                                                                setObjectRaw(obj.kr);
                                                                 setObjectInput(obj.kr);
                                                                 setObjectZh(obj.zh);
                                                                 if (obj.category === 'none' || !obj.kr) setObjectParticleType('none');
@@ -1003,23 +1105,43 @@
                                                 </span>
                                             </div>
 
-                                            {/* 輸入看板 */}
+                                            {/* 單一萬能輸入看板 */}
                                             <div className="bg-white/95 rounded-2xl p-3.5 sm:p-4 border-2 border-amber-600 shadow-inner space-y-2.5">
-                                                <div className="flex items-center gap-2">
+                                                <div className="relative flex items-center">
+                                                    <span className="absolute left-3.5 text-emerald-700/60 text-sm sm:text-base pointer-events-none">
+                                                        <i className="fas fa-person-running"></i>
+                                                    </span>
                                                     <input
                                                         type="text"
-                                                        value={verbZh}
-                                                        onChange={(e) => handleVerbZhChange(e.target.value)}
-                                                        placeholder="中文 (如: 看)"
-                                                        className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                                        value={verbRaw}
+                                                        onChange={(e) => handleUniversalInputChange('verb', e.target.value)}
+                                                        onKeyDown={(e) => handleKeyDown('verb', e)}
+                                                        onCompositionStart={() => setIsComposing(true)}
+                                                        onCompositionEnd={(e) => { setIsComposing(false); handleUniversalInputChange('verb', e.target.value); }}
+                                                        placeholder="中文/韓文/英文 (如: 看 / see / 보다)"
+                                                        className="w-full pl-9 pr-14 py-2.5 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 placeholder:text-amber-900/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all shadow-inner"
                                                     />
-                                                    <input
-                                                        type="text"
-                                                        value={verbInput}
-                                                        onChange={(e) => setVerbInput(e.target.value)}
-                                                        placeholder="韓文 (如: 보다)"
-                                                        className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
-                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => commitUniversalInput('verb', verbRaw)}
+                                                        title="確認輸入 (Enter)"
+                                                        className="absolute right-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs sm:text-sm font-black shadow-xs transition-all active:scale-95 flex items-center gap-1 cursor-pointer"
+                                                    >
+                                                        <span>↵</span>
+                                                        <span className="hidden sm:inline">確認</span>
+                                                    </button>
+                                                </div>
+
+                                                {/* 即時智慧解析狀態標籤 */}
+                                                <div className="flex items-center justify-between text-xs text-amber-800 font-bold bg-amber-100/70 rounded-lg py-1 px-2.5 border border-amber-200/80">
+                                                    <div className="truncate flex items-center gap-1.5">
+                                                        <span className="text-amber-700">✨ 韓:</span>
+                                                        <span className="kr-font font-black text-amber-950 text-sm">{verbInput || "—"}</span>
+                                                        <span className="text-amber-400">|</span>
+                                                        <span className="text-amber-700">中:</span>
+                                                        <span className="text-amber-900">{verbZh || "—"}</span>
+                                                    </div>
+                                                    <span className="text-2xs bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded font-bold shrink-0 ml-1">自動翻譯</span>
                                                 </div>
 
                                                 {/* 快捷點選動詞卡 */}
@@ -1028,6 +1150,7 @@
                                                         <button
                                                             key={vrb.id}
                                                             onClick={() => {
+                                                                setVerbRaw(vrb.kr);
                                                                 setVerbInput(vrb.kr);
                                                                 setVerbZh(vrb.zh);
                                                             }}
