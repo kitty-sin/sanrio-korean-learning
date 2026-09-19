@@ -7,7 +7,7 @@
 ## ⏯️ 目前做到哪
 
 1. **🍔 自訂詞庫擴充**：
-   - 新增外來語名詞 `#5694 패스트푸드`、`#5695 패스트`、`#5696 푸드` 與受格短語名詞 `#5697 친구를 (朋友（朋友「친구」+ 受格助詞「를」，作句子受詞，如 친구를 만나요 見朋友/和朋友見面） / Friend (as direct object))` 至 Kitty 自訂詞庫與核心大字典。
+   - 新增外來語名詞 `#5694 패스트푸드`、`#5695 패스트`、`#5696 푸드` 與複數名詞 `#5697 친구들 (朋友們（朋友「친구」+ 複數後綴「들」，表示複數個朋友/大家） / Friends (plural of 친구))` 至 Kitty 自訂詞庫與核心大字典。
    - 全量同步 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫累計達 **31 筆**，全庫總量達到 **5,697 筆**；並同步重構漢字辭典資料集 `korean_hanja_data.js/csv/md`。
 2. **🚂 韓語造句發音積木列車全功能進化** (`sanrio_korean_sentences.html` + `korean_sentence_data.js`)：
    - **單一萬能輸入框**：整合中/韓/英/粵語拼音智慧即時解析，支援繁簡雙向、電腦端與手機端完整自適應、Enter 鍵即時確認。

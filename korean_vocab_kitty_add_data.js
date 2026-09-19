@@ -302,10 +302,10 @@ window.KOREAN_VOCAB_KITTY_ADD = [
   },
   {
     "id": 5697,
-    "k": "친구를",
-    "r": "chingureul",
-    "c": "朋友（朋友「친구」+ 受格助詞「를」，作句子受詞/賓語，如 친구를 만나요 見朋友/和朋友見面、친구를 기다려요 等朋友）",
-    "e": "Friend (as direct object with particle '를', e.g., to meet a friend, wait for a friend)",
+    "k": "친구들",
+    "r": "chingudeul",
+    "c": "朋友們（朋友「친구」+ 複數後綴「들」，表示複數個朋友/大家）",
+    "e": "Friends (plural of 친구 with plural marker 들)",
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
