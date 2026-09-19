@@ -40,6 +40,7 @@ Korean-Learning/
 ├── korean_hanja_dictionary.html # 韓語漢字音變大辭典 (Glossika 6,277 漢字詞 + 1,037 全量音節矩陣 + 外來語 + 暖杏風)
 ├── sanrio_korean_songs.html     # 韓語名曲歌詞練唱樂園 (李碩珉 DK《Stay With Me》+ 北極光淺色系 + 一句一框框)
 ├── sanrio_korean_honorifics.html # 韓語兩大敬語發音積木樂園 (最高敬語 습니다 ✕ 日常敬語 해요 + 5大分頁 + 闖關測驗)
+├── sanrio_korean_particles.html  # 韓語兩大核心助詞發音積木樂園 (主格 이/가 ✕ 受格 을/를 + 5大分頁 + 闖關測驗)
 ├── korean_songs_data.js         # 韓語歌曲結構化常數數據集
 ├── korean_songs_data.md         # 韓語歌曲 Markdown 對照清單
 ├── korean_hanja_data.js         # 6,520 筆漢字詞與 1,040 音節常數數據集
@@ -59,7 +60,7 @@ Korean-Learning/
 ├── sanrio_korean_food_100.md    # 100 種常見食物 Markdown 清單
 ├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
 ├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
-├── sw.js                        # Service Worker 離線快取核心 (v1.0.23)
+├── sw.js                        # Service Worker 離線快取核心 (v1.0.25)
 ├── package.json                 # 專案套件管理與 Capacitor 依賴
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔
@@ -83,6 +84,7 @@ Korean-Learning/
 - [x] **韓語漢字音變大辭典** (korean_hanja_dictionary.html，收錄 Glossika 6,277 漢字詞、1,040 組全量音節矩陣與 242 外來語，支援以字查音/以音查字、單字卡、3段速語音、字母結構拆解、🧸 泰迪熊代表圖標與柔和奶茶暖杏風視覺設計)
 - [x] **🎵 韓語名曲歌詞練唱樂園** (sanrio_korean_songs.html，李碩珉 DK《Stay With Me》+ 北極光淺色典雅系 + 一句一框框)
 - [x] **👑 韓語兩大敬語發音積木樂園** (`sanrio_korean_honorifics.html`，最高敬語 `습니다` ✕ 日常敬語 `해요` + 5大分頁 + 母音四大家族拼盤含 `ㅐ, ㅖ, ㅢ` 歸屬 + 名詞四大接法 + 職場/咖啡廳 PK 模擬器 + 隨堂星級闖關測驗 + 3段速發音)
+- [x] **🌸 韓語兩大核心助詞發音積木樂園** (`sanrio_korean_particles.html`，主格 `이/가` ✕ 受格 `을/를` + 美樂蒂 ✕ 大耳狗 + 4大代名詞變形 `내가/제가/네가/누가` + 5大口語縮合 `날/절/널/뭘/이걸` + `좋다 vs 좋아하다` 魔王對決 + 隨堂星級闖關測驗 + 3段速發音)
 - [x] **📑 韓語教材線上互動閱讀器** (`pdf_viewer.html`，Mozilla PDF.js 向量高清晰渲染、免下載直讀、單頁翻閱與連續捲動、手勢滑動翻頁與全功能分頁導航列)
 - [x] **大字典全功能極速導航分頁列** (自由跳頁下拉選單、⏮ 頁首、頁尾 ⏭、自適應頁數與平滑置頂)
 - [x] **全生態圈雙向無縫互聯** (主站、核心大字典、漢字大辭典、名曲樂園、美食清單、PDF 講義與積木屋跨頁參數傳遞)

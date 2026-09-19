@@ -552,11 +552,19 @@
       4. **Page 4（PK 對決台）**：場景對話韓語加大至 `text-lg sm:text-xl font-black`，情境翻譯文字加大為 `text-sm sm:text-base font-bold`。
       5. **Page 5（隨堂測驗）**：測驗題目升級為 `text-sm sm:text-base md:text-lg font-bold`，選項按鈕內距加寬並放大至 `text-xs sm:text-sm md:text-base`，結算結果放大至 `text-lg sm:text-xl md:text-2xl font-black`。
     - **同步部署**：透過 `scripts/build_honorifics_page.py` 重新編譯生成 `sanrio_korean_honorifics.html`，同步至 `www/sanrio_korean_honorifics.html` 並推播至 GitHub Pages。
-- **2026-09-18 17:15 PT**：
-  - **🇨🇳 全量增補《KITTY 韓語兩大敬語發音積木樂園 (`sanrio_korean_honorifics.html`)》韓文中文對照解釋**：
-    - **背景**：針對 5 大敬語教學頁面中的所有韓文例詞、肯定句、疑問句、否定句、口訣卡、鼻音化音變對照與隨堂測驗選項，全量補齊標準清晰的中文對照（如 `먹습니다 (吃)`、`갑니다 (去)`、`가요 (去)`、`좋아요 (好)`、`식사하셨습니까? (您用餐了嗎？)`、`학생입니다 (是學生)`、`의사예요 (是醫生)` 等）。
-    - **發音朗讀保護**：所有發音點讀按鈕（`AudioBtn`）維持純韓文文字傳遞，完全排除中文字符，保障語音朗讀精準度。
-    - **同步部署**：透過 `scripts/build_honorifics_page.py` 自動生成最新 HTML，同步至 `www/sanrio_korean_honorifics.html` 並推播至 GitHub Pages。
+- **2026-09-18 17:35 PT**：
+  - **🌸 全新推出《KITTY 韓語兩大核心助詞發音積木樂園 (`sanrio_korean_particles.html`)》Sanrio 萌趣多頁面版**：
+    - **背景**：將韓語兩大基石助詞——主格助詞（`이/가`，美樂蒂派）與受格助詞（`을/를`，大耳狗派）進行全方位語法補齊、深度例句解析、連音化發音透視與 5 大分頁互動闖關樂園建置。
+    - **5 大核心分頁**：
+      1. **Page 1: 🌟 樂園總覽與黃金速查總表**（主格 `이/가` ✕ 受格 `을/를` 全景速查表、三秒記憶神口訣、3 段速發音點讀、代名詞變形與口語縮合一覽）。
+      2. **Page 2: 🌸 主格 이/가 派（美樂蒂）**（收音規則、連音化讀音 `[선생니미/바비]`、4 大代名詞特殊變形 `내가/제가/네가(니가)/누가`、5 大必備句型 `있다/없다/아니다/되다/좋다/필요하다`）。
+      3. **Page 3: 🐶 受格 을/를 派（大耳狗）**（收音規則、強烈連音化 `[채글/으마글/바블]`、5 大口語代名詞常見縮合 `날/절/널/뭘/이걸`、日常對話自然省略規律）。
+      4. **Page 4: 🥊 實戰 PK 對決台**（`좋다 (形容詞：接 이/가)` vs `좋아하다 (他動詞：接 을/를)` 經典魔王對決、完整主賓動句子積木拆解 `민수가 사과를 먹어요`、生活雙助詞即時切換）。
+      5. **Page 5: 🎮 隨堂星級小測驗**（5 題助詞闖關測驗 + 答對撒花 Confetti + 即時解析 + 星級成績單）。
+    - **全站互聯與離線支援**：
+      - 更新 `index.html`、`korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`sanrio_korean_honorifics.html`、`sanrio_korean_songs.html` 及 `README.md`。
+      - `sw.js` 升級至 `v1.0.25` 快取新頁面，同步部署至 `www/` 鏡像目錄。
+    - **發音保護**：所有點讀按鈕純韓文發音，無中文雜音。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -566,6 +574,6 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 17:15 PT
+- **更新時間**：2026-09-18 17:35 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)

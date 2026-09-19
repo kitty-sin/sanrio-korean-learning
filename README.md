@@ -36,8 +36,11 @@ Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與
   - 🌐 [線上即時清晰閱讀 (免下載直讀)](https://kitty-sin.github.io/sanrio-korean-learning/pdf_viewer.html?doc=grammar)
   - 📥 [直接下載 PDF 原檔 (Raw Download)](https://raw.githubusercontent.com/kitty-sin/sanrio-korean-learning/main/韓語語序・敬語・時態大解密.pdf)
 - **👑 KITTY 韓語兩大敬語發音積木樂園 (Sanrio 萌趣多頁面版)**：
-  - 🌐 [線上互動多頁面樂園 (sanrio_korean_honorifics.html)](sanrio_korean_honorifics.html)
+  - 🌐 [線上互動敬語樂園 (sanrio_korean_honorifics.html)](sanrio_korean_honorifics.html)
   - 💡 涵蓋最高敬語 (`-습니다`) vs 日常敬語 (`-아요/어요/요`)、母音四大家族拼盤（含 `ㅐ, ㅖ, ㅢ` 歸屬）、名詞四大接法、PK 模擬器與隨堂星級測驗。
+- **🌸 KITTY 韓語兩大核心助詞發音積木樂園 (主格 이/가 ✕ 受格 을/를)**：
+  - 🌐 [線上互動助詞樂園 (sanrio_korean_particles.html)](sanrio_korean_particles.html)
+  - 💡 涵蓋主格 `이/가` vs 受格 `을/를`、4大代名詞特殊變形（`내가/제가/네가/누가`）、5大口語縮合（`날/절/널/뭘/이걸`）、`좋다 vs 좋아하다` 魔王對決與隨堂星級測驗。
 - **🎵 KITTY 韓語名曲歌詞練唱樂園 (大字體版 • 北極光淺色系)**：
   - 🌐 [線上互動名曲樂園 (sanrio_korean_songs.html)](sanrio_korean_songs.html)
 - **🍱 Sanrio 100 個常見食物學習清單 (10頁發音打卡手札 / 支援 A4 列印 PDF)**：

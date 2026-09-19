@@ -1,5 +1,5 @@
-// KITTY 韓語積木大冒險 - Service Worker 離線快取 v1.0.24
-const CACHE_NAME = 'kitty-korean-v1.0.24';
+// KITTY 韓語積木大冒險 - Service Worker 離線快取 v1.0.25
+const CACHE_NAME = 'kitty-korean-v1.0.25';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -8,6 +8,7 @@ const STATIC_ASSETS = [
   './sanrio_korean_food_100.html',
   './sanrio_korean_songs.html',
   './sanrio_korean_honorifics.html',
+  './sanrio_korean_particles.html',
   './pdf_viewer.html',
   './kitty_search_engine.js',
   './korean_vocab_5666_data.js',
