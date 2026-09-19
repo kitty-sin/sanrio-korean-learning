@@ -412,28 +412,52 @@ HTML_CONTENT = """<!DOCTYPE html>
                                                 <td className="py-4 px-4 font-black text-gray-800">
                                                     🧱 收音接續規則
                                                 </td>
-                                                <td className="py-4 px-4 bg-rose-50/20 space-y-2">
+                                                <td className="py-4 px-4 bg-rose-50/20 space-y-2.5">
                                                     <div>• <strong>有收音</strong>接 <span className="kr-font font-black text-rose-700 text-sm sm:text-base">-이</span>（觸發連音化）</div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-base sm:text-lg text-gray-900">선생님이</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(老師)</span> / <span className="kr-font font-black text-base sm:text-lg text-gray-900">밥이</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(飯)</span>
-                                                        <AudioBtn text="선생님이, 밥이" speed={1.0} color="rose" size="xs" />
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">선생님이</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(老師)</span>
+                                                            <AudioBtn text="선생님이" speed={1.0} color="rose" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">밥이</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(飯)</span>
+                                                            <AudioBtn text="밥이" speed={1.0} color="rose" size="xs" />
+                                                        </div>
                                                     </div>
                                                     <div>• <strong>無收音</strong>接 <span className="kr-font font-black text-rose-700 text-sm sm:text-base">-가</span></div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-base sm:text-lg text-gray-900">친구가</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(朋友)</span> / <span className="kr-font font-black text-base sm:text-lg text-gray-900">비가</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(雨)</span>
-                                                        <AudioBtn text="친구가, 비가" speed={1.0} color="rose" size="xs" />
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">친구가</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(朋友)</span>
+                                                            <AudioBtn text="친구가" speed={1.0} color="rose" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">비가</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(雨)</span>
+                                                            <AudioBtn text="비가" speed={1.0} color="rose" size="xs" />
+                                                        </div>
                                                     </div>
                                                 </td>
-                                                <td className="py-4 px-4 bg-sky-50/20 space-y-2">
+                                                <td className="py-4 px-4 bg-sky-50/20 space-y-2.5">
                                                     <div>• <strong>有收音</strong>接 <span className="kr-font font-black text-sky-700 text-sm sm:text-base">-을</span>（觸發連音化）</div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-base sm:text-lg text-gray-900">책을</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(書)</span> / <span className="kr-font font-black text-base sm:text-lg text-gray-900">밥을</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(飯)</span>
-                                                        <AudioBtn text="책을, 밥을" speed={1.0} color="sky" size="xs" />
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">책을</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(書)</span>
+                                                            <AudioBtn text="책을" speed={1.0} color="sky" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">밥을</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(飯)</span>
+                                                            <AudioBtn text="밥을" speed={1.0} color="sky" size="xs" />
+                                                        </div>
                                                     </div>
                                                     <div>• <strong>無收音</strong>接 <span className="kr-font font-black text-sky-700 text-sm sm:text-base">-를</span></div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-base sm:text-lg text-gray-900">영화를</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(電影)</span> / <span className="kr-font font-black text-base sm:text-lg text-gray-900">커피를</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(咖啡)</span>
-                                                        <AudioBtn text="영화를, 커피를" speed={1.0} color="sky" size="xs" />
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">영화를</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(電影)</span>
+                                                            <AudioBtn text="영화를" speed={1.0} color="sky" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">커피를</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(咖啡)</span>
+                                                            <AudioBtn text="커피를" speed={1.0} color="sky" size="xs" />
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>

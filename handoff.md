@@ -565,6 +565,11 @@
       - 更新 `index.html`、`korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`sanrio_korean_honorifics.html`、`sanrio_korean_songs.html` 及 `README.md`。
       - `sw.js` 升級至 `v1.0.25` 快取新頁面，同步部署至 `www/` 鏡像目錄。
     - **發音保護**：所有點讀按鈕純韓文發音，無中文雜音。
+- **2026-09-18 17:48 PT**：
+  - **🔊 韓語速查總表例詞獨立化與專屬點讀按鈕重構 (Unbundle Example Pairs)**：
+    - **背景**：針對《韓語兩大敬語發音積木樂園》與《韓語兩大核心助詞發音積木樂園》總表中以斜線 `/` 組合的例詞（如 `선생님이 / 밥이`、`친구가 / 비가`、`책을 / 밥을`、`영화를 / 커피를`、`가요 / 좋아요`、`먹어요 / 보내요`、`학생입니다 / 의사입니다` 等），全面拆分為**獨立單行**，每行配置**專屬獨立發音按鈕**。
+    - **優勢**：學習者能逐一針對單一韓語單字/例詞單獨點擊發音與反覆跟讀，徹底消除過去連讀多詞的干擾，發音體驗更精準清晰。
+    - **同步部署**：更新 `scripts/build_particles_page.py`、`scripts/build_honorifics_page.py`、`sanrio_korean_particles.html`、`sanrio_korean_honorifics.html` 及 `www/` 鏡像目錄。
 - **➡️ 下一步**：
   1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
   2. 持續豐富漢字詞庫之生活例句與成語聯想。
@@ -574,6 +579,7 @@
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 17:35 PT
+- **更新時間**：2026-09-18 17:48 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
+

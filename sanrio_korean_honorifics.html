@@ -402,16 +402,28 @@
                                                         <AudioBtn text="갑니다" speed={1.0} color="amber" size="xs" />
                                                     </div>
                                                 </td>
-                                                <td className="py-4 px-4 bg-pink-50/20 space-y-2">
+                                                <td className="py-4 px-4 bg-pink-50/20 space-y-2.5">
                                                     <div>• <strong>陽性母音(ㅏ,ㅗ)</strong>接 <span className="kr-font font-black text-pink-700 text-sm sm:text-base">-아요</span></div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-base sm:text-lg text-gray-900">가요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(去)</span> / <span className="kr-font font-black text-base sm:text-lg text-gray-900">좋아요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(好)</span>
-                                                        <AudioBtn text="가요, 좋아요" speed={1.0} color="pink" size="xs" />
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">가요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(去)</span>
+                                                            <AudioBtn text="가요" speed={1.0} color="pink" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">좋아요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(好)</span>
+                                                            <AudioBtn text="좋아요" speed={1.0} color="pink" size="xs" />
+                                                        </div>
                                                     </div>
                                                     <div>• <strong>陰性/中性/複合(ㅐ,ㅖ,ㅢ)</strong>接 <span className="kr-font font-black text-pink-700 text-sm sm:text-base">-어요</span></div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-base sm:text-lg text-gray-900">먹어요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(吃)</span> / <span className="kr-font font-black text-base sm:text-lg text-gray-900">보내요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(寄/過)</span>
-                                                        <AudioBtn text="먹어요, 보내요" speed={1.0} color="pink" size="xs" />
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">먹어요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(吃)</span>
+                                                            <AudioBtn text="먹어요" speed={1.0} color="pink" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">보내요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(寄/過)</span>
+                                                            <AudioBtn text="보내요" speed={1.0} color="pink" size="xs" />
+                                                        </div>
                                                     </div>
                                                     <div>• <strong>하다</strong> 一律變 <span className="kr-font font-black text-pink-700">해요</span> (공부해요 <span className="text-xs sm:text-sm text-gray-500 font-bold">學習</span>)</div>
                                                 </td>
@@ -444,19 +456,30 @@
                                                 <td className="py-4 px-4 font-black text-gray-800">
                                                     🏷️ 名詞肯定句<br/><span className="text-xs sm:text-sm font-bold text-purple-600">【是...】</span>
                                                 </td>
-                                                <td className="py-4 px-4 bg-amber-50/20 space-y-1.5">
+                                                <td className="py-4 px-4 bg-amber-50/20 space-y-2">
                                                     <div>• 不論有無收音，一律接 <span className="kr-font font-black text-amber-900">-입니다</span></div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생입니다</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是學生)</span> / <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사입니다</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是醫生)</span>
-                                                        <AudioBtn text="학생입니다, 의사입니다" speed={1.0} color="amber" size="xs" />
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생입니다</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是學生)</span>
+                                                            <AudioBtn text="학생입니다" speed={1.0} color="amber" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사입니다</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是醫生)</span>
+                                                            <AudioBtn text="의사입니다" speed={1.0} color="amber" size="xs" />
+                                                        </div>
                                                     </div>
                                                 </td>
-                                                <td className="py-4 px-4 bg-pink-50/20 space-y-1.5">
-                                                    <div>• <strong>有收音</strong>接 <span className="kr-font font-black text-pink-700">-이에요</span> (학생이에요 <span className="text-xs sm:text-sm text-gray-500 font-bold">是學生</span>)</div>
-                                                    <div>• <strong>無收音</strong>接 <span className="kr-font font-black text-pink-700">-예요</span> (의사예요 <span className="text-xs sm:text-sm text-gray-500 font-bold">是醫生</span>)</div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생이에요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是學生)</span> / <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사예요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是醫生)</span>
-                                                        <AudioBtn text="학생이에요, 의사예요" speed={1.0} color="pink" size="xs" />
+                                                <td className="py-4 px-4 bg-pink-50/20 space-y-2">
+                                                    <div>• <strong>有收音</strong>接 <span className="kr-font font-black text-pink-700">-이에요</span> / <strong>無收音</strong>接 <span className="kr-font font-black text-pink-700">-예요</span></div>
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생이에요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是學生)</span>
+                                                            <AudioBtn text="학생이에요" speed={1.0} color="pink" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사예요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是醫生)</span>
+                                                            <AudioBtn text="의사예요" speed={1.0} color="pink" size="xs" />
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -466,18 +489,30 @@
                                                 <td className="py-4 px-4 font-black text-gray-800">
                                                     ❓ 名詞疑問句<br/><span className="text-xs sm:text-sm font-bold text-purple-600">【是...嗎?】</span>
                                                 </td>
-                                                <td className="py-4 px-4 bg-amber-50/20 space-y-1.5">
+                                                <td className="py-4 px-4 bg-amber-50/20 space-y-2">
                                                     <div>• 不論有無收音，一律接 <span className="kr-font font-black text-amber-900">-입니까?</span> <span className="text-xs text-red-600 font-black">(非 습니까)</span></div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생입니까?</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是學生嗎？)</span> / <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사입니까?</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是醫生嗎？)</span>
-                                                        <AudioBtn text="학생입니까? 의사입니까?" speed={1.0} color="amber" size="xs" />
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생입니까?</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是學生嗎？)</span>
+                                                            <AudioBtn text="학생입니까?" speed={1.0} color="amber" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사입니까?</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是醫生嗎？)</span>
+                                                            <AudioBtn text="의사입니까?" speed={1.0} color="amber" size="xs" />
+                                                        </div>
                                                     </div>
                                                 </td>
-                                                <td className="py-4 px-4 bg-pink-50/20 space-y-1.5">
+                                                <td className="py-4 px-4 bg-pink-50/20 space-y-2">
                                                     <div>• 詞形不變，句尾語調「<strong>升調 ⤴️</strong>」</div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생이에요? ⤴️</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是學生嗎？)</span> / <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사예요? ⤴️</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是醫生嗎？)</span>
-                                                        <AudioBtn text="학생이에요? 의사예요?" speed={1.0} color="pink" size="xs" />
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생이에요? ⤴️</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是學生嗎？)</span>
+                                                            <AudioBtn text="학생이에요?" speed={1.0} color="pink" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사예요? ⤴️</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(是醫生嗎？)</span>
+                                                            <AudioBtn text="의사예요?" speed={1.0} color="pink" size="xs" />
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -487,20 +522,30 @@
                                                 <td className="py-4 px-4 font-black text-gray-800">
                                                     🚫 名詞否定句<br/><span className="text-xs sm:text-sm font-bold text-purple-600">【不是...】</span>
                                                 </td>
-                                                <td className="py-4 px-4 bg-amber-50/20 space-y-1.5">
-                                                    <div>• 有收音：<span className="kr-font font-black text-amber-900">-이 아닙니다</span></div>
-                                                    <div>• 無收音：<span className="kr-font font-black text-amber-900">-가 아닙니다</span></div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생이 아닙니다</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(不是學生)</span> / <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사가 아닙니다</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(不是醫生)</span>
-                                                        <AudioBtn text="학생이 아닙니다, 의사가 아닙니다" speed={1.0} color="amber" size="xs" />
+                                                <td className="py-4 px-4 bg-amber-50/20 space-y-2">
+                                                    <div>• 有收音：<span className="kr-font font-black text-amber-900">-이 아닙니다</span> / 無收音：<span className="kr-font font-black text-amber-900">-가 아닙니다</span></div>
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생이 아닙니다</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(不是學生)</span>
+                                                            <AudioBtn text="학생이 아닙니다" speed={1.0} color="amber" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사가 아닙니다</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(不是醫生)</span>
+                                                            <AudioBtn text="의사가 아닙니다" speed={1.0} color="amber" size="xs" />
+                                                        </div>
                                                     </div>
                                                 </td>
-                                                <td className="py-4 px-4 bg-pink-50/20 space-y-1.5">
-                                                    <div>• 有收音：<span className="kr-font font-black text-pink-700">-이 아니에요</span></div>
-                                                    <div>• 無收音：<span className="kr-font font-black text-pink-700">-가 아니에요</span></div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생이 아니에요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(不是學生)</span> / <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사가 아니에요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(不是醫生)</span>
-                                                        <AudioBtn text="학생이 아니에요, 의사가 아니에요" speed={1.0} color="pink" size="xs" />
+                                                <td className="py-4 px-4 bg-pink-50/20 space-y-2">
+                                                    <div>• 有收音：<span className="kr-font font-black text-pink-700">-이 아니에요</span> / 無收音：<span className="kr-font font-black text-pink-700">-가 아니에요</span></div>
+                                                    <div className="space-y-1.5 pl-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">학생이 아니에요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(不是學生)</span>
+                                                            <AudioBtn text="학생이 아니에요" speed={1.0} color="pink" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">의사가 아니에요</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(不是醫生)</span>
+                                                            <AudioBtn text="의사가 아니에요" speed={1.0} color="pink" size="xs" />
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
