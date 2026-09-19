@@ -1120,7 +1120,7 @@ const HangulEngine = {
 const PRESET_TRAIN_ROUTES = [
     {
         id: "route_space",
-        title: "🪐 弟弟太空館觀月號",
+        title: "🪐 弟弟太空館看月亮",
         badge: "4卡示範 • S+P+O+V",
         subjectId: "sub_5",  // 弟弟
         placeId: "plc_1",    // 太空館
