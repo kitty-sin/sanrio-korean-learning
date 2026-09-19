@@ -269,5 +269,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "助詞",
     "pd": "補助詞 (Auxiliary Particle / 보조사) 或其他接尾助詞。"
+  },
+  {
+    "id": 5694,
+    "k": "패스트푸드",
+    "r": "paeseuteupudeu",
+    "c": "速食、快餐、Fast Food（如漢堡、炸雞、薯條等快餐食品，外來語）",
+    "e": "Fast food (burgers, fried chicken, french fries, etc.)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
