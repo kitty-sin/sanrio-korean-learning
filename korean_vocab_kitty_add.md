@@ -36,3 +36,4 @@
 | 5696 | 푸드 | pudeu | 食物、食品、Food（外來語借詞，常見於 푸드 코트 美食廣場、푸드 트럭 餐車/美食車、소울푸드 療癒美食等） | Food (loanword from English 'food', used in food court, food truck, soul food, etc.) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
 | 5697 | 친구들 | chingudeul | 朋友們（朋友「친구」+ 複數後綴「들」，表示複數個朋友/大家） | Friends (plural of 친구 with plural marker 들) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
 | 5698 | 넋 | neoks | 魂、靈魂、心神、精神（雙收音 ㄳ 代表音 ㄱ，如 넋을 잃다 出神/失魂落魄、넋이 나가다 魂不守舍） | Soul, spirit, mind (e.g. 넋을 잃다 to lose one's senses, be entranced) | B | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
+| 5699 | 외곬 | oegols | 單一途徑、一條路、專一、死心眼（雙收音 ㄽ 代表音 ㄹ，如 외곬으로 專心致志地/一條路走到黑、외곬 인생 一心一意的人生） | Single path, one-track mind, single-minded devotion (e.g. 외곬으로 single-mindedly) | B | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |

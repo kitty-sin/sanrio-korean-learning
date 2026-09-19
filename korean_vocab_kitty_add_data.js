@@ -319,5 +319,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "B",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5699,
+    "k": "외곬",
+    "r": "oegols",
+    "c": "單一途徑、一條路、專一、死心眼（雙收音 ㄽ 代表音 ㄹ，如 외곬으로 專心致志地/一條路走到黑、외곬 인생 一心一意的人生）",
+    "e": "Single path, one-track mind, single-minded devotion (e.g. 외곬으로 single-mindedly)",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
