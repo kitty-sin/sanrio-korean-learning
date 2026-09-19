@@ -289,5 +289,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5696,
+    "k": "푸드",
+    "r": "pudeu",
+    "c": "食物、食品、Food（外來語借詞，常見於 푸드 코트 美食廣場、푸드 트럭 餐車/美食車、소울푸드 療癒美食等）",
+    "e": "Food (loanword from English 'food', used in food court, food truck, soul food, etc.)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];

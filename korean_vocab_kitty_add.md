@@ -33,3 +33,4 @@
 | 5693 | 을/를 | eul/reul | 【受格助詞 / 賓格助詞（목적격 조사）】標記句子受詞（做什麼/動作對象）。名詞「有收音」接 을（如 밥을、책을），「無收音」接 를（如 커피를、영화를）。 | Object marker particle (목적격 조사). Attached to nouns to indicate the direct object. '을' after consonants (batchim), '를' after vowels. | A | 補助詞 (Auxiliary Particle / 보조사) 或其他接尾助詞。 |
 | 5694 | 패스트푸드 | paeseuteupudeu | 速食、快餐、Fast Food（如漢堡、炸雞、薯條等快餐食品，外來語） | Fast food (burgers, fried chicken, french fries, etc.) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
 | 5695 | 패스트 | paeseuteu | 快速、Fast（外來語借詞，常見於 패스트 패션 快時尚、패스트 트랙 快速通道） | Fast (loanword from English 'fast', used in fast fashion, fast track, etc.) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
+| 5696 | 푸드 | pudeu | 食物、食品、Food（外來語借詞，常見於 푸드 코트 美食廣場、푸드 트럭 餐車/美食車、소울푸드 療癒美食等） | Food (loanword from English 'food', used in food court, food truck, soul food, etc.) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
