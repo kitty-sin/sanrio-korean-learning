@@ -620,15 +620,28 @@
   - **🔄 首頁頂部導航站按鈕順序優化**：
     - 依使用者指示，將 `[📖 發音教學PDF(20頁)]` 與 `[📑 語序敬語時態PDF]` 調整至 `[🔍 查看海報]` 與 `[📚 韓語核心大詞庫]` 之間。
     - `sw.js` 升級至 `v1.0.31`，同步鏡像至 `www/`，推播至 GitHub Pages。
+- **2026-09-19 00:23 PT**：
+  - **🚂 KITTY 韓語造句積木列車 (Korean Sentence Train Builder) 正式上線**：
+    - **RDQ 規格探索與定案**：
+      - 依據 RDQ 需求探索與使用者手繪火車圖素，拍板頁面標題為 **「🚂 KITTY 韓語造句積木列車 (KITTY Sentence Train)」**（副標題：「嘟嘟～主受動積木掛上去，4大時態敬語秒發車！✨」）。
+      - 產出正式規格卡 `rdq/RDQ-spec-sentence-train-builder-20260919.md`。
+    - **全新獨立應用 SPA (`sanrio_korean_sentences.html`)**：
+      - **視覺風格**：暖杏木質手繪車廂 ✕ 小雞車長 🐥 駕駛艙 ✕ 蒸氣煙圈音符動態。
+      - **SOV 語序車卡互動**：車卡 1 (主語)、車卡 2 (受語)、車卡 3 (動詞/形容詞) 支援中/韓鍵盤自由輸入與快捷單字卡點選。
+      - **語法變形引擎 (`korean_sentence_data.js`)**：全自動生成詞典原形、現在式（一般現在式 ✕ 現在進行式 `-고 있어요`）、過去式（`-았/었어요`）、未來式（`-(으)ㄹ 거예요`）、最高敬語（`-습니다/ㅂ니다`）、日常敬語（`-해요體`）、平語（`반말`）、否定句（`안 ~`）與疑問句（`~?`）。
+      - **語音與發音標記**：內建 0.3x (極慢口型) / 0.7x (慢速跟讀) / 1.0x (正常原速) 3 段速 Web Speech 真人語音、連音化讀音標記與一鍵複製。
+      - **隨堂測驗與路線**：6 條人氣列車路線一鍵發車 ＋ 5 題星級闖關測驗。
+    - **全生態圈聯網**：
+      - `index.html`、`korean_vocab_dictionary.html`、`korean_hanja_dictionary.html`、`sanrio_korean_honorifics.html`、`sanrio_korean_tenses.html`、`sanrio_korean_particles.html`、`sanrio_korean_songs.html`、`sanrio_korean_food_100.html` 頂部導航站全量互聯。
+      - `sw.js` 升級至 `v1.0.32`，同步離線快取與 `www/` 鏡像目錄。
+    - **線上直連**：[`https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_sentences.html`](https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_sentences.html)
 - **➡️ 下一步**：
-  1. 依學習需求持續收錄更多熱門韓語歌曲（如人氣 K-POP、經典韓劇 OST、童謠等）。
-  2. 持續豐富漢字詞庫之生活例句與成語聯想。
-  3. 待使用者有空時，依其自訂的拼音規則批次修改 `hangul_sanrio_deck.html` 中的諧音標籤，並重新匯出覆蓋 `hangul_sanrio_deck_20p.pdf`。
+  1. 依學習需求持續擴充更多韓語生活動詞與形容詞的特殊慣用語。
+  2. 依使用者自訂的拼音規則更新 `hangul_sanrio_deck_20p.pdf`。
 
 ---
 
 ## 🕐 最後更新資訊
-- **更新時間**：2026-09-18 23:19 PT
+- **更新時間**：2026-09-19 00:23 PT
 - **更新者**：Antigravity Assistant @ PC (DESKTOP-QROANQ2)
 - **Git Push 狀態**：✅ 已部署推播至 GitHub Pages (main 分支)
-

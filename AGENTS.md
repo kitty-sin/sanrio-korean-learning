@@ -28,7 +28,8 @@ Korean-Learning/
 │   ├── RDQ-spec-hanja-theme-redesign-20260911.md # RDQ 規格卡 (漢字大辭典暖杏視覺改版)
 │   ├── RDQ-spec-korean-songs-page-20260916.md    # RDQ 規格卡 (韓語名曲歌詞練唱樂園)
 │   ├── RDQ-spec-top-banner-copy-20260916.md      # RDQ 規格卡 (頂部導航站橫幅文案優化)
-│   └── RDQ-spec-hangul-master-tab-20260918.md    # RDQ 規格卡 (首頁 40音發音積木 大分頁與子分頁階層整合)
+│   ├── RDQ-spec-hangul-master-tab-20260918.md    # RDQ 規格卡 (首頁 40音發音積木 大分頁與子分頁階層整合)
+│   └── RDQ-spec-sentence-train-builder-20260919.md # RDQ 規格卡 (韓語造句發音積木列車與語法變形引擎)
 ├── scripts/
 │   ├── manage_vocab.py          # 韓語核心詞庫自動化管理 CLI (查重+拼音+5檔同步+Git部署)
 │   ├── build_hanja_dataset.py   # 韓語漢字大辭典資料集建置管線
@@ -42,10 +43,12 @@ Korean-Learning/
 ├── index.html                   # 主應用 SPA (React 18 + Tailwind + Firebase + Web Speech)
 ├── korean_vocab_dictionary.html # 韓語核心詞庫大字典 (TOPIK 全量速查 + 萌趣單字卡 + 結構拆解)
 ├── korean_hanja_dictionary.html # 韓語漢字音變大辭典 (Glossika 6,277 漢字詞 + 1,037 全量音節矩陣 + 外來語 + 暖杏風)
+├── sanrio_korean_sentences.html # 韓語造句發音積木列車 (SOV 語序 • 4大時態 ✕ 3大敬語全自動發車 • 暖木手繪小雞火車)
 ├── sanrio_korean_songs.html     # 韓語名曲歌詞練唱樂園 (李碩珉 DK《Stay With Me》+ 北極光淺色系 + 一句一框框)
 ├── sanrio_korean_honorifics.html # 韓語兩大敬語發音積木樂園 (最高敬語 습니다 ✕ 日常敬語 해요 + 5大分頁 + 闖關測驗)
 ├── sanrio_korean_tenses.html    # 韓語四大時態發音積木樂園 (雙子星時光機 • 原形/現在/過去/未來 + 5大分頁 + 闖關測驗)
 ├── sanrio_korean_particles.html  # 韓語兩大核心助詞發音積木樂園 (主格 이/가 ✕ 受格 을/를 + 5大分頁 + 闖關測驗)
+├── korean_sentence_data.js      # 韓語造句火車核心語料庫與語幹變形引擎
 ├── korean_songs_data.js         # 韓語歌曲結構化常數數據集
 ├── korean_songs_data.md         # 韓語歌曲 Markdown 對照清單
 ├── korean_hanja_data.js         # 6,520 筆漢字詞與 1,040 音節常數數據集
@@ -65,7 +68,7 @@ Korean-Learning/
 ├── sanrio_korean_food_100.md    # 100 種常見食物 Markdown 清單
 ├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
 ├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
-├── sw.js                        # Service Worker 離線快取核心 (v1.0.31)
+├── sw.js                        # Service Worker 離線快取核心 (v1.0.32)
 ├── package.json                 # 專案套件管理與 Capacitor 依賴
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔
@@ -84,10 +87,11 @@ Korean-Learning/
 - [x] **Kitty 60 核心生活動詞與 4 大實用時態** (6 大主題、15 組反義詞對、原形/現在/過去/敬語/想做切換、3段速發音、拆解與跟讀)
 - [x] **6 大核心音變透視鏡** (連音化、鼻音化、流音化、激音化、硬音化、口蓋音化，含黃金公式與書寫/發音對照)
 - [x] **Firebase 雲端自學單字庫** (Firestore 即時同步、0.3x 極慢速高亮發音、字母拆解、AI 跟讀評分)
-- [x] **隨堂星級自我挑戰測驗** (7 大題隨堂評量與分數結算)
+- [x] **随堂星級自我挑戰測驗** (7 大題隨堂評量與分數結算)
 - [x] **100 種常見食物學習手札與 20 頁大字 PDF 講義**
 - [x] **韓語核心詞庫大字典** (korean_vocab_dictionary.html，含 TOPIK 全量即時檢索、12大詞性篩選、3D 單字卡翻卡記憶測驗、Unicode 音節結構即時拆解、❤️ 生詞本與 3 段速語音)
 - [x] **韓語漢字音變大辭典** (korean_hanja_dictionary.html，收錄 Glossika 6,277 漢字詞、1,040 組全量音節矩陣與 242 外來語，支援以字查音/以音查字、單字卡、3段速語音、字母結構拆解、🧸 泰迪熊代表圖標與柔和奶茶暖杏風視覺設計)
+- [x] **🚂 KITTY 韓語造句積木列車** (`sanrio_korean_sentences.html`，暖杏原木手繪列車風 ✕ 小雞司機 🐥，車卡 1 主語、車卡 2 受語、車卡 3 動詞自由輸入與快捷詞卡點選，全自動生成詞典原形、現在式一般/進行、過去式、未來式、否定疑問句、0.3x/0.7x/1.0x 三段速語音與隨堂星級闖關測驗)
 - [x] **🎵 韓語名曲歌詞練唱樂園** (sanrio_korean_songs.html，李碩珉 DK《Stay With Me》+ 北極光淺色典雅系 + 一句一框框)
 - [x] **👑 韓語兩大敬語發音積木樂園** (`sanrio_korean_honorifics.html`，最高敬語 `습니다` ✕ 日常敬語 `해요` + 5大分頁 + 母音四大家族拼盤含 `ㅐ, ㅖ, ㅢ` 歸屬 + 名詞四大接法 + 職場/咖啡廳 PK 模擬器 + 隨堂星級闖關測驗 + 3段速發音)
 - [x] **⏳ 韓語四大時態發音積木樂園** (`sanrio_korean_tenses.html`，雙子星時光機 • 原形 ➔ 現在式 ➔ 過去式 ➔ 未來式 + 5大分頁 + 動詞/形容詞/名詞四大時態矩陣 + 隨堂星級闖關測驗 + 3段速發音)
