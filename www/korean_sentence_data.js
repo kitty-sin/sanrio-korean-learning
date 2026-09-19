@@ -122,9 +122,153 @@ const SENTENCE_SUBJECTS = [
 ];
 
 // ==========================================
-// 2. 預設常用受語庫 (Preset Objects)
+// 2. 預設常用地點/場所庫 (Preset Places - 車卡 2)
+// ==========================================
+const SENTENCE_PLACES = [
+    {
+        id: "plc_1",
+        zh: "太空館",
+        kr: "우주관",
+        batchim: true,
+        particle: "에서",
+        emoji: "🪐",
+        desc: "太空科技館 / 天文展館"
+    },
+    {
+        id: "plc_2",
+        zh: "家裡",
+        kr: "집",
+        batchim: true,
+        particle: "에서",
+        emoji: "🏠",
+        desc: "家場所"
+    },
+    {
+        id: "plc_3",
+        zh: "客廳",
+        kr: "거실",
+        batchim: true,
+        particle: "에서",
+        emoji: "🛋️",
+        desc: "客廳"
+    },
+    {
+        id: "plc_4",
+        zh: "學校",
+        kr: "학교",
+        batchim: false,
+        particle: "에서",
+        emoji: "🏫",
+        desc: "學校"
+    },
+    {
+        id: "plc_5",
+        zh: "咖啡廳",
+        kr: "카페",
+        batchim: false,
+        particle: "에서",
+        emoji: "☕",
+        desc: "咖啡店"
+    },
+    {
+        id: "plc_6",
+        zh: "圖書館",
+        kr: "도서관",
+        batchim: true,
+        particle: "에서",
+        emoji: "📚",
+        desc: "圖書館"
+    },
+    {
+        id: "plc_7",
+        zh: "電影院",
+        kr: "영화관",
+        batchim: true,
+        particle: "에서",
+        emoji: "🎬",
+        desc: "電影院"
+    },
+    {
+        id: "plc_8",
+        zh: "公園",
+        kr: "공원",
+        batchim: true,
+        particle: "에서",
+        emoji: "🌳",
+        desc: "公園"
+    },
+    {
+        id: "plc_9",
+        zh: "房間",
+        kr: "방",
+        batchim: true,
+        particle: "에서",
+        emoji: "🛏️",
+        desc: "房間"
+    },
+    {
+        id: "plc_10",
+        zh: "餐廳",
+        kr: "식당",
+        batchim: true,
+        particle: "에서",
+        emoji: "🍽️",
+        desc: "餐廳"
+    },
+    {
+        id: "plc_11",
+        zh: "首爾",
+        kr: "서울",
+        batchim: true,
+        particle: "에서",
+        emoji: "🏙️",
+        desc: "城市地點"
+    },
+    {
+        id: "plc_none",
+        zh: "（無特定地點 / 留空）",
+        kr: "",
+        batchim: false,
+        particle: "",
+        emoji: "✨",
+        desc: "不指定地點"
+    }
+];
+
+// ==========================================
+// 3. 預設常用受語庫 (Preset Objects - 車卡 3)
 // ==========================================
 const SENTENCE_OBJECTS = [
+    {
+        id: "obj_moon",
+        zh: "月亮",
+        kr: "달",
+        category: "nature",
+        batchim: true,
+        particle: "을",
+        emoji: "🌙",
+        desc: "有收音 (ㄹ)"
+    },
+    {
+        id: "obj_star",
+        zh: "星星",
+        kr: "별",
+        category: "nature",
+        batchim: true,
+        particle: "을",
+        emoji: "⭐",
+        desc: "有收音 (ㄹ)"
+    },
+    {
+        id: "obj_sun",
+        zh: "太陽",
+        kr: "태양",
+        category: "nature",
+        batchim: true,
+        particle: "을",
+        emoji: "☀️",
+        desc: "有收音 (ㅇ)"
+    },
     {
         id: "obj_1",
         zh: "咖啡",
@@ -224,28 +368,6 @@ const SENTENCE_OBJECTS = [
         particle: "을",
         emoji: "👗",
         desc: "有收音 (ㅅ)"
-    },
-    {
-        id: "obj_11",
-        zh: "學校 (地點)",
-        kr: "학교",
-        category: "place",
-        batchim: false,
-        particle: "에",
-        isPlace: true,
-        emoji: "🏫",
-        desc: "地點 (去向 에 / 在 에서)"
-    },
-    {
-        id: "obj_12",
-        zh: "咖啡廳 (地點)",
-        kr: "카페",
-        category: "place",
-        batchim: false,
-        particle: "에서",
-        isPlace: true,
-        emoji: "☕",
-        desc: "地點場所"
     },
     {
         id: "obj_none",
@@ -641,10 +763,35 @@ const HangulEngine = {
             '친구는': 'Chin-gu-neun', '친구가': 'Chin-gu-ga', '키티는': 'Ki-ti-neun', '키티가': 'Ki-ti-ga',
             '엄마는': 'Eom-ma-neun', '엄마가': 'Eom-ma-ga', '선생님은': 'Seon-saeng-nim-eun', '선생님이': 'Seon-saeng-nim-i',
             '동생은': 'Dong-saeng-eun', '동생이': 'Dong-saeng-i',
-            '커피를': 'keo-pi-reul', '밥을': 'ba-beul', '물을': 'mu-reul', '한국어를': 'han-gu-geo-reul',
-            '책을': 'chae-geul', '영화를': 'yeong-hwa-reul', '음악을': 'eu-ma-geul', '사과를': 'sa-gwa-reul',
-            '빵을': 'ppang-eul', '옷을': 'o-seul', '학교에': 'hak-gyo-e', '카페에서': 'ka-pe-e-seo',
-            '집에': 'ji-be', '회사에': 'hoe-sa-e', '서울에': 'seo-u-re',
+            // 地點/場所 (Places with 에서 / 에)
+            '우주관에서': 'u-ju-gwa-ne-seo', '우주관에': 'u-ju-gwa-ne', '우주관': 'u-ju-gwan',
+            '천문관에서': 'cheon-mun-gwa-ne-seo', '천문관에': 'cheon-mun-gwa-ne', '천문관': 'cheon-mun-gwan',
+            '집에서': 'ji-be-seo', '집에': 'ji-be', '집': 'jip',
+            '거실에서': 'geo-si-re-seo', '거실에': 'geo-si-re', '거실': 'geo-sil',
+            '학교에서': 'hak-gyo-e-seo', '학교에': 'hak-gyo-e', '학교': 'hak-gyo',
+            '카페에서': 'ka-pe-e-seo', '카페에': 'ka-pe-e', '카페': 'ka-pe',
+            '도서관에서': 'do-seo-gwa-ne-seo', '도서관에': 'do-seo-gwa-ne', '도서관': 'do-seo-gwan',
+            '영화관에서': 'yeong-hwa-gwa-ne-seo', '영화관에': 'yeong-hwa-gwa-ne', '영화관': 'yeong-hwa-gwan',
+            '공원에서': 'gong-wo-ne-seo', '공원에': 'gong-wo-ne', '공원': 'gong-won',
+            '방에서': 'bang-e-seo', '방에': 'bang-e', '방': 'bang',
+            '식당에서': 'sik-dang-e-seo', '식당에': 'sik-dang-e', '식당': 'sik-dang',
+            '서울에서': 'seo-u-re-seo', '서울에': 'seo-u-re', '서울': 'seo-ul',
+            '회사에서': 'hoe-sa-e-seo', '회사에': 'hoe-sa-e', '회사': 'hoe-sa',
+            // 受詞 (Objects with 을 / 를)
+            '달을': 'da-reul', '달': 'dal',
+            '별을': 'byeo-reul', '별': 'byeol',
+            '태양을': 'tae-yang-eul', '태양': 'tae-yang',
+            '커피를': 'keo-pi-reul', '커피': 'keo-pi',
+            '밥을': 'ba-beul', '밥': 'bap',
+            '물을': 'mu-reul', '물': 'mul',
+            '한국어를': 'han-gu-geo-reul', '한국어': 'han-gu-geo',
+            '책을': 'chae-geul', '책': 'chaek',
+            '영화를': 'yeong-hwa-reul', '영화': 'yeong-hwa',
+            '음악을': 'eu-ma-geul', '음악': 'eu-mak',
+            '사과를': 'sa-gwa-reul', '사과': 'sa-gwa',
+            '빵을': 'ppang-eul', '빵': 'ppang',
+            '옷을': 'o-seul', '옷': 'ot',
+            '핸드폰을': 'haen-deu-po-neul', '핸드폰': 'haen-deu-pon',
             // 現在式
             '마십니다': 'ma-sim-ni-da', '마셔요': 'ma-syeo-yo', '마셔': 'ma-syeo',
             '먹습니다': 'meok-seum-ni-da', '먹어요': 'meo-geo-yo', '먹어': 'meo-geo',
@@ -715,21 +862,25 @@ const HangulEngine = {
         const cleanZh = zhText.trim();
         if (!cleanZh) return null;
 
-        // 1. 優先從三大專屬語料庫搜尋
+        // 1. 優先從四大專屬語料庫搜尋
         if (type === "subject" || type === "auto") {
             const sub = SENTENCE_SUBJECTS.find(s => cleanZh.includes(s.zh) || s.zh.includes(cleanZh));
             if (sub) return { kr: sub.kr, zh: sub.zh, type: "subject" };
         }
+        if (type === "place" || type === "auto") {
+            const plc = SENTENCE_PLACES.find(p => cleanZh.includes(p.zh) || p.zh.includes(cleanZh));
+            if (plc) return { kr: plc.kr, zh: plc.zh, type: "place", particleType: "place" };
+        }
         if (type === "object" || type === "auto") {
             const obj = SENTENCE_OBJECTS.find(o => cleanZh.includes(o.zh) || o.zh.includes(cleanZh));
-            if (obj) return { kr: obj.kr, zh: obj.zh, type: "object", isPlace: obj.isPlace || false, particleType: obj.isPlace ? "place" : (obj.category === 'none' ? 'none' : 'object') };
+            if (obj) return { kr: obj.kr, zh: obj.zh, type: "object", particleType: obj.category === 'none' ? 'none' : 'object' };
         }
         if (type === "verb" || type === "auto") {
             const vrb = SENTENCE_VERBS.find(v => cleanZh.includes(v.zh) || v.zh.includes(cleanZh));
             if (vrb) return { kr: vrb.kr, zh: vrb.zh, type: "verb", stem: vrb.stem };
         }
 
-        // 2. 擴充通用常用中韓對照表
+        // 2. 擴充通用常用繁簡中韓對照表
         const zhMap = {
             // 主語 (Subjects)
             '我': { kr: '나', zh: '我', type: 'subject' },
@@ -737,104 +888,197 @@ const HangulEngine = {
             '您': { kr: '당신', zh: '您', type: 'subject' },
             '朋友': { kr: '친구', zh: '朋友', type: 'subject' },
             '老師': { kr: '선생님', zh: '老師', type: 'subject' },
+            '老师': { kr: '선생님', zh: '老師', type: 'subject' },
             '先生': { kr: '선생님', zh: '老師', type: 'subject' },
             '媽媽': { kr: '엄마', zh: '媽媽', type: 'subject' },
+            '妈妈': { kr: '엄마', zh: '媽媽', type: 'subject' },
             '媽': { kr: '엄마', zh: '媽媽', type: 'subject' },
+            '妈': { kr: '엄마', zh: '媽媽', type: 'subject' },
             '爸爸': { kr: '아빠', zh: '爸爸', type: 'subject' },
             '爸': { kr: '아빠', zh: '爸爸', type: 'subject' },
-            '弟弟': { kr: '동생', zh: '弟弟/妹妹', type: 'subject' },
-            '妹妹': { kr: '동생', zh: '弟弟/妹妹', type: 'subject' },
+            '弟弟': { kr: '동생', zh: '弟弟', type: 'subject' },
+            '弟': { kr: '동생', zh: '弟弟', type: 'subject' },
+            '男弟弟': { kr: '남동생', zh: '弟弟', type: 'subject' },
+            '妹妹': { kr: '동생', zh: '妹妹', type: 'subject' },
+            '妹': { kr: '동생', zh: '妹妹', type: 'subject' },
+            '女妹妹': { kr: '여동생', zh: '妹妹', type: 'subject' },
             '弟妹': { kr: '동생', zh: '弟弟/妹妹', type: 'subject' },
             '哥哥': { kr: '오빠', zh: '哥哥', type: 'subject' },
+            '哥': { kr: '오빠', zh: '哥哥', type: 'subject' },
             '姐姐': { kr: '언니', zh: '姐姐', type: 'subject' },
+            '姐': { kr: '언니', zh: '姐姐', type: 'subject' },
             '學生': { kr: '학생', zh: '學生', type: 'subject' },
+            '学生': { kr: '학생', zh: '學生', type: 'subject' },
             '大家': { kr: '여러분', zh: '大家', type: 'subject' },
             'kitty': { kr: '키티', zh: 'Kitty', type: 'subject' },
             '吉蒂': { kr: '키티', zh: 'Kitty', type: 'subject' },
             '凱蒂': { kr: '키티', zh: 'Kitty', type: 'subject' },
 
-            // 受語 / 地點 (Objects & Places)
-            '客廳': { kr: '거실', zh: '客廳', type: 'object', isPlace: true, particleType: 'place' },
-            '在家裡客廳': { kr: '거실', zh: '在家裡客廳', type: 'object', isPlace: true, particleType: 'place' },
-            '家裡的客廳': { kr: '거실', zh: '家裡的客廳', type: 'object', isPlace: true, particleType: 'place' },
-            '家': { kr: '집', zh: '家', type: 'object', isPlace: true, particleType: 'place' },
-            '家裡': { kr: '집', zh: '家裡', type: 'object', isPlace: true, particleType: 'place' },
-            '在家': { kr: '집', zh: '在家', type: 'object', isPlace: true, particleType: 'place' },
-            '在家裡': { kr: '집', zh: '在家裡', type: 'object', isPlace: true, particleType: 'place' },
-            '學校': { kr: '학교', zh: '學校', type: 'object', isPlace: true, particleType: 'place' },
-            '咖啡廳': { kr: '카페', zh: '咖啡廳', type: 'object', isPlace: true, particleType: 'place' },
-            '咖啡館': { kr: '카페', zh: '咖啡館', type: 'object', isPlace: true, particleType: 'place' },
-            '咖啡店': { kr: '카페', zh: '咖啡店', type: 'object', isPlace: true, particleType: 'place' },
-            '公司': { kr: '회사', zh: '公司', type: 'object', isPlace: true, particleType: 'place' },
-            '圖書館': { kr: '도서관', zh: '圖書館', type: 'object', isPlace: true, particleType: 'place' },
-            '餐廳': { kr: '식당', zh: '餐廳', type: 'object', isPlace: true, particleType: 'place' },
-            '房間': { kr: '방', zh: '房間', type: 'object', isPlace: true, particleType: 'place' },
-            '首爾': { kr: '서울', zh: '首爾', type: 'object', isPlace: true, particleType: 'place' },
-            '韓國': { kr: '한국', zh: '韓國', type: 'object', isPlace: true, particleType: 'place' },
+            // 地點/場所 (Places - 支援繁簡)
+            '太空館': { kr: '우주관', zh: '太空館', type: 'place', particleType: 'place' },
+            '太空馆': { kr: '우주관', zh: '太空館', type: 'place', particleType: 'place' },
+            '太空': { kr: '우주', zh: '太空', type: 'place', particleType: 'place' },
+            '天文館': { kr: '천문관', zh: '天文館', type: 'place', particleType: 'place' },
+            '天文馆': { kr: '천문관', zh: '天文館', type: 'place', particleType: 'place' },
+            '科學館': { kr: '과학관', zh: '科學館', type: 'place', particleType: 'place' },
+            '科学馆': { kr: '과학관', zh: '科學館', type: 'place', particleType: 'place' },
+            '博物館': { kr: '박물관', zh: '博物館', type: 'place', particleType: 'place' },
+            '博物馆': { kr: '박물관', zh: '博物館', type: 'place', particleType: 'place' },
+            '客廳': { kr: '거실', zh: '客廳', type: 'place', particleType: 'place' },
+            '客厅': { kr: '거실', zh: '客廳', type: 'place', particleType: 'place' },
+            '在家裡客廳': { kr: '거실', zh: '客廳', type: 'place', particleType: 'place' },
+            '家裡的客廳': { kr: '거실', zh: '客廳', type: 'place', particleType: 'place' },
+            '家': { kr: '집', zh: '家', type: 'place', particleType: 'place' },
+            '家裡': { kr: '집', zh: '家裡', type: 'place', particleType: 'place' },
+            '家里': { kr: '집', zh: '家裡', type: 'place', particleType: 'place' },
+            '在家': { kr: '집', zh: '在家', type: 'place', particleType: 'place' },
+            '在家裡': { kr: '집', zh: '在家裡', type: 'place', particleType: 'place' },
+            '學校': { kr: '학교', zh: '學校', type: 'place', particleType: 'place' },
+            '学校': { kr: '학교', zh: '學校', type: 'place', particleType: 'place' },
+            '咖啡廳': { kr: '카페', zh: '咖啡廳', type: 'place', particleType: 'place' },
+            '咖啡馆': { kr: '카페', zh: '咖啡館', type: 'place', particleType: 'place' },
+            '咖啡店': { kr: '카페', zh: '咖啡店', type: 'place', particleType: 'place' },
+            '公司': { kr: '회사', zh: '公司', type: 'place', particleType: 'place' },
+            '圖書館': { kr: '도서관', zh: '圖書館', type: 'place', particleType: 'place' },
+            '图书馆': { kr: '도서관', zh: '圖書館', type: 'place', particleType: 'place' },
+            '電影院': { kr: '영화관', zh: '電影院', type: 'place', particleType: 'place' },
+            '电影院': { kr: '영화관', zh: '電影院', type: 'place', particleType: 'place' },
+            '公園': { kr: '공원', zh: '公園', type: 'place', particleType: 'place' },
+            '公园': { kr: '공원', zh: '公園', type: 'place', particleType: 'place' },
+            '餐廳': { kr: '식당', zh: '餐廳', type: 'place', particleType: 'place' },
+            '餐厅': { kr: '식당', zh: '餐廳', type: 'place', particleType: 'place' },
+            '房間': { kr: '방', zh: '房間', type: 'place', particleType: 'place' },
+            '房间': { kr: '방', zh: '房間', type: 'place', particleType: 'place' },
+            '首爾': { kr: '서울', zh: '首爾', type: 'place', particleType: 'place' },
+            '首尔': { kr: '서울', zh: '首爾', type: 'place', particleType: 'place' },
+            '韓國': { kr: '한국', zh: '韓國', type: 'place', particleType: 'place' },
+            '韩国': { kr: '한국', zh: '韓國', type: 'place', particleType: 'place' },
 
-            '咖啡': { kr: '커피', zh: '咖啡', type: 'object', isPlace: false, particleType: 'object' },
-            '飯': { kr: '밥', zh: '飯', type: 'object', isPlace: false, particleType: 'object' },
-            '白飯': { kr: '밥', zh: '白飯', type: 'object', isPlace: false, particleType: 'object' },
-            '餐點': { kr: '밥', zh: '餐點', type: 'object', isPlace: false, particleType: 'object' },
-            '韓語': { kr: '한국어', zh: '韓語', type: 'object', isPlace: false, particleType: 'object' },
-            '韓文': { kr: '한국어', zh: '韓文', type: 'object', isPlace: false, particleType: 'object' },
-            '水': { kr: '물', zh: '水', type: 'object', isPlace: false, particleType: 'object' },
-            '書': { kr: '책', zh: '書', type: 'object', isPlace: false, particleType: 'object' },
-            '書本': { kr: '책', zh: '書本', type: 'object', isPlace: false, particleType: 'object' },
-            '電影': { kr: '영화', zh: '電影', type: 'object', isPlace: false, particleType: 'object' },
-            '音樂': { kr: '음악', zh: '音樂', type: 'object', isPlace: false, particleType: 'object' },
-            '蘋果': { kr: '사과', zh: '蘋果', type: 'object', isPlace: false, particleType: 'object' },
-            '麵包': { kr: '빵', zh: '麵包', type: 'object', isPlace: false, particleType: 'object' },
-            '衣服': { kr: '옷', zh: '衣服', type: 'object', isPlace: false, particleType: 'object' },
-            '手機': { kr: '핸드폰', zh: '手機', type: 'object', isPlace: false, particleType: 'object' },
-            '電話': { kr: '전화', zh: '電話', type: 'object', isPlace: false, particleType: 'object' },
-            '照片': { kr: '사진', zh: '照片', type: 'object', isPlace: false, particleType: 'object' },
-            '信': { kr: '편지', zh: '信', type: 'object', isPlace: false, particleType: 'object' },
-            '禮物': { kr: '선물', zh: '禮物', type: 'object', isPlace: false, particleType: 'object' },
-            '錢': { kr: '돈', zh: '錢', type: 'object', isPlace: false, particleType: 'object' },
+            // 受語 (Objects - 支援繁簡)
+            '月亮': { kr: '달', zh: '月亮', type: 'object' },
+            '月': { kr: '달', zh: '月亮', type: 'object' },
+            '月球': { kr: '달', zh: '月亮', type: 'object' },
+            '星星': { kr: '별', zh: '星星', type: 'object' },
+            '星': { kr: '별', zh: '星星', type: 'object' },
+            '太陽': { kr: '태양', zh: '太陽', type: 'object' },
+            '太阳': { kr: '태양', zh: '太陽', type: 'object' },
+            '日': { kr: '해', zh: '太陽', type: 'object' },
+            '咖啡': { kr: '커피', zh: '咖啡', type: 'object' },
+            '飯': { kr: '밥', zh: '飯', type: 'object' },
+            '饭': { kr: '밥', zh: '飯', type: 'object' },
+            '白飯': { kr: '밥', zh: '白飯', type: 'object' },
+            '白饭': { kr: '밥', zh: '白飯', type: 'object' },
+            '餐點': { kr: '밥', zh: '餐點', type: 'object' },
+            '餐点': { kr: '밥', zh: '餐點', type: 'object' },
+            '韓語': { kr: '한국어', zh: '韓語', type: 'object' },
+            '韩语': { kr: '한국어', zh: '韓語', type: 'object' },
+            '韓文': { kr: '한국어', zh: '韓文', type: 'object' },
+            '韩文': { kr: '한국어', zh: '韓文', type: 'object' },
+            '水': { kr: '물', zh: '水', type: 'object' },
+            '書': { kr: '책', zh: '書', type: 'object' },
+            '书': { kr: '책', zh: '書', type: 'object' },
+            '書本': { kr: '책', zh: '書本', type: 'object' },
+            '书本': { kr: '책', zh: '書本', type: 'object' },
+            '電影': { kr: '영화', zh: '電影', type: 'object' },
+            '电影': { kr: '영화', zh: '電影', type: 'object' },
+            '音樂': { kr: '음악', zh: '音樂', type: 'object' },
+            '音乐': { kr: '음악', zh: '音樂', type: 'object' },
+            '蘋果': { kr: '사과', zh: '蘋果', type: 'object' },
+            '苹果': { kr: '사과', zh: '蘋果', type: 'object' },
+            '麵包': { kr: '빵', zh: '麵包', type: 'object' },
+            '面包': { kr: '빵', zh: '麵包', type: 'object' },
+            '衣服': { kr: '옷', zh: '衣服', type: 'object' },
+            '手機': { kr: '핸드폰', zh: '手機', type: 'object' },
+            '手机': { kr: '핸드폰', zh: '手機', type: 'object' },
+            '電話': { kr: '전화', zh: '電話', type: 'object' },
+            '电话': { kr: '전화', zh: '電話', type: 'object' },
+            '照片': { kr: '사진', zh: '照片', type: 'object' },
+            '信': { kr: '편지', zh: '信', type: 'object' },
+            '禮物': { kr: '선물', zh: '禮物', type: 'object' },
+            '礼物': { kr: '선물', zh: '禮物', type: 'object' },
+            '錢': { kr: '돈', zh: '錢', type: 'object' },
+            '钱': { kr: '돈', zh: '錢', type: 'object' },
 
-            // 動詞 (Verbs)
-            '學習韓語': { kr: '공부하다', zh: '學習', type: 'verb', stem: '공부하' },
-            '學習': { kr: '공부하다', zh: '學習', type: 'verb', stem: '공부하' },
-            '學': { kr: '배우다', zh: '學習/學', type: 'verb', stem: '배우' },
+            // 動詞 (Verbs - 含複合輸入拆解)
+            '看月亮': { kr: '보다', zh: '看', type: 'verb', stem: '보', autoObject: { zh: '月亮', kr: '달' } },
+            '看月': { kr: '보다', zh: '看', type: 'verb', stem: '보', autoObject: { zh: '月亮', kr: '달' } },
+            '看星星': { kr: '보다', zh: '看', type: 'verb', stem: '보', autoObject: { zh: '星星', kr: '별' } },
+            '看電影': { kr: '보다', zh: '看', type: 'verb', stem: '보', autoObject: { zh: '電影', kr: '영화' } },
+            '看电影': { kr: '보다', zh: '看', type: 'verb', stem: '보', autoObject: { zh: '電影', kr: '영화' } },
+            '喝咖啡': { kr: '마시다', zh: '喝', type: 'verb', stem: '마시', autoObject: { zh: '咖啡', kr: '커피' } },
+            '喝水': { kr: '마시다', zh: '喝', type: 'verb', stem: '마시', autoObject: { zh: '水', kr: '물' } },
+            '吃飯': { kr: '먹다', zh: '吃', type: 'verb', stem: '먹', autoObject: { zh: '白飯', kr: '밥' } },
+            '吃饭': { kr: '먹다', zh: '吃', type: 'verb', stem: '먹', autoObject: { zh: '白飯', kr: '밥' } },
+            '吃蘋果': { kr: '먹다', zh: '吃', type: 'verb', stem: '먹', autoObject: { zh: '蘋果', kr: '사과' } },
+            '吃苹果': { kr: '먹다', zh: '吃', type: 'verb', stem: '먹', autoObject: { zh: '蘋果', kr: '사과' } },
+            '學習韓語': { kr: '공부하다', zh: '學習', type: 'verb', stem: '공부하', autoObject: { zh: '韓語', kr: '한국어' } },
+            '学习韩语': { kr: '공부하다', zh: '學習', type: 'verb', stem: '공부하', autoObject: { zh: '韓語', kr: '한국어' } },
+            '學韓語': { kr: '공부하다', zh: '學習', type: 'verb', stem: '공부하', autoObject: { zh: '韓語', kr: '한국어' } },
+            '学韩语': { kr: '공부하다', zh: '學習', type: 'verb', stem: '공부하', autoObject: { zh: '韓語', kr: '한국어' } },
+            '聽音樂': { kr: '듣다', zh: '聽', type: 'verb', stem: '듣', irregular: 'd', autoObject: { zh: '音樂', kr: '음악' } },
+            '听音乐': { kr: '듣다', zh: '聽', type: 'verb', stem: '듣', irregular: 'd', autoObject: { zh: '音樂', kr: '음악' } },
             '讀書': { kr: '공부하다', zh: '讀書', type: 'verb', stem: '공부하' },
+            '读书': { kr: '공부하다', zh: '讀書', type: 'verb', stem: '공부하' },
             '念書': { kr: '공부하다', zh: '念書', type: 'verb', stem: '공부하' },
+            '念书': { kr: '공부하다', zh: '念書', type: 'verb', stem: '공부하' },
+            '學習': { kr: '공부하다', zh: '學習', type: 'verb', stem: '공부하' },
+            '学习': { kr: '공부하다', zh: '學習', type: 'verb', stem: '공부하' },
+            '學': { kr: '배우다', zh: '學習/學', type: 'verb', stem: '배우' },
+            '学': { kr: '배우다', zh: '學習/學', type: 'verb', stem: '배우' },
             '喝': { kr: '마시다', zh: '喝', type: 'verb', stem: '마시' },
             '飲': { kr: '마시다', zh: '喝', type: 'verb', stem: '마시' },
+            '饮': { kr: '마시다', zh: '喝', type: 'verb', stem: '마시' },
             '吃': { kr: '먹다', zh: '吃', type: 'verb', stem: '먹' },
             '食': { kr: '먹다', zh: '吃', type: 'verb', stem: '먹' },
             '看': { kr: '보다', zh: '看', type: 'verb', stem: '보' },
             '見': { kr: '보다', zh: '看', type: 'verb', stem: '보' },
+            '见': { kr: '보다', zh: '看', type: 'verb', stem: '보' },
             '觀看': { kr: '보다', zh: '觀看', type: 'verb', stem: '보' },
+            '观看': { kr: '보다', zh: '觀看', type: 'verb', stem: '보' },
             '聽': { kr: '듣다', zh: '聽', type: 'verb', stem: '듣', irregular: 'd' },
+            '听': { kr: '듣다', zh: '聽', type: 'verb', stem: '듣', irregular: 'd' },
             '讀': { kr: '읽다', zh: '讀', type: 'verb', stem: '읽' },
+            '读': { kr: '읽다', zh: '讀', type: 'verb', stem: '읽' },
             '閱讀': { kr: '읽다', zh: '閱讀', type: 'verb', stem: '읽' },
+            '阅读': { kr: '읽다', zh: '閱讀', type: 'verb', stem: '읽' },
             '買': { kr: '사다', zh: '買', type: 'verb', stem: '사' },
+            '买': { kr: '사다', zh: '買', type: 'verb', stem: '사' },
             '購買': { kr: '사다', zh: '購買', type: 'verb', stem: '사' },
+            '购买': { kr: '사다', zh: '購買', type: 'verb', stem: '사' },
             '睡': { kr: '자다', zh: '睡覺', type: 'verb', stem: '자' },
             '睡覺': { kr: '자다', zh: '睡覺', type: 'verb', stem: '자' },
+            '睡觉': { kr: '자다', zh: '睡覺', type: 'verb', stem: '자' },
             '去': { kr: '가다', zh: '去', type: 'verb', stem: '가' },
             '前往': { kr: '가다', zh: '前往', type: 'verb', stem: '가' },
             '來': { kr: '오다', zh: '來', type: 'verb', stem: '오' },
+            '来': { kr: '오다', zh: '來', type: 'verb', stem: '오' },
             '見面': { kr: '만나다', zh: '見面', type: 'verb', stem: '만나' },
+            '见面': { kr: '만나다', zh: '見面', type: 'verb', stem: '만나' },
             '做': { kr: '만들다', zh: '製作', type: 'verb', stem: '만들' },
             '製作': { kr: '만들다', zh: '製作', type: 'verb', stem: '만들' },
+            '制作': { kr: '만들다', zh: '製作', type: 'verb', stem: '만들' },
             '休息': { kr: '쉬다', zh: '休息', type: 'verb', stem: '쉬' },
             '運動': { kr: '운동하다', zh: '運動', type: 'verb', stem: '운동하' },
+            '运动': { kr: '운동하다', zh: '運動', type: 'verb', stem: '운동하' },
             '工作': { kr: '일하다', zh: '工作', type: 'verb', stem: '일하' },
             '上班': { kr: '일하다', zh: '上班', type: 'verb', stem: '일하' },
             '聊天': { kr: '이야기하다', zh: '聊天', type: 'verb', stem: '이야기하' },
             '唱歌': { kr: '노래하다', zh: '唱歌', type: 'verb', stem: '노래하' },
             '料理': { kr: '요리하다', zh: '料理', type: 'verb', stem: '요리하' },
             '煮飯': { kr: '요리하다', zh: '煮飯', type: 'verb', stem: '요리하' },
+            '煮饭': { kr: '요리하다', zh: '煮飯', type: 'verb', stem: '요리하' },
             '教': { kr: '가르치다', zh: '教', type: 'verb', stem: '가르치' },
             '寫': { kr: '쓰다', zh: '寫', type: 'verb', stem: '쓰' },
+            '写': { kr: '쓰다', zh: '寫', type: 'verb', stem: '쓰' },
             '穿': { kr: '입다', zh: '穿', type: 'verb', stem: '입' },
             '等': { kr: '기다리다', zh: '等', type: 'verb', stem: '기다리' },
             '等待': { kr: '기다리다', zh: '等待', type: 'verb', stem: '기다리' },
             '打電話': { kr: '전화하다', zh: '打電話', type: 'verb', stem: '전화하' },
+            '打电话': { kr: '전화하다', zh: '打電話', type: 'verb', stem: '전화하' },
             '喜歡': { kr: '좋아하다', zh: '喜歡', type: 'verb', stem: '좋아하' },
+            '喜欢': { kr: '좋아하다', zh: '喜歡', type: 'verb', stem: '좋아하' },
             '愛': { kr: '사랑하다', zh: '愛', type: 'verb', stem: '사랑하' },
+            '爱': { kr: '사랑하다', zh: '愛', type: 'verb', stem: '사랑하' },
             '漂亮': { kr: '예쁘다', zh: '漂亮', type: 'verb', stem: '예쁘' },
             '好': { kr: '좋다', zh: '好', type: 'verb', stem: '좋' },
             '好吃': { kr: '맛있다', zh: '好吃', type: 'verb', stem: '맛있' },
@@ -843,7 +1087,7 @@ const HangulEngine = {
 
         // 模糊比對 zhMap
         for (const [key, val] of Object.entries(zhMap)) {
-            if (cleanZh.includes(key) || key.includes(cleanZh)) {
+            if (cleanZh === key || cleanZh.includes(key) || key.includes(cleanZh)) {
                 return val;
             }
         }
@@ -871,68 +1115,85 @@ const HangulEngine = {
 };
 
 // ==========================================
-// 5. 6 條精選人氣列車路線預設 (Preset Sample Routes)
+// 5. 7 條精選人氣列車路線預設 (Preset Sample Routes - 4 節車卡架構)
 // ==========================================
 const PRESET_TRAIN_ROUTES = [
+    {
+        id: "route_space",
+        title: "🪐 弟弟太空館觀月號",
+        badge: "4卡示範 • S+P+O+V",
+        subjectId: "sub_5",  // 弟弟
+        placeId: "plc_1",    // 太空館
+        objectId: "obj_moon",// 月亮
+        verbId: "verb_3",    // 看
+        desc: "弟弟 ＋ 太空館(에서) ＋ 月亮(을) ＋ 看 ➔ 동생은 우주관에서 달을 봐요"
+    },
     {
         id: "route_1",
         title: "☕ 經典咖啡時光號",
         badge: "入門必學",
         subjectId: "sub_1", // 我
+        placeId: "plc_5",   // 咖啡廳
         objectId: "obj_1",  // 咖啡
         verbId: "verb_1",   // 喝
-        desc: "我 ＋ 咖啡 ＋ 喝 ➔ 저는 커피를 마셔요 (我喝咖啡)"
+        desc: "我 ＋ 咖啡廳(에서) ＋ 咖啡(를) ＋ 喝 ➔ 저는 카페에서 커피를 마셔요"
     },
     {
         id: "route_2",
         title: "🍱 媽媽美食補給號",
         badge: "日常飲食",
         subjectId: "sub_7", // 媽媽
+        placeId: "plc_2",   // 家裡
         objectId: "obj_2",  // 白飯
         verbId: "verb_2",   // 吃
-        desc: "媽媽 ＋ 白飯 ＋ 吃 ➔ 엄마가 밥을 먹어요"
+        desc: "媽媽 ＋ 家裡(에서) ＋ 白飯(을) ＋ 吃 ➔ 엄마가 집에서 밥을 먹어요"
     },
     {
         id: "route_3",
         title: "🇰🇷 熱血韓語學習號",
         badge: "動詞 하다",
         subjectId: "sub_1", // 我
+        placeId: "plc_6",   // 圖書館
         objectId: "obj_3",  // 韓語
         verbId: "verb_4",   // 學習
-        desc: "我 ＋ 韓語 ＋ 學習 ➔ 저는 한국어를 공부해요"
+        desc: "我 ＋ 圖書館(에서) ＋ 韓語(를) ＋ 學習 ➔ 저는 도서관에서 한국어를 공부해요"
     },
     {
         id: "route_4",
         title: "🎬 週末好友電影號",
         badge: "休閒約會",
         subjectId: "sub_3", // 朋友
+        placeId: "plc_7",   // 電影院
         objectId: "obj_6",  // 電影
         verbId: "verb_3",   // 看
-        desc: "朋友 ＋ 電影 ＋ 看 ➔ 친구가 영화를 봐요"
+        desc: "朋友 ＋ 電影院(에서) ＋ 電影(를) ＋ 看 ➔ 친구가 영화관에서 영화를 봐요"
     },
     {
         id: "route_5",
         title: "🎧 流行音樂沉浸號",
         badge: "ㄷ 不規則",
         subjectId: "sub_1", // 我
+        placeId: "plc_9",   // 房間
         objectId: "obj_7",  // 音樂
         verbId: "verb_5",   // 聽
-        desc: "我 ＋ 音樂 ＋ 聽 ➔ 저는 음악을 들어요"
+        desc: "我 ＋ 房間(에서) ＋ 音樂(을) ＋ 聽 ➔ 저는 방에서 음악을 들어요"
     },
     {
         id: "route_6",
         title: "✨ Kitty 睡覺放鬆號",
         badge: "自動詞模式",
-        subjectId: "sub_6", // Kitty
+        subjectId: "sub_6",   // Kitty
+        placeId: "plc_none",  // 無地點
         objectId: "obj_none", // 無受詞
-        verbId: "verb_8",   // 睡覺
-        desc: "Kitty ＋ (無受詞) ＋ 睡覺 ➔ 키티가 자요"
+        verbId: "verb_8",     // 睡覺
+        desc: "Kitty ＋ 睡覺 ➔ 키티가 자요"
     }
 ];
 
 // 匯出全域變數
 if (typeof window !== 'undefined') {
     window.SENTENCE_SUBJECTS = SENTENCE_SUBJECTS;
+    window.SENTENCE_PLACES = SENTENCE_PLACES;
     window.SENTENCE_OBJECTS = SENTENCE_OBJECTS;
     window.SENTENCE_VERBS = SENTENCE_VERBS;
     window.HangulEngine = HangulEngine;
@@ -940,6 +1201,7 @@ if (typeof window !== 'undefined') {
 }
 if (typeof global !== 'undefined') {
     global.SENTENCE_SUBJECTS = SENTENCE_SUBJECTS;
+    global.SENTENCE_PLACES = SENTENCE_PLACES;
     global.SENTENCE_OBJECTS = SENTENCE_OBJECTS;
     global.SENTENCE_VERBS = SENTENCE_VERBS;
     global.HangulEngine = HangulEngine;

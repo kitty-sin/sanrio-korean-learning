@@ -139,16 +139,20 @@
 
         function KoreanSentenceTrainApp() {
             // ================= 狀態管理 =================
-            const [subjectInput, setSubjectInput] = useState("나");
-            const [subjectZh, setSubjectZh] = useState("我");
+            const [subjectInput, setSubjectInput] = useState("동생");
+            const [subjectZh, setSubjectZh] = useState("弟弟");
             const [subjectParticleType, setSubjectParticleType] = useState("topic"); // 'topic' (은/는) or 'subject' (이/가)
             
-            const [objectInput, setObjectInput] = useState("커피");
-            const [objectZh, setObjectZh] = useState("咖啡");
-            const [objectParticleType, setObjectParticleType] = useState("object"); // 'object' (을/를) or 'place' (에/에서) or 'none'
+            const [placeInput, setPlaceInput] = useState("우주관");
+            const [placeZh, setPlaceZh] = useState("太空館");
+            const [placeParticleType, setPlaceParticleType] = useState("actionPlace"); // 'actionPlace' (에서) or 'destPlace' (에) or 'none'
 
-            const [verbInput, setVerbInput] = useState("마시다");
-            const [verbZh, setVerbZh] = useState("喝");
+            const [objectInput, setObjectInput] = useState("달");
+            const [objectZh, setObjectZh] = useState("月亮");
+            const [objectParticleType, setObjectParticleType] = useState("object"); // 'object' (을/를) or 'none'
+
+            const [verbInput, setVerbInput] = useState("보다");
+            const [verbZh, setVerbZh] = useState("看");
             
             // 語法與發音設定
             const [currentSpeechRate, setCurrentSpeechRate] = useState(0.7); // 0.3x, 0.7x, 1.0x
@@ -231,20 +235,34 @@
 
             // 一鍵套用預設路線
             const applyPresetRoute = (route) => {
-                const sub = window.SENTENCE_SUBJECTS.find(s => s.id === route.subjectId);
-                const obj = window.SENTENCE_OBJECTS.find(o => o.id === route.objectId);
-                const vrb = window.SENTENCE_VERBS.find(v => v.id === route.verbId);
+                const sub = window.SENTENCE_SUBJECTS ? window.SENTENCE_SUBJECTS.find(s => s.id === route.subjectId) : null;
+                const plc = window.SENTENCE_PLACES ? window.SENTENCE_PLACES.find(p => p.id === route.placeId) : null;
+                const obj = window.SENTENCE_OBJECTS ? window.SENTENCE_OBJECTS.find(o => o.id === route.objectId) : null;
+                const vrb = window.SENTENCE_VERBS ? window.SENTENCE_VERBS.find(v => v.id === route.verbId) : null;
 
                 if (sub) {
                     setSubjectInput(sub.kr);
                     setSubjectZh(sub.zh);
                 }
+                if (plc) {
+                    setPlaceInput(plc.kr);
+                    setPlaceZh(plc.zh);
+                    if (plc.id === 'plc_none' || !plc.kr) setPlaceParticleType('none');
+                    else setPlaceParticleType('actionPlace');
+                } else {
+                    setPlaceInput("");
+                    setPlaceZh("");
+                    setPlaceParticleType('none');
+                }
                 if (obj) {
                     setObjectInput(obj.kr);
                     setObjectZh(obj.zh);
-                    if (obj.category === 'none') setObjectParticleType('none');
-                    else if (obj.isPlace) setObjectParticleType('place');
+                    if (obj.category === 'none' || !obj.kr) setObjectParticleType('none');
                     else setObjectParticleType('object');
+                } else {
+                    setObjectInput("");
+                    setObjectZh("");
+                    setObjectParticleType('none');
                 }
                 if (vrb) {
                     setVerbInput(vrb.kr);
@@ -276,7 +294,7 @@
                 localStorage.setItem("kitty_saved_sentences", JSON.stringify(updated));
             };
 
-            // 智慧中文即時自動轉譯韓文處理器
+            // 智慧中文即時自動轉譯韓文處理器 (支援繁簡雙向)
             const handleSubjectZhChange = (val) => {
                 setSubjectZh(val);
                 if (window.HangulEngine && window.HangulEngine.translateZhToKr) {
@@ -287,14 +305,25 @@
                 }
             };
 
+            const handlePlaceZhChange = (val) => {
+                setPlaceZh(val);
+                if (window.HangulEngine && window.HangulEngine.translateZhToKr) {
+                    const match = window.HangulEngine.translateZhToKr(val, "place");
+                    if (match && match.kr) {
+                        setPlaceInput(match.kr);
+                        setPlaceParticleType("actionPlace");
+                    }
+                }
+            };
+
             const handleObjectZhChange = (val) => {
                 setObjectZh(val);
                 if (window.HangulEngine && window.HangulEngine.translateZhToKr) {
                     const match = window.HangulEngine.translateZhToKr(val, "object");
                     if (match && match.kr) {
                         setObjectInput(match.kr);
-                        if (match.isPlace) setObjectParticleType("place");
-                        else if (match.particleType) setObjectParticleType(match.particleType);
+                        if (match.particleType) setObjectParticleType(match.particleType);
+                        else setObjectParticleType("object");
                     }
                 }
             };
@@ -305,13 +334,20 @@
                     const match = window.HangulEngine.translateZhToKr(val, "verb");
                     if (match && match.kr) {
                         setVerbInput(match.kr);
+                        // 若輸入「看月亮」等複合動詞，自動將受詞提取至受語車卡
+                        if (match.autoObject && (!objectInput || objectInput === "")) {
+                            setObjectZh(match.autoObject.zh);
+                            setObjectInput(match.autoObject.kr);
+                            setObjectParticleType("object");
+                        }
                     }
                 }
             };
 
-            // ================= 核心造句引擎運算 =================
+            // ================= 核心造句引擎運算 (S + P + O + V) =================
             const generatedSentences = useMemo(() => {
                 let subKr = subjectInput.trim();
+                let plcKr = placeInput.trim();
                 let objKr = objectInput.trim();
                 let vrbKr = verbInput.trim();
 
@@ -319,6 +355,10 @@
                 if (!subKr && subjectZh.trim() && window.HangulEngine && window.HangulEngine.translateZhToKr) {
                     const match = window.HangulEngine.translateZhToKr(subjectZh, "subject");
                     if (match && match.kr) subKr = match.kr;
+                }
+                if (!plcKr && placeZh.trim() && window.HangulEngine && window.HangulEngine.translateZhToKr) {
+                    const match = window.HangulEngine.translateZhToKr(placeZh, "place");
+                    if (match && match.kr) plcKr = match.kr;
                 }
                 if (!objKr && objectZh.trim() && window.HangulEngine && window.HangulEngine.translateZhToKr) {
                     const match = window.HangulEngine.translateZhToKr(objectZh, "object");
@@ -330,12 +370,12 @@
                 }
 
                 // 預設兜底：確保隨時皆可生成完整句子展示
-                if (!subKr) subKr = "나";
-                if (!vrbKr) vrbKr = "공부하다";
+                if (!subKr) subKr = "동생";
+                if (!vrbKr) vrbKr = "보다";
 
                 // 查找匹配的單字物件
-                const matchedSub = window.SENTENCE_SUBJECTS.find(s => s.kr === subKr);
-                const matchedVrb = window.SENTENCE_VERBS.find(v => v.kr === vrbKr) || {
+                const matchedSub = window.SENTENCE_SUBJECTS ? window.SENTENCE_SUBJECTS.find(s => s.kr === subKr) : null;
+                const matchedVrb = (window.SENTENCE_VERBS ? window.SENTENCE_VERBS.find(v => v.kr === vrbKr) : null) || {
                     kr: vrbKr,
                     stem: vrbKr.endsWith("다") ? vrbKr.slice(0, -1) : vrbKr,
                     type: "verb"
@@ -378,7 +418,7 @@
                     }
                 } else {
                     // 一般名詞收音判定
-                    const hasBat = window.HangulEngine.hasBatchim(subKr);
+                    const hasBat = window.HangulEngine ? window.HangulEngine.hasBatchim(subKr) : false;
                     const particle = subjectParticleType === "topic" 
                         ? (hasBat ? "은" : "는") 
                         : (hasBat ? "이" : "가");
@@ -387,105 +427,120 @@
                     subCasual = `${subKr}${particle}`;
                 }
 
-                // 2. 受詞助詞判定
+                // 2. 地點助詞判定 (에서 / 에)
+                let plcPart = "";
+                if (plcKr) {
+                    if (placeParticleType === "actionPlace") {
+                        plcPart = `${plcKr}에서`;
+                    } else if (placeParticleType === "destPlace") {
+                        plcPart = `${plcKr}에`;
+                    } else {
+                        plcPart = plcKr;
+                    }
+                }
+
+                // 3. 受詞助詞判定 (을 / 를)
                 let objPart = "";
                 if (objKr) {
-                    const hasBat = window.HangulEngine.hasBatchim(objKr);
+                    const hasBat = window.HangulEngine ? window.HangulEngine.hasBatchim(objKr) : false;
                     if (objectParticleType === "object") {
                         objPart = hasBat ? `${objKr}을` : `${objKr}를`;
-                    } else if (objectParticleType === "place") {
-                        objPart = `${objKr}에`;
                     } else {
                         objPart = objKr;
                     }
                 }
 
-                const buildSentence = (sub, obj, verb) => {
-                    return [sub, obj, verb].filter(Boolean).join(" ");
+                const buildSentence = (sub, plc, obj, verb) => {
+                    return [sub, plc, obj, verb].filter(Boolean).join(" ");
                 };
 
-                // 3. 語幹變形產生器
+                // 4. 語幹變形產生器
                 const engine = window.HangulEngine;
+                if (!engine) return null;
 
                 // 原形
-                const baseForm = buildSentence(subFormal, objPart, engine.conjugate(matchedVrb, "base", "formal"));
+                const baseForm = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "base", "formal"));
 
                 // 現在式 (一般現在式)
-                const presFormal = buildSentence(subFormal, objPart, engine.conjugate(matchedVrb, "present", "formal"));
-                const presInformal = buildSentence(subInformal, objPart, engine.conjugate(matchedVrb, "present", "informal"));
-                const presCasual = buildSentence(subCasual, objPart, engine.conjugate(matchedVrb, "present", "casual"));
+                const presFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "formal"));
+                const presInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "informal"));
+                const presCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "present", "casual"));
 
                 // 現在進行式 (-고 있다)
-                const contFormal = buildSentence(subFormal, objPart, engine.conjugate(matchedVrb, "continuous", "formal"));
-                const contInformal = buildSentence(subInformal, objPart, engine.conjugate(matchedVrb, "continuous", "informal"));
-                const contCasual = buildSentence(subCasual, objPart, engine.conjugate(matchedVrb, "continuous", "casual"));
+                const contFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "continuous", "formal"));
+                const contInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "continuous", "informal"));
+                const contCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "continuous", "casual"));
 
                 // 過去式 (-았/었/했-)
-                const pastFormal = buildSentence(subFormal, objPart, engine.conjugate(matchedVrb, "past", "formal"));
-                const pastInformal = buildSentence(subInformal, objPart, engine.conjugate(matchedVrb, "past", "informal"));
-                const pastCasual = buildSentence(subCasual, objPart, engine.conjugate(matchedVrb, "past", "casual"));
+                const pastFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "past", "formal"));
+                const pastInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "past", "informal"));
+                const pastCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "past", "casual"));
 
                 // 未來式 (-(으)ㄹ 거예요)
-                const futFormal = buildSentence(subFormal, objPart, engine.conjugate(matchedVrb, "future", "formal"));
-                const futInformal = buildSentence(subInformal, objPart, engine.conjugate(matchedVrb, "future", "informal"));
-                const futCasual = buildSentence(subCasual, objPart, engine.conjugate(matchedVrb, "future", "casual"));
+                const futFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "future", "formal"));
+                const futInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "future", "informal"));
+                const futCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "future", "casual"));
 
                 // 否定句 (안 ~)
-                const negFormal = buildSentence(subFormal, objPart, engine.conjugate(matchedVrb, "present", "formal", false, true));
-                const negInformal = buildSentence(subInformal, objPart, engine.conjugate(matchedVrb, "present", "informal", false, true));
-                const negCasual = buildSentence(subCasual, objPart, engine.conjugate(matchedVrb, "present", "casual", false, true));
+                const negFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "formal", false, true));
+                const negInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "informal", false, true));
+                const negCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "present", "casual", false, true));
 
                 // 疑問句 (~?)
-                const qFormal = buildSentence(subFormal, objPart, engine.conjugate(matchedVrb, "present", "formal", true));
-                const qInformal = buildSentence(subInformal, objPart, engine.conjugate(matchedVrb, "present", "informal", true));
-                const qCasual = buildSentence(subCasual, objPart, engine.conjugate(matchedVrb, "present", "casual", true));
+                const qFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "formal", true));
+                const qInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "informal", true));
+                const qCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "present", "casual", true));
+
+                // 中文翻譯組裝
+                const pfxPlace = placeZh ? `在${placeZh}` : '';
+                const pfxObj = objectZh || '';
 
                 return {
                     baseForm: {
-                        zh: `${subjectZh} ${objectZh} ${verbZh}（詞典原形）`,
+                        zh: `${subjectZh} ${pfxPlace ? pfxPlace + ' ' : ''}${pfxObj ? pfxObj + ' ' : ''}${verbZh}（詞典原形）`,
                         kr: baseForm,
                         rom: engine.romanize(baseForm)
                     },
                     present: {
-                        zh: `${subjectZh}${verbZh}${objectZh}。`,
+                        zh: `${subjectZh}${pfxPlace}${verbZh}${pfxObj}。`,
                         formal: { kr: presFormal, rom: engine.romanize(presFormal), label: "最高敬語 (습니다/ㅂ니다)" },
                         informal: { kr: presInformal, rom: engine.romanize(presInformal), label: "日常敬語 (해요體)" },
                         casual: { kr: presCasual, rom: engine.romanize(presCasual), label: "平語/半語 (반말)" }
                     },
                     continuous: {
-                        zh: `${subjectZh}正在${verbZh}${objectZh}。`,
+                        zh: `${subjectZh}正在${pfxPlace}${verbZh}${pfxObj}。`,
                         formal: { kr: contFormal, rom: engine.romanize(contFormal), label: "最高敬語 (습니다)" },
                         informal: { kr: contInformal, rom: engine.romanize(contInformal), label: "日常敬語 (해요體)" },
                         casual: { kr: contCasual, rom: engine.romanize(contCasual), label: "平語/半語 (반말)" }
                     },
                     past: {
-                        zh: `${subjectZh}${verbZh}了${objectZh}。`,
+                        zh: `${subjectZh}${pfxPlace}${verbZh}了${pfxObj}。`,
                         formal: { kr: pastFormal, rom: engine.romanize(pastFormal), label: "最高敬語 (-았습니다/었습니다)" },
                         informal: { kr: pastInformal, rom: engine.romanize(pastInformal), label: "日常敬語 (-았어요/었어요)" },
                         casual: { kr: pastCasual, rom: engine.romanize(pastCasual), label: "平語/半語 (-았어/었어)" }
                     },
                     future: {
-                        zh: `${subjectZh}打算/將要${verbZh}${objectZh}。`,
+                        zh: `${subjectZh}打算${pfxPlace}${verbZh}${pfxObj}。`,
                         formal: { kr: futFormal, rom: engine.romanize(futFormal), label: "最高敬語 (-(으)ㄹ 겁니다)" },
                         informal: { kr: futInformal, rom: engine.romanize(futInformal), label: "日常敬語 (-(으)ㄹ 거예요)" },
                         casual: { kr: futCasual, rom: engine.romanize(futCasual), label: "平語/半語 (-(으)ㄹ 거야)" }
                     },
                     explore: {
                         negative: {
-                            zh: `${subjectZh}不${verbZh}${objectZh}。（否定句）`,
+                            zh: `${subjectZh}${pfxPlace}不${verbZh}${pfxObj}。（否定句）`,
                             formal: { kr: negFormal, rom: engine.romanize(negFormal), label: "最高敬語 (습니다)" },
                             informal: { kr: negInformal, rom: engine.romanize(negInformal), label: "日常敬語 (해요體)" },
                             casual: { kr: negCasual, rom: engine.romanize(negCasual), label: "平語/半語 (반말)" }
                         },
                         question: {
-                            zh: `要${verbZh}${objectZh}嗎？（疑問句）`,
+                            zh: `${pfxPlace}要${verbZh}${pfxObj}嗎？（疑問句）`,
                             formal: { kr: qFormal, rom: engine.romanize(qFormal), label: "最高敬語 (습니까)" },
                             informal: { kr: qInformal, rom: engine.romanize(qInformal), label: "日常敬語 (해요體)" },
                             casual: { kr: qCasual, rom: engine.romanize(qCasual), label: "平語/半語 (반말)" }
                         }
                     }
                 };
-            }, [subjectInput, subjectZh, subjectParticleType, objectInput, objectZh, objectParticleType, verbInput, verbZh]);
+            }, [subjectInput, subjectZh, subjectParticleType, placeInput, placeZh, placeParticleType, objectInput, objectZh, objectParticleType, verbInput, verbZh]);
 
             // 測驗題庫
             const quizQuestions = [
@@ -678,12 +733,14 @@
                                 </button>
                             </div>
 
-                            {/* ================= 🚂 核心視覺：頂部獨立居中車頭 + 下方三節放大車卡 ================= */}
+                            {/* ================= 🚂 核心視覺：第一行 [車頭 + 車卡1 + 車卡2] ＋ 第二行 [車卡3 + 車卡4] ================= */}
                             <div className="space-y-6 mb-8">
                                 
-                                {/* 🚂 車頭 No.1 (Locomotive) - 頂部獨立居中展示 */}
-                                <div className={`max-w-xs sm:max-w-sm mx-auto transition-transform duration-500 ${isTrainMoving ? 'translate-x-1 scale-102' : ''}`}>
-                                    <div className="wood-car p-5 flex flex-col items-center justify-between text-center relative shadow-lg">
+                                {/* 🛤️ 第一行 (Row 1): 🚂 車頭 No.1 + 🚃 車卡 1 (主語) + 🚃 車卡 2 (地點) */}
+                                <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 transition-transform duration-500 ${isTrainMoving ? 'translate-x-1 scale-101' : ''}`}>
+                                    
+                                    {/* 🚂 車頭 No.1 (Locomotive) */}
+                                    <div className="wood-car p-5 sm:p-6 flex flex-col justify-between text-center relative shadow-md">
                                         {/* 煙囪與蒸氣 */}
                                         <div className="absolute -top-7 left-10 flex flex-col items-center">
                                             <div className="w-6 h-8 bg-amber-800 rounded-t-lg border-2 border-amber-900 shadow-xs"></div>
@@ -691,42 +748,42 @@
                                             <span className="absolute -top-9 left-4 text-sm steam-bubble-2 font-black text-orange-400">🎶 칙칙</span>
                                         </div>
 
-                                        <div className="w-full flex justify-between items-center px-2 mb-3">
-                                            <span className="text-xs sm:text-sm font-black bg-amber-800 text-amber-100 px-3 py-1 rounded-full shadow-xs">
-                                                車頭 No.1
-                                            </span>
-                                            <span className="text-xs sm:text-sm font-black text-amber-900 bg-amber-200/90 px-2.5 py-0.5 rounded-full border border-amber-300">
-                                                SOV 語序
-                                            </span>
+                                        <div>
+                                            <div className="w-full flex justify-between items-center mb-3">
+                                                <span className="text-sm sm:text-base font-black bg-amber-800 text-amber-100 px-3.5 py-1 rounded-full shadow-xs">
+                                                    🚂 車頭 No.1
+                                                </span>
+                                                <span className="text-xs sm:text-sm font-black text-amber-900 bg-amber-200/90 px-2.5 py-0.5 rounded-full border border-amber-300">
+                                                    S-P-O-V 語序
+                                                </span>
+                                            </div>
+
+                                            {/* 駕駛艙與酷企鵝司機 */}
+                                            <div className="bg-white/95 rounded-2xl p-4 border-2 border-amber-600 shadow-inner flex flex-col items-center justify-center relative overflow-hidden min-h-[148px]">
+                                                <img 
+                                                    src="assets/badtz_maru_driver.png" 
+                                                    alt="酷企鵝車長" 
+                                                    className="w-20 h-20 sm:w-22 sm:h-22 object-contain animate-bounce drop-shadow-md" 
+                                                />
+                                                <span className="text-xs font-black text-amber-950 bg-amber-200 px-3 py-0.5 rounded-full border border-amber-400 mt-2 shadow-2xs">
+                                                    酷企鵝車長 🐧
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        {/* 駕駛艙與酷企鵝司機 */}
-                                        <div className="w-32 h-32 sm:w-36 sm:h-36 bg-white/95 rounded-3xl border-4 border-amber-700 shadow-inner flex flex-col items-center justify-center relative overflow-hidden my-2 p-2">
-                                            <img 
-                                                src="assets/badtz_maru_driver.png" 
-                                                alt="酷企鵝車長" 
-                                                className="w-20 h-20 sm:w-24 sm:h-24 object-contain animate-bounce drop-shadow-md" 
-                                            />
-                                            <span className="text-xs font-black text-amber-950 bg-amber-200 px-3 py-0.5 rounded-full border border-amber-400 mt-1 shadow-2xs">
-                                                酷企鵝車長 🐧
+                                        <div className="text-center pt-2">
+                                            <span className="font-black text-xs sm:text-sm text-amber-950">
+                                                ✨ 韓語發音專列
                                             </span>
                                         </div>
-
-                                        <span className="font-black text-sm sm:text-base text-amber-950 mt-1">
-                                            🚂 韓語發音專列
-                                        </span>
 
                                         {/* 車輪 */}
-                                        <div className="w-full flex justify-around items-center pt-4 border-t-2 border-amber-600/40 mt-3">
+                                        <div className="w-full flex justify-around items-center pt-4 border-t-2 border-amber-600/40 mt-4">
                                             <div className="train-wheel"></div>
                                             <div className="train-wheel"></div>
                                         </div>
                                     </div>
-                                </div>
 
-                                {/* 🚃 3 節獨立大車卡 (主語 + 受語 + 動詞) 橫排放大 */}
-                                <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 transition-transform duration-500 ${isTrainMoving ? 'translate-x-1 scale-101' : ''}`}>
-                                    
                                     {/* 🚃 車卡 1: 主語 (Subject) */}
                                     <div className="wood-car p-5 sm:p-6 flex flex-col justify-between relative shadow-md">
                                         <div>
@@ -751,14 +808,14 @@
                                                         type="text"
                                                         value={subjectZh}
                                                         onChange={(e) => handleSubjectZhChange(e.target.value)}
-                                                        placeholder="中文 (如: 我)"
+                                                        placeholder="中文 (如: 弟弟)"
                                                         className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                                                     />
                                                     <input
                                                         type="text"
                                                         value={subjectInput}
                                                         onChange={(e) => setSubjectInput(e.target.value)}
-                                                        placeholder="韓文 (如: 나)"
+                                                        placeholder="韓文 (如: 동생)"
                                                         className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                                                     />
                                                 </div>
@@ -792,12 +849,86 @@
                                         </div>
                                     </div>
 
-                                    {/* 🚃 車卡 2: 受語 (Object) */}
+                                    {/* 🚃 車卡 2: 地點/場所 (Place) */}
+                                    <div className="wood-car p-5 sm:p-6 flex flex-col justify-between relative shadow-md">
+                                        <div>
+                                            <div className="flex items-center justify-between mb-3">
+                                                <span className="text-sm sm:text-base font-black bg-amber-700 text-white px-3.5 py-1 rounded-full shadow-xs">
+                                                    車卡 2 : 地點 (P)
+                                                </span>
+                                                {/* 助詞狀態 */}
+                                                <select
+                                                    value={placeParticleType}
+                                                    onChange={(e) => setPlaceParticleType(e.target.value)}
+                                                    className="px-2 py-1 bg-white rounded-xl border-2 border-amber-700 font-black text-amber-950 text-xs sm:text-sm focus:outline-none shadow-2xs cursor-pointer"
+                                                >
+                                                    <option value="actionPlace">在...做 (에서)</option>
+                                                    <option value="destPlace">去往/在 (에)</option>
+                                                    <option value="none">無地點</option>
+                                                </select>
+                                            </div>
+
+                                            {/* 輸入看板 */}
+                                            <div className="bg-white/95 rounded-2xl p-3.5 sm:p-4 border-2 border-amber-600 shadow-inner space-y-2.5">
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="text"
+                                                        value={placeZh}
+                                                        onChange={(e) => handlePlaceZhChange(e.target.value)}
+                                                        placeholder="中文 (如: 太空館)"
+                                                        className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        value={placeInput}
+                                                        onChange={(e) => setPlaceInput(e.target.value)}
+                                                        placeholder="韓文 (如: 우주관)"
+                                                        className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                                    />
+                                                </div>
+
+                                                {/* 快捷點選地點卡 */}
+                                                <div className="flex flex-wrap gap-1.5 pt-1 max-h-28 overflow-y-auto">
+                                                    {window.SENTENCE_PLACES && window.SENTENCE_PLACES.map(plc => (
+                                                        <button
+                                                            key={plc.id}
+                                                            onClick={() => {
+                                                                setPlaceInput(plc.kr);
+                                                                setPlaceZh(plc.zh);
+                                                                if (plc.id === 'plc_none' || !plc.kr) setPlaceParticleType('none');
+                                                                else setPlaceParticleType('actionPlace');
+                                                            }}
+                                                            className={`px-2.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold border transition-all ${
+                                                                placeInput === plc.kr
+                                                                    ? 'bg-amber-700 text-white border-amber-800 shadow-xs scale-102'
+                                                                    : 'bg-amber-100/90 text-amber-950 border-amber-300 hover:bg-amber-200'
+                                                            }`}
+                                                        >
+                                                            {plc.emoji} {plc.zh} {plc.kr ? `(${plc.kr})` : ''}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* 車輪 */}
+                                        <div className="w-full flex justify-around items-center pt-4 border-t-2 border-amber-600/40 mt-4">
+                                            <div className="train-wheel"></div>
+                                            <div className="train-wheel"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                {/* 🛤️ 第二行 (Row 2): 🚃 車卡 3 (受語) + 🚃 車卡 4 (動詞) */}
+                                <div className={`grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 transition-transform duration-500 ${isTrainMoving ? 'translate-x-1 scale-101' : ''}`}>
+                                    
+                                    {/* 🚃 車卡 3: 受語 (Object) */}
                                     <div className="wood-car p-5 sm:p-6 flex flex-col justify-between relative shadow-md">
                                         <div>
                                             <div className="flex items-center justify-between mb-3">
                                                 <span className="text-sm sm:text-base font-black bg-rose-600 text-white px-3.5 py-1 rounded-full shadow-xs">
-                                                    車卡 2 : 受語 (O)
+                                                    車卡 3 : 受語 (O)
                                                 </span>
                                                 {/* 助詞狀態 */}
                                                 <select
@@ -806,7 +937,6 @@
                                                     className="px-2.5 py-1 bg-white rounded-xl border-2 border-rose-600 font-black text-rose-900 text-xs sm:text-sm focus:outline-none shadow-2xs cursor-pointer"
                                                 >
                                                     <option value="object">受格 (을/를)</option>
-                                                    <option value="place">地點 (에/에서)</option>
                                                     <option value="none">無受詞 (自動詞)</option>
                                                 </select>
                                             </div>
@@ -818,14 +948,14 @@
                                                         type="text"
                                                         value={objectZh}
                                                         onChange={(e) => handleObjectZhChange(e.target.value)}
-                                                        placeholder="中文 (如: 咖啡)"
+                                                        placeholder="中文 (如: 月亮)"
                                                         className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                                                     />
                                                     <input
                                                         type="text"
                                                         value={objectInput}
                                                         onChange={(e) => setObjectInput(e.target.value)}
-                                                        placeholder="韓文 (如: 커피)"
+                                                        placeholder="韓文 (如: 달)"
                                                         className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                                                     />
                                                 </div>
@@ -838,8 +968,7 @@
                                                             onClick={() => {
                                                                 setObjectInput(obj.kr);
                                                                 setObjectZh(obj.zh);
-                                                                if (obj.category === 'none') setObjectParticleType('none');
-                                                                else if (obj.isPlace) setObjectParticleType('place');
+                                                                if (obj.category === 'none' || !obj.kr) setObjectParticleType('none');
                                                                 else setObjectParticleType('object');
                                                             }}
                                                             className={`px-2.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold border transition-all ${
@@ -862,12 +991,12 @@
                                         </div>
                                     </div>
 
-                                    {/* 🚃 車卡 3: 動詞 (Verb) */}
+                                    {/* 🚃 車卡 4: 動詞 (Verb) */}
                                     <div className="wood-car p-5 sm:p-6 flex flex-col justify-between relative shadow-md">
                                         <div>
                                             <div className="flex items-center justify-between mb-3">
                                                 <span className="text-sm sm:text-base font-black bg-emerald-700 text-white px-3.5 py-1 rounded-full shadow-xs">
-                                                    車卡 3 : 動詞 (V)
+                                                    車卡 4 : 動詞 (V)
                                                 </span>
                                                 <span className="text-xs sm:text-sm bg-emerald-100 text-emerald-950 px-2.5 py-0.5 rounded-xl font-black border border-emerald-400">
                                                     結尾核心
@@ -881,14 +1010,14 @@
                                                         type="text"
                                                         value={verbZh}
                                                         onChange={(e) => handleVerbZhChange(e.target.value)}
-                                                        placeholder="中文 (如: 喝)"
+                                                        placeholder="中文 (如: 看)"
                                                         className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                                                     />
                                                     <input
                                                         type="text"
                                                         value={verbInput}
                                                         onChange={(e) => setVerbInput(e.target.value)}
-                                                        placeholder="韓文 (如: 마시다)"
+                                                        placeholder="韓文 (如: 보다)"
                                                         className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-base sm:text-lg font-black kr-font text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                                                     />
                                                 </div>
