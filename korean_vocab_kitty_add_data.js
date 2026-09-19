@@ -309,5 +309,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5698,
+    "k": "넋",
+    "r": "neoks",
+    "c": "魂、靈魂、心神、精神（雙收音 ㄳ 代表音 ㄱ，如 넋을 잃다 出神/失魂落魄、넋이 나가다 魂不守舍）",
+    "e": "Soul, spirit, mind (e.g. 넋을 잃다 to lose one's senses, be entranced)",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
