@@ -707,6 +707,166 @@ const HangulEngine = {
             return charRoms.join('-');
         });
         return romWords.join(' ');
+    },
+
+    // 智慧中文對照轉譯器 (Auto-Translation from Chinese to Korean)
+    translateZhToKr(zhText, type = "auto") {
+        if (!zhText || typeof zhText !== 'string') return null;
+        const cleanZh = zhText.trim();
+        if (!cleanZh) return null;
+
+        // 1. 優先從三大專屬語料庫搜尋
+        if (type === "subject" || type === "auto") {
+            const sub = SENTENCE_SUBJECTS.find(s => cleanZh.includes(s.zh) || s.zh.includes(cleanZh));
+            if (sub) return { kr: sub.kr, zh: sub.zh, type: "subject" };
+        }
+        if (type === "object" || type === "auto") {
+            const obj = SENTENCE_OBJECTS.find(o => cleanZh.includes(o.zh) || o.zh.includes(cleanZh));
+            if (obj) return { kr: obj.kr, zh: obj.zh, type: "object", isPlace: obj.isPlace || false, particleType: obj.isPlace ? "place" : (obj.category === 'none' ? 'none' : 'object') };
+        }
+        if (type === "verb" || type === "auto") {
+            const vrb = SENTENCE_VERBS.find(v => cleanZh.includes(v.zh) || v.zh.includes(cleanZh));
+            if (vrb) return { kr: vrb.kr, zh: vrb.zh, type: "verb", stem: vrb.stem };
+        }
+
+        // 2. 擴充通用常用中韓對照表
+        const zhMap = {
+            // 主語 (Subjects)
+            '我': { kr: '나', zh: '我', type: 'subject' },
+            '你': { kr: '너', zh: '你', type: 'subject' },
+            '您': { kr: '당신', zh: '您', type: 'subject' },
+            '朋友': { kr: '친구', zh: '朋友', type: 'subject' },
+            '老師': { kr: '선생님', zh: '老師', type: 'subject' },
+            '先生': { kr: '선생님', zh: '老師', type: 'subject' },
+            '媽媽': { kr: '엄마', zh: '媽媽', type: 'subject' },
+            '媽': { kr: '엄마', zh: '媽媽', type: 'subject' },
+            '爸爸': { kr: '아빠', zh: '爸爸', type: 'subject' },
+            '爸': { kr: '아빠', zh: '爸爸', type: 'subject' },
+            '弟弟': { kr: '동생', zh: '弟弟/妹妹', type: 'subject' },
+            '妹妹': { kr: '동생', zh: '弟弟/妹妹', type: 'subject' },
+            '弟妹': { kr: '동생', zh: '弟弟/妹妹', type: 'subject' },
+            '哥哥': { kr: '오빠', zh: '哥哥', type: 'subject' },
+            '姐姐': { kr: '언니', zh: '姐姐', type: 'subject' },
+            '學生': { kr: '학생', zh: '學生', type: 'subject' },
+            '大家': { kr: '여러분', zh: '大家', type: 'subject' },
+            'kitty': { kr: '키티', zh: 'Kitty', type: 'subject' },
+            '吉蒂': { kr: '키티', zh: 'Kitty', type: 'subject' },
+            '凱蒂': { kr: '키티', zh: 'Kitty', type: 'subject' },
+
+            // 受語 / 地點 (Objects & Places)
+            '客廳': { kr: '거실', zh: '客廳', type: 'object', isPlace: true, particleType: 'place' },
+            '在家裡客廳': { kr: '거실', zh: '在家裡客廳', type: 'object', isPlace: true, particleType: 'place' },
+            '家裡的客廳': { kr: '거실', zh: '家裡的客廳', type: 'object', isPlace: true, particleType: 'place' },
+            '家': { kr: '집', zh: '家', type: 'object', isPlace: true, particleType: 'place' },
+            '家裡': { kr: '집', zh: '家裡', type: 'object', isPlace: true, particleType: 'place' },
+            '在家': { kr: '집', zh: '在家', type: 'object', isPlace: true, particleType: 'place' },
+            '在家裡': { kr: '집', zh: '在家裡', type: 'object', isPlace: true, particleType: 'place' },
+            '學校': { kr: '학교', zh: '學校', type: 'object', isPlace: true, particleType: 'place' },
+            '咖啡廳': { kr: '카페', zh: '咖啡廳', type: 'object', isPlace: true, particleType: 'place' },
+            '咖啡館': { kr: '카페', zh: '咖啡館', type: 'object', isPlace: true, particleType: 'place' },
+            '咖啡店': { kr: '카페', zh: '咖啡店', type: 'object', isPlace: true, particleType: 'place' },
+            '公司': { kr: '회사', zh: '公司', type: 'object', isPlace: true, particleType: 'place' },
+            '圖書館': { kr: '도서관', zh: '圖書館', type: 'object', isPlace: true, particleType: 'place' },
+            '餐廳': { kr: '식당', zh: '餐廳', type: 'object', isPlace: true, particleType: 'place' },
+            '房間': { kr: '방', zh: '房間', type: 'object', isPlace: true, particleType: 'place' },
+            '首爾': { kr: '서울', zh: '首爾', type: 'object', isPlace: true, particleType: 'place' },
+            '韓國': { kr: '한국', zh: '韓國', type: 'object', isPlace: true, particleType: 'place' },
+
+            '咖啡': { kr: '커피', zh: '咖啡', type: 'object', isPlace: false, particleType: 'object' },
+            '飯': { kr: '밥', zh: '飯', type: 'object', isPlace: false, particleType: 'object' },
+            '白飯': { kr: '밥', zh: '白飯', type: 'object', isPlace: false, particleType: 'object' },
+            '餐點': { kr: '밥', zh: '餐點', type: 'object', isPlace: false, particleType: 'object' },
+            '韓語': { kr: '한국어', zh: '韓語', type: 'object', isPlace: false, particleType: 'object' },
+            '韓文': { kr: '한국어', zh: '韓文', type: 'object', isPlace: false, particleType: 'object' },
+            '水': { kr: '물', zh: '水', type: 'object', isPlace: false, particleType: 'object' },
+            '書': { kr: '책', zh: '書', type: 'object', isPlace: false, particleType: 'object' },
+            '書本': { kr: '책', zh: '書本', type: 'object', isPlace: false, particleType: 'object' },
+            '電影': { kr: '영화', zh: '電影', type: 'object', isPlace: false, particleType: 'object' },
+            '音樂': { kr: '음악', zh: '音樂', type: 'object', isPlace: false, particleType: 'object' },
+            '蘋果': { kr: '사과', zh: '蘋果', type: 'object', isPlace: false, particleType: 'object' },
+            '麵包': { kr: '빵', zh: '麵包', type: 'object', isPlace: false, particleType: 'object' },
+            '衣服': { kr: '옷', zh: '衣服', type: 'object', isPlace: false, particleType: 'object' },
+            '手機': { kr: '핸드폰', zh: '手機', type: 'object', isPlace: false, particleType: 'object' },
+            '電話': { kr: '전화', zh: '電話', type: 'object', isPlace: false, particleType: 'object' },
+            '照片': { kr: '사진', zh: '照片', type: 'object', isPlace: false, particleType: 'object' },
+            '信': { kr: '편지', zh: '信', type: 'object', isPlace: false, particleType: 'object' },
+            '禮物': { kr: '선물', zh: '禮物', type: 'object', isPlace: false, particleType: 'object' },
+            '錢': { kr: '돈', zh: '錢', type: 'object', isPlace: false, particleType: 'object' },
+
+            // 動詞 (Verbs)
+            '學習韓語': { kr: '공부하다', zh: '學習', type: 'verb', stem: '공부하' },
+            '學習': { kr: '공부하다', zh: '學習', type: 'verb', stem: '공부하' },
+            '學': { kr: '배우다', zh: '學習/學', type: 'verb', stem: '배우' },
+            '讀書': { kr: '공부하다', zh: '讀書', type: 'verb', stem: '공부하' },
+            '念書': { kr: '공부하다', zh: '念書', type: 'verb', stem: '공부하' },
+            '喝': { kr: '마시다', zh: '喝', type: 'verb', stem: '마시' },
+            '飲': { kr: '마시다', zh: '喝', type: 'verb', stem: '마시' },
+            '吃': { kr: '먹다', zh: '吃', type: 'verb', stem: '먹' },
+            '食': { kr: '먹다', zh: '吃', type: 'verb', stem: '먹' },
+            '看': { kr: '보다', zh: '看', type: 'verb', stem: '보' },
+            '見': { kr: '보다', zh: '看', type: 'verb', stem: '보' },
+            '觀看': { kr: '보다', zh: '觀看', type: 'verb', stem: '보' },
+            '聽': { kr: '듣다', zh: '聽', type: 'verb', stem: '듣', irregular: 'd' },
+            '讀': { kr: '읽다', zh: '讀', type: 'verb', stem: '읽' },
+            '閱讀': { kr: '읽다', zh: '閱讀', type: 'verb', stem: '읽' },
+            '買': { kr: '사다', zh: '買', type: 'verb', stem: '사' },
+            '購買': { kr: '사다', zh: '購買', type: 'verb', stem: '사' },
+            '睡': { kr: '자다', zh: '睡覺', type: 'verb', stem: '자' },
+            '睡覺': { kr: '자다', zh: '睡覺', type: 'verb', stem: '자' },
+            '去': { kr: '가다', zh: '去', type: 'verb', stem: '가' },
+            '前往': { kr: '가다', zh: '前往', type: 'verb', stem: '가' },
+            '來': { kr: '오다', zh: '來', type: 'verb', stem: '오' },
+            '見面': { kr: '만나다', zh: '見面', type: 'verb', stem: '만나' },
+            '做': { kr: '만들다', zh: '製作', type: 'verb', stem: '만들' },
+            '製作': { kr: '만들다', zh: '製作', type: 'verb', stem: '만들' },
+            '休息': { kr: '쉬다', zh: '休息', type: 'verb', stem: '쉬' },
+            '運動': { kr: '운동하다', zh: '運動', type: 'verb', stem: '운동하' },
+            '工作': { kr: '일하다', zh: '工作', type: 'verb', stem: '일하' },
+            '上班': { kr: '일하다', zh: '上班', type: 'verb', stem: '일하' },
+            '聊天': { kr: '이야기하다', zh: '聊天', type: 'verb', stem: '이야기하' },
+            '唱歌': { kr: '노래하다', zh: '唱歌', type: 'verb', stem: '노래하' },
+            '料理': { kr: '요리하다', zh: '料理', type: 'verb', stem: '요리하' },
+            '煮飯': { kr: '요리하다', zh: '煮飯', type: 'verb', stem: '요리하' },
+            '教': { kr: '가르치다', zh: '教', type: 'verb', stem: '가르치' },
+            '寫': { kr: '쓰다', zh: '寫', type: 'verb', stem: '쓰' },
+            '穿': { kr: '입다', zh: '穿', type: 'verb', stem: '입' },
+            '等': { kr: '기다리다', zh: '等', type: 'verb', stem: '기다리' },
+            '等待': { kr: '기다리다', zh: '等待', type: 'verb', stem: '기다리' },
+            '打電話': { kr: '전화하다', zh: '打電話', type: 'verb', stem: '전화하' },
+            '喜歡': { kr: '좋아하다', zh: '喜歡', type: 'verb', stem: '좋아하' },
+            '愛': { kr: '사랑하다', zh: '愛', type: 'verb', stem: '사랑하' },
+            '漂亮': { kr: '예쁘다', zh: '漂亮', type: 'verb', stem: '예쁘' },
+            '好': { kr: '좋다', zh: '好', type: 'verb', stem: '좋' },
+            '好吃': { kr: '맛있다', zh: '好吃', type: 'verb', stem: '맛있' },
+            '忙': { kr: '바쁘다', zh: '忙', type: 'verb', stem: '바쁘' }
+        };
+
+        // 模糊比對 zhMap
+        for (const [key, val] of Object.entries(zhMap)) {
+            if (cleanZh.includes(key) || key.includes(cleanZh)) {
+                return val;
+            }
+        }
+
+        // 3. 嘗試從全域 TOPIK 詞庫、Kitty自訂詞庫或漢字大辭典檢索
+        if (typeof window !== 'undefined') {
+            const allVocabs = [
+                ...(window.KITTY_VOCAB_KITTY_ADD || []),
+                ...(window.KITTY_VOCAB_5666 || [])
+            ];
+            const found = allVocabs.find(v => v.zh && (v.zh.includes(cleanZh) || cleanZh.includes(v.zh)));
+            if (found) {
+                const isV = found.pos && (found.pos.includes('動') || found.pos.includes('形') || found.kr.endsWith('다'));
+                return {
+                    kr: found.kr,
+                    zh: found.zh,
+                    type: isV ? "verb" : "object",
+                    stem: isV && found.kr.endsWith('다') ? found.kr.slice(0, -1) : found.kr
+                };
+            }
+        }
+
+        return null;
     }
 };
 

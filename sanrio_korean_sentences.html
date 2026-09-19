@@ -18,6 +18,9 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
     <!-- 韓語造句語料庫與語法引擎 -->
+    <script src="korean_vocab_5666_data.js"></script>
+    <script src="korean_vocab_kitty_add_data.js"></script>
+    <script src="korean_hanja_data.js"></script>
     <script src="korean_sentence_data.js"></script>
     <!-- 行動端與發音橋接 -->
     <script src="app_mobile_bridge.js"></script>
@@ -273,13 +276,62 @@
                 localStorage.setItem("kitty_saved_sentences", JSON.stringify(updated));
             };
 
+            // 智慧中文即時自動轉譯韓文處理器
+            const handleSubjectZhChange = (val) => {
+                setSubjectZh(val);
+                if (window.HangulEngine && window.HangulEngine.translateZhToKr) {
+                    const match = window.HangulEngine.translateZhToKr(val, "subject");
+                    if (match && match.kr) {
+                        setSubjectInput(match.kr);
+                    }
+                }
+            };
+
+            const handleObjectZhChange = (val) => {
+                setObjectZh(val);
+                if (window.HangulEngine && window.HangulEngine.translateZhToKr) {
+                    const match = window.HangulEngine.translateZhToKr(val, "object");
+                    if (match && match.kr) {
+                        setObjectInput(match.kr);
+                        if (match.isPlace) setObjectParticleType("place");
+                        else if (match.particleType) setObjectParticleType(match.particleType);
+                    }
+                }
+            };
+
+            const handleVerbZhChange = (val) => {
+                setVerbZh(val);
+                if (window.HangulEngine && window.HangulEngine.translateZhToKr) {
+                    const match = window.HangulEngine.translateZhToKr(val, "verb");
+                    if (match && match.kr) {
+                        setVerbInput(match.kr);
+                    }
+                }
+            };
+
             // ================= 核心造句引擎運算 =================
             const generatedSentences = useMemo(() => {
-                const subKr = subjectInput.trim();
-                const objKr = objectInput.trim();
-                const vrbKr = verbInput.trim();
+                let subKr = subjectInput.trim();
+                let objKr = objectInput.trim();
+                let vrbKr = verbInput.trim();
 
-                if (!subKr || !vrbKr) return null;
+                // 容錯防護：若韓文輸入為空但中文有填，自動調用轉譯器解析
+                if (!subKr && subjectZh.trim() && window.HangulEngine && window.HangulEngine.translateZhToKr) {
+                    const match = window.HangulEngine.translateZhToKr(subjectZh, "subject");
+                    if (match && match.kr) subKr = match.kr;
+                }
+                if (!objKr && objectZh.trim() && window.HangulEngine && window.HangulEngine.translateZhToKr) {
+                    const match = window.HangulEngine.translateZhToKr(objectZh, "object");
+                    if (match && match.kr) objKr = match.kr;
+                }
+                if (!vrbKr && verbZh.trim() && window.HangulEngine && window.HangulEngine.translateZhToKr) {
+                    const match = window.HangulEngine.translateZhToKr(verbZh, "verb");
+                    if (match && match.kr) vrbKr = match.kr;
+                }
+
+                // 預設兜底：確保隨時皆可生成完整句子展示
+                if (!subKr) subKr = "나";
+                if (!vrbKr) vrbKr = "공부하다";
 
                 // 查找匹配的單字物件
                 const matchedSub = window.SENTENCE_SUBJECTS.find(s => s.kr === subKr);
@@ -698,7 +750,7 @@
                                                     <input
                                                         type="text"
                                                         value={subjectZh}
-                                                        onChange={(e) => setSubjectZh(e.target.value)}
+                                                        onChange={(e) => handleSubjectZhChange(e.target.value)}
                                                         placeholder="中文 (如: 我)"
                                                         className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                                                     />
@@ -765,7 +817,7 @@
                                                     <input
                                                         type="text"
                                                         value={objectZh}
-                                                        onChange={(e) => setObjectZh(e.target.value)}
+                                                        onChange={(e) => handleObjectZhChange(e.target.value)}
                                                         placeholder="中文 (如: 咖啡)"
                                                         className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                                                     />
@@ -828,7 +880,7 @@
                                                     <input
                                                         type="text"
                                                         value={verbZh}
-                                                        onChange={(e) => setVerbZh(e.target.value)}
+                                                        onChange={(e) => handleVerbZhChange(e.target.value)}
                                                         placeholder="中文 (如: 喝)"
                                                         className="w-1/2 px-3 py-2 bg-amber-50/60 border-2 border-amber-300 rounded-xl text-sm sm:text-base font-bold text-amber-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                                                     />
