@@ -540,9 +540,10 @@ const HangulEngine = {
     JONGSUNG: ['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'],
 
     decomposeChar(char) {
+        if (!char || typeof char !== 'string') return { raw: char, isHangul: false, hasBatchim: false, choIdx: 0, jungIdx: 0, jongIdx: 0 };
         const code = char.charCodeAt(0);
         if (code < 0xAC00 || code > 0xD7A3) {
-            return { raw: char, isHangul: false };
+            return { raw: char, isHangul: false, hasBatchim: false, choIdx: 0, jungIdx: 0, jongIdx: 0 };
         }
         const offset = code - 0xAC00;
         const jongIdx = offset % 28;
@@ -562,16 +563,53 @@ const HangulEngine = {
         };
     },
 
+    composeChar(choIdx, jungIdx, jongIdx = 0) {
+        const c = typeof choIdx === 'number' ? choIdx : 0;
+        const ju = typeof jungIdx === 'number' ? jungIdx : 0;
+        const jo = typeof jongIdx === 'number' ? jongIdx : 0;
+        const code = 0xAC00 + (c * 21 * 28) + (ju * 28) + jo;
+        return String.fromCharCode(code);
+    },
+
+    // 建立全域漢字字元對照字典 (用於未知 2~4 字漢字詞直翻韓文音節)
+    initHanjaMap() {
+        if (this._hanjaMap) return this._hanjaMap;
+        this._hanjaMap = {};
+        if (typeof window !== 'undefined' && window.HANJA_SYLLABLE_LIST && Array.isArray(window.HANJA_SYLLABLE_LIST)) {
+            for (const item of window.HANJA_SYLLABLE_LIST) {
+                if (item.hanjas && Array.isArray(item.hanjas)) {
+                    for (const h of item.hanjas) {
+                        if (!this._hanjaMap[h]) {
+                            this._hanjaMap[h] = item.k;
+                        }
+                    }
+                }
+            }
+        }
+        return this._hanjaMap;
+    },
+
+    // 漢字詞逐字轉譯為韓文音節 (例如：議員 ➔ 의원, 會社 ➔ 회사, 會議 ➔ 회의)
+    translateHanjaWord(word) {
+        if (!word || typeof word !== 'string') return null;
+        const map = this.initHanjaMap();
+        const trad = (typeof window !== 'undefined' && window.KittySearch) ? window.KittySearch.toTrad(word) : word;
+        let kr = '';
+        for (const ch of trad) {
+            if (map[ch]) {
+                kr += map[ch];
+            } else {
+                return null;
+            }
+        }
+        return kr;
+    },
+
     hasBatchim(word) {
         if (!word || typeof word !== 'string') return false;
         const lastChar = word.trim().slice(-1);
         const decomposed = this.decomposeChar(lastChar);
         return decomposed.isHangul ? decomposed.hasBatchim : false;
-    },
-
-    composeChar(choIdx, jungIdx, jongIdx = 0) {
-        const code = 0xAC00 + (choIdx * 21 * 28) + (jungIdx * 28) + jongIdx;
-        return String.fromCharCode(code);
     },
 
     // 智能助詞生成
@@ -619,13 +657,19 @@ const HangulEngine = {
         // 3. 現在式 (Present Simple)
         if (tense === "present") {
             if (honorific === "formal") {
-                // 最高敬語：有收音 -습니다, 無收音 -ㅂ니다
-                let conjugatedStem = stem;
-                if (verbObj.irregular === "d" && hasBat) {
-                    // ㄷ 不規則在 습니다 前不變：듣습니다
+                // 非韓文字元安全回退
+                if (!decomposed.isHangul) {
+                    return (isNegative ? "안 " : "") + stem + (isQuestion ? "습니까?" : "습니다.");
                 }
+                // 最高敬語：有收音 -습니다, 無收音 -ㅂ니다
                 if (hasBat) {
-                    return (isNegative ? "안 " : "") + conjugatedStem + (isQuestion ? "습니까?" : "습니다.");
+                    // ㄹ 收音脫落並塞 ㅂ (例如 열다 ➔ 엽니다, 살다 ➔ 삽니다, 만들다 ➔ 만듭니다)
+                    if (decomposed.jong === 'ㄹ') {
+                        const newChar = this.composeChar(decomposed.choIdx, decomposed.jungIdx, 17); // 17 是 ㅂ
+                        const restStem = stem.slice(0, -1);
+                        return (isNegative ? "안 " : "") + restStem + newChar + (isQuestion ? "니까?" : "니다.");
+                    }
+                    return (isNegative ? "안 " : "") + stem + (isQuestion ? "습니까?" : "습니다.");
                 } else {
                     // 塞 ㅂ 收音
                     const newChar = this.composeChar(decomposed.choIdx, decomposed.jungIdx, 17); // 17 是 ㅂ
@@ -763,6 +807,7 @@ const HangulEngine = {
             '친구는': 'Chin-gu-neun', '친구가': 'Chin-gu-ga', '키티는': 'Ki-ti-neun', '키티가': 'Ki-ti-ga',
             '엄마는': 'Eom-ma-neun', '엄마가': 'Eom-ma-ga', '선생님은': 'Seon-saeng-nim-eun', '선생님이': 'Seon-saeng-nim-i',
             '동생은': 'Dong-saeng-eun', '동생이': 'Dong-saeng-i',
+            '의원은': 'Ui-wo-neun', '의원이': 'Ui-wo-ni', '의원': 'Ui-won', '국회의원은': 'Guk-hoe-ui-wo-neun', '국회의원이': 'Guk-hoe-ui-wo-ni',
             // 地點/場所 (Places with 에서 / 에)
             '우주관에서': 'u-ju-gwa-ne-seo', '우주관에': 'u-ju-gwa-ne', '우주관': 'u-ju-gwan',
             '천문관에서': 'cheon-mun-gwa-ne-seo', '천문관에': 'cheon-mun-gwa-ne', '천문관': 'cheon-mun-gwan',
@@ -792,6 +837,8 @@ const HangulEngine = {
             '빵을': 'ppang-eul', '빵': 'ppang',
             '옷을': 'o-seul', '옷': 'ot',
             '핸드폰을': 'haen-deu-po-neul', '핸드폰': 'haen-deu-pon',
+            '회의를': 'hoe-ui-reul', '회의': 'hoe-ui',
+            '문을': 'mu-neul', '문': 'mun',
             // 現在式
             '마십니다': 'ma-sim-ni-da', '마셔요': 'ma-syeo-yo', '마셔': 'ma-syeo',
             '먹습니다': 'meok-seum-ni-da', '먹어요': 'meo-geo-yo', '먹어': 'meo-geo',
@@ -805,10 +852,23 @@ const HangulEngine = {
             '옵니다': 'om-ni-da', '와요': 'wa-yo', '와': 'wa',
             '만납니다': 'man-nam-ni-da', '만나요': 'man-na-yo', '만나': 'man-na',
             '만듭니다': 'man-deum-ni-da', '만들어요': 'man-deu-reo-yo', '만들어': 'man-deu-reo',
+            '엽니다': 'yeom-ni-da', '열어요': 'yeo-reo-yo', '열어': 'yeo-reo',
+            '닫습니다': 'dat-seum-ni-da', '닫아요': 'da-da-yo', '닫아': 'da-da',
+            '걷습니다': 'geot-seum-ni-da', '걸어요': 'geo-reo-yo', '걸어': 'geo-reo',
+            '달립니다': 'dal-lim-ni-da', '달려요': 'dal-lyeo-yo', '달려': 'dal-lyeo',
+            '씻습니다': 'ssit-seum-ni-da', '씻어요': 'ssi-seo-yo', '씻어': 'ssi-seo',
+            '줍니다': 'jum-ni-da', '줘요': 'jwo-yo', '줘': 'jwo',
+            '찾습니다': 'chat-seum-ni-da', '찾아요': 'cha-ja-yo', '찾아': 'cha-ja',
+            '묻습니다': 'mut-seum-ni-da', '물어요': 'mu-reo-yo', '물어': 'mu-reo',
+            '앉습니다': 'an-seum-ni-da', '앉아요': 'an-ja-yo', '앉아': 'an-ja',
+            '섭니다': 'seom-ni-da', '서요': 'seo-yo', '서': 'seo',
+            '웃습니다': 'ut-seum-ni-da', '웃어요': 'u-seo-yo', '웃어': 'u-seo',
+            '웁니다': 'um-ni-da', '울어요': 'u-reo-yo', '울어': 'u-reo',
             // 現在進行式 詞組
             '마시고': 'ma-si-go', '먹고': 'meok-go', '보고': 'bo-go', '공부하고': 'gong-bu-ha-go',
             '듣고': 'deut-go', '읽고': 'ik-go', '사고': 'sa-go', '자고': 'ja-go',
             '가고': 'ga-go', '오고': 'o-go', '만나고': 'man-na-go', '만들고': 'man-deul-go',
+            '열고': 'yeol-go', '닫고': 'dat-go', '걷고': 'geot-go', '달리고': 'dal-li-go',
             '있습니다': 'ik-seum-ni-da', '있어요': 'it-seo-yo', '있어': 'it-seo',
             '있습니까': 'ik-seum-ni-kka', '있어요?': 'it-seo-yo?', '있어?': 'it-seo?',
             // 過去式
@@ -819,16 +879,19 @@ const HangulEngine = {
             '들었습니다': 'deu-reot-seum-ni-da', '들었어요': 'deu-reo-sseo-yo', '들었어': 'deu-reo-sseo',
             '잤습니다': 'jat-seum-ni-da', '잤어요': 'ja-sseo-yo', '잤어': 'ja-sseo',
             '갔습니다': 'gat-seum-ni-da', '갔어요': 'ga-sseo-yo', '갔어': 'ga-sseo',
+            '열었습니다': 'yeo-reot-seum-ni-da', '열었어요': 'yeo-reo-sseo-yo', '열었어': 'yeo-reo-sseo',
+            '닫았습니다': 'da-dat-seum-ni-da', '닫았어요': 'da-da-sseo-yo', '닫았어': 'da-da-sseo',
             // 否定與疑問句
             '안': 'an',
             '마십니까': 'ma-sim-ni-kka', '먹습니까': 'meok-seum-ni-kka', '봅니까': 'bom-ni-kka',
             '공부합니까': 'gong-bu-ham-ni-kka', '듣습니까': 'deut-seum-ni-kka', '읽습니까': 'ik-seum-ni-kka',
             '삽니까': 'sam-ni-kka', '잡니까': 'jam-ni-kka', '갑니까': 'gam-ni-kka',
             '옵니까': 'om-ni-kka', '만납니까': 'man-nam-ni-kka', '만듭니까': 'man-deum-ni-kka',
+            '엽니까': 'yeom-ni-kka', '닫습니까': 'dat-seum-ni-kka',
             // 未來式
             '마실': 'ma-sil', '먹을': 'meo-geul', '볼': 'bol', '공부할': 'gong-bu-hal',
             '들을': 'deu-reul', '잘': 'jal', '갈': 'gal', '올': 'ol', '읽을': 'il-geul', '살': 'sal',
-            '만날': 'man-nal', '만들': 'man-deul',
+            '만날': 'man-nal', '만들': 'man-deul', '열': 'yeol', '닫을': 'da-deul',
             '겁니다': 'geom-ni-da', '거예요': 'geo-ye-yo', '거야': 'geo-ya',
             '겁니까': 'geom-ni-kka', '거예요?': 'geo-ye-yo?', '거야?': 'geo-ya?'
         };
@@ -882,16 +945,21 @@ const HangulEngine = {
 
             // 嘗試從全域詞庫反查釋義
             if (typeof window !== 'undefined') {
-                const allVocabs = [...(window.KITTY_VOCAB_KITTY_ADD || []), ...(window.KITTY_VOCAB_5666 || [])];
-                const found = allVocabs.find(v => v.kr === clean);
+                const allVocabs = [
+                    ...(window.KITTY_VOCAB_KITTY_ADD || []),
+                    ...(window.KOREAN_VOCAB_5666 || [])
+                ];
+                const found = allVocabs.find(v => (v.k || v.kr) === clean);
                 if (found) {
-                    const isV = found.pos && (found.pos.includes('動') || found.pos.includes('形') || found.kr.endsWith('다'));
+                    const krWord = found.k || found.kr;
+                    const p = found.p || found.pos || '';
+                    const isV = p.includes('動') || p.includes('形') || krWord.endsWith('다');
                     return {
-                        kr: found.kr,
-                        zh: found.zh,
-                        en: found.en || '',
+                        kr: krWord,
+                        zh: found.c || found.zh || clean,
+                        en: found.e || found.en || '',
                         type: isV ? "verb" : "object",
-                        stem: isV && found.kr.endsWith('다') ? found.kr.slice(0, -1) : found.kr
+                        stem: isV && krWord.endsWith('다') ? krWord.slice(0, -1) : krWord
                     };
                 }
             }
@@ -940,6 +1008,9 @@ const HangulEngine = {
                 'father': { kr: '아빠', zh: '爸爸', en: 'Father', type: 'subject' },
                 'student': { kr: '학생', zh: '學生', en: 'Student', type: 'subject' },
                 'everyone': { kr: '여러분', zh: '大家', en: 'Everyone', type: 'subject' },
+                'mp': { kr: '의원', zh: '議員', en: 'MP / Council Member', type: 'subject' },
+                'council member': { kr: '의원', zh: '議員', en: 'Council Member', type: 'subject' },
+                'congressman': { kr: '의원', zh: '議員', en: 'Congressman', type: 'subject' },
 
                 // 地點 (Places)
                 'space museum': { kr: '우주관', zh: '太空館', en: 'Space Museum', type: 'place', particleType: 'place' },
@@ -961,8 +1032,8 @@ const HangulEngine = {
                 'restaurant': { kr: '식당', zh: '餐廳', en: 'Restaurant', type: 'place', particleType: 'place' },
                 'seoul': { kr: '서울', zh: '首爾', en: 'Seoul', type: 'place', particleType: 'place' },
                 'korea': { kr: '한국', zh: '韓國', en: 'Korea', type: 'place', particleType: 'place' },
-                'company': { kr: '회사', zh: '公司', en: 'Company', type: 'place', particleType: 'place' },
-                'office': { kr: '회사', zh: '辦公室', en: 'Office', type: 'place', particleType: 'place' },
+                'company': { kr: '회사', zh: '公司/會社', en: 'Company', type: 'place', particleType: 'place' },
+                'office': { kr: '회사', zh: '辦公室/公司', en: 'Office', type: 'place', particleType: 'place' },
 
                 // 受語 (Objects)
                 'moon': { kr: '달', zh: '月亮', en: 'Moon', type: 'object' },
@@ -993,16 +1064,20 @@ const HangulEngine = {
                 'gift': { kr: '선물', zh: '禮物', en: 'Gift', type: 'object' },
                 'present': { kr: '선물', zh: '禮物', en: 'Present', type: 'object' },
                 'money': { kr: '돈', zh: '金錢', en: 'Money', type: 'object' },
-                'korean': { kr: '한국어', zh: '韓語', en: 'Korean language', type: 'object' },
+                'korean': { kr: '한국어', zh: '韓語', en: 'Korean', type: 'object' },
                 'korean language': { kr: '한국어', zh: '韓語', en: 'Korean language', type: 'object' },
+                'meeting': { kr: '회의', zh: '會議', en: 'Meeting', type: 'object' },
+                'conference': { kr: '회의', zh: '會議', en: 'Conference', type: 'object' },
+                'door': { kr: '문', zh: '門', en: 'Door', type: 'object' },
 
-                // 動詞 (Verbs & English Compound Verbs)
+                // 動詞片語 (Compound English Verbs)
                 'watch the moon': { kr: '보다', zh: '看', en: 'Watch the moon', type: 'verb', stem: '보', autoObject: { zh: '月亮', kr: '달', en: 'Moon' } },
                 'watch moon': { kr: '보다', zh: '看', en: 'Watch moon', type: 'verb', stem: '보', autoObject: { zh: '月亮', kr: '달', en: 'Moon' } },
                 'see the moon': { kr: '보다', zh: '看', en: 'See the moon', type: 'verb', stem: '보', autoObject: { zh: '月亮', kr: '달', en: 'Moon' } },
                 'see moon': { kr: '보다', zh: '看', en: 'See moon', type: 'verb', stem: '보', autoObject: { zh: '月亮', kr: '달', en: 'Moon' } },
                 'look at the moon': { kr: '보다', zh: '看', en: 'Look at the moon', type: 'verb', stem: '보', autoObject: { zh: '月亮', kr: '달', en: 'Moon' } },
                 'look at moon': { kr: '보다', zh: '看', en: 'Look at moon', type: 'verb', stem: '보', autoObject: { zh: '月亮', kr: '달', en: 'Moon' } },
+                'watch stars': { kr: '보다', zh: '看', en: 'Watch stars', type: 'verb', stem: '보', autoObject: { zh: '星星', kr: '별', en: 'Star' } },
                 'watch movie': { kr: '보다', zh: '看', en: 'Watch movie', type: 'verb', stem: '보', autoObject: { zh: '電影', kr: '영화', en: 'Movie' } },
                 'watch a movie': { kr: '보다', zh: '看', en: 'Watch a movie', type: 'verb', stem: '보', autoObject: { zh: '電影', kr: '영화', en: 'Movie' } },
                 'drink coffee': { kr: '마시다', zh: '喝', en: 'Drink coffee', type: 'verb', stem: '마시', autoObject: { zh: '咖啡', kr: '커피', en: 'Coffee' } },
@@ -1016,6 +1091,8 @@ const HangulEngine = {
                 'listen to music': { kr: '듣다', zh: '聽', en: 'Listen to music', type: 'verb', stem: '듣', irregular: 'd', autoObject: { zh: '音樂', kr: '음악', en: 'Music' } },
                 'study korean': { kr: '공부하다', zh: '學習', en: 'Study Korean', type: 'verb', stem: '공부하', autoObject: { zh: '韓語', kr: '한국어', en: 'Korean' } },
                 'learn korean': { kr: '배우다', zh: '學習', en: 'Learn Korean', type: 'verb', stem: '배우', autoObject: { zh: '韓語', kr: '한국어', en: 'Korean' } },
+                'hold a meeting': { kr: '열다', zh: '開會', en: 'Hold a meeting', type: 'verb', stem: '열', autoObject: { zh: '會議', kr: '회의', en: 'Meeting' } },
+                'have a meeting': { kr: '회의를 하다', zh: '開會', en: 'Have a meeting', type: 'verb', stem: '하', autoObject: { zh: '會議', kr: '회의', en: 'Meeting' } },
 
                 // 動詞原詞 (Base English Verbs)
                 'see': { kr: '보다', zh: '看', en: 'See', type: 'verb', stem: '보' },
@@ -1031,6 +1108,16 @@ const HangulEngine = {
                 'sleep': { kr: '자다', zh: '睡覺', en: 'Sleep', type: 'verb', stem: '자' },
                 'go': { kr: '가다', zh: '去', en: 'Go', type: 'verb', stem: '가' },
                 'come': { kr: '오다', zh: '來', en: 'Come', type: 'verb', stem: '오' },
+                'open': { kr: '열다', zh: '打開/開', en: 'Open / Hold', type: 'verb', stem: '열' },
+                'close': { kr: '닫다', zh: '關閉', en: 'Close', type: 'verb', stem: '닫' },
+                'walk': { kr: '걷다', zh: '走路', en: 'Walk', type: 'verb', stem: '걷', irregular: 'd' },
+                'run': { kr: '달리다', zh: '跑步', en: 'Run', type: 'verb', stem: '달리' },
+                'wash': { kr: '씻다', zh: '洗', en: 'Wash', type: 'verb', stem: '씻' },
+                'give': { kr: '주다', zh: '給', en: 'Give', type: 'verb', stem: '주' },
+                'ask': { kr: '묻다', zh: '詢問', en: 'Ask', type: 'verb', stem: '묻', irregular: 'd' },
+                'find': { kr: '찾다', zh: '尋找', en: 'Find', type: 'verb', stem: '찾' },
+                'sit': { kr: '앉다', zh: '坐下', en: 'Sit', type: 'verb', stem: '앉' },
+                'stand': { kr: '서다', zh: '站立', en: 'Stand', type: 'verb', stem: '서' },
                 'meet': { kr: '만나다', zh: '見面', en: 'Meet', type: 'verb', stem: '만나' },
                 'make': { kr: '만들다', zh: '製作/做', en: 'Make', type: 'verb', stem: '만들' },
                 'rest': { kr: '쉬다', zh: '休息', en: 'Rest', type: 'verb', stem: '쉬' },
@@ -1075,10 +1162,16 @@ const HangulEngine = {
 
         // 3. 中文 (繁體 / 簡體) 轉譯
         const cleanZh = clean;
+        const tradZh = (typeof window !== 'undefined' && window.KittySearch) ? window.KittySearch.toTrad(cleanZh) : cleanZh;
+        const simpZh = (typeof window !== 'undefined' && window.KittySearch) ? window.KittySearch.toSimp(cleanZh) : cleanZh;
 
         // 擴充通用繁簡中韓對照表
         const zhMap = {
             // 主語 (Subjects)
+            '議員': { kr: '의원', zh: '議員', en: 'Council Member / MP', type: 'subject' },
+            '议员': { kr: '의원', zh: '議員', en: 'Council Member / MP', type: 'subject' },
+            '國會議員': { kr: '국회의원', zh: '國會議員', en: 'Member of Parliament', type: 'subject' },
+            '国会议员': { kr: '국회의원', zh: '國會議員', en: 'Member of Parliament', type: 'subject' },
             '約翰': { kr: '존', zh: '約翰', en: 'John', type: 'subject' },
             '约翰': { kr: '존', zh: '約翰', en: 'John', type: 'subject' },
             '瑪麗': { kr: '메리', zh: '瑪麗', en: 'Mary', type: 'subject' },
@@ -1118,9 +1211,13 @@ const HangulEngine = {
             '凱蒂': { kr: '키티', zh: 'Kitty 貓', en: 'Kitty', type: 'subject' },
 
             // 地點/場所 (Places - 支援繁簡)
+            '會社': { kr: '회사', zh: '公司/會社', en: 'Company', type: 'place', particleType: 'place' },
+            '会社': { kr: '회사', zh: '公司/會社', en: 'Company', type: 'place', particleType: 'place' },
+            '公司': { kr: '회사', zh: '公司', en: 'Company', type: 'place', particleType: 'place' },
             '太空館': { kr: '우주관', zh: '太空館', en: 'Space Museum', type: 'place', particleType: 'place' },
             '太空馆': { kr: '우주관', zh: '太空館', en: 'Space Museum', type: 'place', particleType: 'place' },
             '太空': { kr: '우주', zh: '太空', en: 'Space', type: 'place', particleType: 'place' },
+            '宇宙': { kr: '우주', zh: '宇宙', en: 'Space', type: 'place', particleType: 'place' },
             '天文館': { kr: '천문관', zh: '天文館', en: 'Planetarium', type: 'place', particleType: 'place' },
             '天文馆': { kr: '천문관', zh: '天文館', en: 'Planetarium', type: 'place', particleType: 'place' },
             '科學館': { kr: '과학관', zh: '科學館', en: 'Science Museum', type: 'place', particleType: 'place' },
@@ -1141,7 +1238,6 @@ const HangulEngine = {
             '咖啡廳': { kr: '카페', zh: '咖啡廳', en: 'Cafe', type: 'place', particleType: 'place' },
             '咖啡馆': { kr: '카페', zh: '咖啡館', en: 'Cafe', type: 'place', particleType: 'place' },
             '咖啡店': { kr: '카페', zh: '咖啡店', en: 'Cafe', type: 'place', particleType: 'place' },
-            '公司': { kr: '회사', zh: '公司', en: 'Company', type: 'place', particleType: 'place' },
             '圖書館': { kr: '도서관', zh: '圖書館', en: 'Library', type: 'place', particleType: 'place' },
             '图书馆': { kr: '도서관', zh: '圖書館', en: 'Library', type: 'place', particleType: 'place' },
             '電影院': { kr: '영화관', zh: '電影院', en: 'Cinema', type: 'place', particleType: 'place' },
@@ -1158,6 +1254,8 @@ const HangulEngine = {
             '韩国': { kr: '한국', zh: '韓國', en: 'Korea', type: 'place', particleType: 'place' },
 
             // 受語 (Objects - 支援繁簡)
+            '會議': { kr: '회의', zh: '會議', en: 'Meeting', type: 'object' },
+            '会议': { kr: '회의', zh: '會議', en: 'Meeting', type: 'object' },
             '月亮': { kr: '달', zh: '月亮', en: 'Moon', type: 'object' },
             '月': { kr: '달', zh: '月亮', en: 'Moon', type: 'object' },
             '月球': { kr: '달', zh: '月亮', en: 'Moon', type: 'object' },
@@ -1196,6 +1294,8 @@ const HangulEngine = {
             '手机': { kr: '핸드폰', zh: '手機', en: 'Phone', type: 'object' },
             '電話': { kr: '전화', zh: '電話', en: 'Phone', type: 'object' },
             '电话': { kr: '전화', zh: '電話', en: 'Phone', type: 'object' },
+            '門': { kr: '문', zh: '門', en: 'Door', type: 'object' },
+            '门': { kr: '문', zh: '門', en: 'Door', type: 'object' },
             '照片': { kr: '사진', zh: '照片', en: 'Photo', type: 'object' },
             '信': { kr: '편지', zh: '信', en: 'Letter', type: 'object' },
             '禮物': { kr: '선물', zh: '禮物', en: 'Gift', type: 'object' },
@@ -1204,6 +1304,16 @@ const HangulEngine = {
             '钱': { kr: '돈', zh: '錢', en: 'Money', type: 'object' },
 
             // 動詞 (Verbs - 含複合輸入拆解)
+            '開': { kr: '열다', zh: '打開/開', en: 'Open / Hold', type: 'verb', stem: '열' },
+            '开': { kr: '열다', zh: '打開/開', en: 'Open / Hold', type: 'verb', stem: '열' },
+            '打開': { kr: '열다', zh: '打開', en: 'Open', type: 'verb', stem: '열' },
+            '打开': { kr: '열다', zh: '打開', en: 'Open', type: 'verb', stem: '열' },
+            '關': { kr: '닫다', zh: '關閉', en: 'Close', type: 'verb', stem: '닫' },
+            '关': { kr: '닫다', zh: '關閉', en: 'Close', type: 'verb', stem: '닫' },
+            '關閉': { kr: '닫다', zh: '關閉', en: 'Close', type: 'verb', stem: '닫' },
+            '关闭': { kr: '닫다', zh: '關閉', en: 'Close', type: 'verb', stem: '닫' },
+            '開會': { kr: '회의를 하다', zh: '開會', en: 'Hold a meeting', type: 'verb', stem: '하', autoObject: { zh: '會議', kr: '회의', en: 'Meeting' } },
+            '开会': { kr: '회의를 하다', zh: '開會', en: 'Hold a meeting', type: 'verb', stem: '하', autoObject: { zh: '會議', kr: '회의', en: 'Meeting' } },
             '看月亮': { kr: '보다', zh: '看', en: 'Watch the moon', type: 'verb', stem: '보', autoObject: { zh: '月亮', kr: '달', en: 'Moon' } },
             '看月': { kr: '보다', zh: '看', en: 'Watch moon', type: 'verb', stem: '보', autoObject: { zh: '月亮', kr: '달', en: 'Moon' } },
             '看星星': { kr: '보다', zh: '看', en: 'Watch stars', type: 'verb', stem: '보', autoObject: { zh: '星星', kr: '별', en: 'Star' } },
@@ -1256,8 +1366,26 @@ const HangulEngine = {
             '前往': { kr: '가다', zh: '前往', en: 'Go', type: 'verb', stem: '가' },
             '來': { kr: '오다', zh: '來', en: 'Come', type: 'verb', stem: '오' },
             '来': { kr: '오다', zh: '來', en: 'Come', type: 'verb', stem: '오' },
+            '走': { kr: '걷다', zh: '走路', en: 'Walk', type: 'verb', stem: '걷', irregular: 'd' },
+            '走路': { kr: '걷다', zh: '走路', en: 'Walk', type: 'verb', stem: '걷', irregular: 'd' },
+            '跑': { kr: '달리다', zh: '跑步', en: 'Run', type: 'verb', stem: '달리' },
+            '跑步': { kr: '달리다', zh: '跑步', en: 'Run', type: 'verb', stem: '달리' },
+            '洗': { kr: '씻다', zh: '洗', en: 'Wash', type: 'verb', stem: '씻' },
+            '給': { kr: '주다', zh: '給', en: 'Give', type: 'verb', stem: '주' },
+            '给': { kr: '주다', zh: '給', en: 'Give', type: 'verb', stem: '주' },
+            '問': { kr: '묻다', zh: '詢問', en: 'Ask', type: 'verb', stem: '묻', irregular: 'd' },
+            '问': { kr: '묻다', zh: '詢問', en: 'Ask', type: 'verb', stem: '묻', irregular: 'd' },
+            '找': { kr: '찾다', zh: '尋找', en: 'Find', type: 'verb', stem: '찾' },
+            '尋找': { kr: '찾다', zh: '尋找', en: 'Find', type: 'verb', stem: '찾' },
+            '寻找': { kr: '찾다', zh: '尋找', en: 'Find', type: 'verb', stem: '찾' },
+            '坐': { kr: '앉다', zh: '坐下', en: 'Sit', type: 'verb', stem: '앉' },
+            '坐下': { kr: '앉다', zh: '坐下', en: 'Sit', type: 'verb', stem: '앉' },
+            '站': { kr: '서다', zh: '站立', en: 'Stand', type: 'verb', stem: '서' },
+            '站立': { kr: '서다', zh: '站立', en: 'Stand', type: 'verb', stem: '서' },
+            '笑': { kr: '웃다', zh: '微笑', en: 'Smile/Laugh', type: 'verb', stem: '웃' },
+            '哭': { kr: '울다', zh: '哭泣', en: 'Cry', type: 'verb', stem: '울' },
             '見面': { kr: '만나다', zh: '見面', en: 'Meet', type: 'verb', stem: '만나' },
-            '见面': { kr: '만나다', zh: '見面', en: 'Meet', type: 'verb', stem: '交代' },
+            '见面': { kr: '만나다', zh: '見面', en: 'Meet', type: 'verb', stem: '만나' },
             '做': { kr: '만들다', zh: '製作', en: 'Make', type: 'verb', stem: '만들' },
             '製作': { kr: '만들다', zh: '製作', en: 'Make', type: 'verb', stem: '만들' },
             '制作': { kr: '만들다', zh: '製作', en: 'Make', type: 'verb', stem: '만들' },
@@ -1289,50 +1417,99 @@ const HangulEngine = {
             '忙': { kr: '바쁘다', zh: '忙', en: 'Busy', type: 'verb', stem: '바쁘' }
         };
 
-        // 優先精確比對 zhMap
-        if (zhMap[cleanZh]) {
-            return zhMap[cleanZh];
-        }
+        // 優先精確比對 zhMap (包含輸入原字、繁體與簡體)
+        if (zhMap[cleanZh]) return zhMap[cleanZh];
+        if (zhMap[tradZh]) return zhMap[tradZh];
+        if (zhMap[simpZh]) return zhMap[simpZh];
 
         // 依車卡類型精確檢索四大專屬語料庫
         if (carType === "subject") {
-            const sub = SENTENCE_SUBJECTS.find(s => s.zh === cleanZh);
+            const sub = SENTENCE_SUBJECTS.find(s => s.zh === cleanZh || s.zh === tradZh || s.zh === simpZh);
             if (sub) return { kr: sub.kr, zh: sub.zh, en: sub.en || '', type: "subject" };
         } else if (carType === "place") {
-            const plc = SENTENCE_PLACES.find(p => p.zh === cleanZh);
+            const plc = SENTENCE_PLACES.find(p => p.zh === cleanZh || p.zh === tradZh || p.zh === simpZh);
             if (plc) return { kr: plc.kr, zh: plc.zh, en: plc.en || '', type: "place", particleType: "actionPlace" };
         } else if (carType === "object") {
-            const obj = SENTENCE_OBJECTS.find(o => o.zh === cleanZh);
+            const obj = SENTENCE_OBJECTS.find(o => o.zh === cleanZh || o.zh === tradZh || o.zh === simpZh);
             if (obj) return { kr: obj.kr, zh: obj.zh, en: obj.en || '', type: "object", particleType: obj.category === 'none' ? 'none' : 'object' };
         } else if (carType === "verb") {
-            const vrb = SENTENCE_VERBS.find(v => v.zh === cleanZh);
+            const vrb = SENTENCE_VERBS.find(v => v.zh === cleanZh || v.zh === tradZh || v.zh === simpZh);
             if (vrb) return { kr: vrb.kr, zh: vrb.zh, en: vrb.en || '', type: "verb", stem: vrb.stem, irregular: vrb.irregular };
         }
 
         // 模糊比對 zhMap (優先比對相同車卡類型)
         for (const [key, val] of Object.entries(zhMap)) {
             if (carType !== "auto" && val.type !== carType) continue;
-            if (cleanZh === key || cleanZh.includes(key) || key.includes(cleanZh)) {
+            if (cleanZh === key || tradZh === key || simpZh === key || cleanZh.includes(key) || key.includes(cleanZh) || tradZh.includes(key) || key.includes(tradZh)) {
                 return val;
             }
         }
 
-        // 嘗試從全域 TOPIK 詞庫、Kitty自訂詞庫或漢字大辭典檢索
+        // 4. 全域字典智慧檢索 (TOPIK 5,666 筆 + 漢字大辭典 6,520 筆 + 漢字音節矩陣)
         if (typeof window !== 'undefined') {
+            // A. TOPIK 詞庫檢索
             const allVocabs = [
                 ...(window.KITTY_VOCAB_KITTY_ADD || []),
-                ...(window.KITTY_VOCAB_5666 || [])
+                ...(window.KOREAN_VOCAB_5666 || [])
             ];
-            const found = allVocabs.find(v => v.zh && (v.zh.includes(cleanZh) || cleanZh.includes(v.zh)));
-            if (found) {
-                const isV = found.pos && (found.pos.includes('動') || found.pos.includes('形') || found.kr.endsWith('다'));
+            const foundVocab = allVocabs.find(v => {
+                const c = v.c || v.zh;
+                if (!c) return false;
+                return c === cleanZh || c === tradZh || c === simpZh || c.split('、').includes(tradZh) || c.split('、').includes(cleanZh);
+            }) || allVocabs.find(v => {
+                const c = v.c || v.zh;
+                return c && (c.includes(tradZh) || tradZh.includes(c));
+            });
+
+            if (foundVocab) {
+                const krWord = foundVocab.k || foundVocab.kr;
+                const p = foundVocab.p || foundVocab.pos || '';
+                const isV = p.includes('動') || p.includes('形') || krWord.endsWith('다') || carType === 'verb';
                 return {
-                    kr: found.kr,
-                    zh: found.zh,
-                    en: found.en || '',
-                    type: isV ? "verb" : "object",
-                    stem: isV && found.kr.endsWith('다') ? found.kr.slice(0, -1) : found.kr
+                    kr: krWord,
+                    zh: foundVocab.c || foundVocab.zh || cleanZh,
+                    en: foundVocab.e || foundVocab.en || '',
+                    type: isV ? "verb" : (carType === 'auto' ? 'object' : carType),
+                    stem: isV && krWord.endsWith('다') ? krWord.slice(0, -1) : krWord
                 };
+            }
+
+            // B. 漢字詞大辭典 (HANJA_VOCAB_LIST 6,520 筆)
+            if (window.HANJA_VOCAB_LIST && Array.isArray(window.HANJA_VOCAB_LIST)) {
+                const foundHanja = window.HANJA_VOCAB_LIST.find(v => {
+                    return v.c === cleanZh || v.c === tradZh || v.c.split('、').includes(tradZh) || v.c.split('、').includes(cleanZh);
+                }) || window.HANJA_VOCAB_LIST.find(v => {
+                    return v.c && (v.c.includes(tradZh) || tradZh.includes(v.c));
+                });
+
+                if (foundHanja) {
+                    const krWord = foundHanja.k;
+                    const p = foundHanja.p || '';
+                    const isV = p.includes('動') || krWord.endsWith('다') || carType === 'verb';
+                    return {
+                        kr: krWord,
+                        zh: foundHanja.c || cleanZh,
+                        en: foundHanja.e || '',
+                        type: isV ? "verb" : (carType === 'auto' ? 'object' : carType),
+                        stem: isV && krWord.endsWith('다') ? krWord.slice(0, -1) : krWord
+                    };
+                }
+            }
+
+            // C. 逐字元漢字音節矩陣精確轉譯 (HANJA_SYLLABLE_LIST)
+            if (cleanZh.length >= 2) {
+                const hanjaKr = this.translateHanjaWord(cleanZh);
+                if (hanjaKr) {
+                    const isV = carType === 'verb';
+                    const finalKr = isV ? (hanjaKr.endsWith('하다') ? hanjaKr : hanjaKr + '하다') : hanjaKr;
+                    return {
+                        kr: finalKr,
+                        zh: cleanZh,
+                        en: cleanZh,
+                        type: isV ? "verb" : (carType === 'auto' ? 'object' : carType),
+                        stem: isV && finalKr.endsWith('다') ? finalKr.slice(0, -1) : finalKr
+                    };
+                }
             }
         }
 
