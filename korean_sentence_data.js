@@ -728,6 +728,210 @@ const HangulEngine = {
         return kr;
     },
 
+    // 韓語語幹變形引擎 - 結構化拆解 (Conjugator with Detailed Token Parts)
+    conjugateDetailed(verbObj, tense = "present", honorific = "informal", isQuestion = false, isNegative = false) {
+        if (!verbObj) return { kr: "", stem: "", ending: "", prefix: "", rom: "", romStem: "", romEnding: "", romPrefix: "" };
+
+        const kr = verbObj.kr || verbObj;
+        const stem = verbObj.stem || (kr.endsWith("다") ? kr.slice(0, -1) : kr);
+        const lastChar = stem.slice(-1);
+        const decomposed = this.decomposeChar(lastChar);
+        const hasBat = decomposed.hasBatchim;
+        const prefix = isNegative ? "안 " : "";
+        const romPrefix = isNegative ? "an " : "";
+
+        // 1. 原形
+        if (tense === "base") {
+            const ending = kr.endsWith("다") ? "다" : "";
+            const baseStem = kr.endsWith("다") ? kr.slice(0, -1) : kr;
+            const fullKr = prefix + kr;
+            return {
+                kr: fullKr,
+                prefix,
+                stem: baseStem,
+                ending,
+                rom: this.romanize(fullKr),
+                romPrefix,
+                romStem: this.romanize(baseStem),
+                romEnding: "da"
+            };
+        }
+
+        // 2. 現在進行式 (-고 있다)
+        if (tense === "continuous") {
+            let ending = "";
+            let romEnding = "";
+            if (honorific === "formal") {
+                ending = isQuestion ? "고 있습니까?" : "고 있습니다.";
+                romEnding = isQuestion ? "go ik-seum-ni-kka?" : "go ik-seum-ni-da";
+            } else if (honorific === "informal") {
+                ending = isQuestion ? "고 있어요?" : "고 있어요.";
+                romEnding = isQuestion ? "go it-seo-yo?" : "go it-seo-yo";
+            } else {
+                ending = isQuestion ? "고 있어?" : "고 있어.";
+                romEnding = isQuestion ? "go it-seo?" : "go it-seo";
+            }
+            const fullKr = prefix + stem + ending;
+            return {
+                kr: fullKr,
+                prefix,
+                stem: stem,
+                ending,
+                rom: this.romanize(fullKr),
+                romPrefix,
+                romStem: this.romanize(stem),
+                romEnding
+            };
+        }
+
+        // 3. 現在式 (Present Simple)
+        if (tense === "present") {
+            if (honorific === "formal") {
+                if (!decomposed.isHangul) {
+                    const ending = isQuestion ? "습니까?" : "습니다.";
+                    const fullKr = prefix + stem + ending;
+                    return { kr: fullKr, prefix, stem, ending, rom: this.romanize(fullKr), romPrefix, romStem: this.romanize(stem), romEnding: isQuestion ? "seum-ni-kka?" : "seum-ni-da" };
+                }
+                if (hasBat) {
+                    if (decomposed.jong === 'ㄹ') {
+                        const newChar = this.composeChar(decomposed.choIdx, decomposed.jungIdx, 17); // ㅂ
+                        const restStem = stem.slice(0, -1);
+                        const verbStemPart = restStem + newChar;
+                        const ending = isQuestion ? "니까?" : "니다.";
+                        const fullKr = prefix + verbStemPart + ending;
+                        return {
+                            kr: fullKr,
+                            prefix,
+                            stem: verbStemPart,
+                            ending,
+                            rom: this.romanize(fullKr),
+                            romPrefix,
+                            romStem: this.romanize(verbStemPart),
+                            romEnding: isQuestion ? "ni-kka?" : "ni-da"
+                        };
+                    }
+                    const ending = isQuestion ? "습니까?" : "습니다.";
+                    const fullKr = prefix + stem + ending;
+                    return {
+                        kr: fullKr,
+                        prefix,
+                        stem,
+                        ending,
+                        rom: this.romanize(fullKr),
+                        romPrefix,
+                        romStem: this.romanize(stem),
+                        romEnding: isQuestion ? "seum-ni-kka?" : "seum-ni-da"
+                    };
+                } else {
+                    const newChar = this.composeChar(decomposed.choIdx, decomposed.jungIdx, 17); // ㅂ
+                    const restStem = stem.slice(0, -1);
+                    const verbStemPart = restStem + newChar;
+                    const ending = isQuestion ? "니까?" : "니다.";
+                    const fullKr = prefix + verbStemPart + ending;
+                    return {
+                        kr: fullKr,
+                        prefix,
+                        stem: verbStemPart,
+                        ending,
+                        rom: this.romanize(fullKr),
+                        romPrefix,
+                        romStem: this.romanize(verbStemPart),
+                        romEnding: isQuestion ? "ni-kka?" : "ni-da"
+                    };
+                }
+            }
+
+            // 日常敬語 / 平語
+            let informalStem = this.getInformalStem(stem, verbObj);
+            const ending = honorific === "informal" ? (isQuestion ? "요?" : "요.") : (isQuestion ? "?" : "");
+            const fullKr = prefix + informalStem + (honorific === "informal" ? "요" : "") + (isQuestion ? "?" : (honorific === "informal" ? "." : ""));
+            const romEnding = honorific === "informal" ? (isQuestion ? "yo?" : "yo") : (isQuestion ? "?" : "");
+            return {
+                kr: fullKr,
+                prefix,
+                stem: informalStem,
+                ending,
+                rom: this.romanize(fullKr),
+                romPrefix,
+                romStem: this.romanize(informalStem),
+                romEnding
+            };
+        }
+
+        // 4. 過去式 (Past Tense)
+        if (tense === "past") {
+            const pastStem = this.getPastStem(stem, verbObj);
+            let ending = "";
+            let romEnding = "";
+            if (honorific === "formal") {
+                ending = isQuestion ? "습니까?" : "습니다.";
+                romEnding = isQuestion ? "seum-ni-kka?" : "seum-ni-da";
+            } else if (honorific === "informal") {
+                ending = isQuestion ? "어요?" : "어요.";
+                romEnding = isQuestion ? "eo-yo?" : "eo-yo";
+            } else {
+                ending = isQuestion ? "어?" : "어.";
+                romEnding = isQuestion ? "eo?" : "eo";
+            }
+            const fullKr = prefix + pastStem + ending;
+            return {
+                kr: fullKr,
+                prefix,
+                stem: pastStem,
+                ending,
+                rom: this.romanize(fullKr),
+                romPrefix,
+                romStem: this.romanize(pastStem),
+                romEnding
+            };
+        }
+
+        // 5. 未來式 (Future Tense)
+        if (tense === "future") {
+            let futureStem = "";
+            if (verbObj.irregular === "d" && hasBat) {
+                const newChar = this.composeChar(decomposed.choIdx, decomposed.jungIdx, 8); // ㄹ
+                futureStem = stem.slice(0, -1) + newChar + "을";
+            } else if (hasBat) {
+                if (decomposed.jong === 'ㄹ') {
+                    futureStem = stem;
+                } else {
+                    futureStem = stem + "을";
+                }
+            } else {
+                const newChar = this.composeChar(decomposed.choIdx, decomposed.jungIdx, 8); // ㄹ
+                futureStem = stem.slice(0, -1) + newChar;
+            }
+
+            let ending = "";
+            let romEnding = "";
+            if (honorific === "formal") {
+                ending = isQuestion ? " 겁니까?" : " 겁니다.";
+                romEnding = isQuestion ? "geom-ni-kka?" : "geom-ni-da";
+            } else if (honorific === "informal") {
+                ending = isQuestion ? " 거예요?" : " 거예요.";
+                romEnding = isQuestion ? "geo-ye-yo?" : "geo-ye-yo";
+            } else {
+                ending = isQuestion ? " 거야?" : " 거야.";
+                romEnding = isQuestion ? "geo-ya?" : "geo-ya";
+            }
+
+            const fullKr = prefix + futureStem + ending;
+            return {
+                kr: fullKr,
+                prefix,
+                stem: futureStem,
+                ending,
+                rom: this.romanize(fullKr),
+                romPrefix,
+                romStem: this.romanize(futureStem),
+                romEnding
+            };
+        }
+
+        return { kr, stem: kr, ending: "", prefix: "", rom: this.romanize(kr), romStem: this.romanize(kr), romEnding: "", romPrefix: "" };
+    },
+
     // 取得日常敬語詞幹 (Informal Stem Resolver)
     getInformalStem(stem, verbObj) {
         if (stem.endsWith("하")) {

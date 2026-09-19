@@ -137,6 +137,106 @@
     <script type="text/babel">
         const { useState, useEffect, useMemo, useRef } = React;
 
+        // ================= 語法螢光筆透視渲染組件 (Grammar Highlight Component) =================
+        function HighlightedSentence({ formObj, isHighlight = true, isLarge = false, textColClass = "text-amber-950", romColClass = "text-amber-800", krClass, romClass }) {
+            if (!formObj) return null;
+            const { kr, rom, parts } = formObj;
+            const finalKrClass = krClass || `${isLarge ? 'text-xl sm:text-2xl' : 'text-base sm:text-lg'} font-black kr-font ${textColClass} mb-1.5 leading-relaxed`;
+            const finalRomClass = romClass || `text-xs ${romColClass} font-bold`;
+
+            if (!isHighlight || !parts) {
+                return (
+                    <div>
+                        <div className={finalKrClass}>
+                            {kr}
+                        </div>
+                        <div className={finalRomClass}>
+                            [讀音] {rom}
+                        </div>
+                    </div>
+                );
+            }
+
+            const { sub, plc, obj, verb } = parts;
+
+            // 溫潤柔和金黃螢光筆樣式（清晰醒目且不傷眼、不干擾文字閱讀）
+            const hlKrClass = "bg-yellow-200/95 text-amber-950 px-1.5 py-0.5 rounded-md font-black border border-yellow-300/90 shadow-2xs mx-0.5 inline-block";
+            const hlRomClass = "bg-yellow-200/90 text-amber-950 px-1 py-0.2 rounded font-extrabold border border-yellow-300/70 shadow-2xs inline-block";
+
+            return (
+                <div>
+                    {/* 韓文句子 */}
+                    <div className={`${finalKrClass} flex flex-wrap items-center gap-x-2 gap-y-1.5`}>
+                        {sub && sub.word && (
+                            <span className="inline-flex items-center">
+                                <span>{sub.word}</span>
+                                {sub.particle && <span className={hlKrClass}>{sub.particle}</span>}
+                            </span>
+                        )}
+                        {plc && plc.word && (
+                            <span className="inline-flex items-center">
+                                <span>{plc.word}</span>
+                                {plc.particle && <span className={hlKrClass}>{plc.particle}</span>}
+                            </span>
+                        )}
+                        {obj && obj.word && (
+                            <span className="inline-flex items-center">
+                                <span>{obj.word}</span>
+                                {obj.particle && <span className={hlKrClass}>{obj.particle}</span>}
+                            </span>
+                        )}
+                        {verb && (
+                            <span className="inline-flex items-center">
+                                {verb.prefix && <span className={`${hlKrClass} mr-1`}>{verb.prefix.trim()}</span>}
+                                <span>{verb.stem}</span>
+                                {verb.ending && (
+                                    <>
+                                        {verb.ending.startsWith(' ') && <span>&nbsp;</span>}
+                                        <span className={hlKrClass}>{verb.ending.trim()}</span>
+                                    </>
+                                )}
+                            </span>
+                        )}
+                    </div>
+
+                    {/* 羅馬拼音 */}
+                    <div className={`text-xs ${romColClass} font-bold flex flex-wrap items-center gap-x-1.5 gap-y-1`}>
+                        <span className="opacity-80 font-black mr-0.5">[讀音]</span>
+                        {sub && sub.romWord && (
+                            <span className="inline-flex items-center">
+                                <span>{sub.romWord}{sub.romParticle ? '-' : ''}</span>
+                                {sub.romParticle && <span className={hlRomClass}>{sub.romParticle.trim()}</span>}
+                            </span>
+                        )}
+                        {plc && plc.romWord && (
+                            <span className="inline-flex items-center">
+                                <span>{plc.romWord}{plc.romParticle ? '-' : ''}</span>
+                                {plc.romParticle && <span className={hlRomClass}>{plc.romParticle.trim()}</span>}
+                            </span>
+                        )}
+                        {obj && obj.romWord && (
+                            <span className="inline-flex items-center">
+                                <span>{obj.romWord}{obj.romParticle ? '-' : ''}</span>
+                                {obj.romParticle && <span className={hlRomClass}>{obj.romParticle.trim()}</span>}
+                            </span>
+                        )}
+                        {verb && (
+                            <span className="inline-flex items-center">
+                                {verb.romPrefix && <span className={`${hlRomClass} mr-1`}>{verb.romPrefix.trim()}</span>}
+                                <span>{verb.romStem}</span>
+                                {verb.romEnding && (
+                                    <>
+                                        {verb.romEnding.startsWith(' ') ? <span>&nbsp;</span> : <span>-</span>}
+                                        <span className={hlRomClass}>{verb.romEnding.trim()}</span>
+                                    </>
+                                )}
+                            </span>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
         function KoreanSentenceTrainApp() {
             // ================= 狀態管理 (單一萬能輸入框 + 多語言智慧解析) =================
             const [subjectRaw, setSubjectRaw] = useState("동생");
@@ -163,6 +263,7 @@
             // 語法與發音設定
             const [currentSpeechRate, setCurrentSpeechRate] = useState(0.7); // 0.3x, 0.7x, 1.0x
             const [isSpeaking, setIsSpeaking] = useState(false);
+            const [isGrammarHighlight, setIsGrammarHighlight] = useState(true); // 語法螢光筆透視模式
             const [activeTenseTab, setActiveTenseTab] = useState("all"); // 'all', 'present', 'past', 'future', 'explore', 'quiz'
             const [isTrainMoving, setIsTrainMoving] = useState(false);
             const [toastMessage, setToastMessage] = useState("");
@@ -420,115 +521,130 @@
                     type: "verb"
                 };
 
-                // 1. 主語變形判定 (나/저 代名詞特別處理)
-                let subFormal = subKr;
-                let subInformal = subKr;
-                let subCasual = subKr;
-
-                if (subKr === "나") {
-                    if (subjectParticleType === "topic") {
-                        subFormal = "저는";
-                        subInformal = "저는";
-                        subCasual = "나는";
-                    } else {
-                        subFormal = "제가";
-                        subInformal = "제가";
-                        subCasual = "내가";
-                    }
-                } else if (subKr === "저") {
-                    if (subjectParticleType === "topic") {
-                        subFormal = "저는";
-                        subInformal = "저는";
-                        subCasual = "나는";
-                    } else {
-                        subFormal = "제가";
-                        subInformal = "제가";
-                        subCasual = "내가";
-                    }
-                } else if (subKr === "너") {
-                    if (subjectParticleType === "topic") {
-                        subFormal = "당신은";
-                        subInformal = "당신은";
-                        subCasual = "너는";
-                    } else {
-                        subFormal = "당신이";
-                        subInformal = "당신이";
-                        subCasual = "네가";
-                    }
-                } else {
-                    // 一般名詞收音判定
-                    const hasBat = window.HangulEngine ? window.HangulEngine.hasBatchim(subKr) : false;
-                    const particle = subjectParticleType === "topic" 
-                        ? (hasBat ? "은" : "는") 
-                        : (hasBat ? "이" : "가");
-                    subFormal = `${subKr}${particle}`;
-                    subInformal = `${subKr}${particle}`;
-                    subCasual = `${subKr}${particle}`;
-                }
-
-                // 2. 地點助詞判定 (에서 / 에)
-                let plcPart = "";
-                if (plcKr) {
-                    if (placeParticleType === "actionPlace") {
-                        plcPart = `${plcKr}에서`;
-                    } else if (placeParticleType === "destPlace") {
-                        plcPart = `${plcKr}에`;
-                    } else {
-                        plcPart = plcKr;
-                    }
-                }
-
-                // 3. 受詞助詞判定 (을 / 를)
-                let objPart = "";
-                if (objKr) {
-                    const hasBat = window.HangulEngine ? window.HangulEngine.hasBatchim(objKr) : false;
-                    if (objectParticleType === "object") {
-                        objPart = hasBat ? `${objKr}을` : `${objKr}를`;
-                    } else {
-                        objPart = objKr;
-                    }
-                }
-
-                const buildSentence = (sub, plc, obj, verb) => {
-                    return [sub, plc, obj, verb].filter(Boolean).join(" ");
-                };
-
-                // 4. 語幹變形產生器
+                // 4. 語幹變形產生器與結構化句子組裝器
                 const engine = window.HangulEngine;
                 if (!engine) return null;
 
+                // 結構化組裝零件
+                let subFormalPart = { word: subKr, particle: "", romWord: engine.romanize(subKr), romParticle: "" };
+                let subCasualPart = { word: subKr, particle: "", romWord: engine.romanize(subKr), romParticle: "" };
+
+                if (subKr === "나" || subKr === "저") {
+                    if (subjectParticleType === "topic") {
+                        subFormalPart = { word: "저", particle: "는", romWord: "Jeo", romParticle: "neun" };
+                        subCasualPart = { word: "나", particle: "는", romWord: "Na", romParticle: "neun" };
+                    } else {
+                        subFormalPart = { word: "제", particle: "가", romWord: "Je", romParticle: "ga" };
+                        subCasualPart = { word: "내", particle: "가", romWord: "Nae", romParticle: "ga" };
+                    }
+                } else if (subKr === "너") {
+                    if (subjectParticleType === "topic") {
+                        subFormalPart = { word: "당신", particle: "은", romWord: "Dang-sin", romParticle: "eun" };
+                        subCasualPart = { word: "너", particle: "는", romWord: "Neo", romParticle: "neun" };
+                    } else {
+                        subFormalPart = { word: "당신", particle: "이", romWord: "Dang-sin", romParticle: "i" };
+                        subCasualPart = { word: "네", particle: "가", romWord: "Ne", romParticle: "ga" };
+                    }
+                } else {
+                    const hasBat = engine.hasBatchim(subKr);
+                    const particle = subjectParticleType === "topic" ? (hasBat ? "은" : "는") : (hasBat ? "이" : "가");
+                    const finalRomPart = particle === "은" ? "eun" : (particle === "는" ? "neun" : (particle === "이" ? "i" : "ga"));
+                    subFormalPart = { word: subKr, particle, romWord: engine.romanize(subKr), romParticle: finalRomPart };
+                    subCasualPart = subFormalPart;
+                }
+
+                let plcPartObj = { word: "", particle: "", romWord: "", romParticle: "" };
+                if (plcKr) {
+                    if (placeParticleType === "actionPlace") {
+                        plcPartObj = { word: plcKr, particle: "에서", romWord: engine.romanize(plcKr), romParticle: "e-seo" };
+                    } else if (placeParticleType === "destPlace") {
+                        plcPartObj = { word: plcKr, particle: "에", romWord: engine.romanize(plcKr), romParticle: "e" };
+                    } else {
+                        plcPartObj = { word: plcKr, particle: "", romWord: engine.romanize(plcKr), romParticle: "" };
+                    }
+                }
+
+                let objPartObj = { word: "", particle: "", romWord: "", romParticle: "" };
+                if (objKr) {
+                    if (objectParticleType === "object") {
+                        const hasBat = engine.hasBatchim(objKr);
+                        const p = hasBat ? "을" : "를";
+                        const romP = hasBat ? "eul" : "reul";
+                        objPartObj = { word: objKr, particle: p, romWord: engine.romanize(objKr), romParticle: romP };
+                    } else {
+                        objPartObj = { word: objKr, particle: "", romWord: engine.romanize(objKr), romParticle: "" };
+                    }
+                }
+
+                const makeSentenceForm = (subPart, plcPart, objPart, vDet, label = "") => {
+                    const krParts = [
+                        subPart && subPart.word ? subPart.word + subPart.particle : '',
+                        plcPart && plcPart.word ? plcPart.word + plcPart.particle : '',
+                        objPart && objPart.word ? objPart.word + objPart.particle : '',
+                        vDet ? vDet.kr : ''
+                    ].filter(Boolean);
+                    const kr = krParts.join(" ");
+
+                    const romParts = [
+                        subPart && subPart.romWord ? subPart.romWord + (subPart.romParticle ? '-' + subPart.romParticle : '') : '',
+                        plcPart && plcPart.romWord ? plcPart.romWord + (plcPart.romParticle ? '-' + plcPart.romParticle : '') : '',
+                        objPart && objPart.romWord ? objPart.romWord + (objPart.romParticle ? '-' + objPart.romParticle : '') : '',
+                        vDet ? vDet.rom : ''
+                    ].filter(Boolean);
+                    const rom = romParts.join(" ");
+
+                    return {
+                        kr,
+                        rom,
+                        label,
+                        parts: {
+                            sub: subPart,
+                            plc: plcPart,
+                            obj: objPart,
+                            verb: {
+                                prefix: vDet ? vDet.prefix : "",
+                                stem: vDet ? vDet.stem : "",
+                                ending: vDet ? vDet.ending : "",
+                                romPrefix: vDet ? vDet.romPrefix : "",
+                                romStem: vDet ? vDet.romStem : "",
+                                romEnding: vDet ? vDet.romEnding : ""
+                            }
+                        }
+                    };
+                };
+
                 // 原形
-                const baseForm = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "base", "formal"));
+                const baseForm = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "base", "formal"));
 
                 // 現在式 (一般現在式)
-                const presFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "formal"));
-                const presInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "informal"));
-                const presCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "present", "casual"));
+                const presFormal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "formal"), "最高敬語 (습니다/ㅂ니다)");
+                const presInformal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "informal"), "日常敬語 (해요體)");
+                const presCasual = makeSentenceForm(subCasualPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "casual"), "平語/半語 (반말)");
 
                 // 現在進行式 (-고 있다)
-                const contFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "continuous", "formal"));
-                const contInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "continuous", "informal"));
-                const contCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "continuous", "casual"));
+                const contFormal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "continuous", "formal"), "最高敬語 (습니다)");
+                const contInformal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "continuous", "informal"), "日常敬語 (해요體)");
+                const contCasual = makeSentenceForm(subCasualPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "continuous", "casual"), "平語/半語 (반말)");
 
                 // 過去式 (-았/었/했-)
-                const pastFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "past", "formal"));
-                const pastInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "past", "informal"));
-                const pastCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "past", "casual"));
+                const pastFormal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "past", "formal"), "最高敬語 (-았습니다/었습니다)");
+                const pastInformal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "past", "informal"), "日常敬語 (-았어요/었어요)");
+                const pastCasual = makeSentenceForm(subCasualPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "past", "casual"), "平語/半語 (-았어/었어)");
 
                 // 未來式 (-(으)ㄹ 거예요)
-                const futFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "future", "formal"));
-                const futInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "future", "informal"));
-                const futCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "future", "casual"));
+                const futFormal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "future", "formal"), "最高敬語 (-(으)ㄹ 겁니다)");
+                const futInformal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "future", "informal"), "日常敬語 (-(으)ㄹ 거예요)");
+                const futCasual = makeSentenceForm(subCasualPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "future", "casual"), "平語/半語 (-(으)ㄹ 거야)");
 
                 // 否定句 (안 ~)
-                const negFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "formal", false, true));
-                const negInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "informal", false, true));
-                const negCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "present", "casual", false, true));
+                const negFormal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "formal", false, true), "最高敬語 (습니다)");
+                const negInformal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "informal", false, true), "日常敬語 (해요體)");
+                const negCasual = makeSentenceForm(subCasualPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "casual", false, true), "平語/半語 (반말)");
 
                 // 疑問句 (~?)
-                const qFormal = buildSentence(subFormal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "formal", true));
-                const qInformal = buildSentence(subInformal, plcPart, objPart, engine.conjugate(matchedVrb, "present", "informal", true));
-                const qCasual = buildSentence(subCasual, plcPart, objPart, engine.conjugate(matchedVrb, "present", "casual", true));
+                const qFormal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "formal", true), "最高敬語 (습니까)");
+                const qInformal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "informal", true), "日常敬語 (해요體)");
+                const qCasual = makeSentenceForm(subCasualPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "casual", true), "平語/半語 (반말)");
 
                 // 中文翻譯組裝
                 const pfxPlace = placeZh ? `在${placeZh}` : '';
@@ -536,46 +652,45 @@
 
                 return {
                     baseForm: {
-                        zh: `${subjectZh} ${pfxPlace ? pfxPlace + ' ' : ''}${pfxObj ? pfxObj + ' ' : ''}${verbZh}（詞典原形）`,
-                        kr: baseForm,
-                        rom: engine.romanize(baseForm)
+                        ...baseForm,
+                        zh: `${subjectZh} ${pfxPlace ? pfxPlace + ' ' : ''}${pfxObj ? pfxObj + ' ' : ''}${verbZh}（詞典原形）`
                     },
                     present: {
                         zh: `${subjectZh}${pfxPlace}${verbZh}${pfxObj}。`,
-                        formal: { kr: presFormal, rom: engine.romanize(presFormal), label: "最高敬語 (습니다/ㅂ니다)" },
-                        informal: { kr: presInformal, rom: engine.romanize(presInformal), label: "日常敬語 (해요體)" },
-                        casual: { kr: presCasual, rom: engine.romanize(presCasual), label: "平語/半語 (반말)" }
+                        formal: presFormal,
+                        informal: presInformal,
+                        casual: presCasual
                     },
                     continuous: {
                         zh: `${subjectZh}正在${pfxPlace}${verbZh}${pfxObj}。`,
-                        formal: { kr: contFormal, rom: engine.romanize(contFormal), label: "最高敬語 (습니다)" },
-                        informal: { kr: contInformal, rom: engine.romanize(contInformal), label: "日常敬語 (해요體)" },
-                        casual: { kr: contCasual, rom: engine.romanize(contCasual), label: "平語/半語 (반말)" }
+                        formal: contFormal,
+                        informal: contInformal,
+                        casual: contCasual
                     },
                     past: {
                         zh: `${subjectZh}${pfxPlace}${verbZh}了${pfxObj}。`,
-                        formal: { kr: pastFormal, rom: engine.romanize(pastFormal), label: "最高敬語 (-았습니다/었습니다)" },
-                        informal: { kr: pastInformal, rom: engine.romanize(pastInformal), label: "日常敬語 (-았어요/었어요)" },
-                        casual: { kr: pastCasual, rom: engine.romanize(pastCasual), label: "平語/半語 (-았어/었어)" }
+                        formal: pastFormal,
+                        informal: pastInformal,
+                        casual: pastCasual
                     },
                     future: {
                         zh: `${subjectZh}打算${pfxPlace}${verbZh}${pfxObj}。`,
-                        formal: { kr: futFormal, rom: engine.romanize(futFormal), label: "最高敬語 (-(으)ㄹ 겁니다)" },
-                        informal: { kr: futInformal, rom: engine.romanize(futInformal), label: "日常敬語 (-(으)ㄹ 거예요)" },
-                        casual: { kr: futCasual, rom: engine.romanize(futCasual), label: "平語/半語 (-(으)ㄹ 거야)" }
+                        formal: futFormal,
+                        informal: futInformal,
+                        casual: futCasual
                     },
                     explore: {
                         negative: {
                             zh: `${subjectZh}${pfxPlace}不${verbZh}${pfxObj}。（否定句）`,
-                            formal: { kr: negFormal, rom: engine.romanize(negFormal), label: "最高敬語 (습니다)" },
-                            informal: { kr: negInformal, rom: engine.romanize(negInformal), label: "日常敬語 (해요體)" },
-                            casual: { kr: negCasual, rom: engine.romanize(negCasual), label: "平語/半語 (반말)" }
+                            formal: negFormal,
+                            informal: negInformal,
+                            casual: negCasual
                         },
                         question: {
                             zh: `${pfxPlace}要${verbZh}${pfxObj}嗎？（疑問句）`,
-                            formal: { kr: qFormal, rom: engine.romanize(qFormal), label: "最高敬語 (습니까)" },
-                            informal: { kr: qInformal, rom: engine.romanize(qInformal), label: "日常敬語 (해요體)" },
-                            casual: { kr: qCasual, rom: engine.romanize(qCasual), label: "平語/半語 (반말)" }
+                            formal: qFormal,
+                            informal: qInformal,
+                            casual: qCasual
                         }
                     }
                 };
@@ -1182,30 +1297,52 @@
                             <div className="rail-track w-full rounded-full my-2"></div>
                         </div>
 
-                        {/* ================= 時態分類分頁標籤 (Tabs) ================= */}
-                        <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 text-xs sm:text-sm font-black">
-                            {[
-                                { id: "all", label: "🌟 全部時態一覽", icon: "fa-cubes" },
-                                { id: "present", label: "☀️ 現在式 (一般)", icon: "fa-sun" },
-                                { id: "continuous", label: "⏳ 現在進行式 (-고 있다)", icon: "fa-hourglass-half" },
-                                { id: "past", label: "🌙 過去式 (-았/었어요)", icon: "fa-moon" },
-                                { id: "future", label: "🚀 未來式 (-(으)ㄹ 거예요)", icon: "fa-rocket" },
-                                { id: "explore", label: "🪄 否定與疑問句探索", icon: "fa-wand-magic-sparkles" },
-                                { id: "quiz", label: "🎮 隨堂星級測驗", icon: "fa-gamepad" }
-                            ].map(tab => (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => setActiveTenseTab(tab.id)}
-                                    className={`px-4 py-2.5 rounded-2xl transition-all shrink-0 flex items-center gap-1.5 border-2 ${
-                                        activeTenseTab === tab.id
-                                            ? 'bg-amber-700 text-white border-amber-800 shadow-md scale-102'
-                                            : 'bg-white/90 text-amber-950 border-amber-200 hover:bg-amber-100'
-                                    }`}
-                                >
-                                    <i className={`fas ${tab.icon}`}></i>
-                                    <span>{tab.label}</span>
-                                </button>
-                            ))}
+                        {/* ================= 時態分類分頁標籤 (Tabs) & 語法螢光筆開關 ================= */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                            <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs sm:text-sm font-black">
+                                {[
+                                    { id: "all", label: "🌟 全部時態一覽", icon: "fa-cubes" },
+                                    { id: "present", label: "☀️ 現在式 (一般)", icon: "fa-sun" },
+                                    { id: "continuous", label: "⏳ 現在進行式 (-고 있다)", icon: "fa-hourglass-half" },
+                                    { id: "past", label: "🌙 過去式 (-았/었어요)", icon: "fa-moon" },
+                                    { id: "future", label: "🚀 未來式 (-(으)ㄹ 거예요)", icon: "fa-rocket" },
+                                    { id: "explore", label: "🪄 否定與疑問句探索", icon: "fa-wand-magic-sparkles" },
+                                    { id: "quiz", label: "🎮 隨堂星級測驗", icon: "fa-gamepad" }
+                                ].map(tab => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTenseTab(tab.id)}
+                                        className={`px-4 py-2.5 rounded-2xl transition-all shrink-0 flex items-center gap-1.5 border-2 ${
+                                            activeTenseTab === tab.id
+                                                ? 'bg-amber-700 text-white border-amber-800 shadow-md scale-102'
+                                                : 'bg-white/90 text-amber-950 border-amber-200 hover:bg-amber-100'
+                                        }`}
+                                    >
+                                        <i className={`fas ${tab.icon}`}></i>
+                                        <span>{tab.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* 🎨 語法螢光筆透視開關 */}
+                            <button
+                                type="button"
+                                onClick={() => setIsGrammarHighlight(!isGrammarHighlight)}
+                                className={`px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-black border-2 transition-all flex items-center gap-2 cursor-pointer shadow-xs shrink-0 ${
+                                    isGrammarHighlight
+                                        ? 'bg-amber-100 text-amber-950 border-amber-400 ring-2 ring-yellow-400/50'
+                                        : 'bg-white/90 text-amber-800 border-amber-200 hover:bg-amber-100'
+                                }`}
+                                title="切換語法助詞與語尾螢光筆透視高亮"
+                            >
+                                <span>🎨</span>
+                                <span>語法螢光筆</span>
+                                <span className={`text-[11px] px-2 py-0.5 rounded-full font-black ${
+                                    isGrammarHighlight ? 'bg-amber-900 text-yellow-300' : 'bg-amber-200 text-amber-800'
+                                }`}>
+                                    {isGrammarHighlight ? '✨ 開啟中' : '關閉'}
+                                </span>
+                            </button>
                         </div>
 
                         {/* ================= 造句結果呈現區 ================= */}
@@ -1216,27 +1353,27 @@
                                 {(activeTenseTab === "all" || activeTenseTab === "present") && (
                                     <div className="train-card rounded-3xl p-5 bg-gradient-to-r from-amber-50 to-orange-50/50 border-amber-300">
                                         <div className="flex flex-wrap items-center justify-between gap-2">
-                                            <div>
+                                            <div className="space-y-1">
                                                 <span className="text-xs font-black text-amber-800 bg-amber-200/80 px-2.5 py-1 rounded-full">
                                                     📖 詞典原形 (Dictionary Form)
                                                 </span>
-                                                <div className="text-xl sm:text-2xl font-black kr-font text-amber-950 mt-1">
-                                                    {generatedSentences.baseForm.kr}
+                                                <div className="mt-1">
+                                                    <HighlightedSentence formObj={generatedSentences.baseForm} isHighlight={isGrammarHighlight} isLarge={true} />
                                                 </div>
                                                 <div className="text-xs text-amber-700 font-bold">
-                                                    [讀音] {generatedSentences.baseForm.rom} • {generatedSentences.baseForm.zh}
+                                                    中文意思：{generatedSentences.baseForm.zh}
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={() => speakKorean(generatedSentences.baseForm.kr)}
-                                                    className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-black shadow-xs flex items-center gap-1"
+                                                    className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-black shadow-xs flex items-center gap-1 cursor-pointer"
                                                 >
                                                     <i className="fas fa-volume-high"></i> 朗讀
                                                 </button>
                                                 <button
                                                     onClick={() => copyToClipboard(generatedSentences.baseForm.kr)}
-                                                    className="px-3 py-1.5 bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-xl text-xs font-black shadow-xs flex items-center gap-1"
+                                                    className="px-3 py-1.5 bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-xl text-xs font-black shadow-xs flex items-center gap-1 cursor-pointer"
                                                 >
                                                     <i className="fas fa-copy"></i> 複製
                                                 </button>
@@ -1269,28 +1406,23 @@
                                             {/* 最高敬語 */}
                                             <div className="bg-indigo-50/70 rounded-2xl p-4 border border-indigo-200 flex flex-col justify-between">
                                                 <div>
-                                                    <div className="flex items-center justify-between mb-1.5">
+                                                    <div className="flex items-center justify-between mb-2">
                                                         <span className="text-xs font-black text-indigo-900 bg-indigo-100 px-2 py-0.5 rounded-full">
                                                             👑 最高敬語 (습니다)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1">
-                                                        {generatedSentences.present.formal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-indigo-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.present.formal.rom}
-                                                    </div>
+                                                    <HighlightedSentence formObj={generatedSentences.present.formal} isHighlight={isGrammarHighlight} textColClass="text-indigo-950" romColClass="text-indigo-800" />
                                                 </div>
-                                                <div className="flex items-center gap-2 pt-2 border-t border-indigo-200/60">
+                                                <div className="flex items-center gap-2 pt-3 border-t border-indigo-200/60 mt-2">
                                                     <button
                                                         onClick={() => speakKorean(generatedSentences.present.formal.kr)}
-                                                        className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                        className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer"
                                                     >
                                                         <i className="fas fa-volume-high"></i> 朗讀
                                                     </button>
                                                     <button
                                                         onClick={() => copyToClipboard(generatedSentences.present.formal.kr)}
-                                                        className="px-2.5 py-1 bg-white hover:bg-indigo-100 text-indigo-800 rounded-lg text-xs font-bold border border-indigo-200"
+                                                        className="px-2.5 py-1 bg-white hover:bg-indigo-100 text-indigo-800 rounded-lg text-xs font-bold border border-indigo-200 cursor-pointer"
                                                     >
                                                         <i className="fas fa-copy"></i>
                                                     </button>
@@ -1303,28 +1435,23 @@
                                                     最常用推薦 ⭐
                                                 </span>
                                                 <div>
-                                                    <div className="flex items-center justify-between mb-1.5">
+                                                    <div className="flex items-center justify-between mb-2">
                                                         <span className="text-xs font-black text-amber-950 bg-amber-200 px-2 py-0.5 rounded-full">
                                                             🌸 日常敬語 (해요體)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-amber-950 mb-1">
-                                                        {generatedSentences.present.informal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-amber-800 font-bold mb-2">
-                                                        [讀音] {generatedSentences.present.informal.rom}
-                                                    </div>
+                                                    <HighlightedSentence formObj={generatedSentences.present.informal} isHighlight={isGrammarHighlight} textColClass="text-amber-950" romColClass="text-amber-900" />
                                                 </div>
-                                                <div className="flex items-center gap-2 pt-2 border-t border-amber-200">
+                                                <div className="flex items-center gap-2 pt-3 border-t border-amber-200 mt-2">
                                                     <button
                                                         onClick={() => speakKorean(generatedSentences.present.informal.kr)}
-                                                        className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                        className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer"
                                                     >
                                                         <i className="fas fa-volume-high"></i> 朗讀
                                                     </button>
                                                     <button
                                                         onClick={() => copyToClipboard(generatedSentences.present.informal.kr)}
-                                                        className="px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-900 rounded-lg text-xs font-bold border border-amber-300"
+                                                        className="px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-900 rounded-lg text-xs font-bold border border-amber-300 cursor-pointer"
                                                     >
                                                         <i className="fas fa-copy"></i>
                                                     </button>
@@ -1334,28 +1461,23 @@
                                             {/* 平語 / 半語 */}
                                             <div className="bg-rose-50/70 rounded-2xl p-4 border border-rose-200 flex flex-col justify-between">
                                                 <div>
-                                                    <div className="flex items-center justify-between mb-1.5">
+                                                    <div className="flex items-center justify-between mb-2">
                                                         <span className="text-xs font-black text-rose-900 bg-rose-100 px-2 py-0.5 rounded-full">
                                                             👫 平語/半語 (반말)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-rose-950 mb-1">
-                                                        {generatedSentences.present.casual.kr}
-                                                    </div>
-                                                    <div className="text-xs text-rose-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.present.casual.rom}
-                                                    </div>
+                                                    <HighlightedSentence formObj={generatedSentences.present.casual} isHighlight={isGrammarHighlight} textColClass="text-rose-950" romColClass="text-rose-800" />
                                                 </div>
-                                                <div className="flex items-center gap-2 pt-2 border-t border-rose-200/60">
+                                                <div className="flex items-center gap-2 pt-3 border-t border-rose-200/60 mt-2">
                                                     <button
                                                         onClick={() => speakKorean(generatedSentences.present.casual.kr)}
-                                                        className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                        className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer"
                                                     >
                                                         <i className="fas fa-volume-high"></i> 朗讀
                                                     </button>
                                                     <button
                                                         onClick={() => copyToClipboard(generatedSentences.present.casual.kr)}
-                                                        className="px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-800 rounded-lg text-xs font-bold border border-rose-200"
+                                                        className="px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-800 rounded-lg text-xs font-bold border border-rose-200 cursor-pointer"
                                                     >
                                                         <i className="fas fa-copy"></i>
                                                     </button>
@@ -1396,28 +1518,23 @@
                                             {/* 最高敬語 (습니다) */}
                                             <div className="bg-indigo-50/70 rounded-2xl p-4 border border-indigo-200 flex flex-col justify-between">
                                                 <div>
-                                                    <div className="flex items-center justify-between mb-1.5">
+                                                    <div className="flex items-center justify-between mb-2">
                                                         <span className="text-xs font-black text-indigo-900 bg-indigo-100 px-2 py-0.5 rounded-full">
                                                             👑 最高敬語 (습니다)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1">
-                                                        {generatedSentences.continuous.formal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-indigo-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.continuous.formal.rom}
-                                                    </div>
+                                                    <HighlightedSentence formObj={generatedSentences.continuous.formal} isHighlight={isGrammarHighlight} textColClass="text-indigo-950" romColClass="text-indigo-800" />
                                                 </div>
-                                                <div className="flex items-center gap-2 pt-2 border-t border-indigo-200/60">
+                                                <div className="flex items-center gap-2 pt-3 border-t border-indigo-200/60 mt-2">
                                                     <button
                                                         onClick={() => speakKorean(generatedSentences.continuous.formal.kr)}
-                                                        className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                        className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer"
                                                     >
                                                         <i className="fas fa-volume-high"></i> 朗讀
                                                     </button>
                                                     <button
                                                         onClick={() => copyToClipboard(generatedSentences.continuous.formal.kr)}
-                                                        className="px-2.5 py-1 bg-white hover:bg-indigo-100 text-indigo-800 rounded-lg text-xs font-bold border border-indigo-200"
+                                                        className="px-2.5 py-1 bg-white hover:bg-indigo-100 text-indigo-800 rounded-lg text-xs font-bold border border-indigo-200 cursor-pointer"
                                                     >
                                                         <i className="fas fa-copy"></i>
                                                     </button>
@@ -1430,28 +1547,23 @@
                                                     最常用推薦 ⭐
                                                 </span>
                                                 <div>
-                                                    <div className="flex items-center justify-between mb-1.5">
+                                                    <div className="flex items-center justify-between mb-2">
                                                         <span className="text-xs font-black text-amber-950 bg-amber-200 px-2 py-0.5 rounded-full">
                                                             🌸 日常敬語 (해요體)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-amber-950 mb-1">
-                                                        {generatedSentences.continuous.informal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-amber-800 font-bold mb-2">
-                                                        [讀音] {generatedSentences.continuous.informal.rom}
-                                                    </div>
+                                                    <HighlightedSentence formObj={generatedSentences.continuous.informal} isHighlight={isGrammarHighlight} textColClass="text-amber-950" romColClass="text-amber-900" />
                                                 </div>
-                                                <div className="flex items-center gap-2 pt-2 border-t border-amber-200">
+                                                <div className="flex items-center gap-2 pt-3 border-t border-amber-200 mt-2">
                                                     <button
                                                         onClick={() => speakKorean(generatedSentences.continuous.informal.kr)}
-                                                        className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                        className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer"
                                                     >
                                                         <i className="fas fa-volume-high"></i> 朗讀
                                                     </button>
                                                     <button
                                                         onClick={() => copyToClipboard(generatedSentences.continuous.informal.kr)}
-                                                        className="px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-900 rounded-lg text-xs font-bold border border-amber-300"
+                                                        className="px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-900 rounded-lg text-xs font-bold border border-amber-300 cursor-pointer"
                                                     >
                                                         <i className="fas fa-copy"></i>
                                                     </button>
@@ -1461,28 +1573,23 @@
                                             {/* 平語 / 半語 (반말) */}
                                             <div className="bg-rose-50/70 rounded-2xl p-4 border border-rose-200 flex flex-col justify-between">
                                                 <div>
-                                                    <div className="flex items-center justify-between mb-1.5">
+                                                    <div className="flex items-center justify-between mb-2">
                                                         <span className="text-xs font-black text-rose-900 bg-rose-100 px-2 py-0.5 rounded-full">
                                                             👫 平語/半語 (반말)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-rose-950 mb-1">
-                                                        {generatedSentences.continuous.casual.kr}
-                                                    </div>
-                                                    <div className="text-xs text-rose-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.continuous.casual.rom}
-                                                    </div>
+                                                    <HighlightedSentence formObj={generatedSentences.continuous.casual} isHighlight={isGrammarHighlight} textColClass="text-rose-950" romColClass="text-rose-800" />
                                                 </div>
-                                                <div className="flex items-center gap-2 pt-2 border-t border-rose-200/60">
+                                                <div className="flex items-center gap-2 pt-3 border-t border-rose-200/60 mt-2">
                                                     <button
                                                         onClick={() => speakKorean(generatedSentences.continuous.casual.kr)}
-                                                        className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                                                        className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer"
                                                     >
                                                         <i className="fas fa-volume-high"></i> 朗讀
                                                     </button>
                                                     <button
                                                         onClick={() => copyToClipboard(generatedSentences.continuous.casual.kr)}
-                                                        className="px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-800 rounded-lg text-xs font-bold border border-rose-200"
+                                                        className="px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-800 rounded-lg text-xs font-bold border border-rose-200 cursor-pointer"
                                                     >
                                                         <i className="fas fa-copy"></i>
                                                     </button>
@@ -1519,12 +1626,12 @@
                                                     <span className="text-xs font-black text-indigo-900 bg-indigo-100 px-2 py-0.5 rounded-full mb-2 inline-block">
                                                         👑 最高敬語 (-았습니다/었습니다)
                                                     </span>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1">
-                                                        {generatedSentences.past.formal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-indigo-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.past.formal.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.past.formal}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1"
+                                                        romClass="text-xs text-indigo-700 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-indigo-200/60">
                                                     <button
@@ -1548,12 +1655,12 @@
                                                     <span className="text-xs font-black text-amber-950 bg-amber-200 px-2 py-0.5 rounded-full mb-2 inline-block">
                                                         🌸 日常敬語 (-았어요/었어요)
                                                     </span>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-amber-950 mb-1">
-                                                        {generatedSentences.past.informal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-amber-800 font-bold mb-2">
-                                                        [讀音] {generatedSentences.past.informal.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.past.informal}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-amber-950 mb-1"
+                                                        romClass="text-xs text-amber-800 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-amber-200">
                                                     <button
@@ -1577,12 +1684,12 @@
                                                     <span className="text-xs font-black text-rose-900 bg-rose-100 px-2 py-0.5 rounded-full mb-2 inline-block">
                                                         👫 平語/半語 (-았어/었어)
                                                     </span>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-rose-950 mb-1">
-                                                        {generatedSentences.past.casual.kr}
-                                                    </div>
-                                                    <div className="text-xs text-rose-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.past.casual.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.past.casual}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-rose-950 mb-1"
+                                                        romClass="text-xs text-rose-700 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-rose-200/60">
                                                     <button
@@ -1630,12 +1737,12 @@
                                                     <span className="text-xs font-black text-indigo-900 bg-indigo-100 px-2 py-0.5 rounded-full mb-2 inline-block">
                                                         👑 最高敬語 (-(으)ㄹ 겁니다)
                                                     </span>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1">
-                                                        {generatedSentences.future.formal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-indigo-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.future.formal.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.future.formal}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1"
+                                                        romClass="text-xs text-indigo-700 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-indigo-200/60">
                                                     <button
@@ -1659,12 +1766,12 @@
                                                     <span className="text-xs font-black text-amber-950 bg-amber-200 px-2 py-0.5 rounded-full mb-2 inline-block">
                                                         🌸 日常敬語 (-(으)ㄹ 거예요)
                                                     </span>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-amber-950 mb-1">
-                                                        {generatedSentences.future.informal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-amber-800 font-bold mb-2">
-                                                        [讀音] {generatedSentences.future.informal.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.future.informal}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-amber-950 mb-1"
+                                                        romClass="text-xs text-amber-800 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-amber-200">
                                                     <button
@@ -1688,12 +1795,12 @@
                                                     <span className="text-xs font-black text-rose-900 bg-rose-100 px-2 py-0.5 rounded-full mb-2 inline-block">
                                                         👫 平語/半語 (-(으)ㄹ 거야)
                                                     </span>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-rose-950 mb-1">
-                                                        {generatedSentences.future.casual.kr}
-                                                    </div>
-                                                    <div className="text-xs text-rose-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.future.casual.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.future.casual}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-rose-950 mb-1"
+                                                        romClass="text-xs text-rose-700 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-rose-200/60">
                                                     <button
@@ -1750,12 +1857,12 @@
                                                             👑 最高敬語 (습니다)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1">
-                                                        {generatedSentences.explore.negative.formal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-indigo-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.explore.negative.formal.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.explore.negative.formal}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1"
+                                                        romClass="text-xs text-indigo-700 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-indigo-200/60">
                                                     <button
@@ -1784,12 +1891,12 @@
                                                             🌸 日常敬語 (해요體)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-amber-950 mb-1">
-                                                        {generatedSentences.explore.negative.informal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-amber-800 font-bold mb-2">
-                                                        [讀音] {generatedSentences.explore.negative.informal.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.explore.negative.informal}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-amber-950 mb-1"
+                                                        romClass="text-xs text-amber-800 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-amber-200">
                                                     <button
@@ -1815,12 +1922,12 @@
                                                             👫 平語/半語 (반말)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-rose-950 mb-1">
-                                                        {generatedSentences.explore.negative.casual.kr}
-                                                    </div>
-                                                    <div className="text-xs text-rose-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.explore.negative.casual.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.explore.negative.casual}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-rose-950 mb-1"
+                                                        romClass="text-xs text-rose-700 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-rose-200/60">
                                                     <button
@@ -1877,12 +1984,12 @@
                                                             👑 最高敬語 (습니까)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1">
-                                                        {generatedSentences.explore.question.formal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-indigo-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.explore.question.formal.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.explore.question.formal}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-indigo-950 mb-1"
+                                                        romClass="text-xs text-indigo-700 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-indigo-200/60">
                                                     <button
@@ -1911,12 +2018,12 @@
                                                             🌸 日常敬語 (해요體)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-amber-950 mb-1">
-                                                        {generatedSentences.explore.question.informal.kr}
-                                                    </div>
-                                                    <div className="text-xs text-amber-800 font-bold mb-2">
-                                                        [讀音] {generatedSentences.explore.question.informal.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.explore.question.informal}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-amber-950 mb-1"
+                                                        romClass="text-xs text-amber-800 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-amber-200">
                                                     <button
@@ -1942,12 +2049,12 @@
                                                             👫 平語/半語 (반말)
                                                         </span>
                                                     </div>
-                                                    <div className="text-base sm:text-lg font-black kr-font text-rose-950 mb-1">
-                                                        {generatedSentences.explore.question.casual.kr}
-                                                    </div>
-                                                    <div className="text-xs text-rose-700 font-bold mb-2">
-                                                        [讀音] {generatedSentences.explore.question.casual.rom}
-                                                    </div>
+                                                    <HighlightedSentence
+                                                        formObj={generatedSentences.explore.question.casual}
+                                                        isHighlight={isGrammarHighlight}
+                                                        krClass="text-base sm:text-lg font-black kr-font text-rose-950 mb-1"
+                                                        romClass="text-xs text-rose-700 font-bold mb-2"
+                                                    />
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-2 border-t border-rose-200/60">
                                                     <button
