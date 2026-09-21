@@ -35,15 +35,19 @@
    - **點餐造句積木組裝機**：菜餚品項 + 份量規格 + `주세요` 一鍵合成完整點餐語句並朗讀。
    - **隨堂星級闖關測驗**：5 大情境隨堂評量與滿分慶祝煙花特效。
    - **全生態圈導航互聯**：已同步掛載於首頁、大字典、漢字辭典、造句列車、敬語、時態、助詞、名曲、100種美食清單。
-5. **📱 離線快取升級**：`sw.js` 與 `www/sw.js` 升級至快取版本 `kitty-korean-v1.0.39`，所有新靜態資源與圖資全量同步至 `www/`。
+5. **📱 離線快取升級**：`sw.js` 與 `www/sw.js` 升級至快取版本 `kitty-korean-v1.0.40`，所有新靜態資源與圖資全量同步至 `www/`。
+6. **🛠️ 餐廳樂園空白頁修復與變數作用域優化**：
+   - 修復 JavaScript 暫時性死區（TDZ）錯誤：將 `const BBQ_HOTSPOTS` 與 `const QUIZ_QUESTIONS` 移至 `function KoreanRestaurantApp()` 頂部外部全域作用域，解決組件初始化時 `useMemo` 提前引用 `BBQ_HOTSPOTS` 導致的崩潰。
+   - 統一測驗變數命名：將 JSX 與評分邏輯中殘存的 `quizQuestions` 統一為 `QUIZ_QUESTIONS`。
+   - 升級 Service Worker 快取為 `v1.0.40`，確保所有客戶端第一時間清除舊版快取並獲取最新修復版。
 
 ---
 
 ## 🚦 目前狀態
 
 - **運行狀態**：全功能正常運作，無報錯，可直接於瀏覽器與 Capacitor 移動端離線體驗。
-- **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/korean_vocab_dictionary.html](https://kitty-sin.github.io/sanrio-korean-learning/korean_vocab_dictionary.html)
-- **最新 Git Commit**：`42e97f2` (`feat(restaurant): launch Korean Restaurant & BBQ Ordering Playground with interactive table hotspots and dual highlighting`)
+- **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_restaurant.html](https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_restaurant.html)
+- **最新 Git Commit**：`56fd3b0` (`chore(sw): bump Service Worker cache version to v1.0.40 to ensure fresh asset cache`)
 
 ---
 
