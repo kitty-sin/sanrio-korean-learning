@@ -43,7 +43,7 @@
 
 - **運行狀態**：全功能正常運作，無報錯，可直接於瀏覽器與 Capacitor 移動端離線體驗。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/korean_vocab_dictionary.html](https://kitty-sin.github.io/sanrio-korean-learning/korean_vocab_dictionary.html)
-- **最新 Git Commit**：`1fdf961` (`feat(vocab): add entry #5702 곽`)
+- **最新 Git Commit**：`42e97f2` (`feat(restaurant): launch Korean Restaurant & BBQ Ordering Playground with interactive table hotspots and dual highlighting`)
 
 ---
 
