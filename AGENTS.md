@@ -66,9 +66,10 @@ Korean-Learning/
 ├── pdf_viewer.html          # 韓語教材線上互動閱讀器 (Mozilla PDF.js + 免下載直讀 + 手勢翻頁 + 縮放)
 ├── sanrio_korean_food_100.html  # 100 種常見食物發音打卡學習手札 (含 0.3x 口型)
 ├── sanrio_korean_food_100.md    # 100 種常見食物 Markdown 清單
+├── sanrio_korean_restaurant.html # 韓語餐廳與烤肉店點餐實戰樂園 (8大分類 ✕ 烤肉桌實境圖解 ✕ 點餐造句機 ✕ 0.3x發音)
 ├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
 ├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
-├── sw.js                        # Service Worker 離線快取核心 (v1.0.38)
+├── sw.js                        # Service Worker 離線快取核心 (v1.0.39)
 ├── package.json                 # 專案套件管理與 Capacitor 依賴
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔
@@ -89,6 +90,7 @@ Korean-Learning/
 - [x] **Firebase 雲端自學單字庫** (Firestore 即時同步、0.3x 極慢速高亮發音、字母拆解、AI 跟讀評分)
 - [x] **随堂星級自我挑戰測驗** (7 大題隨堂評量與分數結算)
 - [x] **100 種常見食物學習手札與 20 頁大字 PDF 講義**
+- [x] **🥩 韓語餐廳與烤肉店點餐實戰樂園** (`sanrio_korean_restaurant.html`，8 大必備分類 ✕ 烤肉桌實境圖解熱點 ✕ 連音化/硬音化透視 ✕ 點餐造句積木組裝機 ✕ 5 大情境隨堂星級闖關測驗 ✕ 0.3x/0.7x/1.0x 三段速真人發音)
 - [x] **韓語核心詞庫大字典** (korean_vocab_dictionary.html，含 TOPIK 全量即時檢索、12大詞性篩選、3D 單字卡翻卡記憶測驗、Unicode 音節結構即時拆解、❤️ 生詞本與 3 段速語音)
 - [x] **韓語漢字音變大辭典** (korean_hanja_dictionary.html，收錄 Glossika 6,277 漢字詞、1,044 組全量音節矩陣與 242 外來語，支援以字查音/以音查字、單字卡、3段速語音、字母結構拆解、🧸 泰迪熊代表圖標與柔和奶茶暖杏風視覺設計)
 - [x] **🚂 KITTY 韓語造句發音積木列車** (`sanrio_korean_sentences.html`，暖杏原木手繪列車風 ✕ 酷企鵝車長 🐧 ✕ 4 車卡 2 排自適應大卡排版：S 主語 + P 地點 + O 受語 + V 動詞，萬能單一多語言輸入框、繁簡中文智慧翻譯與複合動詞拆解，全自動生成詞典原形、現在式一般/獨立現在進行式、過去式、未來式、否定疑問句、3大敬語階層、語法助詞與時態語尾螢光筆透視高亮、0.3x/0.7x/1.0x 三段速語音與隨堂星級闖關測驗)
@@ -98,9 +100,9 @@ Korean-Learning/
 - [x] **🌸 韓語兩大核心助詞發音積木樂園** (`sanrio_korean_particles.html`，主格 `이/가` ✕ 受格 `을/를` + 美樂蒂 ✕ 大耳狗 + 4大代名詞變形 `내가/제가/네가/누가` + 5大口語縮合 `날/절/널/뭘/이걸` + `좋다 vs 좋아하다` 魔王對決 + 隨堂星級闖關測驗 + 3段速發音)
 - [x] **📑 韓語教材線上互動閱讀器** (`pdf_viewer.html`，Mozilla PDF.js 向量高清晰渲染、免下載直讀、單頁翻閱與連續捲動、手勢滑動翻頁與全功能分頁導航列)
 - [x] **大字典全功能極速導航分頁列** (自由跳頁下拉選單、⏮ 頁首、頁尾 ⏭、自適應頁數與平滑置頂)
-- [x] **全生態圈雙向無縫互聯** (主站、核心大字典、漢字大辭典、名曲樂園、美食清單、PDF 講義與積木屋跨頁參數傳遞)
+- [x] **全生態圈雙向無縫互聯** (主站、核心大字典、漢字大辭典、名曲樂園、美食清單、烤肉點餐樂園、PDF 講義與積木屋跨頁參數傳遞)
 - [x] **自動化詞庫管理管線** (`scripts/manage_vocab.py` + `scripts/build_hanja_dataset.py` + `korean-vocab-manager` Agent Skill，支援「查加 XX」全自動秒級查重、拼音生成、5 檔同步與 Git 自動部署)
-- [x] **RDQ Method 需求探索規格卡體系** (完成韓語漢字辭典視覺改版、名曲練唱樂園、頂部導航站規格卡落地與執行驗證)
+- [x] **RDQ Method 需求探索規格卡體系** (完成韓語漢字辭典視覺改版、名曲練唱樂園、頂部導航站、烤肉點餐樂園規格卡落地與執行驗證)
 - [x] **📱 Android 原生 App 封裝《KITTY 韓語積木大冒險 🌟》** (Capacitor 6.x + 雲端即時熱更新 + Service Worker 離線快取 + 拼豆 Yoda 寶寶萌趣 Adaptive 圖示 + 原生返回鍵防護 + GitHub Actions 自動編譯 APK 工作流)
 
 ---
