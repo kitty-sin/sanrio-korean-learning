@@ -1065,16 +1065,16 @@
 
         // 10 大分頁標籤定義
         const TABS = [
-            { id: 'bbqTable', title: '🔥 烤肉桌實景圖解', icon: 'fa-fire-burner', badge: '實景熱點' },
+            { id: 'bbqTable', title: '🔥 烤肉桌實景', icon: 'fa-fire-burner', badge: '實景熱點' },
             { id: 'greet', title: '🙋 禮貌招呼', icon: 'fa-hand', count: 4 },
             { id: 'menu', title: '📋 菜單與份量', icon: 'fa-utensils', count: 10 },
             { id: 'tableware', title: '🥢 餐具與自助', icon: 'fa-bowl-food', count: 7 },
             { id: 'staple', title: '🧀 主食與配料', icon: 'fa-cheese', count: 6 },
             { id: 'banchan', title: '🥬 蔬菜與小菜', icon: 'fa-carrot', count: 8 },
-            { id: 'alcohol', title: '🍺 酒精飲料品牌', icon: 'fa-beer-mug-empty', count: 11 },
-            { id: 'sauce', title: '🧂 烤肉沾醬調味', icon: 'fa-pepper-hot', count: 6 },
+            { id: 'alcohol', title: '🍺 酒精飲料', icon: 'fa-beer-mug-empty', count: 11 },
+            { id: 'sauce', title: '🧂 烤肉沾醬', icon: 'fa-pepper-hot', count: 6 },
             { id: 'count', title: '🔢 數量詞實戰', icon: 'fa-calculator', count: 5 },
-            { id: 'simulator', title: '🎯 點餐積木與測驗', icon: 'fa-gamepad', badge: '闖關測驗' }
+            { id: 'simulator', title: '🎯 點餐與測驗', icon: 'fa-gamepad', badge: '闖關測驗' }
         ];
 
         // 烤肉桌熱點定義 (17 大全量實境熱點)
@@ -1314,8 +1314,8 @@
                         </div>
                     </div>
 
-                    {/* 10 大多分頁膠囊導航列 (橫向滑動) */}
-                    <div className="flex overflow-x-auto no-scrollbar gap-2 pb-3 mb-6">
+                    {/* 10 大多分頁膠囊導航列 (兩行排版，方便點選) */}
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-2.5 mb-6">
                         {TABS.map(tab => (
                             <button
                                 key={tab.id}
@@ -1323,23 +1323,24 @@
                                     setActiveTab(tab.id);
                                     setSearchTerm('');
                                 }}
-                                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm whitespace-nowrap transition-all duration-200 shadow-2xs ${
+                                className={`flex items-center justify-between sm:justify-center gap-1.5 px-3 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition-all duration-200 shadow-2xs ${
                                     activeTab === tab.id
-                                        ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-amber-300 shadow-md scale-105 ring-2 ring-amber-300'
-                                        : 'bg-white/95 hover:bg-white text-gray-700 hover:text-amber-700 border border-amber-200/80'
+                                        ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-amber-300 shadow-md scale-[1.02] ring-2 ring-amber-300'
+                                        : 'bg-white/95 hover:bg-white text-gray-700 hover:text-amber-700 border border-amber-200/80 hover:border-amber-300'
                                 }`}
                             >
-                                <i className={`fas ${tab.icon}`}></i>
-                                <span>{tab.title}</span>
+                                <span className="truncate">{tab.title}</span>
                                 {tab.count && (
-                                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0 ${
                                         activeTab === tab.id ? 'bg-white/30 text-white' : 'bg-amber-100 text-amber-800'
                                     }`}>
                                         {tab.count}
                                     </span>
                                 )}
                                 {tab.badge && (
-                                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-rose-500 text-white animate-pulse">
+                                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0 ${
+                                        activeTab === tab.id ? 'bg-white/30 text-white' : 'bg-rose-500 text-white animate-pulse'
+                                    }`}>
                                         {tab.badge}
                                     </span>
                                 )}
