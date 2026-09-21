@@ -40,6 +40,12 @@
    - 修復 JavaScript 暫時性死區（TDZ）錯誤：將 `const BBQ_HOTSPOTS` 與 `const QUIZ_QUESTIONS` 移至 `function KoreanRestaurantApp()` 頂部外部全域作用域，解決組件初始化時 `useMemo` 提前引用 `BBQ_HOTSPOTS` 導致的崩潰。
    - 統一測驗變數命名：將 JSX 與評分邏輯中殘存的 `quizQuestions` 統一為 `QUIZ_QUESTIONS`。
    - 升級 Service Worker 快取為 `v1.0.40`，確保所有客戶端第一時間清除舊版快取並獲取最新修復版。
+7. 🍱 **烤肉店點餐分類膠囊雙行排版進化 (2-Row Capsule Tabs)**：
+   - 解決原本單行橫向滑動需手動來回滑動找尋分頁的痛點，改為響應式 **雙行自適應網格排版**（`grid grid-cols-2 sm:grid-cols-5 gap-2`）。
+   - 電腦與平板螢幕（`sm:` 以上）：精準分為 2 排，每排 5 個膠囊，10 大分類一覽無遺、一鍵直達。
+   - 手機螢幕（`< 640px`）：自動切換為雙列大卡片排版，按鈕更寬大好點擊，不再需要橫向滑動。
+   - 簡化按鈕文字，去除重複 FontAwesome 圖標，保留 Sanrio 萌趣 Emoji、項目計數與亮點 Badge。
+   - 升級 Service Worker 快取至 `kitty-korean-v1.0.41`。
 
 ---
 
@@ -47,7 +53,7 @@
 
 - **運行狀態**：全功能正常運作，無報錯，可直接於瀏覽器與 Capacitor 移動端離線體驗。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_restaurant.html](https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_restaurant.html)
-- **最新 Git Commit**：`56fd3b0` (`chore(sw): bump Service Worker cache version to v1.0.40 to ensure fresh asset cache`)
+- **最新 Git Commit**：`94dca55` (`feat(restaurant): split tab bar capsules into responsive 2-row grid for easy selection`)
 
 ---
 
