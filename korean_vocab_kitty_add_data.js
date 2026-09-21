@@ -709,5 +709,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "B",
     "p": "專有名詞",
     "pd": "專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。"
+  },
+  {
+    "id": 5738,
+    "k": "깅",
+    "r": "ging",
+    "c": "撒嬌、可愛、裝萌、小可愛/小寶貝（K-pop 飯圈愛稱與流行語氣後綴。常接在偶像名字後如「名字+깅」，或稱「우리 깅 我們家小可愛/小寶貝」）",
+    "e": "Cute pet name / affectionate suffix (K-pop fandom slang for cutie/baby, e.g. 우리 깅 my lovely cutie)",
+    "l": "A",
+    "p": "獨立詞",
+    "pd": "流行語 / 萌趣愛稱與接尾語氣詞 (K-pop 飯圈用語)，如 우리 깅（我們家小可愛）。"
   }
 ];
