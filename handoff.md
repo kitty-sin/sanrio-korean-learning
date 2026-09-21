@@ -68,12 +68,12 @@
 ## ⚠️ 注意事項
 
 - 本專案所有發音 API 使用 Web Speech API (`ko-KR`)，輸入句子時會自動剝離 HTML 與標點確保發音正確。
-- 修改 `korean_sentence_data.js` 或 `sanrio_korean_sentences.html` 後，必須同步複製至 `www/` 並升級 `sw.js` 快取版本。
+- 修改 `sanrio_korean_restaurant.html` 或任何前端 HTML 後，必須注意變數宣告順序（避免 TDZ），並同步複製至 `www/` 與升級 `sw.js` 快取版本。
 
 ---
 
 ## 🕐 最後更新
 
-- **時間**：2026-09-20 23:46 PT
+- **時間**：2026-09-21 01:25 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 已推 (`main` 分支)

@@ -69,7 +69,7 @@ Korean-Learning/
 ├── sanrio_korean_restaurant.html # 韓語餐廳與烤肉店點餐實戰樂園 (8大分類 ✕ 烤肉桌實境圖解 ✕ 點餐造句機 ✕ 0.3x發音)
 ├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
 ├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
-├── sw.js                        # Service Worker 離線快取核心 (v1.0.39)
+├── sw.js                        # Service Worker 離線快取核心 (v1.0.41)
 ├── package.json                 # 專案套件管理與 Capacitor 依賴
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔
@@ -90,7 +90,7 @@ Korean-Learning/
 - [x] **Firebase 雲端自學單字庫** (Firestore 即時同步、0.3x 極慢速高亮發音、字母拆解、AI 跟讀評分)
 - [x] **随堂星級自我挑戰測驗** (7 大題隨堂評量與分數結算)
 - [x] **100 種常見食物學習手札與 20 頁大字 PDF 講義**
-- [x] **🥩 韓語餐廳與烤肉店點餐實戰樂園** (`sanrio_korean_restaurant.html`，8 大必備分類 ✕ 烤肉桌實境圖解熱點 ✕ 連音化/硬音化透視 ✕ 點餐造句積木組裝機 ✕ 5 大情境隨堂星級闖關測驗 ✕ 0.3x/0.7x/1.0x 三段速真人發音)
+- [x] **🥩 韓語餐廳與烤肉店點餐實戰樂園** (`sanrio_korean_restaurant.html`，8 大必備分類 ✕ 雙行自適應膠囊導航 ✕ 烤肉桌實境圖解 17 大熱點 ✕ 連音化/硬音化透視 ✕ 點餐造句積木組裝機 ✕ 5 大情境隨堂星級闖關測驗 ✕ 0.3x/0.7x/1.0x 三段速真人發音)
 - [x] **韓語核心詞庫大字典** (korean_vocab_dictionary.html，含 TOPIK 全量即時檢索、12大詞性篩選、3D 單字卡翻卡記憶測驗、Unicode 音節結構即時拆解、❤️ 生詞本與 3 段速語音)
 - [x] **韓語漢字音變大辭典** (korean_hanja_dictionary.html，收錄 Glossika 6,277 漢字詞、1,044 組全量音節矩陣與 242 外來語，支援以字查音/以音查字、單字卡、3段速語音、字母結構拆解、🧸 泰迪熊代表圖標與柔和奶茶暖杏風視覺設計)
 - [x] **🚂 KITTY 韓語造句發音積木列車** (`sanrio_korean_sentences.html`，暖杏原木手繪列車風 ✕ 酷企鵝車長 🐧 ✕ 4 車卡 2 排自適應大卡排版：S 主語 + P 地點 + O 受語 + V 動詞，萬能單一多語言輸入框、繁簡中文智慧翻譯與複合動詞拆解，全自動生成詞典原形、現在式一般/獨立現在進行式、過去式、未來式、否定疑問句、3大敬語階層、語法助詞與時態語尾螢光筆透視高亮、0.3x/0.7x/1.0x 三段速語音與隨堂星級闖關測驗)
