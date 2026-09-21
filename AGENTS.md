@@ -57,9 +57,9 @@ Korean-Learning/
 ├── korean_vocab_5666_data.js    # 5,666 筆基準高壓縮常數數據集 (#1 ~ #5666)
 ├── korean_vocab_5666.csv        # 5,666 筆 TOPIK 基準詞庫總表
 ├── korean_vocab_5666.md         # 5,666 筆基準詞庫 Markdown 字典
-├── korean_vocab_kitty_add_data.js # Kitty 自訂新增詞庫常數數據集 (#5667 ~ #5708)
-├── korean_vocab_kitty_add.csv   # Kitty 自訂新增詞庫 CSV 總表 (42 筆)
-├── korean_vocab_kitty_add.md    # Kitty 自訂新增詞庫 Markdown 字典 (42 筆)
+├── korean_vocab_kitty_add_data.js # Kitty 自訂新增詞庫常數數據集 (#5667 ~ #5737)
+├── korean_vocab_kitty_add.csv   # Kitty 自訂新增詞庫 CSV 總表 (71 筆)
+├── korean_vocab_kitty_add.md    # Kitty 自訂新增詞庫 Markdown 字典 (71 筆)
 ├── kitty_search_engine.js       # 全域智慧多語言搜尋引擎 (繁簡雙向通搜 + 韓語 NFC/初聲 + 英文拼音)
 ├── hangul_sanrio_deck_20p.pdf   # 20 頁超大字 Sanrio 拼音總表 (PDF 直連瀏覽)
 ├── 韓語語序・敬語・時態大解密.pdf # 韓語語序・敬語・時態大解密精美講義 (PDF 直連瀏覽)
@@ -68,7 +68,7 @@ Korean-Learning/
 ├── sanrio_korean_food_100.md    # 100 種常見食物 Markdown 清單
 ├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
 ├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
-├── sw.js                        # Service Worker 離線快取核心 (v1.0.37)
+├── sw.js                        # Service Worker 離線快取核心 (v1.0.38)
 ├── package.json                 # 專案套件管理與 Capacitor 依賴
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔
