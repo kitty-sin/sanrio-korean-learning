@@ -1077,6 +1077,86 @@
             { id: 'simulator', title: '🎯 點餐積木與測驗', icon: 'fa-gamepad', badge: '闖關測驗' }
         ];
 
+        // 烤肉桌熱點定義 (17 大全量實境熱點)
+        const BBQ_HOTSPOTS = [
+            { name: '불판', label: '烤盤', pron: '[불판]', x: '24%', y: '20%', desc: '炭火鐵板烤盤，烤焦時可叫服務生更換 (불판 갈아 주세요)' },
+            { name: '집게', label: '烤肉夾', pron: '[집께]', x: '52%', y: '33%', desc: '夾肉翻面專用不鏽鋼長夾' },
+            { name: '가위', label: '剪肉剪刀', pron: '[가위]', x: '64%', y: '33%', desc: '將五花肉剪成適口條狀之專用剪刀' },
+            { name: '쌈을 싸다', label: '生菜包肉', pron: '[싸믈 싸다]', x: '83%', y: '26%', desc: '生菜包裹肉片、蒜片與包飯醬一口塞進嘴裡的招牌吃法' },
+            { name: '깻잎', label: '芝麻葉', pron: '[깬닙]', x: '10%', y: '48%', desc: '具獨特香氣的韓國包肉綠葉 (鼻音化發音 [깬닙])' },
+            { name: '상추', label: '生菜', pron: '[상추]', x: '19%', y: '51%', desc: '爽脆多汁的萵苣生菜，包肉去油解膩' },
+            { name: '고추', label: '青辣椒', pron: '[고추]', x: '11%', y: '57%', desc: '微辣爽脆的綠色辣椒，沾包飯醬生吃' },
+            { name: '마늘', label: '大蒜', pron: '[마늘]', x: '18%', y: '61%', desc: '辛香生蒜片，亦可放烤盤邊慢火烘烤至金黃軟甜' },
+            { name: '된장찌개', label: '大醬湯', pron: '[된장찌개]', x: '45%', y: '58%', desc: '微辣濃郁的石鍋豆腐大醬湯，暖胃解膩' },
+            { name: '쌈장', label: '包飯醬', pron: '[쌈장]', x: '70%', y: '54%', desc: '橘色鹹甜烤肉靈魂沾醬 (大醬+辣椒醬+麻油)' },
+            { name: '밥', label: '白飯', pron: '[밥]', x: '90%', y: '48%', desc: '一碗熱騰騰的白米飯 (亦稱 공기밥)' },
+            { name: '김치', label: '泡菜', pron: '[김치]', x: '49%', y: '83%', desc: '烤肉時放在鐵板下緣吸飽豬油煎熟更加酸香' },
+            { name: '삼겹살', label: '五花肉', pron: '[삼겹쌀]', x: '82%', y: '75%', desc: '厚切生三層肉片，烤至兩面金黃酥脆多汁' },
+            { name: '맥주', label: '啤酒', pron: '[맥쭈]', x: '7%', y: '76%', desc: '冰涼爽快的瓶裝啤酒 (TERRA / CASS / Kelly)' },
+            { name: '소주', label: '燒酒', pron: '[소주]', x: '16%', y: '78%', desc: '韓國國民綠瓶蒸餾燒酒 (真露 / 初飲初樂)' },
+            { name: '맥주잔', label: '啤酒杯', pron: '[맥쭈잔]', x: '27%', y: '83%', desc: '大口暢飲的黃金啤酒玻璃杯' },
+            { name: '소주잔', label: '燒酒杯', pron: '[소주잔]', x: '35%', y: '88%', desc: '一口乾杯的精巧透明燒酒小杯' }
+        ];
+
+        // 隨堂測驗題目 (5 題道地情境實戰)
+        const QUIZ_QUESTIONS = [
+            {
+                id: 1,
+                scenario: "情境 1：呼叫服務生",
+                question: "在韓國烤肉店入座後，想要呼叫店員點餐，最得體有禮貌的發語詞是？",
+                options: [
+                    { text: "아줌마! (大嬸！稍微有些失禮)", isCorrect: false },
+                    { text: "저기요! (不好意思／服務生請留步 - 最禮貌標準)", isCorrect: true, exp: "叫「저기요」或「사장님 (老闆)」最親切得體！" },
+                    { text: "야! (喂！這是對好友晚輩的粗魯叫法)", isCorrect: false },
+                    { text: "메뉴! (只喊菜單不禮貌)", isCorrect: false }
+                ]
+            },
+            {
+                id: 2,
+                scenario: "情境 2：連音化聽力考驗",
+                question: "「1인분 (一人份)」在實際口語對話中，由於連音化，聽到的發音應該是？",
+                options: [
+                    { text: "[이인분] (這是 2인분 的發音)", isCorrect: false },
+                    { text: "[이린분] (終聲 ㄹ 移至後方 ㅇ，發音為 [이린분])", isCorrect: true, exp: "일 的收音 ㄹ 遇到後方 ㅇ 產生連音化，讀作 [이린분]！" },
+                    { text: "[일인분] (生硬不連音)", isCorrect: false },
+                    { text: "[일림분]", isCorrect: false }
+                ]
+            },
+            {
+                id: 3,
+                scenario: "情境 3：大中小份點餐技巧",
+                question: "想要點一份「大份」的馬鈴薯排骨湯，韓語最道地的講法是？",
+                options: [
+                    { text: "대 주세요", isCorrect: false },
+                    { text: "대자로 주세요 (請給我大份的，常加上 -자로)", isCorrect: true, exp: "道地口語習慣說「대자로 주세요 (大者/大號)」，中份說「중자로 주세요」，小份說「소자로 주세요」！" },
+                    { text: "빅 주세요", isCorrect: false },
+                    { text: "대 하나요", isCorrect: false }
+                ]
+            },
+            {
+                id: 4,
+                scenario: "情境 4：包生菜的香草之王",
+                question: "包肉必備且帶有獨特清香的「깻잎 (芝麻葉)」，其正確發音為下列何者？",
+                options: [
+                    { text: "[깨닙]", isCorrect: false },
+                    { text: "[깻잎]", isCorrect: false },
+                    { text: "[깬닙] (發生鼻音化與 ㄴ 添加)", isCorrect: true, exp: "終聲 ㅅ 遇到後方複合字葉子 (잎)，引發 ㄴ 音添加並使前面音節鼻音化，讀作 [깬닙]！" },
+                    { text: "[깬잎]", isCorrect: false }
+                ]
+            },
+            {
+                id: 5,
+                scenario: "情境 5：自助吧文化",
+                question: "若在小菜區或飲水機上方看到「셀프 (Self)」標語，代表什麼意思？",
+                options: [
+                    { text: "禁止觸摸", isCorrect: false },
+                    { text: "需要另外付費購買", isCorrect: false },
+                    { text: "請顧客自行取用（自助服務）", isCorrect: true, exp: "셀프 = Self，意指開水或小菜需客人自行拿杯子或盤子到自助吧裝取！" },
+                    { text: "服務生專用通道", isCorrect: false }
+                ]
+            }
+        ];
+
         function KoreanRestaurantApp() {
             const [activeTab, setActiveTab] = useState('bbqTable');
             const [searchTerm, setSearchTerm] = useState('');
@@ -1130,72 +1210,13 @@
             // 點餐積木合成句子
             const constructedSentence = `${builderDish} ${builderAmount} 주세요`;
 
-            // 隨堂測驗題目 (5 題道地情境實戰)
-            const quizQuestions = [
-                {
-                    id: 1,
-                    scenario: "情境 1：呼叫服務生",
-                    question: "在韓國烤肉店入座後，想要呼叫店員點餐，最得體有禮貌的發語詞是？",
-                    options: [
-                        { text: "아줌마! (大嬸！稍微有些失禮)", isCorrect: false },
-                        { text: "저기요! (不好意思／服務生請留步 - 最禮貌標準)", isCorrect: true, exp: "叫「저기요」或「사장님 (老闆)」最親切得體！" },
-                        { text: "야! (喂！這是對好友晚輩的粗魯叫法)", isCorrect: false },
-                        { text: "메뉴! (只喊菜單不禮貌)", isCorrect: false }
-                    ]
-                },
-                {
-                    id: 2,
-                    scenario: "情境 2：連音化聽力考驗",
-                    question: "「1인분 (一人份)」在實際口語對話中，由於連音化，聽到的發音應該是？",
-                    options: [
-                        { text: "[이인분] (這是 2인분 的發音)", isCorrect: false },
-                        { text: "[이린분] (終聲 ㄹ 移至後方 ㅇ，發音為 [이린분])", isCorrect: true, exp: "일 的收音 ㄹ 遇到後方 ㅇ 產生連音化，讀作 [이린분]！" },
-                        { text: "[일인분] (生硬不連音)", isCorrect: false },
-                        { text: "[일림분]", isCorrect: false }
-                    ]
-                },
-                {
-                    id: 3,
-                    scenario: "情境 3：大中小份點餐技巧",
-                    question: "想要點一份「大份」的馬鈴薯排骨湯，韓語最道地的講法是？",
-                    options: [
-                        { text: "대 주세요", isCorrect: false },
-                        { text: "대자로 주세요 (請給我大份的，常加上 -자로)", isCorrect: true, exp: "道地口語習慣說「대자로 주세요 (大者/大號)」，中份說「중자로 주세요」，小份說「소자로 주세요」！" },
-                        { text: "빅 주세요", isCorrect: false },
-                        { text: "대 하나요", isCorrect: false }
-                    ]
-                },
-                {
-                    id: 4,
-                    scenario: "情境 4：包生菜的香草之王",
-                    question: "包肉必備且帶有獨特清香的「깻잎 (芝麻葉)」，其正確發音為下列何者？",
-                    options: [
-                        { text: "[깨닙]", isCorrect: false },
-                        { text: "[깻잎]", isCorrect: false },
-                        { text: "[깬닙] (發生鼻音化與 ㄴ 添加)", isCorrect: true, exp: "終聲 ㅅ 遇到後方複合字葉子 (잎)，引發 ㄴ 音添加並使前面音節鼻音化，讀作 [깬닙]！" },
-                        { text: "[깬잎]", isCorrect: false }
-                    ]
-                },
-                {
-                    id: 5,
-                    scenario: "情境 5：自助吧文化",
-                    question: "若在小菜區或飲水機上方看到「셀프 (Self)」標語，代表什麼意思？",
-                    options: [
-                        { text: "禁止觸摸", isCorrect: false },
-                        { text: "需要另外付費購買", isCorrect: false },
-                        { text: "請顧客自行取用（自助服務）", isCorrect: true, exp: "셀프 = Self，意指開水或小菜需客人自行拿杯子或盤子到自助吧裝取！" },
-                        { text: "服務生專用通道", isCorrect: false }
-                    ]
-                }
-            ];
-
             const handleQuizSelect = (qId, optIdx) => {
                 setQuizAnswers(prev => ({ ...prev, [qId]: optIdx }));
             };
 
             const handleQuizSubmit = () => {
                 setQuizSubmitted(true);
-                const score = quizQuestions.reduce((acc, q) => {
+                const score = QUIZ_QUESTIONS.reduce((acc, q) => {
                     const ans = quizAnswers[q.id];
                     return (ans !== undefined && q.options[ans]?.isCorrect) ? acc + 1 : acc;
                 }, 0);
@@ -1203,27 +1224,6 @@
                     fireConfetti();
                 }
             };
-
-            // 烤肉桌熱點定義 (17 大全量實境熱點)
-            const BBQ_HOTSPOTS = [
-                { name: '불판', label: '烤盤', pron: '[불판]', x: '24%', y: '20%', desc: '炭火鐵板烤盤，烤焦時可叫服務生更換 (불판 갈아 주세요)' },
-                { name: '집게', label: '烤肉夾', pron: '[집께]', x: '52%', y: '33%', desc: '夾肉翻面專用不鏽鋼長夾' },
-                { name: '가위', label: '剪肉剪刀', pron: '[가위]', x: '64%', y: '33%', desc: '將五花肉剪成適口條狀之專用剪刀' },
-                { name: '쌈을 싸다', label: '生菜包肉', pron: '[싸믈 싸다]', x: '83%', y: '26%', desc: '生菜包裹肉片、蒜片與包飯醬一口塞進嘴裡的招牌吃法' },
-                { name: '깻잎', label: '芝麻葉', pron: '[깬닙]', x: '10%', y: '48%', desc: '具獨特香氣的韓國包肉綠葉 (鼻音化發音 [깬닙])' },
-                { name: '상추', label: '生菜', pron: '[상추]', x: '19%', y: '51%', desc: '爽脆多汁的萵苣生菜，包肉去油解膩' },
-                { name: '고추', label: '青辣椒', pron: '[고추]', x: '11%', y: '57%', desc: '微辣爽脆的綠色辣椒，沾包飯醬生吃' },
-                { name: '마늘', label: '大蒜', pron: '[마늘]', x: '18%', y: '61%', desc: '辛香生蒜片，亦可放烤盤邊慢火烘烤至金黃軟甜' },
-                { name: '된장찌개', label: '大醬湯', pron: '[된장찌개]', x: '45%', y: '58%', desc: '微辣濃郁的石鍋豆腐大醬湯，暖胃解膩' },
-                { name: '쌈장', label: '包飯醬', pron: '[쌈장]', x: '70%', y: '54%', desc: '橘色鹹甜烤肉靈魂沾醬 (大醬+辣椒醬+麻油)' },
-                { name: '밥', label: '白飯', pron: '[밥]', x: '90%', y: '48%', desc: '一碗熱騰騰的白米飯 (亦稱 공기밥)' },
-                { name: '김치', label: '泡菜', pron: '[김치]', x: '49%', y: '83%', desc: '烤肉時放在鐵板下緣吸飽豬油煎熟更加酸香' },
-                { name: '삼겹살', label: '五花肉', pron: '[삼겹쌀]', x: '82%', y: '75%', desc: '厚切生三層肉片，烤至兩面金黃酥脆多汁' },
-                { name: '맥주', label: '啤酒', pron: '[맥쭈]', x: '7%', y: '76%', desc: '冰涼爽快的瓶裝啤酒 (TERRA / CASS / Kelly)' },
-                { name: '소주', label: '燒酒', pron: '[소주]', x: '16%', y: '78%', desc: '韓國國民綠瓶蒸餾燒酒 (真露 / 初飲初樂)' },
-                { name: '맥주잔', label: '啤酒杯', pron: '[맥쭈잔]', x: '27%', y: '83%', desc: '大口暢飲的黃金啤酒玻璃杯' },
-                { name: '소주잔', label: '燒酒杯', pron: '[소주잔]', x: '35%', y: '88%', desc: '一口乾杯的精巧透明燒酒小杯' }
-            ];
 
             const currentHotspotObj = BBQ_HOTSPOTS.find(h => h.name === selectedHotspot) || BBQ_HOTSPOTS[0];
 
@@ -1625,7 +1625,7 @@
                                 </div>
 
                                 <div className="space-y-6">
-                                    {quizQuestions.map((q, idx) => {
+                                    {QUIZ_QUESTIONS.map((q, idx) => {
                                         const userAnswer = quizAnswers[q.id];
                                         return (
                                             <div key={q.id} className="p-4 sm:p-5 rounded-2xl bg-amber-50/40 border border-amber-100">
@@ -1687,9 +1687,9 @@
                                     {!quizSubmitted ? (
                                         <button
                                             onClick={handleQuizSubmit}
-                                            disabled={Object.keys(quizAnswers).length < quizQuestions.length}
+                                            disabled={Object.keys(quizAnswers).length < QUIZ_QUESTIONS.length}
                                             className={`px-8 py-3 rounded-2xl font-black text-sm shadow-md transition ${
-                                                Object.keys(quizAnswers).length === quizQuestions.length
+                                                Object.keys(quizAnswers).length === QUIZ_QUESTIONS.length
                                                     ? 'bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-white cursor-pointer'
                                                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                             }`}
@@ -1698,10 +1698,10 @@
                                         </button>
                                     ) : (
                                         <div className="p-4 rounded-2xl bg-amber-100 border border-amber-300 inline-block font-black text-amber-900 text-base">
-                                            您的得分：{quizQuestions.reduce((acc, q) => {
+                                            您的得分：{QUIZ_QUESTIONS.reduce((acc, q) => {
                                                 const ans = quizAnswers[q.id];
                                                 return (ans !== undefined && q.options[ans]?.isCorrect) ? acc + 1 : acc;
-                                            }, 0)} / {quizQuestions.length} 分 🎉
+                                            }, 0)} / {QUIZ_QUESTIONS.length} 分 🎉
                                         </div>
                                     )}
                                 </div>
