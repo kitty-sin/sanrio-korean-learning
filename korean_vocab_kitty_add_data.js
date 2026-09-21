@@ -359,5 +359,65 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5703,
+    "k": "수분",
+    "r": "subun",
+    "c": "水分、水份（如補水保濕、水分攝取）；受粉",
+    "e": "Moisture, water content, hydration; pollination",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5704,
+    "k": "동의",
+    "r": "dongui",
+    "c": "同意、贊同、贊成（如同意書、意見贊同）；同義",
+    "e": "Agreement, consent, approval; same meaning",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5705,
+    "k": "인맥",
+    "r": "inmaek",
+    "c": "人脈、人事關係、人際網絡（如拓展人脈）",
+    "e": "Personal connections, network, social relations",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5706,
+    "k": "신장",
+    "r": "sinjang",
+    "c": "身高、個子（身長）；腎臟；伸張、擴展",
+    "e": "Height, stature; kidney; expansion, growth",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5707,
+    "k": "지연",
+    "r": "jiyeon",
+    "c": "延誤、延遲、耽擱（如班機/列車延誤）；地緣",
+    "e": "Delay, postponement; regional ties",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5708,
+    "k": "활약",
+    "r": "hwalyak",
+    "c": "活躍、大顯身手、出色表現（如大活躍）",
+    "e": "Activity, great performance, active participation",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];

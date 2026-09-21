@@ -269,5 +269,155 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "助詞",
     "pd": "補助詞 (Auxiliary Particle / 보조사) 或其他接尾助詞。"
+  },
+  {
+    "id": 5694,
+    "k": "패스트푸드",
+    "r": "paeseuteupudeu",
+    "c": "速食、快餐、Fast Food（如漢堡、炸雞、薯條等快餐食品，外來語）",
+    "e": "Fast food (burgers, fried chicken, french fries, etc.)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5695,
+    "k": "패스트",
+    "r": "paeseuteu",
+    "c": "快速、Fast（外來語借詞，常見於 패스트 패션 快時尚、패스트 트랙 快速通道）",
+    "e": "Fast (loanword from English 'fast', used in fast fashion, fast track, etc.)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5696,
+    "k": "푸드",
+    "r": "pudeu",
+    "c": "食物、食品、Food（外來語借詞，常見於 푸드 코트 美食廣場、푸드 트럭 餐車/美食車、소울푸드 療癒美食等）",
+    "e": "Food (loanword from English 'food', used in food court, food truck, soul food, etc.)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5697,
+    "k": "친구들",
+    "r": "chingudeul",
+    "c": "朋友們（朋友「친구」+ 複數後綴「들」，表示複數個朋友/大家）",
+    "e": "Friends (plural of 친구 with plural marker 들)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5698,
+    "k": "넋",
+    "r": "neoks",
+    "c": "魂、靈魂、心神、精神（雙收音 ㄳ 代表音 ㄱ，如 넋을 잃다 出神/失魂落魄、넋이 나가다 魂不守舍）",
+    "e": "Soul, spirit, mind (e.g. 넋을 잃다 to lose one's senses, be entranced)",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5699,
+    "k": "외곬",
+    "r": "oegols",
+    "c": "單一途徑、一條路、專一、死心眼（雙收音 ㄽ 代表音 ㄹ，如 외곬으로 專心致志地/一條路走到黑、외곬 인생 一心一意的人生）",
+    "e": "Single path, one-track mind, single-minded devotion (e.g. 외곬으로 single-mindedly)",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5700,
+    "k": "핥다",
+    "r": "haltda",
+    "c": "舔、舔舐（雙收音 ㄾ 代表音 ㄹ，如 고양이가 손을 핥다 貓舔手、아이스크림을 핥다 舔冰淇淋）",
+    "e": "To lick, lap up (e.g. cat licking paws, licking ice cream)",
+    "l": "A",
+    "p": "動詞",
+    "pd": "動詞 (Verb / 동사)，如 하다（做）、가다（去）。"
+  },
+  {
+    "id": 5701,
+    "k": "읊다",
+    "r": "eulpda",
+    "c": "吟誦、吟詠、誦讀（詩歌/文章）（雙收音 ㄿ 發右邊音 ㅂ/ㅍ，如 시를 읊다 吟詩）",
+    "e": "To recite, chant (a poem or verse)",
+    "l": "B",
+    "p": "動詞",
+    "pd": "動詞 (Verb / 동사)，如 하다（做）、가다（去）。"
+  },
+  {
+    "id": 5702,
+    "k": "곽",
+    "r": "gwak",
+    "c": "小盒子、包、盒、槨 (量詞/名詞：如牛奶盒、火柴盒、煙盒等紙盒；或指外槨、姓氏郭/霍)",
+    "e": "small box / pack / carton / case",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5703,
+    "k": "수분",
+    "r": "subun",
+    "c": "水分、水份（如補水保濕、水分攝取）；受粉",
+    "e": "Moisture, water content, hydration; pollination",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5704,
+    "k": "동의",
+    "r": "dongui",
+    "c": "同意、贊同、贊成（如同意書、意見贊同）；同義",
+    "e": "Agreement, consent, approval; same meaning",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5705,
+    "k": "인맥",
+    "r": "inmaek",
+    "c": "人脈、人事關係、人際網絡（如拓展人脈）",
+    "e": "Personal connections, network, social relations",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5706,
+    "k": "신장",
+    "r": "sinjang",
+    "c": "身高、個子（身長）；腎臟；伸張、擴展",
+    "e": "Height, stature; kidney; expansion, growth",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5707,
+    "k": "지연",
+    "r": "jiyeon",
+    "c": "延誤、延遲、耽擱（如班機/列車延誤）；地緣",
+    "e": "Delay, postponement; regional ties",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5708,
+    "k": "활약",
+    "r": "hwalyak",
+    "c": "活躍、大顯身手、出色表現（如大活躍）",
+    "e": "Activity, great performance, active participation",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
