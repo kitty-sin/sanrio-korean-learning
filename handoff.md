@@ -23,12 +23,16 @@
 5. **📱 APK 與 PWA 離線快取同步**：
    - 升級 Service Worker 快取版本至 `v1.0.44`。
    - 同步複製所有變更至 `www/`，執行 `npx cap sync android` 完成 Android 原生資源同步。
+6. **🎯 CORE 2000 欄位錯位、斷行截斷與荒謬音譯全量精準修復**：
+   - **問題溯源**：在原始 PDF 解析時，由於部分長單字/電影名稱在表格中換行，導致單字與例句交錯錯位（如 #1993《좋은 놈, 나쁜 놈, 이상한 놈》韓文被切成兩截、例句英文被切成 `sipeoyo.` 導致音譯成「西佩奧約。」；#1994《태극기 휘날리며》英文被切斷為 `of War` 翻成「戰爭的」；#1995~#1999 經典電影譯名失準等）。
+   - **全面排查與修復**：精準修復 #568、#738、#1261、#1277、#1424、#1704、#1875、#1993、#1994、#1995、#1996、#1997、#1998、#1999 共 14 筆問題條目，恢復韓國影史經典電影名片正確繁體官方譯名（《神偷·獵人·斷指客》、《太極旗－生死兄弟》、《駭人怪物》、《原罪犯》、《大浩劫》、《殺人回憶》、《王的男人》）。
+   - 快取升級為 `v1.0.45`。
 
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.44`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.45`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
 - **最新 Git Commit**：`663d523`（✅ 已推至 origin/main）
