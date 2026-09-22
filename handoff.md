@@ -56,7 +56,7 @@
 - **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.43`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：待推更新（L1/L2 收工同步中）
+- **最新 Git Commit**：`7ac639a`（✅ 已推至 origin/main）
 
 ---
 
@@ -79,6 +79,6 @@
 
 ## 🕐 最後更新
  
-- **時間**：2026-09-22 14:05 PT
+- **時間**：2026-09-22 14:11 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
-- **Git Push 狀態**：待推更新
+- **Git Push 狀態**：✅ 已推
