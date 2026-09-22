@@ -219,6 +219,121 @@
     }, 2000);
   }
 
+  // 4. 終極語音辨識與跟讀評分引擎 (KittySTT: 支援 AndroidNativeSTT 原生極速辨識 + 瀏覽器 Web Speech 雙軌)
+  window.KittySTT = {
+    recognizer: null,
+    isListening: false,
+    
+    start: function(options) {
+      const opts = options || {};
+      const targetWord = opts.targetWord || '';
+      const onStart = opts.onStart || function() {};
+      const onResult = opts.onResult || function() {};
+      const onError = opts.onError || function() {};
+      const onEnd = opts.onEnd || function() {};
+
+      this.stop();
+
+      // 優先級 1：若在 Android 原生 App 內，調用系統級 SpeechRecognizer (直連 Google/Samsung 原生語音引擎)
+      if (window.AndroidNativeSTT && typeof window.AndroidNativeSTT.startListening === 'function') {
+        window.onAndroidSpeechStart = () => {
+          this.isListening = true;
+          onStart();
+        };
+        window.onAndroidSpeechResult = (text) => {
+          this.isListening = false;
+          onResult(text);
+        };
+        window.onAndroidSpeechError = (errMsg) => {
+          this.isListening = false;
+          onError(errMsg);
+        };
+        window.onAndroidSpeechEnd = () => {
+          this.isListening = false;
+          onEnd();
+        };
+        try {
+          this.isListening = true;
+          window.AndroidNativeSTT.startListening(targetWord);
+          return true;
+        } catch(e) {
+          console.warn('AndroidNativeSTT startListening failed, trying fallback:', e);
+        }
+      }
+
+      // 優先級 2：瀏覽器環境 Web Speech API (Chrome / Edge / Safari)
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        this.isListening = false;
+        onError('您的瀏覽器不支援 Web Speech 麥克風語音辨識，建議使用 Chrome 瀏覽器！');
+        onEnd();
+        return false;
+      }
+
+      try {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'ko-KR';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = () => {
+          this.isListening = true;
+          onStart();
+        };
+
+        recognition.onresult = (event) => {
+          this.isListening = false;
+          const transcript = (event.results && event.results[0] && event.results[0][0]) ? event.results[0][0].transcript : '';
+          onResult(transcript);
+        };
+
+        recognition.onerror = (event) => {
+          this.isListening = false;
+          console.warn("Speech Error:", event.error);
+          let msg = '未能辨識到聲音，請靠近麥克風再試一次！';
+          if (event.error === 'not-allowed') {
+            msg = '麥克風權限已被拒絕，請在瀏覽器設定中允許使用麥克風！';
+          } else if (event.error === 'network') {
+            msg = '網絡連線異常，語音服務無法連線，請檢查網絡！';
+          }
+          onError(msg);
+        };
+
+        recognition.onend = () => {
+          this.isListening = false;
+          onEnd();
+        };
+
+        this.recognizer = recognition;
+        this.isListening = true;
+        recognition.start();
+        return true;
+      } catch (err) {
+        this.isListening = false;
+        console.error("Speech Init Error:", err);
+        onError('語音辨識啟動失敗，請稍後再試！');
+        onEnd();
+        return false;
+      }
+    },
+
+    stop: function() {
+      this.isListening = false;
+      if (window.AndroidNativeSTT && typeof window.AndroidNativeSTT.stopListening === 'function') {
+        try {
+          window.AndroidNativeSTT.stopListening();
+        } catch(e) {}
+      }
+      if (this.recognizer) {
+        try {
+          this.recognizer.stop();
+        } catch(e) {}
+        this.recognizer = null;
+      }
+    }
+  };
+
   // 若載入 Capacitor 原生環境
   if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
     const App = window.Capacitor.Plugins.App;

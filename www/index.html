@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+KR:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Mobile Bridge & Speech Engine -->
+    <script src="./app_mobile_bridge.js"></script>
     
     <style>
         body {
@@ -1784,18 +1786,43 @@
                 }
             };
 
-            // 麥克風語音辨識跟讀評分
+            // 麥克風語音辨識跟讀評分 (支援 AndroidNativeSTT 原生極速辨識 + 瀏覽器 Web Speech 雙軌引擎)
             const startSpeechRecognition = (targetWord) => {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (!SpeechRecognition) {
-                    alert("您的瀏覽器不支援 Web Speech 麥克風語音辨識，建議使用 Chrome 瀏覽器！");
-                    return;
-                }
-
                 stopAllAudio();
                 setRecognizedText('');
                 setSpeechResult(null);
                 setIsRecording(true);
+
+                if (window.KittySTT) {
+                    window.KittySTT.start({
+                        targetWord: targetWord,
+                        onStart: () => {
+                            setIsRecording(true);
+                        },
+                        onResult: (transcript) => {
+                            setRecognizedText(transcript);
+                            const result = calculateJamoScore(targetWord, transcript);
+                            setSpeechResult(result);
+                            setIsRecording(false);
+                        },
+                        onError: (errorMsg) => {
+                            console.warn("Speech Recognition Error:", errorMsg);
+                            setIsRecording(false);
+                            setSpeechResult({ percentage: 0, stars: 0, feedback: errorMsg || '未能辨識到聲音，請靠近麥克風再試一次！' });
+                        },
+                        onEnd: () => {
+                            setIsRecording(false);
+                        }
+                    });
+                    return;
+                }
+
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    alert("您的瀏覽器不支援 Web Speech 麥克風語音辨識，建議使用 Chrome 瀏覽器！");
+                    setIsRecording(false);
+                    return;
+                }
 
                 try {
                     const recognition = new SpeechRecognition();
@@ -1831,8 +1858,11 @@
             };
 
             const stopSpeechRecognition = () => {
+                if (window.KittySTT) {
+                    window.KittySTT.stop();
+                }
                 if (recognitionRef.current) {
-                    recognitionRef.current.stop();
+                    try { recognitionRef.current.stop(); } catch(e) {}
                 }
                 setIsRecording(false);
             };
