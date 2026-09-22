@@ -74,7 +74,7 @@ Korean-Learning/
 ├── sanrio_korean_restaurant.html # 韓語餐廳與烤肉店點餐實戰樂園 (8大分類 ✕ 烤肉桌實境圖解 ✕ 點餐造句機 ✕ 0.3x發音)
 ├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
 ├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
-├── sw.js                        # Service Worker 離線快取核心 (v1.0.43)
+├── sw.js                        # Service Worker 離線快取核心 (v1.0.44)
 ├── package.json                 # 專案套件管理與 Capacitor 依賴
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔

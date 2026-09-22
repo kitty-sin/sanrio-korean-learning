@@ -9,111 +9,111 @@
       "ch": 1,
       "title": "How to Say \"Hello\", \"Thank You\" and More!",
       "name_zh": "日常問候與基礎禮貌",
-      "range": "Words 1 - 200",
-      "main_col": "#FF6B8B",
+      "range": "1-200",
+      "main_col": "#FF5E7E",
       "bg_col": "#FFF0F4",
       "bdr_col": "#FFCCD5",
       "badge_icon": "🍓",
-      "cheer_name": "蜜桃粉應援 🍓"
+      "cheer_name": "CH 01 (1-200)：日常問候與基礎禮貌"
     },
     {
       "ch": 2,
       "title": "How to Say \"black\", \"brown\" and More!",
-      "name_zh": "顏色與生活常見形容詞",
-      "range": "Words 201 - 400",
+      "name_zh": "顏色與基本形容詞",
+      "range": "201-400",
       "main_col": "#FF8A3D",
       "bg_col": "#FFF6EE",
       "bdr_col": "#FFE0CC",
       "badge_icon": "🍊",
-      "cheer_name": "甜杏橙應援 🍊"
+      "cheer_name": "CH 02 (201-400)：顏色與基本形容詞"
     },
     {
       "ch": 3,
       "title": "How to Say \"outside\", \"inside\" and More!",
-      "name_zh": "方向、位置與空間環境",
-      "range": "Words 401 - 600",
-      "main_col": "#EAB308",
+      "name_zh": "方向、位置與空間",
+      "range": "401-600",
+      "main_col": "#D99B00",
       "bg_col": "#FEFCE8",
       "bdr_col": "#FEF08A",
       "badge_icon": "🍋",
-      "cheer_name": "奶黃檸檬 🍋"
+      "cheer_name": "CH 03 (401-600)：方向、位置與空間"
     },
     {
       "ch": 4,
       "title": "How to Say \"restaurant\", \"cafe\" and More!",
-      "name_zh": "餐廳、咖啡廳與飲食點餐",
-      "range": "Words 601 - 800",
+      "name_zh": "餐廳、咖啡廳與飲食",
+      "range": "601-800",
       "main_col": "#10B981",
       "bg_col": "#ECFDF5",
       "bdr_col": "#A7F3D0",
       "badge_icon": "🌱",
-      "cheer_name": "薄荷蘇打 🌱"
+      "cheer_name": "CH 04 (601-800)：餐廳、咖啡廳與飲食"
     },
     {
       "ch": 5,
       "title": "How to Say \"sneeze\", \"allergy\" and More!",
-      "name_zh": "身體狀況、過敏與日常動作",
-      "range": "Words 801 - 1000",
-      "main_col": "#0EA5E9",
+      "name_zh": "身體狀況、過敏與生活動作",
+      "range": "801-1000",
+      "main_col": "#0284C7",
       "bg_col": "#F0F9FF",
       "bdr_col": "#BAE6FD",
       "badge_icon": "☁️",
-      "cheer_name": "夢幻天藍 ☁️"
+      "cheer_name": "CH 05 (801-1000)：身體狀況、過敏與生活動作"
     },
     {
       "ch": 6,
       "title": "How to Say \"sew\", \"knit\" and More!",
-      "name_zh": "休閒嗜好、日常手工與手作",
-      "range": "Words 1001 - 1200",
-      "main_col": "#8B5CF6",
+      "name_zh": "休閒嗜好與日常手作",
+      "range": "1001-1200",
+      "main_col": "#7C3AED",
       "bg_col": "#F5F3FF",
       "bdr_col": "#DDD6FE",
       "badge_icon": "🫐",
-      "cheer_name": "薰衣草紫 🫐"
+      "cheer_name": "CH 06 (1001-1200)：休閒嗜好與日常手作"
     },
     {
       "ch": 7,
       "title": "How to Say \"hungry\", \"thirsty\" and More!",
-      "name_zh": "情緒感受、生理需求與心境",
-      "range": "Words 1201 - 1400",
-      "main_col": "#EC4899",
+      "name_zh": "感受、生理需求與心境",
+      "range": "1201-1400",
+      "main_col": "#DB2777",
       "bg_col": "#FDF2F8",
       "bdr_col": "#FBCFE8",
       "badge_icon": "🌸",
-      "cheer_name": "櫻花愛心 🌸"
+      "cheer_name": "CH 07 (1201-1400)：感受、生理需求與心境"
     },
     {
       "ch": 8,
       "title": "How to Say \"alligator\", \"anteater\" and More!",
-      "name_zh": "大自然生物、動物與環境生態",
-      "range": "Words 1401 - 1600",
-      "main_col": "#14B8A6",
+      "name_zh": "動物、大自然與環境",
+      "range": "1401-1600",
+      "main_col": "#059669",
       "bg_col": "#F0FDFA",
       "bdr_col": "#99F6E4",
       "badge_icon": "🍈",
-      "cheer_name": "蜜瓜冰淇淋 🍈"
+      "cheer_name": "CH 08 (1401-1600)：動物、大自然與環境"
     },
     {
       "ch": 9,
       "title": "How to Say \"housewife\", \"husband\" and More!",
-      "name_zh": "家庭成員、社會職業與人際關係",
-      "range": "Words 1601 - 1800",
-      "main_col": "#A855F7",
+      "name_zh": "家庭成員、職業與人際關係",
+      "range": "1601-1800",
+      "main_col": "#9333EA",
       "bg_col": "#FAF5FF",
       "bdr_col": "#E9D5FF",
       "badge_icon": "🍇",
-      "cheer_name": "葡萄芭菲 🍇"
+      "cheer_name": "CH 09 (1601-1800)：家庭成員、職業與人際關係"
     },
     {
       "ch": 10,
       "title": "How to Say \"sports\", \"stadium\" and More!",
-      "name_zh": "體育運動、休閒競賽與戶外活動",
-      "range": "Words 1801 - 2000",
-      "main_col": "#F43F5E",
+      "name_zh": "運動、休閒活動與戶外",
+      "range": "1801-2000",
+      "main_col": "#E11D48",
       "bg_col": "#FFF1F2",
       "bdr_col": "#FECDD3",
       "badge_icon": "🎀",
-      "cheer_name": "寶石珊瑚 🎀"
+      "cheer_name": "CH 10 (1801-2000)：運動、休閒活動與戶外"
     }
   ],
   "data": [

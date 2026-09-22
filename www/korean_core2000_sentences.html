@@ -116,41 +116,115 @@
     <script type="text/babel">
         const { useState, useEffect, useMemo, useRef } = React;
 
-        // 韓系 10 大應援主題色票定義對照表
+        // 韓系 10 大章節劃分與馬卡龍色票定義對照表
         const CHEER_PALETTE = {
-            1: { cheer: "蜜桃粉應援", icon: "🍓", tag: "蜜桃粉應援 🍓", col: "#FF6B8B", bg: "#FFF0F4", bdr: "#FFCCD5" },
-            2: { cheer: "甜杏橙應援", icon: "🍊", tag: "甜杏橙應援 🍊", col: "#FF8A3D", bg: "#FFF6EE", bdr: "#FFE0CC" },
-            3: { cheer: "奶黃檸檬", icon: "🍋", tag: "奶黃檸檬 🍋", col: "#EAB308", bg: "#FEFCE8", bdr: "#FEF08A" },
-            4: { cheer: "薄荷蘇打", icon: "🌱", tag: "薄荷蘇打 🌱", col: "#10B981", bg: "#ECFDF5", bdr: "#A7F3D0" },
-            5: { cheer: "夢幻天藍", icon: "☁️", tag: "夢幻天藍 ☁️", col: "#0EA5E9", bg: "#F0F9FF", bdr: "#BAE6FD" },
-            6: { cheer: "薰衣草紫", icon: "🫐", tag: "薰衣草紫 🫐", col: "#8B5CF6", bg: "#F5F3FF", bdr: "#DDD6FE" },
-            7: { cheer: "櫻花愛心", icon: "🌸", tag: "櫻花愛心 🌸", col: "#EC4899", bg: "#FDF2F8", bdr: "#FBCFE8" },
-            8: { cheer: "蜜瓜冰淇淋", icon: "🍈", tag: "蜜瓜冰淇淋 🍈", col: "#14B8A6", bg: "#F0FDFA", bdr: "#99F6E4" },
-            9: { cheer: "葡萄芭菲", icon: "🍇", tag: "葡萄芭菲 🍇", col: "#A855F7", bg: "#FAF5FF", bdr: "#E9D5FF" },
-            10: { cheer: "寶石珊瑚", icon: "🎀", tag: "寶石珊瑚 🎀", col: "#F43F5E", bg: "#FFF1F2", bdr: "#FECDD3" }
+            1: { name: "日常問候與基礎禮貌", range: "1-200", icon: "🍓", fullName: "CH 01 (1-200)：日常問候與基礎禮貌", col: "#FF5E7E", bg: "#FFF0F4", bdr: "#FFCCD5" },
+            2: { name: "顏色與基本形容詞", range: "201-400", icon: "🍊", fullName: "CH 02 (201-400)：顏色與基本形容詞", col: "#FF8A3D", bg: "#FFF6EE", bdr: "#FFE0CC" },
+            3: { name: "方向、位置與空間", range: "401-600", icon: "🍋", fullName: "CH 03 (401-600)：方向、位置與空間", col: "#D99B00", bg: "#FEFCE8", bdr: "#FEF08A" },
+            4: { name: "餐廳、咖啡廳與飲食", range: "601-800", icon: "🌱", fullName: "CH 04 (601-800)：餐廳、咖啡廳與飲食", col: "#10B981", bg: "#ECFDF5", bdr: "#A7F3D0" },
+            5: { name: "身體狀況、過敏與生活動作", range: "801-1000", icon: "☁️", fullName: "CH 05 (801-1000)：身體狀況、過敏與生活動作", col: "#0284C7", bg: "#F0F9FF", bdr: "#BAE6FD" },
+            6: { name: "休閒嗜好與日常手作", range: "1001-1200", icon: "🫐", fullName: "CH 06 (1001-1200)：休閒嗜好與日常手作", col: "#7C3AED", bg: "#F5F3FF", bdr: "#DDD6FE" },
+            7: { name: "感受、生理需求與心境", range: "1201-1400", icon: "🌸", fullName: "CH 07 (1201-1400)：感受、生理需求與心境", col: "#DB2777", bg: "#FDF2F8", bdr: "#FBCFE8" },
+            8: { name: "動物、大自然與環境", range: "1401-1600", icon: "🍈", fullName: "CH 08 (1401-1600)：動物、大自然與環境", col: "#059669", bg: "#F0FDFA", bdr: "#99F6E4" },
+            9: { name: "家庭成員、職業與人際關係", range: "1601-1800", icon: "🍇", fullName: "CH 09 (1601-1800)：家庭成員、職業與人際關係", col: "#9333EA", bg: "#FAF5FF", bdr: "#E9D5FF" },
+            10: { name: "運動、休閒活動與戶外", range: "1801-2000", icon: "🎀", fullName: "CH 10 (1801-2000)：運動、休閒活動與戶外", col: "#E11D48", bg: "#FFF1F2", bdr: "#FECDD3" }
         };
 
-        // 語音發音核心
+        // 全域終極發音引擎 (支援 PC 瀏覽器 / 手機端 Android WebView / iOS Safari 100% 響亮發音)
         const playKoreanVoice = (text, rate = 1.0, onEnd = null) => {
-            if (!text) return;
-            if (window.speechSynthesis) {
-                window.speechSynthesis.cancel();
-                const utter = new SpeechSynthesisUtterance(text);
-                utter.lang = 'ko-KR';
-                utter.rate = rate;
-                
-                // 優先挑選韓語語音
-                const voices = window.speechSynthesis.getVoices();
-                const koVoice = voices.find(v => v.lang.includes('ko') || v.lang.includes('KR'));
-                if (koVoice) utter.voice = koVoice;
-                
-                if (onEnd) {
-                    utter.onend = () => onEnd();
-                    utter.onerror = () => onEnd();
+            if (!text) {
+                if (onEnd) onEnd();
+                return;
+            }
+
+            // 清理標記文字（移除括號、音標或特殊符號）
+            const cleanText = text.replace(/\[.*?\]/g, '').trim();
+
+            // 1. 優先使用全域 KittyVoice 引擎 (跨平台終極引擎：原生 TTS ➔ WebSpeech ➔ Google/Baidu 雲端真人 Fallback)
+            if (window.KittyVoice && typeof window.KittyVoice.speak === 'function') {
+                window.KittyVoice.speak(cleanText, rate, () => {
+                    if (onEnd) onEnd();
+                });
+                return;
+            }
+
+            // 2. 本地 Fallback 機制 (當 KittyVoice 尚未加載時)
+            if (rate <= 0.35) {
+                // 0.3x 極慢速逐字音節發音
+                const chars = Array.from(cleanText).filter(ch => ch.trim().length > 0 && /[\uac00-\ud7a3\u1100-\u11ff\u3130-\u318f]/.test(ch));
+                const targetChars = chars.length > 0 ? chars : Array.from(cleanText.trim()).filter(ch => ch.trim().length > 0);
+                (async () => {
+                    for (let i = 0; i < targetChars.length; i++) {
+                        await new Promise(res => {
+                            try {
+                                const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${encodeURIComponent(targetChars[i])}`);
+                                audio.playbackRate = 0.8;
+                                audio.onended = () => res();
+                                audio.onerror = () => res();
+                                audio.play().catch(() => res());
+                            } catch(e) { res(); }
+                        });
+                        if (i < targetChars.length - 1) await new Promise(r => setTimeout(r, 420));
+                    }
+                    if (onEnd) onEnd();
+                })();
+            } else {
+                // 檢查是否可用原生 Web Speech API 且具備韓語語音包
+                let hasKoVoice = false;
+                if (window.speechSynthesis) {
+                    const voices = window.speechSynthesis.getVoices();
+                    hasKoVoice = voices.some(v => v.lang && (v.lang.toLowerCase().includes('ko') || v.lang.toLowerCase().includes('kr')));
                 }
-                window.speechSynthesis.speak(utter);
-            } else if (onEnd) {
-                onEnd();
+
+                if (hasKoVoice && window.speechSynthesis) {
+                    try {
+                        window.speechSynthesis.cancel();
+                        const utter = new SpeechSynthesisUtterance(cleanText);
+                        utter.lang = 'ko-KR';
+                        utter.rate = Math.max(0.5, Math.min(1.5, rate));
+                        utter.pitch = 1.05;
+                        const voices = window.speechSynthesis.getVoices();
+                        const koVoice = voices.find(v => v.lang && (v.lang.toLowerCase().includes('ko') || v.lang.toLowerCase().includes('kr')));
+                        if (koVoice) utter.voice = koVoice;
+                        utter.onend = () => { if (onEnd) onEnd(); };
+                        utter.onerror = () => {
+                            playCloudAudio(cleanText, rate, onEnd);
+                        };
+                        window.speechSynthesis.speak(utter);
+                        return;
+                    } catch(e) {
+                        console.warn('SpeechSynthesis error, falling back to cloud:', e);
+                    }
+                }
+
+                // 3. 極速 Google Translate TTS 韓語高音質雲端真人發音
+                playCloudAudio(cleanText, rate, onEnd);
+            }
+        };
+
+        const playCloudAudio = (text, rate, onEnd) => {
+            try {
+                const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${encodeURIComponent(text)}`;
+                const audio = new Audio(url);
+                audio.playbackRate = Math.max(0.5, Math.min(1.5, rate || 1.0));
+                audio.onended = () => { if (onEnd) onEnd(); };
+                audio.onerror = () => {
+                    // 備援 Baidu TTS
+                    try {
+                        const bUrl = `https://tts.baidu.com/text2audio?tex=${encodeURIComponent(text)}&cuid=baike&lan=kor&ctp=1&pdt=301&vol=9&rate=32`;
+                        const bAudio = new Audio(bUrl);
+                        bAudio.onended = () => { if (onEnd) onEnd(); };
+                        bAudio.onerror = () => { if (onEnd) onEnd(); };
+                        bAudio.play().catch(() => { if (onEnd) onEnd(); });
+                    } catch(e) {
+                        if (onEnd) onEnd();
+                    }
+                };
+                audio.play().catch(() => {
+                    if (onEnd) onEnd();
+                });
+            } catch(err) {
+                if (onEnd) onEnd();
             }
         };
 
@@ -215,11 +289,12 @@
             // 豐富章節資訊
             const chapters = useMemo(() => {
                 return rawChapters.map(ch => {
-                    const pal = CHEER_PALETTE[ch.ch] || { cheer: "應援色票", icon: "💖", col: "#FF6B8B", bg: "#FFF0F4", bdr: "#FFCCD5" };
+                    const pal = CHEER_PALETTE[ch.ch] || { name: ch.name_zh, range: ch.range, icon: "💖", fullName: `CH ${ch.ch}`, col: ch.main_col, bg: ch.bg_col, bdr: ch.bdr_col };
                     return {
                         ...ch,
-                        cheer_name: pal.tag,
-                        cheer_short: pal.cheer,
+                        name_zh: pal.name,
+                        range: pal.range,
+                        full_title: pal.fullName,
                         badge_icon: pal.icon,
                         main_col: pal.col,
                         bg_col: pal.bg,
@@ -346,12 +421,16 @@
 
             // 連播模式 (單字 ➔ 暫停 ➔ 例句)
             const handlePlayCombo = (item) => {
+                if (!item) return;
                 const playKey = `${item.id}_combo`;
                 setPlayingId(playKey);
+                if (window.KittyVoice && typeof window.KittyVoice.unlock === 'function') {
+                    window.KittyVoice.unlock();
+                }
                 playKoreanVoice(item.word_kr, speed, () => {
                     setTimeout(() => {
                         playKoreanVoice(item.sent_kr, speed, () => setPlayingId(null));
-                    }, 400);
+                    }, 350);
                 });
             };
 
@@ -366,11 +445,17 @@
 
             const startRecognition = (targetText) => {
                 setIsListening(true);
-                setRecognizedText('');
+                setRecognizedText('正在聆聽中，請朗讀...');
                 setSttScore(null);
 
-                if (window.KittySTT && typeof window.KittySTT.startListening === 'function') {
-                    window.KittySTT.startListening({
+                // 優先使用 KittySTT 雙軌語音辨識 (Android 原生 SpeechRecognizer + Web Speech API)
+                if (window.KittySTT && typeof window.KittySTT.start === 'function') {
+                    window.KittySTT.start({
+                        targetWord: targetText,
+                        onStart: () => {
+                            setIsListening(true);
+                            setRecognizedText('正在聆聽中，請朗讀...');
+                        },
                         onResult: (resText) => {
                             setIsListening(false);
                             setRecognizedText(resText);
@@ -379,7 +464,10 @@
                         },
                         onError: (err) => {
                             setIsListening(false);
-                            setRecognizedText('未能辨識聲音，請靠近麥克風重試');
+                            setRecognizedText(typeof err === 'string' ? err : '未能辨識聲音，請靠近麥克風重試');
+                        },
+                        onEnd: () => {
+                            setIsListening(false);
                         }
                     });
                 } else if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -391,14 +479,14 @@
 
                     recognition.onresult = (event) => {
                         setIsListening(false);
-                        const resText = event.results[0][0].transcript;
+                        const resText = (event.results && event.results[0] && event.results[0][0]) ? event.results[0][0].transcript : '';
                         setRecognizedText(resText);
                         const score = calculateAccuracy(targetText, resText);
                         setSttScore(score);
                     };
                     recognition.onerror = () => {
                         setIsListening(false);
-                        setRecognizedText('辨識超時或未偵測到聲音');
+                        setRecognizedText('辨識超時或未偵測到聲音，請靠近重試');
                     };
                     recognition.onend = () => {
                         setIsListening(false);
@@ -410,7 +498,7 @@
                     }
                 } else {
                     setIsListening(false);
-                    setRecognizedText('此環境不支援麥克風語音辨識');
+                    setRecognizedText('此瀏覽器環境暫不支援麥克風語音辨識');
                 }
             };
 
@@ -470,9 +558,6 @@
                                 <a href="korean_hanja_dictionary.html" className="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-lg transition">
                                     <i className="fas fa-cubes"></i> 漢字
                                 </a>
-                                <a href="sanrio_korean_sentences.html" className="px-2 py-1 bg-orange-50 hover:bg-orange-100 text-orange-900 rounded-lg transition">
-                                    <i className="fas fa-train"></i> 造句
-                                </a>
                                 <a href="sanrio_korean_honorifics.html" className="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition">
                                     <i className="fas fa-crown"></i> 敬語
                                 </a>
@@ -482,13 +567,22 @@
                                 <a href="sanrio_korean_particles.html" className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg transition">
                                     <i className="fas fa-heart"></i> 助詞
                                 </a>
-                                <a href="sanrio_korean_restaurant.html" className="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg transition">
+                                <a href="sanrio_korean_sentences.html" className="px-2 py-1 bg-orange-50 hover:bg-orange-100 text-orange-900 rounded-lg transition">
+                                    <i className="fas fa-train"></i> 造句
+                                </a>
+                                <a href="korean_core2000_sentences.html" className="px-2 py-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-lg transition shadow-xs font-black ring-1 ring-rose-300">
+                                    <i className="fas fa-book-open"></i> 核心2000例句
+                                </a>
+                                <a href="sanrio_korean_food_100.html" className="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg transition">
+                                    <i className="fas fa-utensils"></i> 美食
+                                </a>
+                                <a href="sanrio_korean_restaurant.html" className="px-2 py-1 bg-orange-50 hover:bg-orange-100 text-orange-800 rounded-lg transition">
                                     <i className="fas fa-drumstick-bite"></i> 點餐
                                 </a>
                                 <a href="sanrio_korean_songs.html" className="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg transition">
                                     <i className="fas fa-music"></i> 名曲
                                 </a>
-                                <a href="pdf_viewer.html?doc=core2000" target="_blank" className="px-2 py-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white rounded-lg transition flex items-center gap-1 shadow-xs">
+                                <a href="pdf_viewer.html?doc=core2000" target="_blank" className="px-2 py-1 bg-white hover:bg-pink-50 text-pink-700 border border-pink-200 rounded-lg transition flex items-center gap-1 shadow-2xs">
                                     <i className="fas fa-file-pdf"></i> 原書PDF
                                 </a>
                             </div>
@@ -569,36 +663,36 @@
                             </div>
                         </div>
 
-                        {/* ================= 10 大應援主題色票篩選膠囊列 ================= */}
+                        {/* ================= 10 大章節劃分與馬卡龍色票篩選 ================= */}
                         <div className="mb-6">
                             <div className="flex items-center justify-between mb-2.5">
                                 <span className="text-xs sm:text-sm font-black text-rose-950 flex items-center gap-1.5">
-                                    <span className="text-pink-500 text-base">💖</span>
-                                    <span>10 大粉彩應援主題篩選</span>
+                                    <span className="text-pink-500 text-base">🎨</span>
+                                    <span>10 大章節劃分與馬卡龍色票篩選</span>
                                 </span>
                                 <span className="text-xs text-pink-700 font-bold bg-pink-50 px-2.5 py-0.5 rounded-full border border-pink-200">
-                                    共 {filteredData.length} 筆偶像應援小卡
+                                    共 {filteredData.length} 筆核心例句小卡
                                 </span>
                             </div>
 
-                            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-11 gap-1.5 sm:gap-2">
-                                {/* 全部應援按鈕 */}
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-11 gap-2">
+                                {/* 全部章節按鈕 */}
                                 <button
                                     onClick={() => setSelectedCh(0)}
-                                    className={`px-3 py-2 rounded-2xl text-xs font-black transition text-left flex flex-col justify-between border ${
+                                    className={`px-3 py-2.5 rounded-2xl text-xs font-black transition text-left flex flex-col justify-between border ${
                                         selectedCh === 0 
                                             ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white border-rose-600 shadow-md scale-102' 
                                             : 'bg-white/90 hover:bg-pink-50 text-gray-700 border-pink-200 shadow-2xs'
                                     }`}
                                 >
-                                    <span className="flex items-center justify-between">
-                                        <span>🌟 全部應援</span>
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-black">🌟 全部章節</span>
                                         <span className="text-[10px] opacity-80">ALL</span>
-                                    </span>
-                                    <span className="text-[10px] mt-1 opacity-90">2,000 句全量</span>
+                                    </div>
+                                    <span className="text-[10px] mt-1 opacity-90">1-2000 全量</span>
                                 </button>
 
-                                {/* 10 大應援主題色票 */}
+                                {/* 10 大章節馬卡龍色票 */}
                                 {chapters.map(ch => {
                                     const isAct = selectedCh === ch.ch;
                                     return (
@@ -610,19 +704,20 @@
                                                 borderColor: isAct ? ch.main_col : ch.bdr_col,
                                                 color: isAct ? '#FFFFFF' : '#374151'
                                             }}
-                                            className={`px-2.5 py-2 rounded-2xl text-xs font-black transition text-left flex flex-col justify-between border shadow-2xs hover:opacity-95 active:scale-95 ${
+                                            className={`px-3 py-2.5 rounded-2xl text-xs font-black transition text-left flex flex-col justify-between border shadow-2xs hover:opacity-95 active:scale-95 ${
                                                 isAct ? 'shadow-md scale-102 ring-2 ring-white/60' : ''
                                             }`}
                                         >
-                                            <div className="flex items-center justify-between">
-                                                <span className="truncate">CH {ch.ch < 10 ? `0${ch.ch}` : ch.ch}</span>
-                                                <span className="text-sm">{ch.badge_icon}</span>
+                                            <div className="flex items-center justify-between gap-1">
+                                                <span className="truncate font-black text-[11px]">CH {ch.ch < 10 ? `0${ch.ch}` : ch.ch} ({ch.range})</span>
+                                                <span className="text-sm shrink-0">{ch.badge_icon}</span>
                                             </div>
                                             <span 
-                                                className="text-[10px] font-black truncate mt-1" 
+                                                className="text-[11px] font-black truncate mt-1 leading-tight" 
                                                 style={{ color: isAct ? '#FFFFFF' : ch.main_col }}
+                                                title={ch.name_zh}
                                             >
-                                                {ch.cheer_short}
+                                                {ch.name_zh}
                                             </span>
                                         </button>
                                     );
@@ -719,7 +814,7 @@
                                     const isWordPlaying = playingId === `${item.id}_word`;
                                     const isSentPlaying = playingId === `${item.id}_sent`;
                                     const isComboPlaying = playingId === `${item.id}_combo`;
-                                    const cheerMeta = CHEER_PALETTE[item.ch] || { cheer: "應援", icon: "💖", col: item.chColor || "#FF6B8B", bg: item.chBg || "#FFF0F4", bdr: "#FFCCD5" };
+                                    const cheerMeta = CHEER_PALETTE[item.ch] || { name: `CH ${item.ch}`, range: "", icon: "💖", col: item.chColor || "#FF5E7E", bg: item.chBg || "#FFF0F4", bdr: "#FFCCD5" };
 
                                     return (
                                         <div
@@ -742,13 +837,13 @@
                                                         <span className="text-[9px] opacity-90">♥~♡</span>
                                                     </span>
 
-                                                    {/* 應援主題色票標籤 */}
+                                                    {/* 章節主題與色票標籤 */}
                                                     <span
                                                         style={{ backgroundColor: cheerMeta.bg, color: cheerMeta.col, borderColor: cheerMeta.bdr }}
                                                         className="text-[11px] font-black px-2 py-0.5 rounded-lg border flex items-center gap-1 shadow-2xs"
                                                     >
                                                         <span>{cheerMeta.icon}</span>
-                                                        <span>CH {item.ch < 10 ? `0${item.ch}` : item.ch} · {cheerMeta.cheer}</span>
+                                                        <span>CH {item.ch < 10 ? `0${item.ch}` : item.ch} ({cheerMeta.range}) · {cheerMeta.name}</span>
                                                     </span>
 
                                                     <span className="text-[10px] text-pink-400/90 font-bold">
@@ -982,12 +1077,19 @@
 
                                             {/* 小卡頂標 */}
                                             <div className="w-full flex items-center justify-between text-xs relative z-10">
-                                                <span 
-                                                    style={{ backgroundColor: currentFlashcard.chColor || '#FF6B8B', color: '#fff' }}
-                                                    className="font-black px-2.5 py-0.5 rounded-full shadow-2xs"
-                                                >
-                                                    #{currentFlashcard.id}
-                                                </span>
+                                                <div className="flex items-center gap-1.5">
+                                                    <span 
+                                                        style={{ backgroundColor: currentFlashcard.chColor || '#FF5E7E', color: '#fff' }}
+                                                        className="font-black px-2.5 py-0.5 rounded-full shadow-2xs"
+                                                    >
+                                                        #{currentFlashcard.id < 10 ? `000${currentFlashcard.id}` : currentFlashcard.id < 100 ? `00${currentFlashcard.id}` : currentFlashcard.id < 1000 ? `0${currentFlashcard.id}` : currentFlashcard.id}
+                                                    </span>
+                                                    {CHEER_PALETTE[currentFlashcard.ch] && (
+                                                        <span className="font-bold text-[11px] text-pink-600 bg-pink-50 px-2 py-0.5 rounded-lg border border-pink-200">
+                                                            {CHEER_PALETTE[currentFlashcard.ch].icon} CH {currentFlashcard.ch < 10 ? `0${currentFlashcard.ch}` : currentFlashcard.ch} · {CHEER_PALETTE[currentFlashcard.ch].name}
+                                                        </span>
+                                                    )}
+                                                </div>
                                                 <span className="text-pink-400 font-black">✦ K-POP CHEER ✦</span>
                                             </div>
 
