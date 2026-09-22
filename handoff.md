@@ -6,70 +6,67 @@
 
 ## ⏯️ 目前做到哪
 
-1. **🧩 詞彙庫擴充（72 筆自訂新增詞彙）**：
-   - `#5738 깅 (撒嬌、可愛、小寶貝 / K-pop 飯圈愛稱語氣後綴)`
-   - `#5703~#5708 수분, 동의, 인맥, 신장, 지연, 활약` 及人氣酒水等實用生活詞彙。
-   - 全量同步 `korean_vocab_kitty_add_data.js`、`www/korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv`、`korean_vocab_kitty_add.md`，Kitty 自訂庫累計達 **72 筆**，全庫總量達到 **5,738 筆**。
-2. **🧩 雙收音 (겹받침) 核心代表詞彙庫擴充與查重盤點**：
-   - **已存在於基準詞庫 (7 筆)**：`#162 앉다` (坐 / ㄵ)、`#5586 여덟` (八 / ㄼ)、`#707 값` (價錢 / ㅄ)、`#7 없다` (沒有 / ㅄ)、`#2461 닭` (雞 / ㄺ)、`#168 삶` (生活 / ㄻ)、`#1672 밟다` (踩 / ㄼ 特例)。
-   - **新收錄至 Kitty 自訂庫 (5 筆)**：
-     - `#5698 넋 (魂、靈魂、心神 / 雙收音 ㄳ 代表音 ㄱ)`
-     - `#5699 외곬 (單一途徑、專一、死心眼 / 雙收音 ㄽ 代表音 ㄹ)`
-     - `#5700 핥다 (舔、舔舐 / 雙收音 ㄾ 代表音 ㄹ)`
-     - `#5701 읊다 (吟誦、吟詠 / 雙收音 ㄿ 發右邊 ㅂ 音)`
-     - `#5702 곽 (小盒子、包、盒、槨 / 固有詞量詞與名詞、漢字音郭/霍)`
-3. **🚂 韓語造句發音積木列車全功能進化** (`sanrio_korean_sentences.html` + `korean_sentence_data.js`)：
-   - **單一萬能輸入框**：整合中/韓/英/粵語拼音智慧即時解析，支援繁簡雙向、電腦端與手機端完整自適應、Enter 鍵即時確認。
-   - **2 排自適應車卡排版**：第一行（車頭 🐧 + 車卡1 主語 + 車卡2 地點）、第二行（車卡3 受語 + 車卡4 動詞），解決手機與平板空間擠壓問題。
-   - **語法助詞與時態語尾螢光筆透視高亮 (Grammar Highlight)**：全量上線！將主語/主題助詞（`은/는/이/가`）、場所助詞（`에서`）、受格助詞（`을/를`）與語幹變形/語尾/時態標誌（`ㅂ니다/습니다`、`아/어요`、`았/었`、`ㄹ 거예요`、`고 있어요` 等）以溫潤奶黃螢光底色標註，羅馬拼音同步高亮對應。
-   - **螢光筆開關控制**：時態標籤列支援「`🎨 語法螢光筆 [✨ 開啟中 / 關閉]`」一鍵切換模式。
-   - **語音與複製純淨度**：朗讀與複製功能保持 100% 純文字，不受 HTML 標籤干擾。
-4. **🥩 韓語餐廳與烤肉店點餐實戰樂園全功能上線** (`sanrio_korean_restaurant.html` + `assets/korean_bbq_table.png`)：
-   - **8 大必備分類 + 實境俯視圖解**：涵蓋禮貌招呼、菜單規格（大中小份 `-자로 주세요`、一人份 `1인분 [이린분]` vs 二人份 `2인분 [이인분]`）、餐具與自助服務（抽屜文化、`셀프` 自助）、主食加點配料（鐵板炒飯 `볶음밥 [보끔밥]`）、蔬菜小菜（`깻잎 [깬닙]` 芝麻葉、包生菜疊法）、酒精飲料人氣王（真露、TERRA、Kelly、初飲初樂、零糖初露、馬格利與栗子米酒 `밤 막걸리` 原稿筆誤修正）、烤肉沾醬調味（包飯醬 `쌈장`、麻油鹽 `기름장`、濟州鯷魚醬 `멜젓`）、數量詞與實用量詞（`하나/두 개/세 개/병/잔/인分`）。
-   - **🔥 烤肉桌實景熱點互動點擊器 (Interactive BBQ Table)**：深度融合使用者上傳之實境烤肉桌圖資，點選烤盤（`불판`）、五花肉（`삼겹살`）、剪刀（`가위`）、夾子（`집게`）、大醬湯（`된장찌개`）、生菜包肉（`쌈을 싸다`）等直接跳出發音與雙語教學。
-   - **3 段速語音朗讀**：支援 `0.3x` 極慢速口型、`0.7x` 慢速、`1.0x` 道地原速發音。
-   - **點餐造句積木組裝機**：菜餚品項 + 份量規格 + `주세요` 一鍵合成完整點餐語句並朗讀。
-   - **隨堂星級闖關測驗**：5 大情境隨堂評量與滿分慶祝煙花特效。
-   - **全生態圈導航互聯**：已同步掛載於首頁、大字典、漢字辭典、造句列車、敬語、時態、助詞、名曲、100種美食清單。
-5. **📱 離線快取升級**：`sw.js` 與 `www/sw.js` 升級至快取版本 `kitty-korean-v1.0.40`，所有新靜態資源與圖資全量同步至 `www/`。
-6. **🛠️ 餐廳樂園空白頁修復與變數作用域優化**：
-   - 修復 JavaScript 暫時性死區（TDZ）錯誤：將 `const BBQ_HOTSPOTS` 與 `const QUIZ_QUESTIONS` 移至 `function KoreanRestaurantApp()` 頂部外部全域作用域，解決組件初始化時 `useMemo` 提前引用 `BBQ_HOTSPOTS` 導致的崩潰。
-   - 統一測驗變數命名：將 JSX 與評分邏輯中殘存的 `quizQuestions` 統一為 `QUIZ_QUESTIONS`。
-   - 升級 Service Worker 快取為 `v1.0.40`，確保所有客戶端第一時間清除舊版快取並獲取最新修復版。
-7. 🍱 **烤肉店點餐分類膠囊雙行排版進化 (2-Row Capsule Tabs)**：
+1. **🎤 Android App 原生麥克風韓語語音辨識與跟讀評分全面修復 (`AndroidNativeSTT`)**：
+   - **問題排查**：徹底解決 App（APK / Capacitor WebView）內點擊麥克風無法辨識或顯示「未能辨識到聲音」問題。根本原因在於：
+     1. `AndroidManifest.xml` 缺少 `RECORD_AUDIO` 底層錄音權限；
+     2. Android WebView 因商業授權閹割了 Web Speech API 的 Google 雲端語音服務，調用 `recognition.start()` 會拋出 `network` 或 `not-allowed`；
+     3. 缺少 Android 6.0+ 動態運行時權限彈窗與 Android 11+ `<queries>` 語音服務宣告。
+   - **Android 底層權限補齊**：在 `android/app/src/main/AndroidManifest.xml` 宣告 `RECORD_AUDIO`、`MODIFY_AUDIO_SETTINGS` 以及 `<queries><intent><action android:name="android.speech.RecognitionService" /></intent></queries>`。
+   - **實裝 `AndroidNativeSTT` 橋接**：在 `MainActivity.java` 接入系統層級 `android.speech.SpeechRecognizer`，配置 `ko-KR` 韓語聲學模型，支援動態麥克風授權（首次點擊時自動彈出系統授權提示，允許後無縫開始聆聽），並將識別結果透過 `window.onAndroidSpeechResult` 等回調傳回前端。
+   - **前端跨平台雙軌語音引擎 (`KittySTT`)**：在 `app_mobile_bridge.js` 封裝 `window.KittySTT`，在 App 內優先走原生 `AndroidNativeSTT`，在一般瀏覽器自動回退至 Web Speech API；於 `index.html` 的 `<head>` 預載 bridge，重構 `startSpeechRecognition`，將原生辨識文字直接注入 `calculateJamoScore` 進行初聲、中聲、收音拆解與星級評分。
+2. **📱 APK 自動編譯與 GitHub Release 最新安裝包發布**：
+   - 執行 `npx cap sync android` 同步所有靜態資源與原生配置至 Android 專案。
+   - 推送至 GitHub `main` 分支觸發 GitHub Actions `Build Android APK` 工作流，1m43s 順利編譯通過。
+   - 自動更新 GitHub Release `v1.0.1-apk` 的 `app-debug.apk`，並同步下載至本地根目錄 `app-debug.apk`（約 7.3 MB）。
+   - 在 `.gitignore` 中加入 `*.apk`，防止安裝包二進位檔被意外追蹤。
+3. **🍱 烤肉店點餐分類膠囊雙行排版進化 (2-Row Capsule Tabs)**：
    - 解決原本單行橫向滑動需手動來回滑動找尋分頁的痛點，改為響應式 **雙行自適應網格排版**（`grid grid-cols-2 sm:grid-cols-5 gap-2`）。
    - 電腦與平板螢幕（`sm:` 以上）：精準分為 2 排，每排 5 個膠囊，10 大分類一覽無遺、一鍵直達。
    - 手機螢幕（`< 640px`）：自動切換為雙列大卡片排版，按鈕更寬大好點擊，不再需要橫向滑動。
-   - 簡化按鈕文字，去除重複 FontAwesome 圖標，保留 Sanrio 萌趣 Emoji、項目計數與亮點 Badge。
    - 升級 Service Worker 快取至 `kitty-korean-v1.0.41`。
+4. **🥩 韓語餐廳與烤肉店點餐實戰樂園全功能上線** (`sanrio_korean_restaurant.html` + `assets/korean_bbq_table.png`)：
+   - **8 大必備分類 + 實境俯視圖解**：涵蓋禮貌招呼、菜單規格、餐具與自助服務、主食加點配料、蔬菜小菜、酒精飲料、烤肉沾醬調味、數量詞與實用量詞。
+   - **🔥 烤肉桌實景熱點互動點擊器 (Interactive BBQ Table)**：融合實境烤肉桌圖資，點選烤盤、五花肉、剪刀、大醬湯、生菜包肉等直接跳出發音與雙語教學。
+   - **3 段速語音朗讀**：支援 `0.3x` 極慢速口型、`0.7x` 慢速、`1.0x` 道地原速發音。
+   - **點餐造句積木組裝機**：菜餚品項 + 份量規格 + `주세요` 一鍵合成完整點餐語句並朗讀。
+   - **隨堂星級闖關測驗**：5 大情境隨堂評量與滿分慶祝煙花特效。
+5. **🚂 韓語造句發音積木列車全功能進化** (`sanrio_korean_sentences.html` + `korean_sentence_data.js`)：
+   - **單一萬能輸入框**：整合中/韓/英/粵語拼音智慧即時解析，支援繁簡雙向、電腦端與手機端完整自適應、Enter 鍵即時確認。
+   - **2 排自適應車卡排版**：第一行（車頭 🐧 + 車卡1 主語 + 車卡2 地點）、第二行（車卡3 受語 + 車卡4 動詞）。
+   - **語法助詞與時態語尾螢光筆透視高亮**：主語/主題助詞、場所助詞、受格助詞與語幹變形/語尾/時態標誌雙語螢光筆標註，支援開關控制。
+6. **📚 詞彙庫持續擴充至 5,738 筆**：
+   - 收錄 `#5738 깅`（撒嬌、可愛、小寶貝 / K-pop 飯圈愛稱語氣後綴）、雙收音詞庫等，Kitty 自訂庫累計達 **72 筆**，基準庫 5,666 筆，全庫總量達 **5,738 筆**。
 
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，無報錯，可直接於瀏覽器與 Capacitor 移動端離線體驗。
-- **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_restaurant.html](https://kitty-sin.github.io/sanrio-korean-learning/sanrio_korean_restaurant.html)
-- **最新 Git Commit**：`94dca55` (`feat(restaurant): split tab bar capsules into responsive 2-row grid for easy selection`)
+- **運行狀態**：全功能正常運作，Web 端與 Android 原生端（發音 TTS + 語音跟讀 STT）均已支援完畢。
+- **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
+- **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
+- **最新 Git Commit**：待推更新（L1/L2 收工同步中）
 
 ---
 
 ## ➡️ 下一步
 
-1. 依使用者後續反饋擴充更多常用韓語造句動詞、形容詞與主題句庫。
-2. 評估是否將造句列車測驗模式（Quiz）亦加入語法高亮透視解析反饋。
-3. 支援更多外來語或生活常用語法句型（如「想做 ~고 싶다」、「請做 ~아/어 주세요」等）。
+1. 測試真機 Android 麥克風語音辨識與 Jamo 評分反饋體驗。
+2. 依使用者後續反饋擴充更多常用韓語造句動詞、形容詞與主題句庫。
+3. 評估是否將造句列車測驗模式（Quiz）亦加入語法高亮透視解析反饋。
+4. 支援更多外來語或生活常用語法句型（如「想做 ~고 싶다」、「請做 ~아/어 주세요」等）。
 
 ---
 
 ## ⚠️ 注意事項
 
-- 本專案所有發音 API 使用 Web Speech API (`ko-KR`)，輸入句子時會自動剝離 HTML 與標點確保發音正確。
-- 修改 `sanrio_korean_restaurant.html` 或任何前端 HTML 後，必須注意變數宣告順序（避免 TDZ），並同步複製至 `www/` 與升級 `sw.js` 快取版本。
+- **Android 原生語音辨識**：在 Android 原生端，`SpeechRecognizer.createSpeechRecognizer` 必須在主執行緒（Main Looper）中執行，且需透過 `MainActivity.java` 中的動態權限檢查確保已取得 `RECORD_AUDIO` 授權。
+- **WebView 限制**：切勿在 Android WebView 依賴 `window.webkitSpeechRecognition`，必須走 `KittySTT` ➔ `AndroidNativeSTT` 橋接通道。
+- **前端變更同步**：每次修改根目錄的 `index.html`、`app_mobile_bridge.js` 或相關資源時，均需同步複製至 `www/`，並執行 `npx cap sync android`。
 
 ---
 
 ## 🕐 最後更新
 
-- **時間**：2026-09-21 14:35 PT
+- **時間**：2026-09-21 18:20 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 已推 (`main` 分支)

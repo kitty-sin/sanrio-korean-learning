@@ -104,6 +104,7 @@ Korean-Learning/
 - [x] **自動化詞庫管理管線** (`scripts/manage_vocab.py` + `scripts/build_hanja_dataset.py` + `korean-vocab-manager` Agent Skill，支援「查加 XX」全自動秒級查重、拼音生成、5 檔同步與 Git 自動部署)
 - [x] **RDQ Method 需求探索規格卡體系** (完成韓語漢字辭典視覺改版、名曲練唱樂園、頂部導航站、烤肉點餐樂園規格卡落地與執行驗證)
 - [x] **📱 Android 原生 App 封裝《KITTY 韓語積木大冒險 🌟》** (Capacitor 6.x + 雲端即時熱更新 + Service Worker 離線快取 + 拼豆 Yoda 寶寶萌趣 Adaptive 圖示 + 原生返回鍵防護 + GitHub Actions 自動編譯 APK 工作流)
+- [x] **🎤 Android 原生語音辨識橋接 (AndroidNativeSTT)** (解決 Android WebView 限制，接入系統底層 `android.speech.SpeechRecognizer` 支援 `ko-KR` 韓語聲學模型 + `RECORD_AUDIO` 動態權限申請 + `KittySTT` 雙軌適配 + Jamo 初聲/中聲/收音即時精確度評分)
 
 ---
 
