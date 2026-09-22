@@ -36,12 +36,24 @@
    - **語法助詞與時態語尾螢光筆透視高亮**：主語/主題助詞、場所助詞、受格助詞與語幹變形/語尾/時態標誌雙語螢光筆標註，支援開關控制。
 6. **📚 詞彙庫持續擴充至 5,738 筆**：
    - 收錄 `#5738 깅`（撒嬌、可愛、小寶貝 / K-pop 飯圈愛稱語氣後綴）、雙收音詞庫等，Kitty 自訂庫累計達 **72 筆**，基準庫 5,666 筆，全庫總量達 **5,738 筆**。
+7. **📖 【韓國核心互動例句朗讀樂園】全新上線並重塑為【韓系粉彩應援插畫風】** (`korean_core2000_sentences.html` + `korean_core2000_data.js` + `assets/Korean_CORE2000.pdf`)：
+   - **全書 2,000 組單字與例句管線萃取**：編寫 `scripts/build_core2000_dataset.py`，從 262 頁手帳 PDF 精準抽取 250 頁單字表，零遺漏抽取 2,000 組單字與生活實戰例句。
+   - **100% 嚴謹繁體中文復查與正字化**：徹底排查修復使用者發現之簡體殘留（如 #1201「镜头」），編寫 `scripts/refine_traditional_chinese.py` 接入 OpenCC `s2twp`（臺灣/香港繁體正字標準），將 2,000 筆數據全量清洗，繁體化達 100%（鏡頭、著、只、後等），並補全 64 筆缺漏繁中翻譯。
+   - **全面重塑為【韓系粉彩應援插畫風】 (K-pop Pastel Cheer Aesthetic)**：
+     - 告別日系手帳格子，採用夢幻粉彩雲朵背景（`#FFF0F5`, `#FFE4E9`）與微光星芒 (✦)。
+     - 頂部 Hero Banner 融合 `assets/kpop_cheer_banner_bg.png` 視覺，搭配粉彩愛心手燈 (🪄)、粉彩耳機 (🎧)、應援日記本 (📓)、拍立得小卡 (📷)。
+     - 單字與例句卡片升級為「拍立得偶像小卡（Polaroid Photocard / 應援小卡 #0001 ♥~♡）」，具備柔和白框、光澤感與立體陰影。
+     - 10 大主題章節全面升級為「10 大應援主題色票」（蜜桃粉應援 🍓、甜杏橙應援 🍊、奶黃檸檬 🍋、薄荷蘇打 🌱、夢幻天藍 ☁️、薰衣草紫 🫐、櫻花愛心 🌸、蜜瓜冰淇淋 🍈、葡萄芭菲 🍇、寶石珊瑚 🎀）。
+     - 3D 抽認卡升級為「拍立得偶像小卡 (Photocard Flip)」3D 翻轉記憶模式。
+   - **全域智慧搜尋與三段速語音**：引入 `kitty_search_engine.js`，支援繁簡雙向即時檢索、韓語初聲子音搜尋（如 `ㅋㅁㄹ` 匹配 `카메라`）及英文拼音；配備 0.3x/0.7x/1.0x 三段速語音朗讀、單字例句連播、生詞本與麥克風跟讀評分。
+   - **原書手帳 PDF 免下載直讀**：將 262 頁原書 PDF 掛載至 `pdf_viewer.html?doc=core2000`。
+   - **全生態圈互聯與快取**：更新全站 10 個核心頁面頂部導航站，升級 Service Worker 快取至 `v1.0.43`，所有資源同步複製至 `www/` 並完成 `npx cap sync android`。
 
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端與 Android 原生端（發音 TTS + 語音跟讀 STT）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.43`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
 - **最新 Git Commit**：待推更新（L1/L2 收工同步中）
@@ -50,23 +62,23 @@
 
 ## ➡️ 下一步
 
-1. 測試真機 Android 麥克風語音辨識與 Jamo 評分反饋體驗。
-2. 依使用者後續反饋擴充更多常用韓語造句動詞、形容詞與主題句庫。
-3. 評估是否將造句列車測驗模式（Quiz）亦加入語法高亮透視解析反饋。
-4. 支援更多外來語或生活常用語法句型（如「想做 ~고 싶다」、「請做 ~아/어 주세요」等）。
+1. **真機與瀏覽器全功能驗證**：驗證 GitHub Pages 站點與 Service Worker 快取更新後之拍立得小卡渲染效果、3D 翻卡動畫及語音連播。
+2. **造句列車與 CORE 2000 聯動**：評估是否在造句列車（`sanrio_korean_sentences.html`）中引入 CORE 2000 例句庫作為智慧造句參考範例。
+3. **測驗模式語法解析擴充**：評估是否將造句列車測驗模式亦加入語法高亮透視解析反饋。
 
 ---
 
 ## ⚠️ 注意事項
 
+- **繁體中文嚴格規範**：全站所有資料集、例句、按鈕與介面說明必須嚴謹 100% 繁體中文，杜絕簡體殘留；進行中文字串處理時必須採用 OpenCC `s2twp`（臺灣正體詞彙）標準，避免 `s2t` 造成的生僻字或異體字轉換偏差。
 - **Android 原生語音辨識**：在 Android 原生端，`SpeechRecognizer.createSpeechRecognizer` 必須在主執行緒（Main Looper）中執行，且需透過 `MainActivity.java` 中的動態權限檢查確保已取得 `RECORD_AUDIO` 授權。
 - **WebView 限制**：切勿在 Android WebView 依賴 `window.webkitSpeechRecognition`，必須走 `KittySTT` ➔ `AndroidNativeSTT` 橋接通道。
-- **前端變更同步**：每次修改根目錄的 `index.html`、`app_mobile_bridge.js` 或相關資源時，均需同步複製至 `www/`，並執行 `npx cap sync android`。
+- **前端變更同步**：每次修改根目錄的網頁、腳本或資源時，均需同步複製至 `www/`，並執行 `npx cap sync android`。
 
 ---
 
 ## 🕐 最後更新
-
-- **時間**：2026-09-21 18:20 PT
+ 
+- **時間**：2026-09-22 14:05 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
-- **Git Push 狀態**：✅ 已推 (`main` 分支)
+- **Git Push 狀態**：待推更新

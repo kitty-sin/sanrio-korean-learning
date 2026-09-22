@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【韓國核心互動例句朗讀樂園】Korean CORE 2000 | 韓系粉彩應援插畫風 • 偶像拍立得小卡 💖 | KITTY 韓語積木樂園</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- React & Babel -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- 全域智慧搜尋引擎 (繁簡雙向通搜 + 韓語初聲/NFC + 英文拼音) -->
+    <script src="kitty_search_engine.js"></script>
+
+    <!-- 行動端與原生語音橋接 -->
+    <script src="app_mobile_bridge.js"></script>
+
+    <!-- CORE 2000 完整數據集 -->
+    <script src="korean_core2000_data.js"></script>
+
+    <style>
+        body {
+            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E9 50%, #FFF5F8 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .font-cute {
+            font-family: 'Gaegu', cursive, 'Noto Sans KR', sans-serif;
+        }
+
+        /* 韓系拍立得偶像小卡 (Polaroid Photocard) */
+        .photocard-frame {
+            background: #FFFFFF;
+            border-radius: 1.5rem;
+            border: 2px solid rgba(255, 182, 193, 0.55);
+            box-shadow: 
+                0 10px 25px -4px rgba(255, 182, 193, 0.3),
+                0 4px 10px -2px rgba(244, 114, 182, 0.12);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+        .photocard-frame:hover {
+            transform: translateY(-4px) scale(1.008);
+            border-color: rgba(244, 114, 182, 0.75);
+            box-shadow: 
+                0 18px 36px -4px rgba(255, 154, 179, 0.42),
+                0 8px 18px -2px rgba(244, 114, 182, 0.2);
+        }
+
+        /* 偶像小卡高光折射覆層 */
+        .photocard-sheen {
+            background: linear-gradient(
+                135deg, 
+                rgba(255, 255, 255, 0.65) 0%, 
+                rgba(255, 255, 255, 0) 45%, 
+                rgba(255, 228, 233, 0.25) 100%
+            );
+            pointer-events: none;
+        }
+
+        /* 3D 抽認卡旋轉效果 */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* 自定義隱藏捲軸 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @keyframes pulseSoft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .pulse-soft {
+            animation: pulseSoft 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.85; }
+            50% { transform: translateY(-5px) rotate(8deg); opacity: 1; }
+        }
+        .sparkle-float {
+            animation: sparkleFloat 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative selection:bg-pink-200 selection:text-rose-900 text-gray-800">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useRef } = React;
+
+        // 韓系 10 大應援主題色票定義對照表
+        const CHEER_PALETTE = {
+            1: { cheer: "蜜桃粉應援", icon: "🍓", tag: "蜜桃粉應援 🍓", col: "#FF6B8B", bg: "#FFF0F4", bdr: "#FFCCD5" },
+            2: { cheer: "甜杏橙應援", icon: "🍊", tag: "甜杏橙應援 🍊", col: "#FF8A3D", bg: "#FFF6EE", bdr: "#FFE0CC" },
+            3: { cheer: "奶黃檸檬", icon: "🍋", tag: "奶黃檸檬 🍋", col: "#EAB308", bg: "#FEFCE8", bdr: "#FEF08A" },
+            4: { cheer: "薄荷蘇打", icon: "🌱", tag: "薄荷蘇打 🌱", col: "#10B981", bg: "#ECFDF5", bdr: "#A7F3D0" },
+            5: { cheer: "夢幻天藍", icon: "☁️", tag: "夢幻天藍 ☁️", col: "#0EA5E9", bg: "#F0F9FF", bdr: "#BAE6FD" },
+            6: { cheer: "薰衣草紫", icon: "🫐", tag: "薰衣草紫 🫐", col: "#8B5CF6", bg: "#F5F3FF", bdr: "#DDD6FE" },
+            7: { cheer: "櫻花愛心", icon: "🌸", tag: "櫻花愛心 🌸", col: "#EC4899", bg: "#FDF2F8", bdr: "#FBCFE8" },
+            8: { cheer: "蜜瓜冰淇淋", icon: "🍈", tag: "蜜瓜冰淇淋 🍈", col: "#14B8A6", bg: "#F0FDFA", bdr: "#99F6E4" },
+            9: { cheer: "葡萄芭菲", icon: "🍇", tag: "葡萄芭菲 🍇", col: "#A855F7", bg: "#FAF5FF", bdr: "#E9D5FF" },
+            10: { cheer: "寶石珊瑚", icon: "🎀", tag: "寶石珊瑚 🎀", col: "#F43F5E", bg: "#FFF1F2", bdr: "#FECDD3" }
+        };
+
+        // 語音發音核心
+        const playKoreanVoice = (text, rate = 1.0, onEnd = null) => {
+            if (!text) return;
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'ko-KR';
+                utter.rate = rate;
+                
+                // 優先挑選韓語語音
+                const voices = window.speechSynthesis.getVoices();
+                const koVoice = voices.find(v => v.lang.includes('ko') || v.lang.includes('KR'));
+                if (koVoice) utter.voice = koVoice;
+                
+                if (onEnd) {
+                    utter.onend = () => onEnd();
+                    utter.onerror = () => onEnd();
+                }
+                window.speechSynthesis.speak(utter);
+            } else if (onEnd) {
+                onEnd();
+            }
+        };
+
+        // 韓語 Jamo 初聲/中聲/收音拆解函式 (用於評分與結構解析)
+        const decomposeHangul = (text) => {
+            const CHOSUNG = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+            const JUNGSUNG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
+            const JONGSUNG = ['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+
+            let result = '';
+            for (let i = 0; i < text.length; i++) {
+                const code = text.charCodeAt(i);
+                if (code >= 0xAC00 && code <= 0xD7A3) {
+                    const syllableIndex = code - 0xAC00;
+                    const cho = Math.floor(syllableIndex / 588);
+                    const jung = Math.floor((syllableIndex % 588) / 28);
+                    const jong = syllableIndex % 28;
+                    result += CHOSUNG[cho] + JUNGSUNG[jung] + (jong > 0 ? JONGSUNG[jong] : '');
+                } else if (code >= 0x3131 && code <= 0x3163) {
+                    result += text[i];
+                } else {
+                    result += text[i];
+                }
+            }
+            return result;
+        };
+
+        // Levenshtein 距離精準度評分
+        const calculateAccuracy = (target, spoken) => {
+            const cleanT = decomposeHangul(target.replace(/[^가-힣a-zA-Z0-9]/g, ''));
+            const cleanS = decomposeHangul(spoken.replace(/[^가-힣a-zA-Z0-9]/g, ''));
+            if (!cleanT || !cleanS) return 0;
+            if (cleanT === cleanS) return 100;
+
+            const matrix = [];
+            for (let i = 0; i <= cleanS.length; i++) matrix[i] = [i];
+            for (let j = 0; j <= cleanT.length; j++) matrix[0][j] = j;
+
+            for (let i = 1; i <= cleanS.length; i++) {
+                for (let j = 1; j <= cleanT.length; j++) {
+                    if (cleanS.charAt(i - 1) === cleanT.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j - 1] + 1,
+                            matrix[i][j - 1] + 1,
+                            matrix[i - 1][j] + 1
+                        );
+                    }
+                }
+            }
+            const dist = matrix[cleanS.length][cleanT.length];
+            const maxLen = Math.max(cleanS.length, cleanT.length);
+            const score = Math.max(0, Math.round((1 - dist / maxLen) * 100));
+            return score;
+        };
+
+        function App() {
+            const rawChapters = window.KOREAN_CORE2000_CHAPTERS || [];
+            const allData = window.KOREAN_CORE2000_DATA || [];
+
+            // 豐富章節資訊
+            const chapters = useMemo(() => {
+                return rawChapters.map(ch => {
+                    const pal = CHEER_PALETTE[ch.ch] || { cheer: "應援色票", icon: "💖", col: "#FF6B8B", bg: "#FFF0F4", bdr: "#FFCCD5" };
+                    return {
+                        ...ch,
+                        cheer_name: pal.tag,
+                        cheer_short: pal.cheer,
+                        badge_icon: pal.icon,
+                        main_col: pal.col,
+                        bg_col: pal.bg,
+                        bdr_col: pal.bdr
+                    };
+                });
+            }, [rawChapters]);
+
+            // 狀態管理
+            const [selectedCh, setSelectedCh] = useState(0); // 0 = 全部
+            const [searchQuery, setSearchQuery] = useState('');
+            const [speed, setSpeed] = useState(1.0); // 0.3, 0.7, 1.0
+            const [currentPage, setCurrentPage] = useState(1);
+            const [pageSize, setPageSize] = useState(25);
+            const [favorites, setFavorites] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('kitty_core2000_favs');
+                    return saved ? JSON.parse(saved) : [];
+                } catch(e) { return []; }
+            });
+            const [onlyFavorites, setOnlyFavorites] = useState(false);
+            const [showEnglish, setShowEnglish] = useState(true);
+
+            // 正在播放狀態
+            const [playingId, setPlayingId] = useState(null); // `${id}_word` or `${id}_sent` or `${id}_combo`
+
+            // 3D 偶像拍立得小卡 Modal 狀態
+            const [isFlashcardOpen, setIsFlashcardOpen] = useState(false);
+            const [flashcardIndex, setFlashcardIndex] = useState(0);
+            const [isCardFlipped, setIsCardFlipped] = useState(false);
+
+            // 跟讀錄音與評分 Modal 狀態
+            const [sttModalOpen, setSttModalOpen] = useState(false);
+            const [sttTargetItem, setSttTargetItem] = useState(null); // { text, type, id }
+            const [isListening, setIsListening] = useState(false);
+            const [recognizedText, setRecognizedText] = useState('');
+            const [sttScore, setSttScore] = useState(null);
+
+            // 收藏同步保存
+            useEffect(() => {
+                try {
+                    localStorage.setItem('kitty_core2000_favs', JSON.stringify(favorites));
+                } catch(e) {}
+            }, [favorites]);
+
+            const toggleFavorite = (id) => {
+                setFavorites(prev => 
+                    prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+                );
+            };
+
+            // 過濾數據集 (整合 kitty_search_engine 智慧搜尋引擎)
+            const filteredData = useMemo(() => {
+                const q = searchQuery.trim();
+                let pq = null;
+                if (q && window.KittySearch) {
+                    pq = window.KittySearch.prepareQuery(q);
+                }
+
+                return allData.filter(item => {
+                    // 章節篩選
+                    if (selectedCh > 0 && item.ch !== selectedCh) return false;
+                    // 收藏篩選
+                    if (onlyFavorites && !favorites.includes(item.id)) return false;
+
+                    // 關鍵字搜尋 (支援繁簡雙向通搜、韓語 NFC/初聲、英文拼音、#編號)
+                    if (q) {
+                        // 編號比對
+                        if (q.startsWith('#')) {
+                            if (item.id.toString() === q.substring(1)) return true;
+                        } else if (/^\d+$/.test(q)) {
+                            if (item.id.toString() === q) return true;
+                        }
+
+                        if (pq && window.KittySearch) {
+                            const isMatched = 
+                                window.KittySearch.matchSmart(item.word_kr, pq) ||
+                                window.KittySearch.matchSmart(item.sent_kr, pq) ||
+                                window.KittySearch.matchSmart(item.word_zh, pq) ||
+                                window.KittySearch.matchSmart(item.sent_zh, pq) ||
+                                window.KittySearch.matchSmart(item.word_rom, pq) ||
+                                window.KittySearch.matchSmart(item.sent_rom, pq) ||
+                                window.KittySearch.matchSmart(item.word_en, pq) ||
+                                window.KittySearch.matchSmart(item.sent_en, pq);
+                            if (!isMatched) return false;
+                        } else {
+                            const lowQ = q.toLowerCase();
+                            const krMatch = (item.word_kr && item.word_kr.toLowerCase().includes(lowQ)) || (item.sent_kr && item.sent_kr.toLowerCase().includes(lowQ));
+                            const zhMatch = (item.word_zh && item.word_zh.toLowerCase().includes(lowQ)) || (item.sent_zh && item.sent_zh.toLowerCase().includes(lowQ));
+                            const romMatch = (item.word_rom && item.word_rom.toLowerCase().includes(lowQ)) || (item.sent_rom && item.sent_rom.toLowerCase().includes(lowQ));
+                            const enMatch = (item.word_en && item.word_en.toLowerCase().includes(lowQ)) || (item.sent_en && item.sent_en.toLowerCase().includes(lowQ));
+                            if (!krMatch && !zhMatch && !romMatch && !enMatch) return false;
+                        }
+                    }
+                    return true;
+                });
+            }, [allData, selectedCh, onlyFavorites, favorites, searchQuery]);
+
+            // 重置分頁
+            useEffect(() => {
+                setCurrentPage(1);
+            }, [selectedCh, onlyFavorites, searchQuery, pageSize]);
+
+            // 當前頁切片
+            const totalPages = Math.max(1, Math.ceil(filteredData.length / pageSize));
+            const paginatedData = useMemo(() => {
+                const start = (currentPage - 1) * pageSize;
+                return filteredData.slice(start, start + pageSize);
+            }, [filteredData, currentPage, pageSize]);
+
+            // 播放單字
+            const handlePlayWord = (item) => {
+                const playKey = `${item.id}_word`;
+                setPlayingId(playKey);
+                playKoreanVoice(item.word_kr, speed, () => setPlayingId(null));
+            };
+
+            // 播放例句
+            const handlePlaySent = (item) => {
+                const playKey = `${item.id}_sent`;
+                setPlayingId(playKey);
+                playKoreanVoice(item.sent_kr, speed, () => setPlayingId(null));
+            };
+
+            // 連播模式 (單字 ➔ 暫停 ➔ 例句)
+            const handlePlayCombo = (item) => {
+                const playKey = `${item.id}_combo`;
+                setPlayingId(playKey);
+                playKoreanVoice(item.word_kr, speed, () => {
+                    setTimeout(() => {
+                        playKoreanVoice(item.sent_kr, speed, () => setPlayingId(null));
+                    }, 400);
+                });
+            };
+
+            // 開啟語音評分
+            const handleStartSTT = (text, type, id) => {
+                setSttTargetItem({ text, type, id });
+                setRecognizedText('');
+                setSttScore(null);
+                setSttModalOpen(true);
+                startRecognition(text);
+            };
+
+            const startRecognition = (targetText) => {
+                setIsListening(true);
+                setRecognizedText('');
+                setSttScore(null);
+
+                if (window.KittySTT && typeof window.KittySTT.startListening === 'function') {
+                    window.KittySTT.startListening({
+                        onResult: (resText) => {
+                            setIsListening(false);
+                            setRecognizedText(resText);
+                            const score = calculateAccuracy(targetText, resText);
+                            setSttScore(score);
+                        },
+                        onError: (err) => {
+                            setIsListening(false);
+                            setRecognizedText('未能辨識聲音，請靠近麥克風重試');
+                        }
+                    });
+                } else if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    const recognition = new SpeechRecognition();
+                    recognition.lang = 'ko-KR';
+                    recognition.interimResults = false;
+                    recognition.maxAlternatives = 1;
+
+                    recognition.onresult = (event) => {
+                        setIsListening(false);
+                        const resText = event.results[0][0].transcript;
+                        setRecognizedText(resText);
+                        const score = calculateAccuracy(targetText, resText);
+                        setSttScore(score);
+                    };
+                    recognition.onerror = () => {
+                        setIsListening(false);
+                        setRecognizedText('辨識超時或未偵測到聲音');
+                    };
+                    recognition.onend = () => {
+                        setIsListening(false);
+                    };
+                    try {
+                        recognition.start();
+                    } catch(e) {
+                        setIsListening(false);
+                    }
+                } else {
+                    setIsListening(false);
+                    setRecognizedText('此環境不支援麥克風語音辨識');
+                }
+            };
+
+            // 鍵盤控制 3D 偶像拍立得抽認卡
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if (!isFlashcardOpen) return;
+                    if (e.key === 'ArrowRight' || e.key === 'j') {
+                        setFlashcardIndex(prev => (prev + 1) % filteredData.length);
+                        setIsCardFlipped(false);
+                    } else if (e.key === 'ArrowLeft' || e.key === 'k') {
+                        setFlashcardIndex(prev => (prev - 1 + filteredData.length) % filteredData.length);
+                        setIsCardFlipped(false);
+                    } else if (e.key === ' ' || e.key === 'Enter') {
+                        e.preventDefault();
+                        setIsCardFlipped(prev => !prev);
+                    } else if (e.key === 'p' || e.key === 'P') {
+                        if (filteredData[flashcardIndex]) {
+                            handlePlayCombo(filteredData[flashcardIndex]);
+                        }
+                    } else if (e.key === 'Escape') {
+                        setIsFlashcardOpen(false);
+                    }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, [isFlashcardOpen, filteredData, flashcardIndex]);
+
+            const currentFlashcard = filteredData[flashcardIndex] || null;
+
+            return (
+                <div className="pb-24">
+                    {/* ================= 頂部導航站 ================= */}
+                    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-pink-200/80 shadow-xs">
+                        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                                <a href="index.html" className="flex items-center gap-1.5 hover:opacity-85 transition">
+                                    <span className="text-xl sm:text-2xl">🌸</span>
+                                    <span className="font-extrabold text-gray-800 text-sm sm:text-base tracking-tight">
+                                        KITTY 韓語積木樂園
+                                    </span>
+                                </a>
+                                <span className="text-xs bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-0.5 rounded-full font-black shadow-2xs flex items-center gap-1">
+                                    <span>💖</span>
+                                    <span>核心2000 應援</span>
+                                </span>
+                            </div>
+
+                            {/* 導航站各樂園入口 */}
+                            <div className="flex items-center gap-1 sm:gap-1.5 text-xs font-bold flex-wrap">
+                                <a href="index.html" className="px-2 py-1 bg-pink-50 hover:bg-pink-100 text-pink-900 rounded-lg transition">
+                                    <i className="fas fa-home"></i> 首頁
+                                </a>
+                                <a href="korean_vocab_dictionary.html" className="px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition">
+                                    <i className="fas fa-book"></i> 詞庫
+                                </a>
+                                <a href="korean_hanja_dictionary.html" className="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-lg transition">
+                                    <i className="fas fa-cubes"></i> 漢字
+                                </a>
+                                <a href="sanrio_korean_sentences.html" className="px-2 py-1 bg-orange-50 hover:bg-orange-100 text-orange-900 rounded-lg transition">
+                                    <i className="fas fa-train"></i> 造句
+                                </a>
+                                <a href="sanrio_korean_honorifics.html" className="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition">
+                                    <i className="fas fa-crown"></i> 敬語
+                                </a>
+                                <a href="sanrio_korean_tenses.html" className="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg transition">
+                                    <i className="fas fa-clock"></i> 時態
+                                </a>
+                                <a href="sanrio_korean_particles.html" className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg transition">
+                                    <i className="fas fa-heart"></i> 助詞
+                                </a>
+                                <a href="sanrio_korean_restaurant.html" className="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg transition">
+                                    <i className="fas fa-drumstick-bite"></i> 點餐
+                                </a>
+                                <a href="sanrio_korean_songs.html" className="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg transition">
+                                    <i className="fas fa-music"></i> 名曲
+                                </a>
+                                <a href="pdf_viewer.html?doc=core2000" target="_blank" className="px-2 py-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white rounded-lg transition flex items-center gap-1 shadow-xs">
+                                    <i className="fas fa-file-pdf"></i> 原書PDF
+                                </a>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* ================= 韓系粉彩應援插畫橫幅 (Hero Banner) ================= */}
+                    <div className="max-w-7xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 pb-4">
+                        <div className="relative rounded-3xl overflow-hidden border-2 border-pink-200/90 shadow-lg mb-6 bg-gradient-to-r from-pink-100 via-rose-50 to-pink-100">
+                            {/* 韓系粉彩應援官方插畫背景 */}
+                            <div 
+                                className="absolute inset-0 bg-cover bg-center opacity-80 sm:opacity-95"
+                                style={{ backgroundImage: `url('assets/kpop_cheer_banner_bg.png')` }}
+                            ></div>
+
+                            {/* 留白應援區中央卡片 (自適應高透磨砂白框，保證行動端與桌面端 100% 易讀) */}
+                            <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 sm:py-12 my-1 sm:my-3">
+                                <div className="bg-white/80 sm:bg-white/75 backdrop-blur-md rounded-3xl p-5 sm:p-7 border border-pink-200/90 shadow-sm text-center space-y-3">
+                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-pink-100/90 border border-pink-300 text-pink-900 text-xs sm:text-sm font-black rounded-full shadow-2xs">
+                                        <span>🪄</span>
+                                        <span>應援手燈 ✕ 📷 拍立得小卡 ✕ 📓 追星手札</span>
+                                        <span>💖</span>
+                                    </div>
+
+                                    <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-rose-950 tracking-tight flex items-center justify-center gap-2 flex-wrap">
+                                        <span className="animate-bounce">💖</span>
+                                        <span>韓國核心互動例句朗讀樂園</span>
+                                        <span className="sparkle-float text-amber-500">✦</span>
+                                    </h1>
+
+                                    <p className="text-xs sm:text-base text-rose-900/90 font-bold max-w-2xl mx-auto leading-relaxed">
+                                        韓系粉彩應援插畫風 • 偶像拍立得小卡 • 2,000 組單字例句 • 3 段速真人朗讀 💖
+                                    </p>
+
+                                    {/* 快捷功能卡列 */}
+                                    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-1">
+                                        <button
+                                            onClick={() => {
+                                                setIsFlashcardOpen(true);
+                                                setFlashcardIndex(0);
+                                                setIsCardFlipped(false);
+                                            }}
+                                            className="px-4 py-2.5 bg-gradient-to-r from-rose-500 via-pink-500 to-rose-500 hover:from-rose-600 hover:to-pink-600 text-white text-xs sm:text-sm font-black rounded-2xl shadow-md transition flex items-center gap-2 active:scale-95 border border-pink-300"
+                                        >
+                                            <i className="fas fa-camera-retro"></i>
+                                            <span>3D 偶像拍立得翻卡</span>
+                                            <span className="bg-white/25 px-1.5 py-0.5 rounded-md text-[10px]">Space 翻面</span>
+                                        </button>
+
+                                        <button
+                                            onClick={() => setOnlyFavorites(!onlyFavorites)}
+                                            className={`px-4 py-2.5 text-xs sm:text-sm font-black rounded-2xl border transition flex items-center gap-2 active:scale-95 shadow-2xs ${
+                                                onlyFavorites 
+                                                    ? 'bg-rose-500 text-white border-rose-600 shadow-md' 
+                                                    : 'bg-white hover:bg-pink-50 text-rose-800 border-pink-200'
+                                            }`}
+                                        >
+                                            <i className={`fas fa-heart ${onlyFavorites ? 'text-white' : 'text-rose-500'}`}></i>
+                                            <span>我的追星收藏生詞本</span>
+                                            <span className={`px-2 py-0.5 rounded-full text-xs font-black ${
+                                                onlyFavorites ? 'bg-white text-rose-600' : 'bg-pink-100 text-rose-800'
+                                            }`}>
+                                                {favorites.length}
+                                            </span>
+                                        </button>
+
+                                        <a
+                                            href="pdf_viewer.html?doc=core2000"
+                                            target="_blank"
+                                            className="px-4 py-2.5 bg-white/90 hover:bg-white text-gray-700 text-xs sm:text-sm font-black rounded-2xl border border-pink-200 shadow-2xs transition flex items-center gap-2"
+                                        >
+                                            <i className="fas fa-book-open text-pink-500"></i>
+                                            <span>線上原書手帳 (262頁)</span>
+                                            <i className="fas fa-external-link-alt text-[10px] text-pink-300"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* ================= 10 大應援主題色票篩選膠囊列 ================= */}
+                        <div className="mb-6">
+                            <div className="flex items-center justify-between mb-2.5">
+                                <span className="text-xs sm:text-sm font-black text-rose-950 flex items-center gap-1.5">
+                                    <span className="text-pink-500 text-base">💖</span>
+                                    <span>10 大粉彩應援主題篩選</span>
+                                </span>
+                                <span className="text-xs text-pink-700 font-bold bg-pink-50 px-2.5 py-0.5 rounded-full border border-pink-200">
+                                    共 {filteredData.length} 筆偶像應援小卡
+                                </span>
+                            </div>
+
+                            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-11 gap-1.5 sm:gap-2">
+                                {/* 全部應援按鈕 */}
+                                <button
+                                    onClick={() => setSelectedCh(0)}
+                                    className={`px-3 py-2 rounded-2xl text-xs font-black transition text-left flex flex-col justify-between border ${
+                                        selectedCh === 0 
+                                            ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white border-rose-600 shadow-md scale-102' 
+                                            : 'bg-white/90 hover:bg-pink-50 text-gray-700 border-pink-200 shadow-2xs'
+                                    }`}
+                                >
+                                    <span className="flex items-center justify-between">
+                                        <span>🌟 全部應援</span>
+                                        <span className="text-[10px] opacity-80">ALL</span>
+                                    </span>
+                                    <span className="text-[10px] mt-1 opacity-90">2,000 句全量</span>
+                                </button>
+
+                                {/* 10 大應援主題色票 */}
+                                {chapters.map(ch => {
+                                    const isAct = selectedCh === ch.ch;
+                                    return (
+                                        <button
+                                            key={ch.ch}
+                                            onClick={() => setSelectedCh(ch.ch)}
+                                            style={{
+                                                backgroundColor: isAct ? ch.main_col : '#FFFFFF',
+                                                borderColor: isAct ? ch.main_col : ch.bdr_col,
+                                                color: isAct ? '#FFFFFF' : '#374151'
+                                            }}
+                                            className={`px-2.5 py-2 rounded-2xl text-xs font-black transition text-left flex flex-col justify-between border shadow-2xs hover:opacity-95 active:scale-95 ${
+                                                isAct ? 'shadow-md scale-102 ring-2 ring-white/60' : ''
+                                            }`}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <span className="truncate">CH {ch.ch < 10 ? `0${ch.ch}` : ch.ch}</span>
+                                                <span className="text-sm">{ch.badge_icon}</span>
+                                            </div>
+                                            <span 
+                                                className="text-[10px] font-black truncate mt-1" 
+                                                style={{ color: isAct ? '#FFFFFF' : ch.main_col }}
+                                            >
+                                                {ch.cheer_short}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* ================= 萬能搜尋與語音控制列 ================= */}
+                        <div className="bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-pink-200/90 shadow-xs mb-6 flex flex-col md:flex-row items-center justify-between gap-3">
+                            {/* 搜尋框 */}
+                            <div className="relative w-full md:w-96">
+                                <i className="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-pink-400 text-sm"></i>
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="搜尋韓語 (支援初聲 ㄱㅅ)、拼音、繁簡中文通搜、英文或 #編號..."
+                                    className="w-full pl-9 pr-8 py-2.5 bg-pink-50/40 border border-pink-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 focus:bg-white transition"
+                                />
+                                {searchQuery && (
+                                    <button 
+                                        onClick={() => setSearchQuery('')}
+                                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-pink-400 hover:text-pink-600 text-xs p-1"
+                                    >
+                                        <i className="fas fa-times-circle"></i>
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* 控制項集合 */}
+                            <div className="flex flex-wrap items-center justify-between md:justify-end w-full md:w-auto gap-2 text-xs">
+                                {/* 發音速率選擇 */}
+                                <div className="flex items-center gap-1 bg-pink-50/60 border border-pink-200/70 p-1 rounded-xl font-bold">
+                                    <span className="text-pink-400 px-1 text-[11px]"><i className="fas fa-tachometer-alt"></i> 語速:</span>
+                                    {[0.3, 0.7, 1.0].map(s => (
+                                        <button
+                                            key={s}
+                                            onClick={() => setSpeed(s)}
+                                            className={`px-2.5 py-1 rounded-lg transition ${
+                                                speed === s 
+                                                    ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-2xs font-black' 
+                                                    : 'text-gray-600 hover:text-pink-700'
+                                            }`}
+                                        >
+                                            {s}x
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* 英文顯示切換 */}
+                                <button
+                                    onClick={() => setShowEnglish(!showEnglish)}
+                                    className={`px-3 py-1.5 rounded-xl border font-black transition flex items-center gap-1 ${
+                                        showEnglish 
+                                            ? 'bg-pink-100/90 text-pink-900 border-pink-300' 
+                                            : 'bg-white text-gray-500 border-gray-200'
+                                    }`}
+                                >
+                                    <i className="fas fa-language text-pink-500"></i>
+                                    <span>{showEnglish ? '中英雙顯' : '僅顯示繁中'}</span>
+                                </button>
+
+                                {/* 每頁數量 */}
+                                <select
+                                    value={pageSize}
+                                    onChange={(e) => setPageSize(Number(e.target.value))}
+                                    className="bg-white text-gray-700 font-bold px-2.5 py-1.5 rounded-xl border border-pink-200 text-xs focus:ring-1 focus:ring-pink-300"
+                                >
+                                    <option value={20}>每頁 20 筆</option>
+                                    <option value={25}>每頁 25 筆</option>
+                                    <option value={50}>每頁 50 筆</option>
+                                    <option value={100}>每頁 100 筆</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* ================= 核心單字與例句卡片清單 (拍立得偶像小卡 Polaroid Photocard) ================= */}
+                        {paginatedData.length === 0 ? (
+                            <div className="text-center py-16 bg-white/90 rounded-3xl border border-dashed border-pink-300">
+                                <span className="text-4xl">🔍</span>
+                                <h3 className="text-base font-bold text-gray-700 mt-2">查無相符的核心單字或例句</h3>
+                                <p className="text-xs text-gray-400 mt-1">請嘗試縮減關鍵字或切換其他應援主題分類</p>
+                                <button
+                                    onClick={() => { setSearchQuery(''); setSelectedCh(0); setOnlyFavorites(false); }}
+                                    className="mt-4 px-4 py-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl text-xs font-bold shadow-xs hover:opacity-95 transition"
+                                >
+                                    重置所有篩選
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+                                {paginatedData.map(item => {
+                                    const isFav = favorites.includes(item.id);
+                                    const isWordPlaying = playingId === `${item.id}_word`;
+                                    const isSentPlaying = playingId === `${item.id}_sent`;
+                                    const isComboPlaying = playingId === `${item.id}_combo`;
+                                    const cheerMeta = CHEER_PALETTE[item.ch] || { cheer: "應援", icon: "💖", col: item.chColor || "#FF6B8B", bg: item.chBg || "#FFF0F4", bdr: "#FFCCD5" };
+
+                                    return (
+                                        <div
+                                            key={item.id}
+                                            style={{ borderColor: cheerMeta.col + '55' }}
+                                            className="photocard-frame p-4 sm:p-5 flex flex-col justify-between overflow-hidden"
+                                        >
+                                            {/* 拍立得小卡折射光澤覆層 */}
+                                            <div className="photocard-sheen absolute inset-0 rounded-3xl"></div>
+
+                                            {/* 卡片標頭列 */}
+                                            <div className="flex items-center justify-between mb-3 relative z-10">
+                                                <div className="flex items-center gap-1.5 flex-wrap">
+                                                    {/* 編號 + 拍立得愛心標記 */}
+                                                    <span 
+                                                        style={{ backgroundColor: cheerMeta.col, color: '#fff' }}
+                                                        className="text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-2xs flex items-center gap-1"
+                                                    >
+                                                        <span>#{item.id < 10 ? `000${item.id}` : item.id < 100 ? `00${item.id}` : item.id < 1000 ? `0${item.id}` : item.id}</span>
+                                                        <span className="text-[9px] opacity-90">♥~♡</span>
+                                                    </span>
+
+                                                    {/* 應援主題色票標籤 */}
+                                                    <span
+                                                        style={{ backgroundColor: cheerMeta.bg, color: cheerMeta.col, borderColor: cheerMeta.bdr }}
+                                                        className="text-[11px] font-black px-2 py-0.5 rounded-lg border flex items-center gap-1 shadow-2xs"
+                                                    >
+                                                        <span>{cheerMeta.icon}</span>
+                                                        <span>CH {item.ch < 10 ? `0${item.ch}` : item.ch} · {cheerMeta.cheer}</span>
+                                                    </span>
+
+                                                    <span className="text-[10px] text-pink-400/90 font-bold">
+                                                        P.{item.page}
+                                                    </span>
+                                                </div>
+
+                                                <div className="flex items-center gap-1.5">
+                                                    {/* 跟讀評分按鈕 */}
+                                                    <button
+                                                        onClick={() => handleStartSTT(item.sent_kr, 'sent', item.id)}
+                                                        title="跟讀評分挑戰"
+                                                        className="w-7 h-7 rounded-xl bg-pink-50 hover:bg-pink-100 hover:text-pink-600 text-pink-400 transition flex items-center justify-center text-xs shadow-2xs"
+                                                    >
+                                                        <i className="fas fa-microphone"></i>
+                                                    </button>
+
+                                                    {/* 收藏愛心 (追星生詞本) */}
+                                                    <button
+                                                        onClick={() => toggleFavorite(item.id)}
+                                                        title={isFav ? "取消收藏" : "收藏至追星小卡生詞本"}
+                                                        className={`w-7 h-7 rounded-xl transition flex items-center justify-center text-xs shadow-2xs ${
+                                                            isFav 
+                                                                ? 'bg-rose-500 text-white shadow-xs scale-105' 
+                                                                : 'bg-pink-50 text-pink-300 hover:text-rose-500 hover:bg-pink-100'
+                                                        }`}
+                                                    >
+                                                        <i className="fas fa-heart"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* ================= 上層：核心單字小卡嵌框 ================= */}
+                                            <div className="relative z-10 bg-gradient-to-br from-pink-50/50 via-white to-purple-50/30 rounded-2xl p-3 sm:p-3.5 border border-pink-100/90 mb-3 shadow-2xs">
+                                                <div className="flex items-start justify-between gap-2">
+                                                    <div>
+                                                        <div className="flex items-baseline gap-2 flex-wrap">
+                                                            <h3 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+                                                                {item.word_kr}
+                                                            </h3>
+                                                            <span className="text-xs font-bold text-pink-500">
+                                                                [{item.word_rom}]
+                                                            </span>
+                                                            <span className="text-[10px] text-amber-500">✦</span>
+                                                        </div>
+                                                        <div className="mt-1 flex items-baseline gap-2 flex-wrap">
+                                                            <span className="text-sm font-black text-rose-950">
+                                                                {item.word_zh}
+                                                            </span>
+                                                            {showEnglish && (
+                                                                <span className="text-xs text-gray-400 font-medium">
+                                                                    / {item.word_en}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* 單字發音按鈕 */}
+                                                    <button
+                                                        onClick={() => handlePlayWord(item)}
+                                                        className={`shrink-0 w-8 h-8 rounded-xl transition flex items-center justify-center text-xs shadow-2xs active:scale-90 ${
+                                                            isWordPlaying 
+                                                                ? 'bg-pink-500 text-white pulse-soft' 
+                                                                : 'bg-white hover:bg-pink-50 text-pink-500 border border-pink-200'
+                                                        }`}
+                                                        title="朗讀單字"
+                                                    >
+                                                        <i className={`fas ${isWordPlaying ? 'fa-volume-high' : 'fa-volume-low'}`}></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* ================= 下層：生活實戰例句區塊 ================= */}
+                                            <div className="relative z-10 bg-white/95 rounded-2xl p-3 sm:p-3.5 border border-pink-100/90 shadow-2xs">
+                                                <div className="flex items-start justify-between gap-2">
+                                                    <div className="space-y-1">
+                                                        <div className="text-sm sm:text-base font-bold text-gray-800 leading-relaxed flex items-start gap-1.5">
+                                                            <span className="text-pink-400 text-xs mt-0.5">💬</span>
+                                                            <span>{item.sent_kr}</span>
+                                                        </div>
+                                                        <div className="text-[11px] text-gray-400 font-medium pl-4">
+                                                            {item.sent_rom}
+                                                        </div>
+                                                        <div className="text-xs sm:text-sm font-bold text-teal-800 pt-1.5 border-t border-pink-50 pl-4 flex items-center gap-1">
+                                                            <span>{item.sent_zh}</span>
+                                                        </div>
+                                                        {showEnglish && (
+                                                            <div className="text-[11px] text-gray-500 font-normal pl-4">
+                                                                {item.sent_en}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* 例句發音與連播控制 */}
+                                                    <div className="flex flex-col gap-1.5 shrink-0">
+                                                        <button
+                                                            onClick={() => handlePlaySent(item)}
+                                                            className={`w-8 h-8 rounded-xl transition flex items-center justify-center text-xs shadow-2xs active:scale-90 ${
+                                                                isSentPlaying 
+                                                                    ? 'bg-teal-500 text-white pulse-soft' 
+                                                                    : 'bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200'
+                                                            }`}
+                                                            title="朗讀例句"
+                                                        >
+                                                            <i className={`fas ${isSentPlaying ? 'fa-volume-high' : 'fa-play'}`}></i>
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => handlePlayCombo(item)}
+                                                            className={`px-2 py-1 rounded-xl text-[10px] font-black transition flex items-center justify-center gap-1 active:scale-90 ${
+                                                                isComboPlaying 
+                                                                    ? 'bg-purple-600 text-white pulse-soft shadow-xs' 
+                                                                    : 'bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200'
+                                                            }`}
+                                                            title="連播：單字 ➔ 0.4秒 ➔ 例句"
+                                                        >
+                                                            <i className="fas fa-forward-step"></i>
+                                                            <span>連播</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* 拍立得小卡底座印記 */}
+                                            <div className="mt-2.5 pt-1.5 border-t border-pink-100/70 flex items-center justify-between text-[10px] text-pink-300 font-bold px-1 relative z-10">
+                                                <span className="flex items-center gap-1">
+                                                    <span>♥~♡</span>
+                                                    <span>POLAROID PHOTOCARD</span>
+                                                </span>
+                                                <span className="flex items-center gap-1 text-pink-400">
+                                                    <span>✦ K-POP CHEER ✦</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+
+                        {/* ================= 極速分頁導航列 ================= */}
+                        {totalPages > 1 && (
+                            <div className="mt-8 pt-4 border-t border-pink-200/80 flex flex-wrap items-center justify-between gap-3 text-xs">
+                                <div className="text-pink-900/80 font-bold">
+                                    顯示第 {(currentPage - 1) * pageSize + 1} - {Math.min(currentPage * pageSize, filteredData.length)} 筆，共 {filteredData.length} 筆應援卡片
+                                </div>
+
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        onClick={() => { setCurrentPage(1); window.scrollTo({ top: 250, behavior: 'smooth' }); }}
+                                        disabled={currentPage === 1}
+                                        className="px-2.5 py-1.5 bg-white border border-pink-200 rounded-xl hover:bg-pink-50 disabled:opacity-40 transition font-bold text-gray-700 shadow-2xs"
+                                    >
+                                        <i className="fas fa-angles-left"></i> 頁首
+                                    </button>
+                                    <button
+                                        onClick={() => { setCurrentPage(prev => Math.max(1, prev - 1)); window.scrollTo({ top: 250, behavior: 'smooth' }); }}
+                                        disabled={currentPage === 1}
+                                        className="px-3 py-1.5 bg-white border border-pink-200 rounded-xl hover:bg-pink-50 disabled:opacity-40 transition font-bold text-gray-700 shadow-2xs"
+                                    >
+                                        <i className="fas fa-angle-left"></i> 上一頁
+                                    </button>
+
+                                    {/* 下拉跳頁 */}
+                                    <select
+                                        value={currentPage}
+                                        onChange={(e) => { setCurrentPage(Number(e.target.value)); window.scrollTo({ top: 250, behavior: 'smooth' }); }}
+                                        className="px-2.5 py-1.5 bg-pink-50 text-pink-900 border border-pink-300 rounded-xl font-black shadow-2xs focus:ring-1 focus:ring-pink-300"
+                                    >
+                                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                                            <option key={p} value={p}>
+                                                第 {p} 頁 / 共 {totalPages} 頁
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <button
+                                        onClick={() => { setCurrentPage(prev => Math.min(totalPages, prev + 1)); window.scrollTo({ top: 250, behavior: 'smooth' }); }}
+                                        disabled={currentPage === totalPages}
+                                        className="px-3 py-1.5 bg-white border border-pink-200 rounded-xl hover:bg-pink-50 disabled:opacity-40 transition font-bold text-gray-700 shadow-2xs"
+                                    >
+                                        下一頁 <i className="fas fa-angle-right"></i>
+                                    </button>
+                                    <button
+                                        onClick={() => { setCurrentPage(totalPages); window.scrollTo({ top: 250, behavior: 'smooth' }); }}
+                                        disabled={currentPage === totalPages}
+                                        className="px-2.5 py-1.5 bg-white border border-pink-200 rounded-xl hover:bg-pink-50 disabled:opacity-40 transition font-bold text-gray-700 shadow-2xs"
+                                    >
+                                        頁尾 <i className="fas fa-angles-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* ================= 3D 偶像拍立得抽認卡 Modal (Photocard Flip) ================= */}
+                    {isFlashcardOpen && currentFlashcard && (
+                        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+                            <div className="bg-gradient-to-b from-pink-50 to-white rounded-3xl max-w-xl w-full p-5 sm:p-6 shadow-2xl relative flex flex-col items-center border-4 border-pink-100">
+                                {/* 關閉按鈕 */}
+                                <button
+                                    onClick={() => setIsFlashcardOpen(false)}
+                                    className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white hover:bg-pink-100 text-pink-400 hover:text-pink-600 flex items-center justify-center text-sm transition shadow-2xs border border-pink-200"
+                                >
+                                    <i className="fas fa-times"></i>
+                                </button>
+
+                                {/* 頂部計數與章節資訊 */}
+                                <div className="text-center mb-3">
+                                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-white text-pink-900 text-xs font-black rounded-full border border-pink-200 shadow-2xs mb-1">
+                                        <span>📷</span>
+                                        <span>偶像拍立得小卡 (Photocard Flip)</span>
+                                        <span className="text-pink-400">♥~♡</span>
+                                    </div>
+                                    <div className="text-xs font-bold text-gray-500">
+                                        卡片 {flashcardIndex + 1} / {filteredData.length} · {currentFlashcard.badgeIcon} CH {currentFlashcard.ch} {currentFlashcard.chCheerName || currentFlashcard.chName}
+                                    </div>
+                                </div>
+
+                                {/* 3D 翻轉卡片容器 */}
+                                <div 
+                                    onClick={() => setIsCardFlipped(!isCardFlipped)}
+                                    className="w-full h-88 sm:h-96 perspective-1000 cursor-pointer my-2"
+                                >
+                                    <div className={`w-full h-full duration-500 transform-style-3d relative transition-transform ${isCardFlipped ? 'rotate-y-180' : ''}`}>
+                                        {/* 正面：韓文偶像小卡風格 */}
+                                        <div 
+                                            style={{ borderColor: currentFlashcard.chColor || '#FF6B8B' }}
+                                            className="absolute inset-0 bg-white rounded-3xl border-4 p-6 sm:p-8 flex flex-col items-center justify-between text-center backface-hidden shadow-xl overflow-hidden"
+                                        >
+                                            <div className="photocard-sheen absolute inset-0 pointer-events-none"></div>
+
+                                            {/* 小卡頂標 */}
+                                            <div className="w-full flex items-center justify-between text-xs relative z-10">
+                                                <span 
+                                                    style={{ backgroundColor: currentFlashcard.chColor || '#FF6B8B', color: '#fff' }}
+                                                    className="font-black px-2.5 py-0.5 rounded-full shadow-2xs"
+                                                >
+                                                    #{currentFlashcard.id}
+                                                </span>
+                                                <span className="text-pink-400 font-black">✦ K-POP CHEER ✦</span>
+                                            </div>
+
+                                            {/* 核心單字與例句 */}
+                                            <div className="my-auto relative z-10 space-y-3">
+                                                <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+                                                    {currentFlashcard.word_kr}
+                                                </h2>
+                                                <div className="text-sm sm:text-base font-bold text-gray-700 p-3 bg-pink-50/50 rounded-2xl border border-pink-100 leading-relaxed">
+                                                    「 {currentFlashcard.sent_kr} 」
+                                                </div>
+                                            </div>
+
+                                            {/* 拍立得簽名區底標 */}
+                                            <div className="w-full pt-3 border-t border-pink-100 flex items-center justify-between text-[11px] text-pink-400 font-bold relative z-10">
+                                                <span>♥~♡ POLAROID PHOTOCARD</span>
+                                                <span className="flex items-center gap-1 text-gray-400">
+                                                    <i className="fas fa-rotate"></i> 點擊卡片或按 Space 翻面
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* 背面：繁中釋義與英文對照 */}
+                                        <div 
+                                            style={{ borderColor: currentFlashcard.chColor || '#FF6B8B' }}
+                                            className="absolute inset-0 bg-white rounded-3xl border-4 p-6 sm:p-8 flex flex-col items-center justify-between text-center backface-hidden rotate-y-180 shadow-xl overflow-hidden"
+                                        >
+                                            <div className="photocard-sheen absolute inset-0 pointer-events-none"></div>
+
+                                            {/* 小卡頂標 */}
+                                            <div className="w-full flex items-center justify-between text-xs relative z-10">
+                                                <span className="text-xs text-pink-500 font-bold">
+                                                    [{currentFlashcard.word_rom}]
+                                                </span>
+                                                <span className="text-amber-500 font-black">✦ 繁體中文釋義 ✦</span>
+                                            </div>
+
+                                            {/* 核心單字中文與例句中文 */}
+                                            <div className="my-auto relative z-10 space-y-2 w-full">
+                                                <h2 className="text-2xl sm:text-3xl font-black text-rose-950">
+                                                    {currentFlashcard.word_zh}
+                                                </h2>
+                                                <p className="text-xs text-gray-400 font-medium">
+                                                    {currentFlashcard.word_en}
+                                                </p>
+                                                <div className="w-full text-left text-xs sm:text-sm font-bold text-teal-800 p-3.5 bg-teal-50/80 rounded-2xl border border-teal-100 space-y-1">
+                                                    <div>{currentFlashcard.sent_zh}</div>
+                                                    <div className="text-[11px] text-gray-400 font-normal">{currentFlashcard.sent_en}</div>
+                                                </div>
+                                            </div>
+
+                                            {/* 拍立得簽名區底標 */}
+                                            <div className="w-full pt-3 border-t border-pink-100 flex items-center justify-between text-[11px] text-pink-400 font-bold relative z-10">
+                                                <span>♥~♡ K-POP FAN CHEER</span>
+                                                <span className="flex items-center gap-1 text-gray-400">
+                                                    <i className="fas fa-rotate"></i> 按 Space 再翻回正面
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 底部導航與發音控制 */}
+                                <div className="mt-5 w-full flex items-center justify-between gap-2">
+                                    <button
+                                        onClick={() => {
+                                            setFlashcardIndex(prev => (prev - 1 + filteredData.length) % filteredData.length);
+                                            setIsCardFlipped(false);
+                                        }}
+                                        className="px-4 py-2 bg-pink-50 hover:bg-pink-100 text-pink-900 font-bold rounded-2xl text-xs transition border border-pink-200"
+                                    >
+                                        <i className="fas fa-arrow-left"></i> 上一張
+                                    </button>
+
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => handlePlayCombo(currentFlashcard)}
+                                            className="px-4 py-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-black rounded-2xl text-xs transition flex items-center gap-1.5 shadow-xs"
+                                        >
+                                            <i className="fas fa-volume-high"></i>
+                                            <span>發音 (P)</span>
+                                        </button>
+                                        <button
+                                            onClick={() => toggleFavorite(currentFlashcard.id)}
+                                            className={`px-3 py-2 rounded-2xl text-xs font-bold transition ${
+                                                favorites.includes(currentFlashcard.id)
+                                                    ? 'bg-rose-500 text-white shadow-xs'
+                                                    : 'bg-pink-50 text-pink-400 hover:text-rose-500 hover:bg-pink-100 border border-pink-200'
+                                            }`}
+                                        >
+                                            <i className="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+
+                                    <button
+                                        onClick={() => {
+                                            setFlashcardIndex(prev => (prev + 1) % filteredData.length);
+                                            setIsCardFlipped(false);
+                                        }}
+                                        className="px-4 py-2 bg-pink-50 hover:bg-pink-100 text-pink-900 font-bold rounded-2xl text-xs transition border border-pink-200"
+                                    >
+                                        下一張 <i className="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ================= 麥克風跟讀評分 Modal (STT Challenge) ================= */}
+                    {sttModalOpen && sttTargetItem && (
+                        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+                            <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative text-center border-4 border-pink-100">
+                                <button
+                                    onClick={() => {
+                                        setSttModalOpen(false);
+                                        setIsListening(false);
+                                    }}
+                                    className="absolute top-4 right-4 w-9 h-9 rounded-full bg-pink-50 hover:bg-pink-100 text-pink-400 hover:text-pink-600 flex items-center justify-center text-sm transition border border-pink-200"
+                                >
+                                    <i className="fas fa-times"></i>
+                                </button>
+
+                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center text-2xl mx-auto mb-3 shadow-md">
+                                    <i className="fas fa-microphone"></i>
+                                </div>
+
+                                <h3 className="text-lg font-black text-rose-950 mb-1">
+                                    韓語例句跟讀自我挑戰 💖
+                                </h3>
+                                <p className="text-xs text-pink-700/80 mb-4 font-bold">
+                                    點擊麥克風開始朗讀，系統將拆解初聲/中聲/收音為您即時評分！
+                                </p>
+
+                                {/* 目標句子 */}
+                                <div className="p-3.5 bg-pink-50/70 rounded-2xl border border-pink-200 text-sm sm:text-base font-black text-rose-950 mb-4 shadow-2xs">
+                                    {sttTargetItem.text}
+                                </div>
+
+                                {/* 正在聆聽狀態波形 */}
+                                <div className="my-6">
+                                    {isListening ? (
+                                        <div className="flex flex-col items-center">
+                                            <div className="w-16 h-16 rounded-full bg-pink-500 text-white flex items-center justify-center text-2xl animate-ping-slow shadow-lg">
+                                                <i className="fas fa-microphone"></i>
+                                            </div>
+                                            <span className="text-xs font-black text-rose-600 mt-3 animate-pulse">
+                                                正在聆聽中，請朗讀上述韓語...
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <button
+                                            onClick={() => startRecognition(sttTargetItem.text)}
+                                            className="w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white flex items-center justify-center text-2xl shadow-lg transition active:scale-95 mx-auto"
+                                        >
+                                            <i className="fas fa-microphone"></i>
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* 識別與評分結果 */}
+                                {recognizedText && (
+                                    <div className="mt-4 p-3.5 bg-pink-50/40 rounded-2xl border border-pink-200 text-left space-y-2">
+                                        <div className="text-xs text-pink-400 font-bold">識別到的語音：</div>
+                                        <div className="text-sm font-bold text-gray-800">{recognizedText}</div>
+                                        
+                                        {sttScore !== null && (
+                                            <div className="pt-2 border-t border-pink-200 flex items-center justify-between">
+                                                <span className="text-xs font-bold text-gray-600">發音精確度：</span>
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className={`text-lg font-black ${
+                                                        sttScore >= 80 ? 'text-emerald-600' : sttScore >= 50 ? 'text-amber-500' : 'text-rose-500'
+                                                    }`}>
+                                                        {sttScore}%
+                                                    </span>
+                                                    <span className="text-sm">
+                                                        {sttScore >= 90 ? '🌟🌟🌟' : sttScore >= 70 ? '⭐⭐' : '⭐'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

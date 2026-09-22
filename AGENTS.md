@@ -37,11 +37,16 @@ Korean-Learning/
 │   ├── build_honorifics_page.py # 韓語兩大敬語樂園頁面建置腳本
 │   ├── build_tenses_page.py     # 韓語四大時態樂園頁面建置腳本
 │   ├── build_particles_page.py  # 韓語兩大助詞樂園頁面建置腳本
+│   ├── build_core2000_dataset.py # 韓語 CORE 2000 例句資料集抽取與建置管線
+│   ├── refine_traditional_chinese.py # OpenCC s2twp 繁體中文嚴謹正字與缺漏翻譯修復腳本
 │   ├── generate_app_assets.py   # 拼豆 Yoda 圖標精修與 Adaptive Icon 生成器
 │   ├── deploy_android_icons.py  # Android mipmap 各尺寸圖標部署腳本
 │   └── loanword_translations.py # 242 筆外來語繁體中文對照字典
 ├── index.html                   # 主應用 SPA (React 18 + Tailwind + Firebase + Web Speech)
 ├── korean_vocab_dictionary.html # 韓語核心詞庫大字典 (TOPIK 全量速查 + 萌趣單字卡 + 結構拆解)
+├── korean_core2000_sentences.html # 韓國核心互動例句朗讀樂園 (Korean CORE 2000 • 韓系粉彩應援插畫風 • 偶像拍立得小卡 • 10大應援色票 • 2,000組單字例句 • 3段速朗讀 • 3D翻卡)
+├── korean_core2000_data.js      # 2,000 組核心單字與生活例句結構化常數數據集 (含繁中翻譯對照)
+├── korean_core2000.json         # 2,000 組核心單字與生活例句結構化 JSON 檔案
 ├── korean_hanja_dictionary.html # 韓語漢字音變大辭典 (Glossika 6,277 漢字詞 + 1,037 全量音節矩陣 + 外來語 + 暖杏風)
 ├── sanrio_korean_sentences.html # 韓語造句發音積木列車 (SOV 語序 • 4大時態 ✕ 3大敬語全自動發車 • 暖木手繪小雞火車)
 ├── sanrio_korean_songs.html     # 韓語名曲歌詞練唱樂園 (李碩珉 DK《Stay With Me》+ 北極光淺色系 + 一句一框框)
@@ -69,7 +74,7 @@ Korean-Learning/
 ├── sanrio_korean_restaurant.html # 韓語餐廳與烤肉店點餐實戰樂園 (8大分類 ✕ 烤肉桌實境圖解 ✕ 點餐造句機 ✕ 0.3x發音)
 ├── capacitor.config.json        # Capacitor 雲端熱更新與 Android 原生設定
 ├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
-├── sw.js                        # Service Worker 離線快取核心 (v1.0.41)
+├── sw.js                        # Service Worker 離線快取核心 (v1.0.43)
 ├── package.json                 # 專案套件管理與 Capacitor 依賴
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔
@@ -91,6 +96,7 @@ Korean-Learning/
 - [x] **随堂星級自我挑戰測驗** (7 大題隨堂評量與分數結算)
 - [x] **100 種常見食物學習手札與 20 頁大字 PDF 講義**
 - [x] **🥩 韓語餐廳與烤肉店點餐實戰樂園** (`sanrio_korean_restaurant.html`，8 大必備分類 ✕ 雙行自適應膠囊導航 ✕ 烤肉桌實境圖解 17 大熱點 ✕ 連音化/硬音化透視 ✕ 點餐造句積木組裝機 ✕ 5 大情境隨堂星級闖關測驗 ✕ 0.3x/0.7x/1.0x 三段速真人發音)
+- [x] **📖 韓國核心互動例句朗讀樂園** (`korean_core2000_sentences.html`，Korean CORE 2000 Everyday Words and Phrases • 韓系粉彩應援插畫風 • 偶像拍立得小卡 • 10 大粉彩應援主題色票 • 2,000 組單字與生活實戰例句 • 萬能全域智慧搜尋 kitty_search_engine 繁簡雙向通搜 • 0.3x/0.7x/1.0x 三段速真人語音朗讀 • 單字例句連播 • 💖 我的追星收藏生詞本 • 3D 偶像拍立得翻卡記憶模式 • 🎤 麥克風跟讀評分 • 262頁原書手帳 PDF 免下載線上直讀)
 - [x] **韓語核心詞庫大字典** (korean_vocab_dictionary.html，含 TOPIK 全量即時檢索、12大詞性篩選、3D 單字卡翻卡記憶測驗、Unicode 音節結構即時拆解、❤️ 生詞本與 3 段速語音)
 - [x] **韓語漢字音變大辭典** (korean_hanja_dictionary.html，收錄 Glossika 6,277 漢字詞、1,044 組全量音節矩陣與 242 外來語，支援以字查音/以音查字、單字卡、3段速語音、字母結構拆解、🧸 泰迪熊代表圖標與柔和奶茶暖杏風視覺設計)
 - [x] **🚂 KITTY 韓語造句發音積木列車** (`sanrio_korean_sentences.html`，暖杏原木手繪列車風 ✕ 酷企鵝車長 🐧 ✕ 4 車卡 2 排自適應大卡排版：S 主語 + P 地點 + O 受語 + V 動詞，萬能單一多語言輸入框、繁簡中文智慧翻譯與複合動詞拆解，全自動生成詞典原形、現在式一般/獨立現在進行式、過去式、未來式、否定疑問句、3大敬語階層、語法助詞與時態語尾螢光筆透視高亮、0.3x/0.7x/1.0x 三段速語音與隨堂星級闖關測驗)

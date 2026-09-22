@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
@@ -264,6 +264,16 @@
 
         // 預設講義字典資料集
         const DOC_REGISTRY = {
+            'core2000': {
+                id: 'core2000',
+                file: 'assets/Korean_CORE2000.pdf',
+                fallbackFile: 'assets/Korean_CORE2000.pdf',
+                title: '📖 Korean CORE 2000 韓語核心詞彙手帳 (262頁完整版 PDF)',
+                subtitle: '日系手帳馬卡龍彩虹風格 • 10大章節互動索引 • 2,000組單字例句',
+                emoji: '📖',
+                nextDocId: 'grammar',
+                nextDocName: '語序敬語時態講義'
+            },
             'grammar': {
                 id: 'grammar',
                 file: '韓語語序・敬語・時態大解密.pdf',
@@ -281,8 +291,8 @@
                 title: '📖 Sanrio 韓語發音教學簡報 (20頁完整版 PDF)',
                 subtitle: '人氣角色圖像記憶 • 粵語諧音口訣 • 40音收音大整理',
                 emoji: '📖',
-                nextDocId: 'grammar',
-                nextDocName: '語序敬語時態大解密'
+                nextDocId: 'core2000',
+                nextDocName: 'CORE 2000 核心詞彙手帳'
             }
         };
 
