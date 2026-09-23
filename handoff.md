@@ -38,14 +38,14 @@
      - `#5743` `오사카` [osaka] - 大阪 (專有名詞 • A 級)
      - `#5744` `드라마` [deurama] - 電視劇、韓劇、戲劇 (名詞 • A 級)
    - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **78 筆**，全庫總量正式擴展至 **5,744 筆**。
-   - 升級 Service Worker 離線快取版本為 **`v1.0.46`**。
+   - 升級 Service Worker 離線快取版本為 **`v1.0.47`**。
    - 同步複製變更至 `www/`，執行 `npx cap sync android` 完成 Android 原生資源同步。
 
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.46`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.47`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
 - **最新 Git Commit**：`97b3083`（✅ 已推至 origin/main）
@@ -72,6 +72,6 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-09-22 17:40 PT
+- **時間**：2026-09-23 14:38 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 已推 (`main` 分支)

@@ -1,0 +1,37 @@
+{
+  "name": "KITTY 韓語發音積木樂園 🌟",
+  "short_name": "KITTY韓語",
+  "description": "Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與音變 ✨",
+  "id": "com.kittysin.koreanlearning",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFF5F7",
+  "theme_color": "#FFF0F3",
+  "lang": "zh-TW",
+  "categories": [
+    "education",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

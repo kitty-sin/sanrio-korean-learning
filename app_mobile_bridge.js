@@ -353,4 +353,83 @@
       }
     });
   }
+
+  // 5. PWA 一鍵安裝導引與自動熱更新提示 (Android Chrome / Edge / WebAPK)
+  let deferredInstallPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    window.deferredPWAInstallPrompt = e;
+    window.dispatchEvent(new CustomEvent('pwaCanInstall'));
+    
+    // 若尚未處於獨立 App 模式，彈性顯示溫馨安裝提示
+    setTimeout(showPWAInstallPrompt, 1500);
+  });
+
+  window.addEventListener('appinstalled', function() {
+    deferredInstallPrompt = null;
+    window.deferredPWAInstallPrompt = null;
+    hidePWAInstallPrompt();
+    showToast('🎉 已成功安裝 KITTY 韓語至桌面！');
+  });
+
+  window.installPWA = async function() {
+    if (!deferredInstallPrompt) {
+      showToast('📱 請點擊瀏覽器右上角選單 (⋮) ➔ 選擇「加到主畫面」或「安裝應用程式」');
+      return;
+    }
+    deferredInstallPrompt.prompt();
+    try {
+      const choice = await deferredInstallPrompt.userChoice;
+      if (choice && choice.outcome === 'accepted') {
+        console.log('User accepted PWA installation');
+      }
+    } catch(err) {
+      console.warn('Install prompt error:', err);
+    }
+    deferredInstallPrompt = null;
+    window.deferredPWAInstallPrompt = null;
+    hidePWAInstallPrompt();
+  };
+
+  function showPWAInstallPrompt() {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (isStandalone) return;
+    if (sessionStorage.getItem('kitty_pwa_dismissed') === 'true') return;
+
+    let banner = document.getElementById('kitty-pwa-install-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'kitty-pwa-install-banner';
+      banner.className = 'fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-[9998] max-w-sm bg-white/95 backdrop-blur-md border-2 border-rose-300 rounded-3xl p-3 shadow-2xl flex items-center justify-between gap-3 transition-all duration-300';
+      banner.innerHTML = `
+        <div class="flex items-center gap-3">
+          <img src="./assets/icon-192.png" class="w-11 h-11 rounded-2xl shadow-sm border border-rose-100 flex-shrink-0" alt="App Icon">
+          <div>
+            <div class="text-xs font-bold text-rose-500 flex items-center gap-1">🌟 KITTY 韓語 App</div>
+            <div class="text-[11px] text-slate-500 font-medium leading-tight">一鍵安裝至桌面 • 永遠自動更新</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 flex-shrink-0">
+          <button id="kitty-pwa-install-btn" class="bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow hover:opacity-90 active:scale-95 transition-all">安裝</button>
+          <button id="kitty-pwa-close-btn" class="text-slate-400 hover:text-slate-600 p-1 rounded-full"><i class="fa-solid fa-xmark text-sm"></i></button>
+        </div>
+      `;
+      document.body.appendChild(banner);
+
+      const installBtn = document.getElementById('kitty-pwa-install-btn');
+      if (installBtn) installBtn.onclick = window.installPWA;
+      const closeBtn = document.getElementById('kitty-pwa-close-btn');
+      if (closeBtn) closeBtn.onclick = function() {
+        sessionStorage.setItem('kitty_pwa_dismissed', 'true');
+        hidePWAInstallPrompt();
+      };
+    }
+    banner.style.display = 'flex';
+  }
+
+  function hidePWAInstallPrompt() {
+    const banner = document.getElementById('kitty-pwa-install-banner');
+    if (banner) banner.style.display = 'none';
+  }
 })();

@@ -1,8 +1,9 @@
-// KITTY 韓語積木大冒險 - Service Worker 離線快取 v1.0.46
-const CACHE_NAME = 'kitty-korean-v1.0.46';
+// KITTY 韓語積木大冒險 - Service Worker 離線快取 v1.0.47
+const CACHE_NAME = 'kitty-korean-v1.0.47';
 const STATIC_ASSETS = [
   './',
   './index.html',
+  './manifest.json',
   './korean_vocab_dictionary.html',
   './korean_core2000_sentences.html',
   './korean_hanja_dictionary.html',
@@ -25,6 +26,10 @@ const STATIC_ASSETS = [
   './assets/korean_bbq_table.png',
   './assets/kpop_cheer_banner_bg.png',
   './assets/icon.png',
+  './assets/icon-192.png',
+  './assets/icon-512.png',
+  './assets/icon-maskable-512.png',
+  './assets/apple-touch-icon.png',
   './app_mobile_bridge.js'
 ];
 
@@ -65,7 +70,8 @@ self.addEventListener('fetch', (event) => {
     event.request.destination === 'document' ||
     url.pathname.endsWith('.html') ||
     url.pathname.endsWith('data.js') ||
-    url.pathname.endsWith('bridge.js');
+    url.pathname.endsWith('bridge.js') ||
+    url.pathname.endsWith('manifest.json');
 
   // 對 HTML 導航及核心數據請求一律採用 Network First，獲取最新版修復代碼
   if (isHtmlOrData) {

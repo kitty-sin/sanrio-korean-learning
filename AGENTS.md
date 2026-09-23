@@ -110,6 +110,7 @@ Korean-Learning/
 - [x] **RDQ Method 需求探索規格卡體系** (完成韓語漢字辭典視覺改版、名曲練唱樂園、頂部導航站、烤肉點餐樂園規格卡落地與執行驗證)
 - [x] **📱 Android 原生 App 封裝《KITTY 韓語積木大冒險 🌟》** (Capacitor 6.x + 雲端即時熱更新 + Service Worker 離線快取 + 拼豆 Yoda 寶寶萌趣 Adaptive 圖示 + 原生返回鍵防護 + GitHub Actions 自動編譯 APK 工作流)
 - [x] **🎤 Android 原生語音辨識橋接 (AndroidNativeSTT)** (解決 Android WebView 限制，接入系統底層 `android.speech.SpeechRecognizer` 支援 `ko-KR` 韓語聲學模型 + `RECORD_AUDIO` 動態權限申請 + `KittySTT` 雙軌適配 + Jamo 初聲/中聲/收音即時精確度評分)
+- [x] **📲 PWA 旗艦標準化與免重裝 Android App 規格** (配置 `manifest.json`、512x512 高清 Yoda 寶寶自適應桌面圖標、192x192、Maskable 與 Apple Touch 圖標、全站 HTML 注入 PWA 標頭、`app_mobile_bridge.js` 實現一鍵安裝導引與自動熱更新提示、Service Worker 快取升級至 `v1.0.47`、支援 Firebase Hosting 與 GitHub Pages 雙軌，手機端安裝一次終身無感熱更新)
 
 ---
 
