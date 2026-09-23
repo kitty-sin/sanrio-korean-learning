@@ -76,3 +76,9 @@
 | 5736 | 카스 | kaseu | Cass 啤酒（OB 啤酒出品，韓國國民市佔第一透明藍瓶拉格啤酒） | Cass beer (Korea's iconic #1 best-selling crisp lager by OB) | B | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5737 | 켈리 | kelri | Kelly 啤酒（HiteJinro 雙重熟成 100% 全麥琥珀金啤酒） | Kelly beer (all-malt double-fermented amber lager by HiteJinro) | B | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
 | 5738 | 깅 | ging | 撒嬌、可愛、裝萌、小可愛/小寶貝（K-pop 飯圈愛稱與流行語氣後綴。常接在偶像名字後如「名字+깅」，或稱「우리 깅 我們家小可愛/小寶貝」） | Cute pet name / affectionate suffix (K-pop fandom slang for cutie/baby, e.g. 우리 깅 my lovely cutie) | A | 流行語 / 萌趣愛稱與接尾語氣詞 (K-pop 飯圈用語)，如 우리 깅（我們家小可愛）。 |
+| 5739 | 뒤 | dwi | 後面、背後、後方 | back, behind, rear | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
+| 5740 | 비자 | bija | 簽證 | visa | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
+| 5741 | 러시아 | reosia | 俄羅斯 | Russia | A | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
+| 5742 | 회사원 | hoesawon | 上班族、公司職員 | office worker, company employee | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
+| 5743 | 오사카 | osaka | 大阪 | Osaka | A | 專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。 |
+| 5744 | 드라마 | deurama | 電視劇、韓劇、戲劇 | TV drama, drama series | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |

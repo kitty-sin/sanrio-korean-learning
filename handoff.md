@@ -28,20 +28,34 @@
    - **全面排查與修復**：精準修復 #568、#738、#1261、#1277、#1424、#1704、#1875、#1993、#1994、#1995、#1996、#1997、#1998、#1999 共 14 筆問題條目，恢復韓國影史經典電影名片正確繁體官方譯名（《神偷·獵人·斷指客》、《太極旗－生死兄弟》、《駭人怪物》、《原罪犯》、《大浩劫》、《殺人回憶》、《王的男人》）。
    - 快取升級為 `v1.0.45`。
 
+7. **📚 核心大字典擴充 6 筆生活高頻核心詞彙 (#5739 ~ #5744)**：
+   - 經全庫逐一精確比對用戶提供的 101 筆生活學習詞彙，其中 94 筆已完全精確收錄、1 筆標準外來語全稱對應（`TV` ➔ `텔레비전` #1734）。
+   - 一次性原子化新增未收錄之 6 筆高頻詞彙至 Kitty 自訂庫（保持 5,666 基準庫純淨）：
+     - `#5739` `뒤` [dwi] - 後面、背後、後方 (名詞 • A 級)
+     - `#5740` `비자` [bija] - 簽證 (名詞 • A 級)
+     - `#5741` `러시아` [reosia] - 俄羅斯 (專有名詞 • A 級)
+     - `#5742` `회사원` [hoesawon] - 上班族、公司職員 (名詞 • A 級)
+     - `#5743` `오사카` [osaka] - 大阪 (專有名詞 • A 級)
+     - `#5744` `드라마` [deurama] - 電視劇、韓劇、戲劇 (名詞 • A 級)
+   - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **78 筆**，全庫總量正式擴展至 **5,744 筆**。
+   - 升級 Service Worker 離線快取版本為 **`v1.0.46`**。
+   - 同步複製變更至 `www/`，執行 `npx cap sync android` 完成 Android 原生資源同步。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.45`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.46`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`6504062`（✅ 已推至 origin/main）
+- **最新 Git Commit**：待提交與推播至 main
+- **全庫總單字數**：5,744 筆 (基準 5,666 + Kitty自訂 78 筆)
 
 ---
 
 ## ➡️ 下一步
 
-1. **真機與瀏覽器全功能驗證**：驗證 GitHub Pages 站點與 Service Worker 快取更新後之拍立得小卡渲染效果、3D 翻卡動畫及語音連播。
+1. **真機與瀏覽器全功能驗證**：驗證 GitHub Pages 站點與 Service Worker 快取更新後之大字典搜尋（搜尋 `뒤`, `비자`, `러시아`, `회사원`, `오사카`, `드라마` 立即反饋）。
 2. **造句列車與 CORE 2000 聯動**：評估是否在造句列車（`sanrio_korean_sentences.html`）中引入 CORE 2000 例句庫作為智慧造句參考範例。
 3. **測驗模式語法解析擴充**：評估是否將造句列車測驗模式亦加入語法高亮透視解析反饋。
 
@@ -57,7 +71,7 @@
 ---
 
 ## 🕐 最後更新
- 
-- **時間**：2026-09-22 14:11 PT
+
+- **時間**：2026-09-22 17:25 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
-- **Git Push 狀態**：✅ 已推
+- **Git Push 狀態**：進行中
