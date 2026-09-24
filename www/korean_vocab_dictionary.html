@@ -775,6 +775,19 @@
                                     <span>📖</span>
                                     <span>發音教學PDF(20頁)</span>
                                 </a>
+
+                                {/* 星際韓語宇宙跨站導航膠囊 */}
+                                <div className="flex items-center gap-1.5 pl-2 border-l-2 border-rose-300 ml-1">
+                                    <span className="px-3 py-1.5 bg-rose-600 text-white rounded-2xl text-xs font-black shadow-xs flex items-center gap-1" title="當前站點：Yoda 韓語發音語法積木樂園">
+                                        <span>🟢</span> <span>🧩 Yoda積木</span>
+                                    </span>
+                                    <a href="https://korean-learning-1ec2a.web.app/" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-300 rounded-2xl text-xs font-black transition-all flex items-center gap-1 shadow-xs" title="前往 R2-D2 韓語生活圖解百科">
+                                        <span>🔵</span> <span>🖼️ 圖解百科</span>
+                                    </a>
+                                    <a href="https://korean-writing-1ec2a.web.app/" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-300 rounded-2xl text-xs font-black transition-all flex items-center gap-1 shadow-xs" title="前往 BB-8 韓語觸控書寫樂園">
+                                        <span>🟠</span> <span>✍️ 觸控手寫</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -1209,6 +1222,16 @@
                                                         >
                                                             <span>🏠</span>
                                                             <span>積木屋</span>
+                                                        </a>
+                                                        <a
+                                                            href={`https://korean-writing-1ec2a.web.app/?word=${encodeURIComponent(word.k)}&from=yoda`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="px-2 py-1 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-800 text-xs font-bold border border-orange-300 transition-all flex items-center gap-1 hover:scale-105 active:scale-95 shadow-2xs"
+                                                            title="送入 BB-8 韓語書寫樂園練習觸控手寫"
+                                                        >
+                                                            <span>✍️</span>
+                                                            <span>練寫</span>
                                                         </a>
                                                     </div>
                                                 </div>

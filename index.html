@@ -2009,11 +2009,26 @@
             return (
                 <div className="max-w-5xl mx-auto px-4 pt-6">
                     {/* Header */}
-                    <header className="text-center mb-6 bg-white/95 backdrop-blur rounded-3xl p-5 md:p-6 shadow-sm border border-rose-100 flex flex-col items-center">
-                        {/* 狀態徽章：置中於標題上方，絕不與文字產生重疊 */}
-                        <div className="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200 px-3.5 py-1 rounded-full text-xs text-rose-600 shadow-xs mb-3">
-                            <span className={`w-2.5 h-2.5 rounded-full ${firebaseConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`}></span>
-                            <span>{firebaseConnected ? 'Firebase 雲端已連線' : '本機模式'}</span>
+                    <header className="relative text-center mb-6 bg-white/95 backdrop-blur rounded-3xl p-5 md:p-6 shadow-sm border border-rose-100 flex flex-col items-center">
+                        {/* 頂部跨站導航膠囊 (Galaxy Ecosystem Dock) + Firebase 連線狀態 */}
+                        <div className="w-full flex items-center justify-between mb-3 flex-wrap gap-2">
+                            <div className="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200 px-3.5 py-1 rounded-full text-xs text-rose-600 shadow-xs">
+                                <span className={`w-2.5 h-2.5 rounded-full ${firebaseConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`}></span>
+                                <span>{firebaseConnected ? 'Firebase 雲端已連線' : '本機模式'}</span>
+                            </div>
+
+                            {/* 星際韓語宇宙跨站導航膠囊 (Galaxy Ecosystem Dock) */}
+                            <div className="inline-flex items-center gap-1.5 bg-pink-50/80 p-1 rounded-2xl border border-pink-200 shadow-2xs">
+                                <span className="px-2.5 py-1 bg-pink-600 text-white rounded-xl text-xs font-black shadow-xs flex items-center gap-1" title="當前站點：Yoda 韓語發音語法積木樂園">
+                                    <span>🟢</span> <span>🧩 Yoda積木</span>
+                                </span>
+                                <a href="https://korean-learning-1ec2a.web.app/" target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 bg-white hover:bg-sky-50 text-sky-800 border border-sky-300 rounded-xl text-xs font-black transition-all flex items-center gap-1 shadow-xs" title="前往 R2-D2 韓語生活圖解百科">
+                                    <span>🔵</span> <span>🖼️ 圖解百科</span>
+                                </a>
+                                <a href="https://korean-writing-1ec2a.web.app/" target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 bg-white hover:bg-orange-50 text-orange-800 border border-orange-300 rounded-xl text-xs font-black transition-all flex items-center gap-1 shadow-xs" title="前往 BB-8 韓語觸控書寫樂園">
+                                    <span>🟠</span> <span>✍️ 觸控手寫</span>
+                                </a>
+                            </div>
                         </div>
 
                         <div className="flex justify-center items-center gap-2 mb-2 w-full">
@@ -2131,6 +2146,16 @@
                             >
                                 <span>🎵</span>
                                 <span>韓語名曲樂園</span>
+                            </a>
+                            <a
+                                href="https://korean-writing-1ec2a.web.app/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white px-3.5 py-2 rounded-2xl shadow-xs transition-all flex items-center gap-1.5 whitespace-nowrap active:scale-95 ring-2 ring-orange-300 font-bold"
+                                title="前往 BB-8 韓語觸控書寫樂園 (40音/單字/原稿紙臨摹)"
+                            >
+                                <span>✍️</span>
+                                <span>BB-8 觸控手寫樂園 🚀</span>
                             </a>
                         </div>
                     </div>

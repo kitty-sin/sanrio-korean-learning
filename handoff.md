@@ -38,26 +38,42 @@
      - `#5743` `오사카` [osaka] - 大阪 (專有名詞 • A 級)
      - `#5744` `드라마` [deurama] - 電視劇、韓劇、戲劇 (名詞 • A 級)
    - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **78 筆**，全庫總量正式擴展至 **5,744 筆**。
-   - 升級 Service Worker 離線快取版本為 **`v1.0.47`**。
-   - 同步複製變更至 `www/`，執行 `npx cap sync android` 完成 Android 原生資源同步。
+
+8. **🌌 星際韓語宇宙三站聯邦跨站串聯 (Galaxy Ecosystem Dock & URL Deep Linking)**：
+   - **零資料庫依賴・純前端 URL 意圖協議**：徹底貫通三大獨立站點：
+     1. 🟢 **Yoda 發音語法積木樂園** (`https://kitty-sin.github.io/sanrio-korean-learning/`)
+     2. 🔵 **R2-D2 生活圖解百科** (`https://korean-learning-1ec2a.web.app/`)
+     3. 🟠 **BB-8 觸控手寫樂園** (`https://korean-writing-1ec2a.web.app/`)
+   - **頂部角色膠囊導航 (Galaxy Ecosystem Dock)**：
+     - 在 `index.html`（首頁）、`sanrio_korean_sentences.html`（造句列車）、`korean_vocab_dictionary.html`（核心大字典）、`korean_hanja_dictionary.html`（漢字大辭典）、`korean_core2000_sentences.html`（核心2000例句）與 BB-8 的 `index.html` 頂部全面配置三色角色膠囊，以新分頁（`target="_blank"`）秒級跨站穿梭。
+   - **Yoda ➔ BB-8 臨摹練寫全面貫通**：
+     - **造句積木列車**：原形、現在式 (3敬語)、進行式 (3敬語)、過去式 (3敬語)、未來式 (3敬語)、否定句 (3敬語)、疑問句 (3敬語) 每一張卡片按鈕列全面注入 `[✍️ 練寫]` / `[✍️ 原稿紙練寫]`，自動將動詞變形句子帶入 BB-8 的 15 格原稿紙。
+     - **核心大字典**：單字卡全面注入 `[✍️ 練寫]` 捷徑，一鍵傳送至 BB-8 單字筆順臨摹格。
+     - **漢字音變大辭典**：6,520 筆漢字詞卡片全面注入 `[✍️ 練寫]` 捷徑。
+     - **核心2000例句樂園**：單字區注入 `[✍️]`，例句區注入 `[✍️ 練寫]`（帶入原稿紙模式）。
+   - **BB-8 接收端智慧解析與平滑回饋**：
+     - `Korean-Writing` 的 `app.js` 新增 `handleUrlIntent()`，精確解析 `?word=`、`?text=`、`?mode=essay`、`?from=yoda`，自動切換單字或原稿紙模式，並彈出歡迎浮動 Toast 提示；單字詳情區新增 `[🧩 查例句語法]` 雙向回跳按鈕。
+   - **多端同步與快取升級**：
+     - `Korean-Writing` 升級快取至 `v1.0.7` 並已 push 至 main。
+     - `Korean-Learning` 升級快取至 `v1.0.48`，靜態檔同步至 `www/`，並執行 `npx cap sync android`。
 
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.47`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.48`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`97b3083`（✅ 已推至 origin/main）
+- **最新 Git Commit**：待提交（Galaxy Ecosystem 跨站聯邦）
 - **全庫總單字數**：5,744 筆 (基準 5,666 + Kitty自訂 78 筆)
 
 ---
 
 ## ➡️ 下一步
 
-1. **真機與瀏覽器全功能驗證**：驗證 GitHub Pages 站點與 Service Worker 快取更新後之大字典搜尋（搜尋 `뒤`, `비자`, `러시아`, `회사원`, `오사카`, `드라마` 立即反饋）。
-2. **造句列車與 CORE 2000 聯動**：評估是否在造句列車（`sanrio_korean_sentences.html`）中引入 CORE 2000 例句庫作為智慧造句參考範例。
-3. **測驗模式語法解析擴充**：評估是否將造句列車測驗模式亦加入語法高亮透視解析反饋。
+1. **實測 Yoda ➔ BB-8 跨站臨摹反饋**：點擊各頁面「✍️ 練寫」測試是否精準傳遞韓文字句至 BB-8 單字格與原稿紙。
+2. **評估 R2-D2 生活圖解百科串聯**：在第二階段依相同 URL 協議擴充 R2-D2 圖解生活百科的詞義與圖片反向聯動。
+3. **持續豐富更多造句列車自選詞彙**。
 
 ---
 
@@ -72,6 +88,6 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-09-23 14:38 PT
+- **時間**：2026-09-23 17:22 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
-- **Git Push 狀態**：✅ 已推 (`main` 分支)
+- **Git Push 狀態**：✅ 準備推播 (`main` 分支)
