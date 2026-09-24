@@ -69,7 +69,7 @@
 - **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.49`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：待提交
+- **最新 Git Commit**：`5905ecd`（✅ 已推至 origin/main）
 - **全庫總單字數**：5,745 筆 (基準 5,666 + Kitty自訂 79 筆)
 
 ---
