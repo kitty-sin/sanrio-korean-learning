@@ -779,5 +779,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5745,
+    "k": "스위트",
+    "r": "seuwiteu",
+    "c": "甜蜜、甜美、甜（Sweet，外來語，如 스위트홈 甜蜜的家/韓劇《Sweet Home》、스위트콘 甜玉米）；套房（Suite，常作 스위트룸 飯店套房）",
+    "e": "Sweet (sugary, pleasant); Suite (hotel suite, suite room)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];

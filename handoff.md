@@ -57,15 +57,20 @@
      - `Korean-Writing` 升級快取至 `v1.0.7` 並已 push 至 main。
      - `Korean-Learning` 升級快取至 `v1.0.48`，靜態檔同步至 `www/`，並執行 `npx cap sync android`。
 
+9. **📚 核心大字典擴充外來語生活高頻詞彙 (#5745)**：
+   - 收錄 `#5745` `스위트` [seuwiteu] - 甜蜜、甜美、甜（Sweet，外來語，如 스위트홈 甜蜜的家/韓劇《Sweet Home》、스위트콘 甜玉米）；套房（Suite，常作 스위트룸 飯店套房） (名詞 • A 級)。
+   - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **79 筆**，全庫總量正式擴展至 **5,745 筆**。
+   - 升級 Service Worker 離線快取版本為 **`v1.0.49`**，同步資源至 `www/` 並執行 `npx cap sync android`。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.48`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.49`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：待提交（Galaxy Ecosystem 跨站聯邦）
-- **全庫總單字數**：5,744 筆 (基準 5,666 + Kitty自訂 78 筆)
+- **最新 Git Commit**：待提交
+- **全庫總單字數**：5,745 筆 (基準 5,666 + Kitty自訂 79 筆)
 
 ---
 
@@ -88,6 +93,6 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-09-23 17:22 PT
+- **時間**：2026-09-23 17:48 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 準備推播 (`main` 分支)
