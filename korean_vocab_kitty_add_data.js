@@ -789,5 +789,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5746,
+    "k": "삽",
+    "r": "sap",
+    "c": "鏟子、鐵鍬、鏟（挖土或除雪工具；俚語衍生詞「삽질」指鏟土、做白工/白忙一場）",
+    "e": "Shovel, spade (tool for digging; slang derivative '삽질' means futile effort)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];

@@ -69,15 +69,20 @@
       - CORE 2000 互動例句樂園 `#705 냉장고`（CH 04 餐廳與飲食點餐：`요즈음에는 집집마다 김치 냉장고를 가지고 있습니다.`）
     - 查重防呆機制順暢生效，無重複收錄，全庫詞彙總量保持純淨 **5,745 筆**（基準 5,666 + Kitty自訂 79 筆）。
 
+11. **📚 核心大字典擴充生活實用詞彙 (#5746)**：
+    - 收錄 `#5746` `삽` [sap] - 鏟子、鐵鍬、鏟（挖土或除雪工具；俚語衍生詞「삽질」指鏟土、做白工/白忙一場） (名詞 • A 級)。
+    - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **80 筆**，全庫總量正式擴展至 **5,746 筆**。
+    - 升級 Service Worker 離線快取版本為 **`v1.0.50`**，同步資源至 `www/` 並執行 `npx cap sync android`。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.49`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.50`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`6020cbc`（✅ 已推至 origin/main）
-- **全庫總單字數**：5,745 筆 (基準 5,666 + Kitty自訂 79 筆)
+- **最新 Git Commit**：待提交
+- **全庫總單字數**：5,746 筆 (基準 5,666 + Kitty自訂 80 筆)
 
 ---
 
@@ -100,6 +105,6 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-09-28 17:52 PT
+- **時間**：2026-09-29 15:11 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 準備推播 (`main` 分支)
