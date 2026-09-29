@@ -62,6 +62,13 @@
    - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **79 筆**，全庫總量正式擴展至 **5,745 筆**。
    - 升級 Service Worker 離線快取版本為 **`v1.0.49`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
+10. **🔍 詞彙查重與生態系盤點 (`냉장고`)**：
+    - 使用者請求新增 `냉장고`，經全域檢索確認已完整存在於三大核心模組：
+      - 核心大字典 `#2811 냉장고` [naengjanggo] (冰箱、冷凍庫)
+      - 韓語漢字音變大辭典 `#2734 冷藏庫`
+      - CORE 2000 互動例句樂園 `#705 냉장고`（CH 04 餐廳與飲食點餐：`요즈음에는 집집마다 김치 냉장고를 가지고 있습니다.`）
+    - 查重防呆機制順暢生效，無重複收錄，全庫詞彙總量保持純淨 **5,745 筆**（基準 5,666 + Kitty自訂 79 筆）。
+
 ---
 
 ## 🚦 目前狀態
@@ -69,7 +76,7 @@
 - **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.49`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`5905ecd`（✅ 已推至 origin/main）
+- **最新 Git Commit**：`6020cbc`（✅ 已推至 origin/main）
 - **全庫總單字數**：5,745 筆 (基準 5,666 + Kitty自訂 79 筆)
 
 ---
@@ -93,6 +100,6 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-09-23 18:20 PT
+- **時間**：2026-09-28 17:52 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
-- **Git Push 狀態**：✅ 已推 (`main` 分支, Commit `e3cda6e`)
+- **Git Push 狀態**：✅ 準備推播 (`main` 分支)
