@@ -799,5 +799,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5747,
+    "k": "엘에이한인축제",
+    "r": "eleihaninchukje",
+    "c": "洛杉磯韓人節、LA 韓國文化慶典（每年於洛杉磯韓國城舉辦之盛大年度文化節，涵蓋韓國美食、農特產與 K-pop 慶典）",
+    "e": "LA Korean Festival (annual cultural event in Koreatown, Los Angeles)",
+    "l": "D",
+    "p": "專有名詞",
+    "pd": "專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。"
   }
 ];

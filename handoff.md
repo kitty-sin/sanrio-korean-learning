@@ -74,15 +74,20 @@
     - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **80 筆**，全庫總量正式擴展至 **5,746 筆**。
     - 升級 Service Worker 離線快取版本為 **`v1.0.50`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
+12. **📚 核心大字典擴充文化與節慶專有名詞 (#5747)**：
+    - 收錄 `#5747` `엘에이한인축제` [eleihaninchukje] - 洛杉磯韓人節、LA 韓國文化慶典（每年於洛杉磯韓國城舉辦之盛大年度文化節，涵蓋韓國傳統美食、農特產展銷與 K-pop 慶典） (專有名詞 • D 級)。
+    - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **81 筆**，全庫總量正式擴展至 **5,747 筆**。
+    - 升級 Service Worker 離線快取版本為 **`v1.0.51`**，同步資源至 `www/` 並執行 `npx cap sync android`。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.50`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.51`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`c70026f`（✅ 已推至 origin/main）
-- **全庫總單字數**：5,746 筆 (基準 5,666 + Kitty自訂 80 筆)
+- **最新 Git Commit**：待提交
+- **全庫總單字數**：5,747 筆 (基準 5,666 + Kitty自訂 81 筆)
 
 ---
 
@@ -105,6 +110,6 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-09-29 15:11 PT
+- **時間**：2026-10-02 13:35 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 準備推播 (`main` 分支)
