@@ -829,5 +829,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5750,
+    "k": "감말랭이",
+    "r": "gammallaengi",
+    "c": "半乾柿子乾、柿乾切片、軟糯柿子角（韓國人氣傳統健康零嘴，將柿子削皮切瓣後半烘乾，外Q彈有嚼勁、內餡軟糯香甜似果凍，與整顆柿餅 곶감 有別）",
+    "e": "Semi-dried persimmon slices / chewy persimmon wedges (popular Korean traditional sweet fruit snack)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];

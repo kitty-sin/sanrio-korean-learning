@@ -81,17 +81,20 @@
     - 收錄 `#5748` `엘에이` [elei] - 洛杉磯、LA (專有名詞 • D 級)。
     - 收錄 `#5749` `한인` [hanin] - 韓人、韓僑（漢字詞「韓人」） (名詞 • A 級)。
     - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **83 筆**，全庫總量正式擴展至 **5,749 筆**。
-    - 升級 Service Worker 離線快取版本為 **`v1.0.52`**，同步資源至 `www/` 並執行 `npx cap sync android`。
+14. **📚 核心大字典擴充傳統美食零嘴 (#5750)**：
+    - 收錄 `#5750` `감말랭이` [gammallaengi] - 半乾柿子乾、柿乾切片、軟糯柿子角（韓國人氣傳統健康零嘴，將柿子削皮切瓣後半烘乾，外Q彈有嚼勁、內餡軟糯香甜似果凍，與整顆柿餅 곶감 有別） (名詞 • A 級)。
+    - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **84 筆**，全庫總量正式擴展至 **5,750 筆**。
+    - 升級 Service Worker 離線快取版本為 **`v1.0.53`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.52`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.53`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`45a308c`（✅ 已推至 origin/main）
-- **全庫總單字數**：5,749 筆 (基準 5,666 + Kitty自訂 83 筆)
+- **最新 Git Commit**：待提交
+- **全庫總單字數**：5,750 筆 (基準 5,666 + Kitty自訂 84 筆)
 
 ---
 
@@ -114,7 +117,7 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-02 13:55 PT
+- **時間**：2026-10-02 14:32 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
-- **Git Push 狀態**：✅ 已全部推送至 GitHub (`main` 分支)
+- **Git Push 狀態**：✅ 準備推播 (`main` 分支)
 
