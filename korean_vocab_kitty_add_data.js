@@ -809,5 +809,25 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "D",
     "p": "專有名詞",
     "pd": "專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。"
+  },
+  {
+    "id": 5748,
+    "k": "엘에이",
+    "r": "elei",
+    "c": "洛杉磯、LA",
+    "e": "LA, Los Angeles",
+    "l": "D",
+    "p": "專有名詞",
+    "pd": "專有名詞 (Proper Noun / 고유명사)，如 대구（大邱）。"
+  },
+  {
+    "id": 5749,
+    "k": "한인",
+    "r": "hanin",
+    "c": "韓人、韓僑",
+    "e": "Korean expatriate, ethnic Korean",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
