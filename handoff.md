@@ -86,14 +86,21 @@
     - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **84 筆**，全庫總量正式擴展至 **5,750 筆**。
     - 升級 Service Worker 離線快取版本為 **`v1.0.53`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
+15. **🔍 韓語漢字音變大辭典「單音節 ↔ 漢字矩陣 (1044)」搜尋智慧展開**：
+    - **痛點排查**：原先於單音節矩陣搜尋「바」時，因純字串包含邏輯導致帶收音音節（박, 받, 반 等）無法命中，反倒是例詞含「바」的無關音節（如 `라` 常用詞 바라다、`람` 常用詞 바람）被過度檢索而排在首位。
+    - **智慧音節家族展開**：輸入無收音韓語音節（如 `바`、`가`、`나`、`다`、`마` 等）時，系統即時透過 Unicode 區段演算法（`baseCode ~ baseCode + 27`）自動展開同母音家族（輸入 `바` ➔ 精準列出 `바`, `박`, `밖`, `반`, `받`, `발`, `밝`, `밟`, `밤`, `밥`, `방`, `밭` 共 12 個音節）。
+    - **精準權重排序**：輸入之母音本尊（`바`）鎖定置頂第 1 位，家族成員按韓語標準字母序緊隨其後。
+    - **羅馬拼音與介面徽章**：同步支援英數拼音前綴（輸入 `ba` 展開 `ba, bak, ban...`），並於標籤列即時呈現「✨ 已展開「바」音節家族 • 顯示 12 個音節」動態徽章。
+    - **離線與跨端同步**：升級 Service Worker 快取至 **`v1.0.54`**，同步至 `www/` 並執行 `npx cap sync android`。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.53`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.54`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`406b246`（✅ 已推至 origin/main）
+- **最新 Git Commit**：待提交
 - **全庫總單字數**：5,750 筆 (基準 5,666 + Kitty自訂 84 筆)
 
 ---
@@ -117,7 +124,7 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-02 14:32 PT
+- **時間**：2026-10-05 17:21 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
-- **Git Push 狀態**：✅ 準備推播 (`main` 分支)
+- **Git Push 狀態**：本地已同步，待推播
 

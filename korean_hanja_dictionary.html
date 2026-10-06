@@ -529,6 +529,16 @@
                 return list;
             }, [rawHanjaVocab, onlyBookmarks, bookmarks, selectedLetter, searchTerm]);
 
+            // 判斷是否為無收音單一韓文音節（如「바」）
+            const isBaseSyllableQuery = useMemo(() => {
+                const q = searchTerm.trim();
+                if (q.length === 1 && q.charCodeAt(0) >= 0xAC00 && q.charCodeAt(0) <= 0xD7A3) {
+                    const syllableIndex = q.charCodeAt(0) - 0xAC00;
+                    return (syllableIndex % 28) === 0;
+                }
+                return false;
+            }, [searchTerm]);
+
             // 單音節矩陣過濾
             const filteredSyllables = useMemo(() => {
                 let list = rawSyllables;
@@ -540,9 +550,53 @@
 
                 if (!searchTerm.trim()) return list;
 
+                const q = searchTerm.trim();
+                const qNorm = q.normalize('NFC').toLowerCase();
+
+                // 🌟 1. 單一韓文字母（如「바」）：智慧展開同母音音節家族（바, 박, 밖, 반, 받, 발, 밝, 밟, 밤, 밥, 방, 밭 等）
+                if (q.length === 1 && q.charCodeAt(0) >= 0xAC00 && q.charCodeAt(0) <= 0xD7A3) {
+                    const code = q.charCodeAt(0);
+                    const syllableIndex = code - 0xAC00;
+                    const jongIndex = syllableIndex % 28;
+                    const jungIndex = Math.floor((syllableIndex - jongIndex) / 28) % 21;
+                    const choIndex = Math.floor((syllableIndex - jongIndex) / (28 * 21));
+                    const baseCode = 0xAC00 + (choIndex * 21 + jungIndex) * 28;
+
+                    if (jongIndex === 0) {
+                        // 無收音：匹配該家族所有音節（從 baseCode 到 baseCode + 27）
+                        const family = list.filter(item => {
+                            if (!item.k) return false;
+                            const c = item.k.charCodeAt(0);
+                            return c >= baseCode && c <= baseCode + 27;
+                        }).sort((a, b) => {
+                            // 搜尋字元本尊（如 '바'）排第 1，其餘依韓語標準字母序排序
+                            if (a.k === q) return -1;
+                            if (b.k === q) return 1;
+                            return a.k.charCodeAt(0) - b.k.charCodeAt(0);
+                        });
+                        if (family.length > 0) return family;
+                    } else {
+                        // 有收音（如輸入「박」、「받」）：精確匹配該單音節優先
+                        const exact = list.filter(item => item.k === q);
+                        if (exact.length > 0) return exact;
+                    }
+                }
+
+                // 🌟 2. 羅馬拼音前綴匹配（如輸入 'ba' 自動匹配 ba, bak, ban, bat, bal...）
+                if (/^[a-z]+$/i.test(qNorm)) {
+                    const romMatched = list.filter(item => item.r && item.r.toLowerCase().startsWith(qNorm))
+                        .sort((a, b) => {
+                            if (a.r.toLowerCase() === qNorm) return -1;
+                            if (b.r.toLowerCase() === qNorm) return 1;
+                            return a.r.localeCompare(b.r);
+                        });
+                    if (romMatched.length > 0) return romMatched;
+                }
+
+                // 🌟 3. 通用智慧搜尋（初聲輔音、漢字、例詞等）
                 if (window.KittySearch) {
                     const pq = window.KittySearch.prepareQuery(searchTerm);
-                    return list.filter(item => 
+                    const matches = list.filter(item => 
                         window.KittySearch.matchSmart(item.k, pq) ||
                         window.KittySearch.matchSmart(item.r, pq) ||
                         (item.hanja_str && window.KittySearch.matchSmart(item.hanja_str, pq)) ||
@@ -550,17 +604,27 @@
                             window.KittySearch.matchSmart(w.k, pq) || window.KittySearch.matchSmart(w.c, pq)
                         ))
                     );
+                    return matches.sort((a, b) => {
+                        if (a.k === q) return -1;
+                        if (b.k === q) return 1;
+                        return 0;
+                    });
                 } else {
-                    const q = searchTerm.trim().normalize('NFC').toLowerCase();
-                    return list.filter(item => 
-                        (item.k && item.k.normalize('NFC').toLowerCase().includes(q)) ||
-                        (item.r && item.r.toLowerCase().includes(q)) ||
-                        (item.hanja_str && item.hanja_str.includes(q)) ||
+                    const qLower = qNorm;
+                    const matches = list.filter(item => 
+                        (item.k && item.k.normalize('NFC').toLowerCase().includes(qLower)) ||
+                        (item.r && item.r.toLowerCase().includes(qLower)) ||
+                        (item.hanja_str && item.hanja_str.includes(qLower)) ||
                         (item.sample_words && item.sample_words.some(w => 
-                            (w.k && w.k.normalize('NFC').toLowerCase().includes(q)) ||
-                            (w.c && w.c.toLowerCase().includes(q))
+                            (w.k && w.k.normalize('NFC').toLowerCase().includes(qLower)) ||
+                            (w.c && w.c.toLowerCase().includes(qLower))
                         ))
                     );
+                    return matches.sort((a, b) => {
+                        if (a.k === q) return -1;
+                        if (b.k === q) return 1;
+                        return 0;
+                    });
                 }
             }, [rawSyllables, sylFilter, searchTerm]);
 
@@ -913,7 +977,7 @@
                                             }}
                                             placeholder={
                                                 viewMode === 'syllable'
-                                                ? "輸入單個漢字 (如：愛、學、國) 或韓語音節 (如：애、학、국)..."
+                                                ? "輸入韓語音節 (如：바、가 展開家族)、單個漢字 (如：學、國) 或拼音..."
                                                 : "即時搜尋：輸入韓文 (애정)、中文 (愛情)、拼音 (aiqing)、羅馬拼音 (aejeong) 或英文..."
                                             }
                                             className="w-full pl-11 pr-10 py-3 rounded-2xl border-2 border-amber-200/80 focus:border-amber-500 focus:outline-none focus:bg-white text-sm md:text-base font-bold kr-font transition-all shadow-inner bg-amber-50/40 text-stone-800 placeholder:text-stone-400 placeholder:font-normal"
@@ -1404,7 +1468,13 @@
                                         </button>
                                     </div>
                                     <span className="text-xs text-stone-500 font-bold">
-                                        已顯示 {filteredSyllables.length} 個音節
+                                        {isBaseSyllableQuery && filteredSyllables.length > 0 ? (
+                                            <span className="text-amber-800 bg-amber-100/70 px-2.5 py-1 rounded-full border border-amber-300 shadow-xs inline-flex items-center gap-1">
+                                                ✨ 已展開「{searchTerm.trim()}」音節家族 • 顯示 {filteredSyllables.length} 個音節
+                                            </span>
+                                        ) : (
+                                            `已顯示 ${filteredSyllables.length} 個音節`
+                                        )}
                                     </span>
                                 </div>
 
