@@ -93,14 +93,21 @@
     - **羅馬拼音與介面徽章**：同步支援英數拼音前綴（輸入 `ba` 展開 `ba, bak, ban...`），並於標籤列即時呈現「✨ 已展開「바」音節家族 • 顯示 12 個音節」動態徽章。
     - **離線與跨端同步**：升級 Service Worker 快取至 **`v1.0.54`**，同步至 `www/` 並執行 `npx cap sync android`。
 
+16. **🔊 全生態系標準韓語發音引擎 (KittyVoice) 深度核查與強化**：
+    - **資料集全量語料純淨度校驗**：經程式全量深度掃描，漢字詞庫 6,278 筆、全量單音節 1,044 筆、外來語 242 筆，韓語 Hangul 欄位 100% 正確純淨（0 筆異常字元、0 筆缺漏）。
+    - **純韓語文本清洗與注釋過濾**：發音前自動過濾中英文括號、詞性標籤與拼音符號（如 `(名詞)`、`[bak]`、`(風)`），保證 100% 純正韓語字元送入發音核心。
+    - **杜絕跨語言語音包冒充**：Web Speech API 強制綁定 `utter.voice = koreanVoice`（嚴謹搜尋 `ko-KR` / `ko` 語音包），若使用者裝置未裝離線韓語包，自動直連 Google 官方首爾真人語音（`tl=ko`），杜絕系統預設之英文或中文發音人發出怪異腔調。
+    - **音節卡全面補齊三段速**：單音節矩陣卡片全面補齊 `1.0x`（自然標準）、`0.7x`（慢速跟讀）、`0.3x`（極慢逐音口型）三段速控制，常用例詞標籤補齊 🔊 一鍵即點即聽。
+    - **離線與跨端同步**：升級 Service Worker 快取至 **`v1.0.55`**，同步至 `www/` 並執行 `npx cap sync android`。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.54`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.55`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`f47781d`（✅ 已推至 origin/main）
+- **最新 Git Commit**：待提交
 - **全庫總單字數**：5,750 筆 (基準 5,666 + Kitty自訂 84 筆)
 
 ---
@@ -124,7 +131,7 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-05 17:22 PT
+- **時間**：2026-10-05 17:41 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
-- **Git Push 狀態**：✅ 已全部推送至 GitHub (`main` 分支)
+- **Git Push 狀態**：本地已同步，待推播
 

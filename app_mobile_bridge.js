@@ -94,12 +94,16 @@
       }
       const speechRate = typeof rate === 'number' ? rate : 1.0;
       
-      // 0. 最高優先級：若處於 Android 原生 App 內，直調系統底層 TextToSpeech (Samsung/Google 原生引擎)
+      // 🌟 純韓語文本清洗：過濾括號註解、羅馬拼音、漢字符號，確保 100% 傳入純正標準韓文
+      const cleanKorean = text.split(/[\(\[\/]/)[0].replace(/[^\uAC00-\uD7A3\u1100-\u11FF\u3130-\u318F\s.,?!~]/g, '').trim();
+      const speakTarget = cleanKorean || text.trim();
+
+      // 0. 最高優先級：若處於 Android 原生 App 內，直調系統底層 TextToSpeech (Samsung/Google 原生韓語引擎)
       if (window.AndroidNativeTTS && typeof window.AndroidNativeTTS.speak === 'function') {
         try {
-          window.AndroidNativeTTS.speak(text, speechRate);
+          window.AndroidNativeTTS.speak(speakTarget, speechRate);
           if (onEnd) {
-            const estTime = Math.max(500, (text.length * 400) / speechRate);
+            const estTime = Math.max(500, (speakTarget.length * 400) / speechRate);
             setTimeout(onEnd, estTime);
           }
           return;
@@ -108,20 +112,24 @@
         }
       }
 
-      // 1. 檢查瀏覽器 Web Speech 是否有韓語語音包
-      let hasKoreanVoice = false;
+      // 1. 檢查瀏覽器 Web Speech 是否有標準韓語語音包
+      let koreanVoice = null;
       if (window.speechSynthesis) {
         const voices = window.speechSynthesis.getVoices();
-        hasKoreanVoice = voices.some(v => v.lang && (v.lang.toLowerCase().startsWith('ko') || v.lang.toLowerCase().includes('korean')));
+        // 嚴謹搜尋：只接受明確為 ko-KR / ko 韓語語音包（杜絕系統英語/中文字體冒充發音）
+        koreanVoice = voices.find(v => v.lang && (v.lang.toLowerCase() === 'ko-kr' || v.lang.toLowerCase() === 'ko_kr'))
+          || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ko'))
+          || voices.find(v => v.lang && v.lang.toLowerCase().includes('korean'));
       }
       
-      // 若系統明確裝有韓語語音包
-      if (hasKoreanVoice && window.speechSynthesis) {
+      // 若系統明確裝有韓語專屬語音包
+      if (koreanVoice && window.speechSynthesis) {
         try {
           window.speechSynthesis.resume();
           window.speechSynthesis.cancel();
-          const utter = new SpeechSynthesisUtterance(text);
+          const utter = new SpeechSynthesisUtterance(speakTarget);
           utter.lang = 'ko-KR';
+          utter.voice = koreanVoice; // 🌟 強制指定韓語專屬語音包，確保正統首爾標準腔
           utter.rate = Math.max(0.4, Math.min(1.5, speechRate));
           utter.pitch = 1.05;
           let finished = false;
@@ -134,16 +142,16 @@
           utter.onerror = () => {
             if (!finished) {
               finished = true;
-              this.playCloud(text, speechRate, onEnd);
+              this.playCloud(speakTarget, speechRate, onEnd);
             }
           };
           window.speechSynthesis.speak(utter);
           
-          // 保護定時器：如果 450ms 內沒在播放且未完成，自動換雲端發音
+          // 保護定時器：如果 450ms 內沒在播放且未完成，自動換 Google 官方首爾真人雲端發音
           setTimeout(() => {
             if (!window.speechSynthesis.speaking && !finished) {
               finished = true;
-              this.playCloud(text, speechRate, onEnd);
+              this.playCloud(speakTarget, speechRate, onEnd);
             }
           }, 450);
           return;
@@ -152,8 +160,8 @@
         }
       }
       
-      // 2. 極速真人雲端發音 (Samsung S26 / S24 / WebView 100% 響亮)
-      this.playCloud(text, speechRate, onEnd);
+      // 2. 極速真人雲端發音 (Google 官方高清晰真人韓語發音，100% 正確標準發音)
+      this.playCloud(speakTarget, speechRate, onEnd);
     },
     
     playCloud: function(text, rate, onEnd) {
