@@ -100,7 +100,7 @@
 - **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.54`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：待提交
+- **最新 Git Commit**：`f47781d`（✅ 已推至 origin/main）
 - **全庫總單字數**：5,750 筆 (基準 5,666 + Kitty自訂 84 筆)
 
 ---
@@ -116,7 +116,7 @@
 ## ⚠️ 注意事項
 
 - **繁體中文嚴格規範**：全站所有資料集、例句、按鈕與介面說明必須嚴謹 100% 繁體中文，杜絕簡體殘留；進行中文字串處理時必須採用 OpenCC `s2twp`（臺灣正體詞彙）標準，避免 `s2t` 造成的生僻字或異體字轉換偏差。
-- **Android 原生語音辨識**：在 Android 原生端，`SpeechRecognizer.createSpeechRecognizer` 必須在主執行緒（Main Looper）中執行，且需透過 `MainActivity.java` 中的動態權限檢查確保已取得 `RECORD_AUDIO` 授權。
+- **Android 原生語音辨析**：在 Android 原生端，`SpeechRecognizer.createSpeechRecognizer` 必須在主執行緒（Main Looper）中執行，且需透過 `MainActivity.java` 中的動態權限檢查確保已取得 `RECORD_AUDIO` 授權。
 - **WebView 限制**：切勿在 Android WebView 依賴 `window.webkitSpeechRecognition`，必須走 `KittySTT` ➔ `AndroidNativeSTT` 橋接通道。
 - **前端變更同步**：每次修改根目錄的網頁、腳本或資源時，均需同步複製至 `www/`，並執行 `npx cap sync android`。
 
@@ -124,7 +124,7 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-05 17:21 PT
+- **時間**：2026-10-05 17:22 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
-- **Git Push 狀態**：本地已同步，待推播
+- **Git Push 狀態**：✅ 已全部推送至 GitHub (`main` 分支)
 
