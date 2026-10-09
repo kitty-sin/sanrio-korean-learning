@@ -114,12 +114,24 @@
 
       // 1. 檢查瀏覽器 Web Speech 是否有標準韓語語音包
       let koreanVoice = null;
+      const savedGender = (typeof localStorage !== 'undefined' && localStorage.getItem('kitty_voice_gender')) || 'male';
+      const isMale = savedGender !== 'female';
       if (window.speechSynthesis) {
         const voices = window.speechSynthesis.getVoices();
-        // 嚴謹搜尋：只接受明確為 ko-KR / ko 韓語語音包（杜絕系統英語/中文字體冒充發音）
-        koreanVoice = voices.find(v => v.lang && (v.lang.toLowerCase() === 'ko-kr' || v.lang.toLowerCase() === 'ko_kr'))
-          || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ko'))
-          || voices.find(v => v.lang && v.lang.toLowerCase().includes('korean'));
+        const koVoices = voices.filter(v => v.lang && (v.lang.toLowerCase() === 'ko-kr' || v.lang.toLowerCase() === 'ko_kr' || v.lang.toLowerCase().startsWith('ko')));
+        if (koVoices.length > 0) {
+          if (isMale) {
+            koreanVoice = koVoices.find(v => {
+              const n = v.name.toLowerCase();
+              return n.includes('injoon') || n.includes('minsu') || n.includes('gwangin') || n.includes('male') || n.includes('nam');
+            }) || koVoices.find(v => v.name.includes('Google') || v.name.includes('Natural')) || koVoices[0];
+          } else {
+            koreanVoice = koVoices.find(v => {
+              const n = v.name.toLowerCase();
+              return n.includes('sunhi') || n.includes('yuna') || n.includes('female') || n.includes('yeo');
+            }) || koVoices[0];
+          }
+        }
       }
       
       // 若系統明確裝有韓語專屬語音包
@@ -131,7 +143,7 @@
           utter.lang = 'ko-KR';
           utter.voice = koreanVoice; // 🌟 強制指定韓語專屬語音包，確保正統首爾標準腔
           utter.rate = Math.max(0.4, Math.min(1.5, speechRate));
-          utter.pitch = 1.05;
+          utter.pitch = isMale ? 0.80 : 1.05; // 👨 男聲自動降頻至 0.80 強化收尾音(받침)與爆破音
           let finished = false;
           utter.onend = () => {
             if (!finished) {

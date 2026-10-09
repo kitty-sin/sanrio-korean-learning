@@ -1610,6 +1610,7 @@
         function App() {
             const [masterTab, setMasterTab] = useState('alphabet'); // 'alphabet' | 'builder' | 'verbs' | 'sound-rules' | 'wordbank' | 'quiz'
             const [alphabetSubTab, setAlphabetSubTab] = useState('basic-vowels'); // 'basic-vowels' | 'compound-vowels' | 'plain-consonants' | 'aspirated-consonants' | 'tense-consonants' | 'batchim-guide'
+            const [voiceGender, setVoiceGender] = useState(() => localStorage.getItem('kitty_voice_gender') || 'male');
 
             // 拼音積木屋狀態
             const [selectedC, setSelectedC] = useState('ㅂ');
@@ -2010,11 +2011,28 @@
                 <div className="max-w-5xl mx-auto px-4 pt-6">
                     {/* Header */}
                     <header className="relative text-center mb-6 bg-white/95 backdrop-blur rounded-3xl p-5 md:p-6 shadow-sm border border-rose-100 flex flex-col items-center">
-                        {/* 頂部跨站導航膠囊 (Galaxy Ecosystem Dock) + Firebase 連線狀態 */}
+                        {/* 頂部跨站導航膠囊 (Galaxy Ecosystem Dock) + 聲線切換膠囊 + Firebase 連線狀態 */}
                         <div className="w-full flex items-center justify-between mb-3 flex-wrap gap-2">
-                            <div className="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200 px-3.5 py-1 rounded-full text-xs text-rose-600 shadow-xs">
-                                <span className={`w-2.5 h-2.5 rounded-full ${firebaseConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`}></span>
-                                <span>{firebaseConnected ? 'Firebase 雲端已連線' : '本機模式'}</span>
+                            <div className="flex items-center gap-2">
+                                <div className="inline-flex items-center bg-rose-50 border border-rose-300 rounded-full p-0.5 shadow-xs">
+                                    <button
+                                        onClick={() => { localStorage.setItem('kitty_voice_gender', 'male'); setVoiceGender('male'); }}
+                                        className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all ${voiceGender === 'male' ? 'bg-rose-500 text-white shadow-xs' : 'text-gray-500 hover:text-rose-500'}`}
+                                    >
+                                        👨 男聲 (預設)
+                                    </button>
+                                    <button
+                                        onClick={() => { localStorage.setItem('kitty_voice_gender', 'female'); setVoiceGender('female'); }}
+                                        className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all ${voiceGender === 'female' ? 'bg-rose-500 text-white shadow-xs' : 'text-gray-500 hover:text-rose-500'}`}
+                                    >
+                                        👩 女聲
+                                    </button>
+                                </div>
+
+                                <div className="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full text-xs text-rose-600 shadow-xs">
+                                    <span className={`w-2.5 h-2.5 rounded-full ${firebaseConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`}></span>
+                                    <span>{firebaseConnected ? 'Firebase 已連線' : '本機模式'}</span>
+                                </div>
                             </div>
 
                             {/* 星際韓語宇宙跨站導航膠囊 (Galaxy Ecosystem Dock) */}
@@ -3666,5 +3684,8 @@
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
   <script src="./app_mobile_bridge.js"></script>
+
+  
+
 </body>
 </html>
