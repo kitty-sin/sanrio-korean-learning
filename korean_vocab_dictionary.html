@@ -371,6 +371,7 @@
             const [onlyBookmarks, setOnlyBookmarks] = useState(false);
             const [speechRate, setSpeechRate] = useState(1.0); // 1.0, 0.7, 0.3
             const [speakingWord, setSpeakingWord] = useState('');
+            const [voiceGender, setVoiceGender] = useState(() => localStorage.getItem('kitty_voice_gender') || 'male');
 
             // 分頁控制 (字典模式)
             const [currentPage, setCurrentPage] = useState(1);
@@ -665,6 +666,46 @@
 
                         {/* ==================== 頂部全域導航條 ==================== */}
                         <header className="bg-white/90 backdrop-blur-md rounded-3xl p-5 md:p-6 shadow-sm border border-white/80 mb-6 relative">
+                            {/* 頂部導航列最上方：極致顯眼真人語音切換膠囊 */}
+                            <div className="w-full flex items-center justify-between pb-3.5 mb-3.5 border-b border-rose-100 flex-wrap gap-2">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs font-black text-rose-600 flex items-center gap-1">
+                                        <span>🎙️</span>
+                                        <span>首爾真人發音：</span>
+                                    </span>
+                                    <div className="inline-flex items-center bg-rose-50 border border-rose-300 rounded-full p-0.5 shadow-2xs">
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                localStorage.setItem('kitty_voice_gender', 'male');
+                                                setVoiceGender('male');
+                                                showToast('👨 已切換為標準首爾男聲（預設，收音強化）');
+                                            }}
+                                            className={`px-3 py-1 rounded-full text-xs font-black transition-all flex items-center gap-1 cursor-pointer ${voiceGender === 'male' ? 'bg-rose-500 text-white shadow-xs' : 'text-gray-500 hover:text-rose-500'}`}
+                                        >
+                                            <span>👨</span>
+                                            <span>男聲 (預設)</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                localStorage.setItem('kitty_voice_gender', 'female');
+                                                setVoiceGender('female');
+                                                showToast('👩 已切換為甜美首爾女聲');
+                                            }}
+                                            className={`px-3 py-1 rounded-full text-xs font-black transition-all flex items-center gap-1 cursor-pointer ${voiceGender === 'female' ? 'bg-rose-500 text-white shadow-xs' : 'text-gray-500 hover:text-rose-500'}`}
+                                        >
+                                            <span>👩</span>
+                                            <span>女聲</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="text-[11px] font-bold text-rose-400 flex items-center gap-1.5">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    <span>KittyVoice 4.0 原生/雲端雙引擎 • 自動持久化</span>
+                                </div>
+                            </div>
+
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div className="flex items-center gap-3">
                                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-200 to-pink-100 text-rose-500 flex items-center justify-center text-2xl shadow-inner pulse-pink">
