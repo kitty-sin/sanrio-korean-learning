@@ -839,5 +839,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5751,
+    "k": "채",
+    "r": "chae",
+    "c": "球拍、球桿、拍子（擊球或揮打之工具，如 배드민턴채 羽毛球拍、탁구채 桌球拍、골프채 高爾夫球桿、파리채 蒼蠅拍、북채 鼓槌）",
+    "e": "Racket, club, stick, bat (sports implement for striking a ball, e.g. badminton racket, golf club, fly swatter)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
