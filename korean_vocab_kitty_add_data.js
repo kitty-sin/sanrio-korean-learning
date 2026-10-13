@@ -889,5 +889,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5756,
+    "k": "검지",
+    "r": "geomji",
+    "c": "食指（검지손가락 的簡稱；五指之一，常用於指向）",
+    "e": "Index finger, forefinger (short for geomjisongarak; the pointing finger)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
