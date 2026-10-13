@@ -849,5 +849,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5752,
+    "k": "도서",
+    "r": "doseo",
+    "c": "圖書、書籍、書本（漢字詞：圖書，如 도서관 圖書館、도서 대출 圖書借閱、도서 상품권 圖書禮券）；島嶼、海島（漢字詞：島嶼，如 도서 지역 島嶼/離島地區）",
+    "e": "Books, publications, literature (圖書); islands, isles (島嶼, as in 도서 지역 island region)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];

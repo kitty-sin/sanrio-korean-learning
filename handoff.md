@@ -105,15 +105,20 @@
     - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **85 筆**，全庫總量正式擴展至 **5,751 筆**。
     - 升級 Service Worker 離線快取版本為 **`v1.0.56`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
+18. **📚 核心大字典擴充圖書與文化詞彙 (#5752)**：
+    - 收錄 `#5752` `도서` [doseo] - 圖書、書籍、書本（漢字詞：圖書，如 도서관 圖書館、도서 대출 圖書借閱、도서 상품권 圖書禮券）；島嶼、海島（漢字詞：島嶼，如 도서 지역 島嶼/離島地區） (名詞 • A 級)。
+    - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **86 筆**，全庫總量正式擴展至 **5,752 筆**。
+    - 升級 Service Worker 離線快取版本為 **`v1.0.57`**，同步資源至 `www/` 並執行 `npx cap sync android`。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.56`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.57`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`539967f`（✅ 已推至 origin/main）
-- **全庫總單字數**：5,751 筆 (基準 5,666 + Kitty自訂 85 筆)
+- **最新 Git Commit**：待提交
+- **全庫總單字數**：5,752 筆 (基準 5,666 + Kitty自訂 86 筆)
 
 ---
 
@@ -136,7 +141,7 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-13 15:02 PT
+- **時間**：2026-10-13 15:12 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 準備推播 (`main` 分支)
 
