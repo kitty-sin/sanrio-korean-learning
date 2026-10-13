@@ -899,5 +899,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5757,
+    "k": "추",
+    "r": "chu",
+    "c": "秤砣、墜子、重錘（漢字詞「錘」；傳統桿秤上的秤錘、釣魚鉛墜、鉛垂線墜子，如 저울추 秤砣、낚시추 釣魚鉛墜）",
+    "e": "Scale counterweight, sinker weight (Hanja 錘; weight on a traditional steelyard balance, fishing sinker, plumb weight, e.g. jeoulchu, nakksichu)",
+    "l": "B",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];

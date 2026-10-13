@@ -132,15 +132,21 @@
     - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **90 筆**，全庫總量正式擴展至 **5,756 筆**。
     - 升級 Service Worker 離線快取版本為 **`v1.0.61`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
+23. **📚 核心大字典擴充傳統度量衡詞彙 (#5757)**：
+    - 收錄 `#5757` `추` [chu] - 秤砣、墜子、重錘（漢字詞「錘」；傳統桿秤上的秤錘、釣魚鉛墜、鉛垂線墜子，如 저울추 秤砣、낚시추 釣魚鉛墜） (名詞 • B 級)。
+    - 查重確認：獨立單字 `추` 精確檢索 0 筆（既有 27 筆皆為含 `추` 音節之複合詞如 추석、추억、고추장）；經用戶確認取「秤砣」義（錘），判定為全新詞。
+    - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **91 筆**，全庫總量正式擴展至 **5,757 筆**。
+    - 升級 Service Worker 離線快取版本為 **`v1.0.62`**，同步資源至 `www/` 並執行 `npx cap sync android`。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.61`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.62`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
 - **最新 Git Commit**：`cd73d8e`
-- **全庫總單字數**：5,756 筆 (基準 5,666 + Kitty自訂 90 筆)
+- **全庫總單字數**：5,757 筆 (基準 5,666 + Kitty自訂 91 筆)
 
 ---
 
@@ -163,7 +169,7 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-13 15:48 PT
+- **時間**：2026-10-13 15:56 PT
 - **更新者**：OpenCode @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 已推送至 GitHub (`main` 分支)
 
