@@ -110,15 +110,20 @@
     - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **86 筆**，全庫總量正式擴展至 **5,752 筆**。
     - 升級 Service Worker 離線快取版本為 **`v1.0.57`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
+19. **📚 核心大字典擴充休閒點心外來語 (#5753)**：
+    - 收錄 `#5753` `나초` [nacho] - 墨西哥玉米片、起司玉米脆片、玉米片（Nachos，外來語。韓國電影院熱門點心與人氣啤酒下酒菜，常搭配濃郁起司醬 치즈소스 或莎莎醬 살사소스 食用） (名詞 • A 級)。
+    - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **87 筆**，全庫總量正式擴展至 **5,753 筆**。
+    - 升級 Service Worker 離線快取版本為 **`v1.0.58`**，同步資源至 `www/` 並執行 `npx cap sync android`。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.57`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.58`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`ce130e8`（✅ 已推至 origin/main）
-- **全庫總單字數**：5,752 筆 (基準 5,666 + Kitty自訂 86 筆)
+- **最新 Git Commit**：待提交
+- **全庫總單字數**：5,753 筆 (基準 5,666 + Kitty自訂 87 筆)
 
 ---
 
@@ -141,7 +146,7 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-13 15:12 PT
+- **時間**：2026-10-13 15:21 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 準備推播 (`main` 分支)
 

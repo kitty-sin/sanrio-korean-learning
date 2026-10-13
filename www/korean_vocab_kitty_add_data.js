@@ -859,5 +859,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5753,
+    "k": "나초",
+    "r": "nacho",
+    "c": "墨西哥玉米片、起司玉米脆片、玉米片（Nachos，外來語。韓國電影院熱門點心與人氣啤酒下酒菜，常搭配濃郁起司醬 치즈소스 或莎莎醬 살사소스 食用）",
+    "e": "Nachos, tortilla chips (Mexican snack, popular cinema snack and beer finger food in Korea)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
