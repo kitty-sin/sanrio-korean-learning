@@ -91,3 +91,4 @@
 | 5751 | 채 | chae | 球拍、球桿、拍子（擊球或揮打之工具，如 배드민턴채 羽毛球拍、탁구채 桌球拍、골프채 高爾夫球桿、파리채 蒼蠅拍、북채 鼓槌） | Racket, club, stick, bat (sports implement for striking a ball, e.g. badminton racket, golf club, fly swatter) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
 | 5752 | 도서 | doseo | 圖書、書籍、書本（漢字詞：圖書，如 도서관 圖書館、도서 대출 圖書借閱、도서 상품권 圖書禮券）；島嶼、海島（漢字詞：島嶼，如 도서 지역 島嶼/離島地區） | Books, publications, literature (圖書); islands, isles (島嶼, as in 도서 지역 island region) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
 | 5753 | 나초 | nacho | 墨西哥玉米片、起司玉米脆片、玉米片（Nachos，外來語。韓國電影院熱門點心與人氣啤酒下酒菜，常搭配濃郁起司醬 치즈소스 或莎莎醬 살사소스 食用） | Nachos, tortilla chips (Mexican snack, popular cinema snack and beer finger food in Korea) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |
+| 5754 | 난초 | nancho | 蘭花、胡姬花（Orchid，觀賞花卉，常作盆栽與切花） | Orchid, orchid plant (ornamental flowering plant, common as potted plant and cut flower) | A | 名詞 (Noun / 명사)，如 사람（人）、집（家）。 |

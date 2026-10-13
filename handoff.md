@@ -115,15 +115,20 @@
     - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **87 筆**，全庫總量正式擴展至 **5,753 筆**。
     - 升級 Service Worker 離線快取版本為 **`v1.0.58`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
+20. **📚 核心大字典擴充觀賞花卉詞彙 (#5754)**：
+    - 收錄 `#5754` `난초` [nancho] - 蘭花、胡姬花（Orchid，觀賞花卉，常作盆栽與切花） (名詞 • A 級)。
+    - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **88 筆**，全庫總量正式擴展至 **5,754 筆**。
+    - 升級 Service Worker 離線快取版本為 **`v1.0.59`**，同步資源至 `www/`（含補齊先前落後的 `www/` CSV/MD）並執行 `npx cap sync android`。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.58`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.59`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
 - **最新 Git Commit**：`b3b7567`
-- **全庫總單字數**：5,753 筆 (基準 5,666 + Kitty自訂 87 筆)
+- **全庫總單字數**：5,754 筆 (基準 5,666 + Kitty自訂 88 筆)
 
 ---
 
@@ -146,7 +151,7 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-13 15:21 PT
+- **時間**：2026-10-13 15:30 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：✅ 已推送至 GitHub (`main` 分支)
 

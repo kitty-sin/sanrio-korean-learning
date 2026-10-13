@@ -869,5 +869,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5754,
+    "k": "난초",
+    "r": "nancho",
+    "c": "蘭花、胡姬花（Orchid，觀賞花卉，常作盆栽與切花）",
+    "e": "Orchid, orchid plant (ornamental flowering plant, common as potted plant and cut flower)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
