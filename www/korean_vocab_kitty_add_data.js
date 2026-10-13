@@ -879,5 +879,15 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "A",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5755,
+    "k": "거지",
+    "r": "geoji",
+    "c": "乞丐、乞討者、流浪漢（街頭行乞者；口語「거지 같다」形容破爛寒酸）",
+    "e": "Beggar, homeless panhandler (person begging on the street; colloquially 'geoji gatda' means shabby-looking)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
   }
 ];
