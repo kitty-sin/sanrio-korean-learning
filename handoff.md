@@ -138,14 +138,21 @@
     - 同步原子化更新 `korean_vocab_kitty_add_data.js`、`korean_vocab_kitty_add.csv` 與 `korean_vocab_kitty_add.md`。自訂庫累計達 **91 筆**，全庫總量正式擴展至 **5,757 筆**。
     - 升級 Service Worker 離線快取版本為 **`v1.0.62`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
+13. **🌸 助詞積木樂園全面升級：增加「🍮 主題 은/는 派」（升級為三大核心助詞樂園）**：
+    - 依指示在 `sanrio_korean_particles.html` 擴充全新第三大分頁「🍮 主題 은/는 派（話題焦點/對比 • 布丁狗派 🍮🐶）」。
+    - 頂部導航升級為 6 大分頁（1. 樂園總覽、2. 主格 이/가 派、3. 主題 은/는 派、4. 受格 을/를 派、5. 實戰 PK 對決、6. 隨堂星級測驗）。
+    - 樂園總覽與三大核心助詞速查表同步加入「은/는」語法維度、收音接續規則（-은/-는）、發音連音化（선생님은 [선생니믄]、밥은 [바븐]、책은 [채근]、오늘은 [오느른]）、口語極速縮合（나는→난、저는→전、너는→넌、이것은→이건）與生活實戰例句。
+    - 實戰 PK 對決台新增「🔥 世紀大對決：【主格 이/가】vs【主題 은/는】（初學者最易搞混的終極解密）」、專屬篩選切換按鈕與雙重主語句（오늘은 날씨가 좋아요 / 코끼리는 코가 길어요）。
+    - 隨堂星級測驗題庫擴展為 7 道經典闖關題（全面涵蓋三大助詞接續、連音化、口語縮合與排他焦點）。
+    - 快取版本升級至 `v1.0.63`，同步至 `www/` 並執行 `npx cap sync android`。
+
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.62`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.63`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：`571c3e0`
 - **全庫總單字數**：5,757 筆 (基準 5,666 + Kitty自訂 91 筆)
 
 ---

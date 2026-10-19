@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌸 KITTY 韓語兩大核心助詞發音積木樂園 (主格 이/가 ✕ 受格 을/를 • 大字體版)</title>
+    <title>🌸 KITTY 韓語三大核心助詞發音積木樂園 (主格 이/가 ✕ 主題 은/는 ✕ 受格 을/를 • 大字體版)</title>
     <!-- PWA Settings -->
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#FFF0F3">
@@ -35,7 +35,7 @@
     <style>
         body {
             font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
-            background: linear-gradient(150deg, #FFF5F7 0%, #F0FDF4 35%, #EFF6FF 70%, #FAF5FF 100%);
+            background: linear-gradient(150deg, #FFF5F7 0%, #FFFBEB 25%, #F0FDF4 50%, #EFF6FF 75%, #FAF5FF 100%);
             background-attachment: fixed;
             color: #2D3748;
             overflow-x: hidden;
@@ -78,7 +78,7 @@
             right: -10%;
             width: 38vw;
             height: 38vw;
-            background: radial-gradient(circle, rgba(52, 211, 153, 0.18) 0%, rgba(240, 253, 244, 0) 70%);
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.18) 0%, rgba(254, 243, 199, 0) 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
@@ -186,11 +186,12 @@
             const [quizSubmitted, setQuizSubmitted] = useState(false);
 
             const tabs = [
-                { id: 1, title: "🌟 樂園總覽", icon: "fa-star", desc: "主格 vs 受格黃金速查總表" },
+                { id: 1, title: "🌟 樂園總覽", icon: "fa-star", desc: "三大核心助詞黃金速查總表" },
                 { id: 2, title: "🌸 主格 이/가 派", icon: "fa-heart", desc: "主體焦點 • 美樂蒂派" },
-                { id: 3, title: "🐶 受格 을/를 派", icon: "fa-bone", desc: "動作對象 • 大耳狗派" },
-                { id: 4, title: "🥊 實戰 PK 對決", icon: "fa-bolt", desc: "좋다 vs 좋아하다 經典拆解" },
-                { id: 5, title: "🎮 隨堂星級測驗", icon: "fa-gamepad", desc: "5 題互動闖關測驗" },
+                { id: 3, title: "🍮 主題 은/는 派", icon: "fa-sun", desc: "話題焦點/對比 • 布丁狗派" },
+                { id: 4, title: "🐶 受格 을/를 派", icon: "fa-bone", desc: "動作對象 • 大耳狗派" },
+                { id: 5, title: "🥊 實戰 PK 對決", icon: "fa-bolt", desc: "이/가 vs 은/는 ✕ 좋다 vs 좋아하다" },
+                { id: 6, title: "🎮 隨堂星級測驗", icon: "fa-gamepad", desc: "7 題互動闖關測驗" },
             ];
 
             const fireConfetti = () => {
@@ -236,6 +237,26 @@
                 },
                 {
                     id: 4,
+                    q: "名詞「선생님 (老師，詞尾有終聲 ㅁ)」如果要作為句子主題提出（說到老師呢...），應接哪個主題助詞？且連音化後的讀音為何？",
+                    options: [
+                        { text: "선생님는 (有收音不能接 는)", isCorrect: false },
+                        { text: "선생님은 [선생니믄] (有收音接 은，連音讀作 [선생니믄])", isCorrect: true, explanation: "선생님 終聲為 ㅁ，遇母音初聲 ㅇ 發生連音化，自然讀作 [선생니믄]！" },
+                        { text: "선생님를 (這是受格助詞)", isCorrect: false },
+                        { text: "선생님이 (這是強調主詞的主格助詞)", isCorrect: false }
+                    ]
+                },
+                {
+                    id: 5,
+                    q: "口語對話與歌詞中常聽到的「난 괜찮아요 (我沒關係/沒事)」，其中的「난」是哪兩個字的口語縮合？",
+                    options: [
+                        { text: "나는 (我 + 主題助詞 는 縮合為 난)", isCorrect: true, explanation: "나는 (我) 在口語中極常縮合為 난！同理 저는→전、너는→넌、이것은→이건！" },
+                        { text: "날 (這是 나를 的縮合)", isCorrect: false },
+                        { text: "내가 (這是 나+이 的主格變形)", isCorrect: false },
+                        { text: "나도 (我也)", isCorrect: false }
+                    ]
+                },
+                {
+                    id: 6,
                     q: "韓語中要表達「我喜歡韓國電影」，使用形容詞「좋다 (好/喜歡)」時，句子主體必須搭配哪個助詞？",
                     options: [
                         { text: "한국 영화를 좋아요 (錯誤，좋다 不能搭配受格 를)", isCorrect: false },
@@ -245,13 +266,13 @@
                     ]
                 },
                 {
-                    id: 5,
-                    q: "「선생님이 (老師)」在實際口語發音時，因為發生了連音化，讀音應為下列何者？",
+                    id: 7,
+                    q: "要詢問「誰來了？（누가 왔어요?）」並回答「是民洙來了！（強調是民洙這個人來了，而不是別人）」，應使用哪個助詞？",
                     options: [
-                        { text: "[선생닙]", isCorrect: false },
-                        { text: "[선생니미] (終聲 ㅁ 移至後方 ㅇ 位置)", isCorrect: true, explanation: "終聲 ㅁ 遇後方母音 ㅇ 初聲發生連音化，自然讀作 [선생니미]！" },
-                        { text: "[선생이]", isCorrect: false },
-                        { text: "[선생이믜]", isCorrect: false }
+                        { text: "민수는 왔어요 (這是對比或主題：說到民洙呢他來了)", isCorrect: false },
+                        { text: "민수가 왔어요 (強調排他焦點是民洙，接主格 가)", isCorrect: true, explanation: "回答「誰（누가）」的排他焦點與眼前新資訊時，必須使用主格助詞 이/가！민수가 왔어요！" },
+                        { text: "민수를 왔어요 (오다 是自動詞不能接受格)", isCorrect: false },
+                        { text: "민수도 왔어요 (民洙也來了)", isCorrect: false }
                     ]
                 }
             ];
@@ -266,7 +287,7 @@
                     const ans = quizAnswers[q.id];
                     return (ans !== undefined && q.options[ans]?.isCorrect) ? acc + 1 : acc;
                 }, 0);
-                if (score >= 4) {
+                if (score >= 5) {
                     fireConfetti();
                 }
             };
@@ -285,11 +306,11 @@
                                 <span className="text-3xl sm:text-4xl">🌸</span>
                                 <div>
                                     <h1 className="text-lg sm:text-xl md:text-2xl font-black text-gray-800 tracking-tight flex items-center gap-2">
-                                        KITTY 韓語兩大核心助詞發音積木樂園
-                                        <span className="text-xs sm:text-sm px-2.5 py-0.5 bg-gradient-to-r from-rose-500 to-sky-500 text-white font-bold rounded-full shadow-xs">大字體 • Sanrio版</span>
+                                        KITTY 韓語三大核心助詞發音積木樂園
+                                        <span className="text-xs sm:text-sm px-2.5 py-0.5 bg-gradient-to-r from-rose-500 via-amber-500 to-sky-500 text-white font-bold rounded-full shadow-xs">大字體 • Sanrio版</span>
                                     </h1>
                                     <p className="text-xs sm:text-sm text-rose-700 font-semibold mt-0.5">
-                                        主格助詞 (이/가) ✕ 受格助詞 (을/를) • 句型拆解與連音化發音速查
+                                        主格助詞 (이/가) ✕ 主題助詞 (은/는) ✕ 受格助詞 (을/를) • 句型拆解與連音化發音速查
                                     </p>
                                 </div>
                             </div>
@@ -329,7 +350,7 @@
                         </div>
                     </header>
 
-                    {/* 5 大分頁切換導航 (大字體版) */}
+                    {/* 6 大分頁切換導航 (大字體版) */}
                     <div className="flex overflow-x-auto no-scrollbar gap-2.5 pb-2 mb-6 sm:justify-center">
                         {tabs.map(tab => (
                             <button
@@ -337,7 +358,7 @@
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-sm sm:text-base whitespace-nowrap transition-all duration-200 shadow-sm ${
                                     activeTab === tab.id
-                                        ? 'bg-gradient-to-r from-rose-500 via-pink-500 to-sky-500 text-white shadow-rose-200 shadow-lg scale-105 ring-2 ring-rose-300'
+                                        ? 'bg-gradient-to-r from-rose-500 via-amber-500 to-sky-500 text-white shadow-rose-200 shadow-lg scale-105 ring-2 ring-rose-300'
                                         : 'bg-white/95 hover:bg-white text-gray-700 hover:text-rose-600 border border-rose-100'
                                 }`}
                             >
@@ -350,37 +371,54 @@
                     {/* ======================= PAGE 1: 🌟 樂園總覽與黃金對照表 ======================= */}
                     {activeTab === 1 && (
                         <div className="space-y-6 md:space-y-8 animate-fadeIn">
-                            {/* 兩大角色陣營卡 (大字體) */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                                <div className="sanrio-card rounded-3xl p-6 border-l-8 border-rose-400 bg-gradient-to-br from-rose-50/80 to-white">
+                            {/* 三大角色陣營卡 (大字體) */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+                                <div className="sanrio-card rounded-3xl p-5 sm:p-6 border-l-8 border-rose-400 bg-gradient-to-br from-rose-50/80 to-white">
                                     <div className="flex items-start justify-between">
                                         <div>
-                                            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-rose-100 text-rose-900 rounded-full text-xs sm:text-sm font-black mb-2">
+                                            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 bg-rose-100 text-rose-900 rounded-full text-xs sm:text-sm font-black mb-2">
                                                 🐰 甜美主角光環 • 美樂蒂派
                                             </div>
-                                            <h3 className="text-xl sm:text-2xl font-black text-rose-900 kr-font">🌸 主格助詞 (주격 조사)</h3>
-                                            <p className="text-sm font-bold text-rose-700 mt-1">代表助詞：<span className="kr-font text-base sm:text-lg font-black bg-rose-200/70 px-2.5 py-0.5 rounded-lg">이 / 가</span></p>
+                                            <h3 className="text-lg sm:text-xl md:text-2xl font-black text-rose-900 kr-font">🌸 主格助詞 (주격)</h3>
+                                            <p className="text-xs sm:text-sm font-bold text-rose-700 mt-1">代表助詞：<span className="kr-font text-base sm:text-lg font-black bg-rose-200/70 px-2.5 py-0.5 rounded-lg">이 / 가</span></p>
                                         </div>
-                                        <span className="text-4xl sm:text-5xl">🐰🎀</span>
+                                        <span className="text-3xl sm:text-4xl">🐰🎀</span>
                                     </div>
-                                    <div className="mt-4 text-xs sm:text-sm text-gray-700 space-y-1.5 bg-white/85 p-3.5 sm:p-4 rounded-2xl border border-rose-100 leading-relaxed">
+                                    <div className="mt-4 text-xs sm:text-sm text-gray-700 space-y-1.5 bg-white/85 p-3.5 rounded-2xl border border-rose-100 leading-relaxed">
                                         <p><strong>🎯 核心角色：</strong>標記句子主詞（誰做動作 / 什麼狀態的主體）、強調排他焦點。</p>
                                         <p><strong>📌 接續口訣：</strong>有收音接 <span className="font-black text-rose-700">이</span>，無收音接 <span className="font-black text-rose-700">가</span>（代名詞：내가/제가/네가/누가）。</p>
                                     </div>
                                 </div>
 
-                                <div className="sanrio-card rounded-3xl p-6 border-l-8 border-sky-400 bg-gradient-to-br from-sky-50/80 to-white">
+                                <div className="sanrio-card rounded-3xl p-5 sm:p-6 border-l-8 border-amber-400 bg-gradient-to-br from-amber-50/80 to-white">
                                     <div className="flex items-start justify-between">
                                         <div>
-                                            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-sky-100 text-sky-900 rounded-full text-xs sm:text-sm font-black mb-2">
+                                            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 bg-amber-100 text-amber-900 rounded-full text-xs sm:text-sm font-black mb-2">
+                                                🍮 溫暖話題王 • 布丁狗派
+                                            </div>
+                                            <h3 className="text-lg sm:text-xl md:text-2xl font-black text-amber-950 kr-font">🍮 主題助詞 (주제/대조)</h3>
+                                            <p className="text-xs sm:text-sm font-bold text-amber-800 mt-1">代表助詞：<span className="kr-font text-base sm:text-lg font-black bg-amber-200/70 px-2.5 py-0.5 rounded-lg">은 / 는</span></p>
+                                        </div>
+                                        <span className="text-3xl sm:text-4xl">🍮🐶</span>
+                                    </div>
+                                    <div className="mt-4 text-xs sm:text-sm text-gray-700 space-y-1.5 bg-white/85 p-3.5 rounded-2xl border border-amber-100 leading-relaxed">
+                                        <p><strong>🎯 核心角色：</strong>拋出話題焦點（「說到...呢 / 至於...」）、自我介紹、強烈前後對比。</p>
+                                        <p><strong>📌 接續口訣：</strong>有收音接 <span className="font-black text-amber-800">은</span>，無收音接 <span className="font-black text-amber-800">는</span>（口語縮合：난/전/넌/이건/그건）。</p>
+                                    </div>
+                                </div>
+
+                                <div className="sanrio-card rounded-3xl p-5 sm:p-6 border-l-8 border-sky-400 bg-gradient-to-br from-sky-50/80 to-white">
+                                    <div className="flex items-start justify-between">
+                                        <div>
+                                            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 bg-sky-100 text-sky-900 rounded-full text-xs sm:text-sm font-black mb-2">
                                                 🐶 活潑行動派 • 大耳狗派
                                             </div>
-                                            <h3 className="text-xl sm:text-2xl font-black text-sky-900 kr-font">🐶 受格助詞 (목적격 조사)</h3>
-                                            <p className="text-sm font-bold text-sky-700 mt-1">代表助詞：<span className="kr-font text-base sm:text-lg font-black bg-sky-200/70 px-2.5 py-0.5 rounded-lg">을 / 를</span></p>
+                                            <h3 className="text-lg sm:text-xl md:text-2xl font-black text-sky-900 kr-font">🐶 受格助詞 (목적격)</h3>
+                                            <p className="text-xs sm:text-sm font-bold text-sky-700 mt-1">代表助詞：<span className="kr-font text-base sm:text-lg font-black bg-sky-200/70 px-2.5 py-0.5 rounded-lg">을 / 를</span></p>
                                         </div>
-                                        <span className="text-4xl sm:text-5xl">🐶☁️</span>
+                                        <span className="text-3xl sm:text-4xl">🐶☁️</span>
                                     </div>
-                                    <div className="mt-4 text-xs sm:text-sm text-gray-700 space-y-1.5 bg-white/85 p-3.5 sm:p-4 rounded-2xl border border-sky-100 leading-relaxed">
+                                    <div className="mt-4 text-xs sm:text-sm text-gray-700 space-y-1.5 bg-white/85 p-3.5 rounded-2xl border border-sky-100 leading-relaxed">
                                         <p><strong>🎯 核心角色：</strong>標記及物動詞的受詞（動作直接作用的對象）、口語可自然省略。</p>
                                         <p><strong>📌 接續口訣：</strong>有收音接 <span className="font-black text-sky-700">을</span>，無收音接 <span className="font-black text-sky-700">를</span>（口語縮合：날/절/널/뭘/이걸）。</p>
                                     </div>
@@ -392,7 +430,7 @@
                                 <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
                                     <div className="flex items-center gap-2.5">
                                         <span className="text-2xl sm:text-3xl">📊</span>
-                                        <h3 className="text-lg sm:text-xl md:text-2xl font-black text-gray-800">兩大核心助詞黃金速查總表</h3>
+                                        <h3 className="text-lg sm:text-xl md:text-2xl font-black text-gray-800">三大核心助詞黃金速查總表</h3>
                                     </div>
                                     <span className="text-xs sm:text-sm font-bold text-rose-700 bg-rose-100 px-3.5 py-1 rounded-full">💡 點擊語音按鈕即可聽示範</span>
                                 </div>
@@ -401,76 +439,108 @@
                                     <table className="w-full text-left border-collapse text-xs sm:text-sm md:text-base">
                                         <thead>
                                             <tr className="border-b-2 border-rose-200 bg-rose-50/70">
-                                                <th className="py-3.5 px-4 font-black text-rose-950 w-1/4">語法維度</th>
-                                                <th className="py-3.5 px-4 font-black text-rose-900 bg-rose-50/90 w-[37.5%]">🌸 主格助詞 (이 / 가)</th>
-                                                <th className="py-3.5 px-4 font-black text-sky-900 bg-sky-50/90 w-[37.5%]">🐶 受格助詞 (을 / 를)</th>
+                                                <th className="py-3.5 px-3 font-black text-rose-950 w-1/5">語法維度</th>
+                                                <th className="py-3.5 px-3 font-black text-rose-900 bg-rose-50/90 w-[26.6%]">🌸 主格助詞 (이 / 가)</th>
+                                                <th className="py-3.5 px-3 font-black text-amber-950 bg-amber-50/90 w-[26.6%]">🍮 主題助詞 (은 / 는)</th>
+                                                <th className="py-3.5 px-3 font-black text-sky-900 bg-sky-50/90 w-[26.6%]">🐶 受格助詞 (을 / 를)</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-rose-100">
                                             {/* 1. 核心定義與角色 */}
                                             <tr className="hover:bg-rose-50/40 transition-colors">
-                                                <td className="py-4 px-4 font-black text-gray-800">
+                                                <td className="py-4 px-3 font-black text-gray-800">
                                                     🎯 核心角色與定義
                                                 </td>
-                                                <td className="py-4 px-4 bg-rose-50/20 space-y-1.5">
-                                                    <div>• 標記句子<strong>主語/主體</strong>（誰做的、什麼狀態）</div>
+                                                <td className="py-4 px-3 bg-rose-50/20 space-y-1.5">
+                                                    <div>• 標記句子<strong>主語/主體</strong>（誰做的、眼前什麼狀態）</div>
                                                     <div>• 強調<strong>排他焦點</strong>（就是這個人/物，非別人）</div>
+                                                    <div>• 回答「<strong>誰/哪個？</strong>（누가? / 무엇이?）」</div>
                                                 </td>
-                                                <td className="py-4 px-4 bg-sky-50/20 space-y-1.5">
+                                                <td className="py-4 px-3 bg-amber-50/20 space-y-1.5">
+                                                    <div>• 標記句子<strong>主題/話頭</strong>（「說到...呢 / 至於...」）</div>
+                                                    <div>• 強調<strong>前後對比</strong>與<strong>自我介紹</strong></div>
+                                                    <div>• 焦點在<strong>後方的說明</strong>（這個事物怎麼樣？）</div>
+                                                </td>
+                                                <td className="py-4 px-3 bg-sky-50/20 space-y-1.5">
                                                     <div>• 標記及物動詞的<strong>受詞/賓語</strong>（動作施加對象）</div>
                                                     <div>• 回答「<strong>做什麼？</strong>（무엇을 해요?）」的對象</div>
+                                                    <div>• 口語隨意聊天常可自然省略</div>
                                                 </td>
                                             </tr>
 
                                             {/* 2. 收音接續規則 */}
                                             <tr className="hover:bg-rose-50/40 transition-colors">
-                                                <td className="py-4 px-4 font-black text-gray-800">
+                                                <td className="py-4 px-3 font-black text-gray-800">
                                                     🧱 收音接續規則
                                                 </td>
-                                                <td className="py-4 px-4 bg-rose-50/20 space-y-2.5">
-                                                    <div>• <strong>有收音</strong>接 <span className="kr-font font-black text-rose-700 text-sm sm:text-base">-이</span>（觸發連音化）</div>
-                                                    <div className="space-y-1.5 pl-2">
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">선생님이</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(老師)</span>
+                                                <td className="py-4 px-3 bg-rose-50/20 space-y-2">
+                                                    <div>• <strong>有收音</strong>接 <span className="kr-font font-black text-rose-700 text-sm sm:text-base">-이</span></div>
+                                                    <div className="space-y-1 pl-1">
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">선생님이</span>
                                                             <AudioBtn text="선생님이" speed={1.0} color="rose" size="xs" />
                                                         </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">밥이</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(飯)</span>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">밥이</span>
                                                             <AudioBtn text="밥이" speed={1.0} color="rose" size="xs" />
                                                         </div>
                                                     </div>
                                                     <div>• <strong>無收音</strong>接 <span className="kr-font font-black text-rose-700 text-sm sm:text-base">-가</span></div>
-                                                    <div className="space-y-1.5 pl-2">
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">친구가</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(朋友)</span>
+                                                    <div className="space-y-1 pl-1">
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">친구가</span>
                                                             <AudioBtn text="친구가" speed={1.0} color="rose" size="xs" />
                                                         </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">비가</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(雨)</span>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">비가</span>
                                                             <AudioBtn text="비가" speed={1.0} color="rose" size="xs" />
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="py-4 px-4 bg-sky-50/20 space-y-2.5">
-                                                    <div>• <strong>有收音</strong>接 <span className="kr-font font-black text-sky-700 text-sm sm:text-base">-을</span>（觸發連音化）</div>
-                                                    <div className="space-y-1.5 pl-2">
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">책을</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(書)</span>
+                                                <td className="py-4 px-3 bg-amber-50/20 space-y-2">
+                                                    <div>• <strong>有收音</strong>接 <span className="kr-font font-black text-amber-800 text-sm sm:text-base">-은</span></div>
+                                                    <div className="space-y-1 pl-1">
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">선생님은</span>
+                                                            <AudioBtn text="선생님은" speed={1.0} color="amber" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">밥은</span>
+                                                            <AudioBtn text="밥은" speed={1.0} color="amber" size="xs" />
+                                                        </div>
+                                                    </div>
+                                                    <div>• <strong>無收音</strong>接 <span className="kr-font font-black text-amber-800 text-sm sm:text-base">-는</span></div>
+                                                    <div className="space-y-1 pl-1">
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">저는</span>
+                                                            <AudioBtn text="저는" speed={1.0} color="amber" size="xs" />
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">사과는</span>
+                                                            <AudioBtn text="사과는" speed={1.0} color="amber" size="xs" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="py-4 px-3 bg-sky-50/20 space-y-2">
+                                                    <div>• <strong>有收音</strong>接 <span className="kr-font font-black text-sky-700 text-sm sm:text-base">-을</span></div>
+                                                    <div className="space-y-1 pl-1">
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">책을</span>
                                                             <AudioBtn text="책을" speed={1.0} color="sky" size="xs" />
                                                         </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">밥을</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(飯)</span>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">밥을</span>
                                                             <AudioBtn text="밥을" speed={1.0} color="sky" size="xs" />
                                                         </div>
                                                     </div>
                                                     <div>• <strong>無收音</strong>接 <span className="kr-font font-black text-sky-700 text-sm sm:text-base">-를</span></div>
-                                                    <div className="space-y-1.5 pl-2">
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">영화를</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(電影)</span>
+                                                    <div className="space-y-1 pl-1">
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">영화를</span>
                                                             <AudioBtn text="영화를" speed={1.0} color="sky" size="xs" />
                                                         </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="kr-font font-black text-base sm:text-lg text-gray-900">커피를</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(咖啡)</span>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="kr-font font-black text-sm sm:text-base text-gray-900">커피를</span>
                                                             <AudioBtn text="커피를" speed={1.0} color="sky" size="xs" />
                                                         </div>
                                                     </div>
@@ -479,26 +549,36 @@
 
                                             {/* 3. 經典生活例句 */}
                                             <tr className="hover:bg-rose-50/40 transition-colors">
-                                                <td className="py-4 px-4 font-black text-gray-800">
+                                                <td className="py-4 px-3 font-black text-gray-800">
                                                     💬 經典生活例句
                                                 </td>
-                                                <td className="py-4 px-4 bg-rose-50/20 space-y-2">
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-sm sm:text-base text-gray-900">비가 와요.</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(下雨。)</span>
+                                                <td className="py-4 px-3 bg-rose-50/20 space-y-2">
+                                                    <div className="flex flex-wrap items-center gap-1.5">
+                                                        <span className="kr-font font-black text-xs sm:text-sm text-gray-900">비가 와요.</span>
                                                         <AudioBtn text="비가 와요." color="rose" size="xs" />
                                                     </div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-sm sm:text-base text-gray-900">밥이 맛있어요.</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(飯好吃。)</span>
+                                                    <div className="flex flex-wrap items-center gap-1.5">
+                                                        <span className="kr-font font-black text-xs sm:text-sm text-gray-900">밥이 맛있어요.</span>
                                                         <AudioBtn text="밥이 맛있어요." color="rose" size="xs" />
                                                     </div>
                                                 </td>
-                                                <td className="py-4 px-4 bg-sky-50/20 space-y-2">
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-sm sm:text-base text-gray-900">밥을 먹어요.</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(吃飯。)</span>
+                                                <td className="py-4 px-3 bg-amber-50/20 space-y-2">
+                                                    <div className="flex flex-wrap items-center gap-1.5">
+                                                        <span className="kr-font font-black text-xs sm:text-sm text-gray-900">저는 학생이에요.</span>
+                                                        <AudioBtn text="저는 학생이에요." color="amber" size="xs" />
+                                                    </div>
+                                                    <div className="flex flex-wrap items-center gap-1.5">
+                                                        <span className="kr-font font-black text-xs sm:text-sm text-gray-900">오늘은 날씨가 좋아요.</span>
+                                                        <AudioBtn text="오늘은 날씨가 좋아요." color="amber" size="xs" />
+                                                    </div>
+                                                </td>
+                                                <td className="py-4 px-3 bg-sky-50/20 space-y-2">
+                                                    <div className="flex flex-wrap items-center gap-1.5">
+                                                        <span className="kr-font font-black text-xs sm:text-sm text-gray-900">밥을 먹어요.</span>
                                                         <AudioBtn text="밥을 먹어요." color="sky" size="xs" />
                                                     </div>
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="kr-font font-black text-sm sm:text-base text-gray-900">영화를 봐요.</span> <span className="text-xs sm:text-sm text-gray-500 font-bold">(看電影。)</span>
+                                                    <div className="flex flex-wrap items-center gap-1.5">
+                                                        <span className="kr-font font-black text-xs sm:text-sm text-gray-900">영화를 봐요.</span>
                                                         <AudioBtn text="영화를 봐요." color="sky" size="xs" />
                                                     </div>
                                                 </td>
@@ -506,37 +586,48 @@
 
                                             {/* 4. 特殊變形 vs 口語縮合 */}
                                             <tr className="hover:bg-rose-50/40 transition-colors">
-                                                <td className="py-4 px-4 font-black text-gray-800">
+                                                <td className="py-4 px-3 font-black text-gray-800">
                                                     🪄 特殊變形 / 縮合
                                                 </td>
-                                                <td className="py-4 px-4 bg-rose-50/20 space-y-1.5">
+                                                <td className="py-4 px-3 bg-rose-50/20 space-y-1">
                                                     <div className="text-xs sm:text-sm font-bold text-rose-900">• <strong>代名詞 4 大變形：</strong></div>
-                                                    <div className="text-xs sm:text-sm text-gray-700">
-                                                        내가 <span className="text-gray-500 font-bold">(我)</span>、제가 <span className="text-gray-500 font-bold">(我/謙稱)</span>、네가/니가 <span className="text-gray-500 font-bold">(你)</span>、누가 <span className="text-gray-500 font-bold">(誰)</span>
+                                                    <div className="text-xs text-gray-700 leading-snug">
+                                                        내가(我)、제가(我/謙稱)、네가(你)、누가(誰)
                                                     </div>
                                                 </td>
-                                                <td className="py-4 px-4 bg-sky-50/20 space-y-1.5">
+                                                <td className="py-4 px-3 bg-amber-50/20 space-y-1">
+                                                    <div className="text-xs sm:text-sm font-bold text-amber-900">• <strong>口語 5 大縮合：</strong></div>
+                                                    <div className="text-xs text-gray-700 leading-snug">
+                                                        난(我)、전(我/謙稱)、넌(你)、이건(這個)、그건(那個)
+                                                    </div>
+                                                </td>
+                                                <td className="py-4 px-3 bg-sky-50/20 space-y-1">
                                                     <div className="text-xs sm:text-sm font-bold text-sky-900">• <strong>口語 5 大縮合：</strong></div>
-                                                    <div className="text-xs sm:text-sm text-gray-700">
-                                                        날 <span className="text-gray-500 font-bold">(我)</span>、절 <span className="text-gray-500 font-bold">(我/謙稱)</span>、널 <span className="text-gray-500 font-bold">(你)</span>、뭘 <span className="text-gray-500 font-bold">(什麼)</span>、이걸 <span className="text-gray-500 font-bold">(這個)</span>
+                                                    <div className="text-xs text-gray-700 leading-snug">
+                                                        날(我)、절(我/謙稱)、널(你)、뭘(什麼)、이걸(這個)
                                                     </div>
                                                 </td>
                                             </tr>
 
                                             {/* 5. 必備固定句型 */}
                                             <tr className="hover:bg-rose-50/40 transition-colors">
-                                                <td className="py-4 px-4 font-black text-gray-800">
-                                                    📜 必備句型
+                                                <td className="py-4 px-3 font-black text-gray-800">
+                                                    📜 必備句型 / 時機
                                                 </td>
-                                                <td className="py-4 px-4 bg-rose-50/20 space-y-1">
-                                                    <div className="text-xs sm:text-sm">• <strong>있다/없다</strong>（有/沒有）</div>
-                                                    <div className="text-xs sm:text-sm">• <strong>아니다</strong>（不是）/ <strong>되다</strong>（成為）</div>
-                                                    <div className="text-xs sm:text-sm">• <strong>좋다/싫다</strong>（喜歡/討厭 - 形容詞）</div>
+                                                <td className="py-4 px-3 bg-rose-50/20 space-y-1">
+                                                    <div className="text-xs">• <strong>있다/없다</strong>（有/無）</div>
+                                                    <div className="text-xs">• <strong>아니다</strong>（不是）/ <strong>되다</strong></div>
+                                                    <div className="text-xs">• <strong>좋다/싫다</strong>（形容詞）</div>
                                                 </td>
-                                                <td className="py-4 px-4 bg-sky-50/20 space-y-1">
-                                                    <div className="text-xs sm:text-sm">• <strong>좋아하다/싫어하다</strong>（喜歡/討厭 - 他動詞）</div>
-                                                    <div className="text-xs sm:text-sm">• <strong>먹다/마시다/보다/사다</strong> 等及物動詞</div>
-                                                    <div className="text-xs sm:text-sm">• 日常熟人對話可<strong>自然省略</strong></div>
+                                                <td className="py-4 px-3 bg-amber-50/20 space-y-1">
+                                                    <div className="text-xs">• <strong>저는 ~입니다/이에요</strong>（自我介紹）</div>
+                                                    <div className="text-xs">• <strong>A-은/는 ~, B-은/는 ~</strong>（強烈對比）</div>
+                                                    <div className="text-xs">• <strong>오늘은 ~</strong>（拋出新話題）</div>
+                                                </td>
+                                                <td className="py-4 px-3 bg-sky-50/20 space-y-1">
+                                                    <div className="text-xs">• <strong>좋아하다/싫어하다</strong>（他動詞）</div>
+                                                    <div className="text-xs">• <strong>먹다/마시다/보다/사다</strong></div>
+                                                    <div className="text-xs">• 日常熟人說話可<strong>自然省略</strong></div>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -545,21 +636,30 @@
                             </div>
 
                             {/* 三秒記憶神口訣卡 (大字體) */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                                <div className="sanrio-card rounded-3xl p-6 bg-gradient-to-r from-rose-100/70 to-rose-50/70 border border-rose-200">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+                                <div className="sanrio-card rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-rose-100/70 to-rose-50/70 border border-rose-200">
                                     <h4 className="font-black text-rose-900 text-base sm:text-lg flex items-center gap-2 mb-2">
                                         <span className="text-xl">🌸</span> 【主格 이/가 派神口訣】
                                     </h4>
-                                    <p className="text-sm sm:text-base font-bold text-rose-900 leading-relaxed">
+                                    <p className="text-xs sm:text-sm font-bold text-rose-900 leading-relaxed">
                                         「主角登場 <span className="underline font-black">이 / 가</span> 帶，有收音 <span className="font-black text-rose-950">이</span> 來無收 <span className="font-black text-rose-950">가</span>，代名詞變 <span className="font-black text-rose-950">내가/제가/네가/누가</span>，있다/없다/아니다 全綁定！」
                                     </p>
                                 </div>
 
-                                <div className="sanrio-card rounded-3xl p-6 bg-gradient-to-r from-sky-100/70 to-sky-50/70 border border-sky-200">
+                                <div className="sanrio-card rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-amber-100/70 to-amber-50/70 border border-amber-200">
+                                    <h4 className="font-black text-amber-950 text-base sm:text-lg flex items-center gap-2 mb-2">
+                                        <span className="text-xl">🍮</span> 【主題 은/는 派神口訣】
+                                    </h4>
+                                    <p className="text-xs sm:text-sm font-bold text-amber-950 leading-relaxed">
+                                        「提起主題 <span className="underline font-black">은 / 는</span> 帶，有收音 <span className="font-black text-amber-950">은</span> 來無收 <span className="font-black text-amber-950">는</span>，連音讀順 <span className="font-black text-amber-950">[선생니믄/채근]</span>，口語快嘴縮成 <span className="font-black text-amber-950">난/전/넌/이건</span>，對比主題超好用！」
+                                    </p>
+                                </div>
+
+                                <div className="sanrio-card rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-sky-100/70 to-sky-50/70 border border-sky-200">
                                     <h4 className="font-black text-sky-900 text-base sm:text-lg flex items-center gap-2 mb-2">
                                         <span className="text-xl">🐶</span> 【受格 을/를 派神口訣】
                                     </h4>
-                                    <p className="text-sm sm:text-base font-bold text-sky-900 leading-relaxed">
+                                    <p className="text-xs sm:text-sm font-bold text-sky-900 leading-relaxed">
                                         「動作對象 <span className="underline font-black">을 / 를</span> 牽，有收音 <span className="font-black text-sky-950">을</span> 來無收 <span className="font-black text-sky-950">를</span>，連音讀順 <span className="font-black text-sky-950">[채글/바블]</span>，口語快嘴縮成 <span className="font-black text-sky-950">날/절/널/뭘</span>！」
                                     </p>
                                 </div>
@@ -749,8 +849,215 @@
                         </div>
                     )}
 
-                    {/* ======================= PAGE 3: 🐶 大耳狗「受格 을/를 派」 ======================= */}
+                    {/* ======================= PAGE 3: 🍮 布丁狗「主題 은/는 派」 ======================= */}
                     {activeTab === 3 && (
+                        <div className="space-y-6 md:space-y-8 animate-fadeIn">
+                            <div className="sanrio-card rounded-3xl p-6 md:p-8 bg-gradient-to-br from-amber-50/90 via-white to-amber-50/50 border border-amber-200">
+                                <div className="flex items-center gap-3.5 mb-6">
+                                    <div className="w-14 h-14 rounded-2xl bg-amber-200 flex items-center justify-center text-3xl shadow-xs">
+                                        🍮
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-amber-950">🍮 主題助詞 (은 / 는) 深度樂園</h3>
+                                        <p className="text-xs sm:text-sm text-amber-800 font-semibold mt-0.5">標記聊天話題、自我介紹、強烈前後對比與 4 大口語縮合神技</p>
+                                    </div>
+                                </div>
+
+                                {/* 收音接續規則 */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-6">
+                                    <div className="p-5 rounded-2xl bg-white border border-amber-200 shadow-xs">
+                                        <div className="flex items-center justify-between mb-3">
+                                            <span className="px-3 py-1 bg-amber-100 text-amber-900 rounded-xl text-xs sm:text-sm font-black">情況 ①：名詞有收音 (終聲)</span>
+                                            <span className="text-xs sm:text-sm font-bold text-amber-700">接 -은 (連音化)</span>
+                                        </div>
+                                        <div className="space-y-3 mt-3">
+                                            <div className="flex items-center justify-between bg-amber-50/60 p-3 rounded-2xl">
+                                                <div>
+                                                    <span className="kr-font font-black text-base sm:text-xl text-amber-950">선생님은</span>
+                                                    <span className="text-xs sm:text-sm text-gray-500 font-bold ml-2">(老師呢 / 說到老師)</span>
+                                                    <div className="text-xs text-amber-700 font-bold mt-0.5">連音化讀作: [선생니믄]</div>
+                                                </div>
+                                                <AudioBtn text="선생님은" color="amber" size="sm" />
+                                            </div>
+                                            <div className="flex items-center justify-between bg-amber-50/60 p-3 rounded-2xl">
+                                                <div>
+                                                    <span className="kr-font font-black text-base sm:text-xl text-amber-950">밥은</span>
+                                                    <span className="text-xs sm:text-sm text-gray-500 font-bold ml-2">(飯呢 / 至於飯)</span>
+                                                    <div className="text-xs text-amber-700 font-bold mt-0.5">連音化讀作: [바븐]</div>
+                                                </div>
+                                                <AudioBtn text="밥은" color="amber" size="sm" />
+                                            </div>
+                                            <div className="flex items-center justify-between bg-amber-50/60 p-3 rounded-2xl">
+                                                <div>
+                                                    <span className="kr-font font-black text-base sm:text-xl text-amber-950">책은</span>
+                                                    <span className="text-xs sm:text-sm text-gray-500 font-bold ml-2">(書呢 / 說到書)</span>
+                                                    <div className="text-xs text-amber-700 font-bold mt-0.5">連音化讀作: [채근]</div>
+                                                </div>
+                                                <AudioBtn text="책은" color="amber" size="sm" />
+                                            </div>
+                                            <div className="flex items-center justify-between bg-amber-50/60 p-3 rounded-2xl">
+                                                <div>
+                                                    <span className="kr-font font-black text-base sm:text-xl text-amber-950">오늘은</span>
+                                                    <span className="text-xs sm:text-sm text-gray-500 font-bold ml-2">(今天呢 / 說到今天)</span>
+                                                    <div className="text-xs text-amber-700 font-bold mt-0.5">連音化讀作: [오느른]</div>
+                                                </div>
+                                                <AudioBtn text="오늘은" color="amber" size="sm" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-5 rounded-2xl bg-white border border-amber-200 shadow-xs">
+                                        <div className="flex items-center justify-between mb-3">
+                                            <span className="px-3 py-1 bg-amber-100 text-amber-900 rounded-xl text-xs sm:text-sm font-black">情況 ②：名詞無收音 (無終聲)</span>
+                                            <span className="text-xs sm:text-sm font-bold text-amber-700">直加 -는</span>
+                                        </div>
+                                        <div className="space-y-3 mt-3">
+                                            <div className="flex items-center justify-between bg-amber-50/60 p-3 rounded-2xl">
+                                                <div>
+                                                    <span className="kr-font font-black text-base sm:text-xl text-amber-950">저는</span>
+                                                    <span className="text-xs sm:text-sm text-gray-500 font-bold ml-2">(我 / 謙稱，說到我)</span>
+                                                    <div className="text-xs text-amber-700 font-bold mt-0.5">敬語對話自我介紹最常用</div>
+                                                </div>
+                                                <AudioBtn text="저는" color="amber" size="sm" />
+                                            </div>
+                                            <div className="flex items-center justify-between bg-amber-50/60 p-3 rounded-2xl">
+                                                <div>
+                                                    <span className="kr-font font-black text-base sm:text-xl text-amber-950">나는</span>
+                                                    <span className="text-xs sm:text-sm text-gray-500 font-bold ml-2">(我 / 平語，說到我)</span>
+                                                    <div className="text-xs text-amber-700 font-bold mt-0.5">平語熟人朋友對話常用</div>
+                                                </div>
+                                                <AudioBtn text="나는" color="amber" size="sm" />
+                                            </div>
+                                            <div className="flex items-center justify-between bg-amber-50/60 p-3 rounded-2xl">
+                                                <div>
+                                                    <span className="kr-font font-black text-base sm:text-xl text-amber-950">친구는</span>
+                                                    <span className="text-xs sm:text-sm text-gray-500 font-bold ml-2">(朋友呢 / 說到朋友)</span>
+                                                </div>
+                                                <AudioBtn text="친구는" color="amber" size="sm" />
+                                            </div>
+                                            <div className="flex items-center justify-between bg-amber-50/60 p-3 rounded-2xl">
+                                                <div>
+                                                    <span className="kr-font font-black text-base sm:text-xl text-amber-950">사과는</span>
+                                                    <span className="text-xs sm:text-sm text-gray-500 font-bold ml-2">(蘋果呢 / 至於蘋果)</span>
+                                                </div>
+                                                <AudioBtn text="사과는" color="amber" size="sm" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 4 大口語代名詞常見縮合卡 */}
+                                <div className="mt-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-amber-200/60 to-orange-100/60 border border-amber-300">
+                                    <div className="flex items-center gap-2.5 mb-2.5">
+                                        <span className="text-2xl">⚡</span>
+                                        <h4 className="font-black text-amber-950 text-base sm:text-lg">4 大口語極速縮合卡（日常對話與韓劇高頻必背！）</h4>
+                                    </div>
+                                    <p className="text-xs sm:text-sm text-amber-900 leading-relaxed font-medium">
+                                        韓國人在口語日常交流時，為了說話省力流暢，主題助詞常與代名詞/指示詞強烈縮合：
+                                    </p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5 mt-4">
+                                        <div className="bg-white p-3.5 rounded-2xl border border-amber-200 shadow-xs flex items-center justify-between">
+                                            <div>
+                                                <div className="text-xs text-gray-400">나는 (我) →</div>
+                                                <div className="kr-font font-black text-base sm:text-lg text-amber-800">난 <span className="text-xs text-gray-500 font-bold">(我)</span></div>
+                                                <div className="text-xs text-amber-600 font-bold mt-0.5">例: 난 괜찮아 (我沒事)</div>
+                                            </div>
+                                            <AudioBtn text="난 괜찮아" color="amber" size="xs" />
+                                        </div>
+
+                                        <div className="bg-white p-3.5 rounded-2xl border border-amber-200 shadow-xs flex items-center justify-between">
+                                            <div>
+                                                <div className="text-xs text-gray-400">저는 (我/謙稱) →</div>
+                                                <div className="kr-font font-black text-base sm:text-lg text-amber-800">전 <span className="text-xs text-gray-500 font-bold">(我)</span></div>
+                                                <div className="text-xs text-amber-600 font-bold mt-0.5">例: 전 학생이에요 (我是學生)</div>
+                                            </div>
+                                            <AudioBtn text="전 학생이에요" color="amber" size="xs" />
+                                        </div>
+
+                                        <div className="bg-white p-3.5 rounded-2xl border border-amber-200 shadow-xs flex items-center justify-between">
+                                            <div>
+                                                <div className="text-xs text-gray-400">너는 (你) →</div>
+                                                <div className="kr-font font-black text-base sm:text-lg text-amber-800">넌 <span className="text-xs text-gray-500 font-bold">(你)</span></div>
+                                                <div className="text-xs text-amber-600 font-bold mt-0.5">例: 넌 최고야 (你最棒)</div>
+                                            </div>
+                                            <AudioBtn text="넌 최고야" color="amber" size="xs" />
+                                        </div>
+
+                                        <div className="bg-white p-3.5 rounded-2xl border border-amber-200 shadow-xs flex items-center justify-between">
+                                            <div>
+                                                <div className="text-xs text-gray-400">이것은 / 그것은 →</div>
+                                                <div className="kr-font font-black text-base sm:text-lg text-amber-800">이건 / 그건 <span className="text-xs text-gray-500 font-bold">(這/那)</span></div>
+                                                <div className="text-xs text-amber-600 font-bold mt-0.5">例: 이건 뭐예요? (這是什麼)</div>
+                                            </div>
+                                            <AudioBtn text="이건 뭐예요?" color="amber" size="xs" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 3 大核心語法時機卡片 */}
+                                <div className="mt-6 p-5 sm:p-6 rounded-2xl bg-amber-100/50 border border-amber-200">
+                                    <h4 className="font-black text-amber-950 text-base sm:text-lg mb-4 flex items-center gap-2">
+                                        <span>🌟</span> 主題助詞 3 大核心使用時機
+                                    </h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                                        <div className="bg-white p-4 rounded-2xl border border-amber-100 shadow-xs">
+                                            <div className="text-xs sm:text-sm font-black text-amber-900 mb-1">① 自我介紹與普遍真理</div>
+                                            <div className="text-xs text-gray-500 mb-2">說明既定身份、國籍或客觀規律</div>
+                                            <div className="space-y-2">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="kr-font font-black text-sm text-gray-900">저는 대만 사람이에요</span>
+                                                    <AudioBtn text="저는 대만 사람이에요" color="amber" size="xs" />
+                                                </div>
+                                                <div className="text-xs text-gray-500 font-bold">(我是台灣人)</div>
+                                                <div className="flex items-center justify-between pt-1">
+                                                    <span className="kr-font font-black text-sm text-gray-900">지구는 둥글어요</span>
+                                                    <AudioBtn text="지구는 둥글어요" color="amber" size="xs" />
+                                                </div>
+                                                <div className="text-xs text-gray-500 font-bold">(地球是圓的)</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-white p-4 rounded-2xl border border-amber-100 shadow-xs">
+                                            <div className="text-xs sm:text-sm font-black text-amber-900 mb-1">② 拋出話頭 / 提起新話題</div>
+                                            <div className="text-xs text-gray-500 mb-2">相當於「說到...呢 / 至於...」</div>
+                                            <div className="space-y-2">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="kr-font font-black text-sm text-gray-900">오늘은 날씨가 좋아요</span>
+                                                    <AudioBtn text="오늘은 날씨가 좋아요" color="amber" size="xs" />
+                                                </div>
+                                                <div className="text-xs text-gray-500 font-bold">(今天天氣很好)</div>
+                                                <div className="flex items-center justify-between pt-1">
+                                                    <span className="kr-font font-black text-sm text-gray-900">한국은 지금 추워요?</span>
+                                                    <AudioBtn text="한국은 지금 추워요?" color="amber" size="xs" />
+                                                </div>
+                                                <div className="text-xs text-gray-500 font-bold">(韓國現在冷嗎？)</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-white p-4 rounded-2xl border border-amber-100 shadow-xs">
+                                            <div className="text-xs sm:text-sm font-black text-amber-900 mb-1">③ 前後對照與強烈對比</div>
+                                            <div className="text-xs text-gray-500 mb-2">A 是這樣，但 B 卻是那樣</div>
+                                            <div className="space-y-2">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="kr-font font-black text-sm text-gray-900">사과는 맛있어요</span>
+                                                    <AudioBtn text="사과는 맛있어요" color="amber" size="xs" />
+                                                </div>
+                                                <div className="text-xs text-gray-500 font-bold">(蘋果很好吃)</div>
+                                                <div className="flex items-center justify-between pt-1">
+                                                    <span className="kr-font font-black text-sm text-gray-900">바나나는 맛없어요</span>
+                                                    <AudioBtn text="바나나는 맛없어요" color="amber" size="xs" />
+                                                </div>
+                                                <div className="text-xs text-gray-500 font-bold">(但香蕉不好吃 - 強烈對比)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ======================= PAGE 4: 🐶 大耳狗「受格 을/를 派」 ======================= */}
+                    {activeTab === 4 && (
                         <div className="space-y-6 md:space-y-8 animate-fadeIn">
                             <div className="sanrio-card rounded-3xl p-6 md:p-8 bg-gradient-to-br from-sky-50/90 via-white to-sky-50/50 border border-sky-200">
                                 <div className="flex items-center gap-3.5 mb-6">
@@ -889,85 +1196,161 @@
                         </div>
                     )}
 
-                    {/* ======================= PAGE 4: 🥊 實戰 PK 對決台 ======================= */}
-                    {activeTab === 4 && (
+                    {/* ======================= PAGE 5: 🥊 實戰 PK 對決台 ======================= */}
+                    {activeTab === 5 && (
                         <div className="space-y-6 md:space-y-8 animate-fadeIn">
                             <div className="sanrio-card rounded-3xl p-6 md:p-8 border border-purple-200">
                                 <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                                     <div className="flex items-center gap-3.5">
-                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-200 to-sky-200 flex items-center justify-center text-3xl shadow-xs">
+                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-200 via-amber-200 to-sky-200 flex items-center justify-center text-3xl shadow-xs">
                                             🥊
                                         </div>
                                         <div>
                                             <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-800">助詞實戰大 PK 與完整句型拆解</h3>
-                                            <p className="text-xs sm:text-sm text-purple-700 font-semibold mt-0.5">魔王對決：좋다 (이/가) vs 좋아하다 (을/를) ✕ 完整語序積木屋</p>
+                                            <p className="text-xs sm:text-sm text-purple-700 font-semibold mt-0.5">世紀對決：이/가 vs 은/는 ✕ 魔王對決：좋다 vs 좋아하다 ✕ 完整語序積木屋</p>
                                         </div>
                                     </div>
 
                                     {/* 模式切換開關 */}
-                                    <div className="flex items-center p-1.5 bg-purple-50 rounded-2xl border border-purple-200 text-xs sm:text-sm font-bold">
+                                    <div className="flex flex-wrap items-center p-1.5 bg-purple-50 rounded-2xl border border-purple-200 text-xs sm:text-sm font-bold gap-1">
                                         <button
                                             onClick={() => setPkMode('both')}
-                                            className={`px-3.5 py-2 rounded-xl transition-all ${pkMode === 'both' ? 'bg-purple-600 text-white shadow-sm' : 'text-gray-600 hover:text-purple-600'}`}
+                                            className={`px-3 py-2 rounded-xl transition-all ${pkMode === 'both' ? 'bg-purple-600 text-white shadow-sm' : 'text-gray-600 hover:text-purple-600'}`}
                                         >
-                                            🌟 雙向對照
+                                            🌟 全景對照
+                                        </button>
+                                        <button
+                                            onClick={() => setPkMode('versus')}
+                                            className={`px-3 py-2 rounded-xl transition-all ${pkMode === 'versus' ? 'bg-indigo-600 text-white shadow-sm' : 'text-gray-600 hover:text-indigo-600'}`}
+                                        >
+                                            ⚔️ 이/가 vs 은/는
                                         </button>
                                         <button
                                             onClick={() => setPkMode('subject')}
-                                            className={`px-3.5 py-2 rounded-xl transition-all ${pkMode === 'subject' ? 'bg-rose-500 text-white shadow-sm' : 'text-gray-600 hover:text-rose-600'}`}
+                                            className={`px-3 py-2 rounded-xl transition-all ${pkMode === 'subject' ? 'bg-rose-500 text-white shadow-sm' : 'text-gray-600 hover:text-rose-600'}`}
                                         >
-                                            🌸 主格模式
+                                            🌸 主格
+                                        </button>
+                                        <button
+                                            onClick={() => setPkMode('topic')}
+                                            className={`px-3 py-2 rounded-xl transition-all ${pkMode === 'topic' ? 'bg-amber-600 text-white shadow-sm' : 'text-gray-600 hover:text-amber-600'}`}
+                                        >
+                                            🍮 主題
                                         </button>
                                         <button
                                             onClick={() => setPkMode('object')}
-                                            className={`px-3.5 py-2 rounded-xl transition-all ${pkMode === 'object' ? 'bg-sky-500 text-white shadow-sm' : 'text-gray-600 hover:text-sky-600'}`}
+                                            className={`px-3 py-2 rounded-xl transition-all ${pkMode === 'object' ? 'bg-sky-500 text-white shadow-sm' : 'text-gray-600 hover:text-sky-600'}`}
                                         >
-                                            🐶 受格模式
+                                            🐶 受格
                                         </button>
                                     </div>
                                 </div>
 
-                                {/* 經典魔王對決卡片 */}
-                                <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-rose-50 via-purple-50 to-sky-50 border border-purple-200 shadow-xs mb-6">
-                                    <div className="flex items-center gap-2.5 mb-3">
-                                        <span className="text-2xl">🔥</span>
-                                        <h4 className="font-black text-purple-950 text-base sm:text-lg">魔王對決：좋다 (形容詞) vs 좋아하다 (他動詞)</h4>
-                                    </div>
-                                    <p className="text-xs sm:text-sm text-purple-900 leading-relaxed font-medium mb-4">
-                                        同樣表達「喜歡」，韓國人依據詞性嚴格區分助詞搭配，絕不能混用：
-                                    </p>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="p-4 rounded-2xl bg-white border border-rose-200 shadow-xs">
-                                            <div className="text-xs sm:text-sm font-bold text-rose-900 mb-1 flex items-center justify-between">
-                                                <span>🌸 좋다（形容詞：好 / 喜愛）</span>
-                                                <span className="text-xs bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-black">必接 이/가</span>
-                                            </div>
-                                            <div className="kr-font text-lg sm:text-xl font-black text-rose-700">한국 영화가 좋아요.</div>
-                                            <div className="text-xs sm:text-sm text-gray-600 mt-2 flex items-center justify-between">
-                                                <span className="font-bold">韓國電影很棒 / 我喜歡韓國電影。</span>
-                                                <AudioBtn text="한국 영화가 좋아요." color="rose" size="xs" />
-                                            </div>
+                                {/* 世紀對決 1: 【主格 이/가】vs【主題 은/는】終極解密 */}
+                                {(pkMode === 'both' || pkMode === 'versus' || pkMode === 'subject' || pkMode === 'topic') && (
+                                    <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-rose-50 via-amber-50 to-orange-50 border-2 border-amber-300 shadow-xs mb-6">
+                                        <div className="flex items-center gap-2.5 mb-3">
+                                            <span className="text-2xl">🔥</span>
+                                            <h4 className="font-black text-amber-950 text-base sm:text-lg">世紀大對決：【主格 이/가】vs【主題 은/는】（初學者最易搞混的終極解密）</h4>
                                         </div>
+                                        <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-medium mb-4">
+                                            韓語中最常被問到的經典疑問：「到底什麼時候用 이/가，什麼時候用 은/는？」核心秘訣在於<strong>「焦點放在哪裡」</strong>：
+                                        </p>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="p-4 rounded-2xl bg-white border border-rose-300 shadow-xs">
+                                                <div className="text-xs sm:text-sm font-bold text-rose-900 mb-1 flex items-center justify-between">
+                                                    <span>🌸 主格 이 / 가（焦點在前面）</span>
+                                                    <span className="text-xs bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-black">回答「誰？」</span>
+                                                </div>
+                                                <div className="text-xs text-rose-800 font-bold mb-2">重點在<strong>「是誰做的/哪個主體」</strong>，具有<strong>排他性</strong>或表示<strong>眼前目擊的新訊息</strong>：</div>
+                                                <div className="bg-rose-50/70 p-3 rounded-xl space-y-2">
+                                                    <div>
+                                                        <div className="kr-font font-black text-base sm:text-lg text-rose-950">누가 왔어요? ➔ 민수가 왔어요!</div>
+                                                        <div className="text-xs text-gray-600 font-bold">誰來了？➔ 是民洙來了！（強調來的是民洙，不是別人）</div>
+                                                        <div className="mt-1 flex justify-end">
+                                                            <AudioBtn text="민수가 왔어요!" color="rose" size="xs" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="pt-2 border-t border-rose-100">
+                                                        <div className="kr-font font-black text-base sm:text-lg text-rose-950">비가 와요!</div>
+                                                        <div className="text-xs text-gray-600 font-bold">下雨了！（眼前目擊剛剛發生的客觀自然現象）</div>
+                                                        <div className="mt-1 flex justify-end">
+                                                            <AudioBtn text="비가 와요!" color="rose" size="xs" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                        <div className="p-4 rounded-2xl bg-white border border-sky-200 shadow-xs">
-                                            <div className="text-xs sm:text-sm font-bold text-sky-900 mb-1 flex items-center justify-between">
-                                                <span>🐶 좋아하다（他動詞：喜愛）</span>
-                                                <span className="text-xs bg-sky-100 text-sky-800 px-2 py-0.5 rounded font-black">必接 을/를</span>
-                                            </div>
-                                            <div className="kr-font text-lg sm:text-xl font-black text-sky-700">한국 영화를 좋아해요.</div>
-                                            <div className="text-xs sm:text-sm text-gray-600 mt-2 flex items-center justify-between">
-                                                <span className="font-bold">我喜歡韓國電影。</span>
-                                                <AudioBtn text="한국 영화를 좋아해요." color="sky" size="xs" />
+                                            <div className="p-4 rounded-2xl bg-white border border-amber-300 shadow-xs">
+                                                <div className="text-xs sm:text-sm font-bold text-amber-950 mb-1 flex items-center justify-between">
+                                                    <span>🍮 主題 은 / 는（焦點在後面）</span>
+                                                    <span className="text-xs bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-black">回答「怎麼樣？」</span>
+                                                </div>
+                                                <div className="text-xs text-amber-900 font-bold mb-2">重點在<strong>「後方的說明內容」</strong>，代表<strong>舊資訊/既定話題</strong>或<strong>前後對比</strong>：</div>
+                                                <div className="bg-amber-50/70 p-3 rounded-xl space-y-2">
+                                                    <div>
+                                                        <div className="kr-font font-black text-base sm:text-lg text-amber-950">민수는 뭐 해요? ➔ 민수는 자요.</div>
+                                                        <div className="text-xs text-gray-600 font-bold">說到民洙他在做什麼？➔ 民洙呢，他在睡覺。（焦點在睡覺）</div>
+                                                        <div className="mt-1 flex justify-end">
+                                                            <AudioBtn text="민수는 자요." color="amber" size="xs" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="pt-2 border-t border-amber-100">
+                                                        <div className="kr-font font-black text-base sm:text-lg text-amber-950">사과는 맛있어요, 하지만 바나나는...</div>
+                                                        <div className="text-xs text-gray-600 font-bold">蘋果很好吃，但香蕉呢...（前後對比）</div>
+                                                        <div className="mt-1 flex justify-end">
+                                                            <AudioBtn text="사과는 맛있어요" color="amber" size="xs" />
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                )}
+
+                                {/* 經典魔王對決卡片 2: 좋다 vs 좋아하다 */}
+                                {(pkMode === 'both' || pkMode === 'subject' || pkMode === 'object') && (
+                                    <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-rose-50 via-purple-50 to-sky-50 border border-purple-200 shadow-xs mb-6">
+                                        <div className="flex items-center gap-2.5 mb-3">
+                                            <span className="text-2xl">🔥</span>
+                                            <h4 className="font-black text-purple-950 text-base sm:text-lg">魔王對決：좋다 (形容詞) vs 좋아하다 (他動詞)</h4>
+                                        </div>
+                                        <p className="text-xs sm:text-sm text-purple-900 leading-relaxed font-medium mb-4">
+                                            同樣表達「喜歡」，韓國人依據詞性嚴格區分助詞搭配，絕不能混用：
+                                        </p>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="p-4 rounded-2xl bg-white border border-rose-200 shadow-xs">
+                                                <div className="text-xs sm:text-sm font-bold text-rose-900 mb-1 flex items-center justify-between">
+                                                    <span>🌸 좋다（形容詞：好 / 喜愛）</span>
+                                                    <span className="text-xs bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-black">必接 이/가</span>
+                                                </div>
+                                                <div className="kr-font text-lg sm:text-xl font-black text-rose-700">한국 영화가 좋아요.</div>
+                                                <div className="text-xs sm:text-sm text-gray-600 mt-2 flex items-center justify-between">
+                                                    <span className="font-bold">韓國電影很棒 / 我喜歡韓國電影。</span>
+                                                    <AudioBtn text="한국 영화가 좋아요." color="rose" size="xs" />
+                                                </div>
+                                            </div>
+
+                                            <div className="p-4 rounded-2xl bg-white border border-sky-200 shadow-xs">
+                                                <div className="text-xs sm:text-sm font-bold text-sky-900 mb-1 flex items-center justify-between">
+                                                    <span>🐶 좋아하다（他動詞：喜愛）</span>
+                                                    <span className="text-xs bg-sky-100 text-sky-800 px-2 py-0.5 rounded font-black">必接 을/를</span>
+                                                </div>
+                                                <div className="kr-font text-lg sm:text-xl font-black text-sky-700">한국 영화를 좋아해요.</div>
+                                                <div className="text-xs sm:text-sm text-gray-600 mt-2 flex items-center justify-between">
+                                                    <span className="font-bold">我喜歡韓國電影。</span>
+                                                    <AudioBtn text="한국 영화를 좋아해요." color="sky" size="xs" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* 完整主賓動句構拆解 */}
                                 <div className="space-y-5">
                                     <div className="p-5 rounded-3xl bg-white border border-purple-100 shadow-xs space-y-4">
                                         <div className="flex items-center justify-between">
-                                            <span className="font-black text-xs sm:text-sm text-purple-900 bg-purple-100 px-3.5 py-1.5 rounded-full">情境 ①：完整主賓動句子積木拆解</span>
+                                            <span className="font-black text-xs sm:text-sm text-purple-900 bg-purple-100 px-3.5 py-1.5 rounded-full">情境 ①：主格 + 受格 + 動詞（民洙在吃蘋果）</span>
                                             <span className="text-xs text-gray-500">主語 + 受詞 + 動詞</span>
                                         </div>
                                         
@@ -999,19 +1382,19 @@
                                     {/* 情境 2 */}
                                     <div className="p-5 rounded-3xl bg-white border border-purple-100 shadow-xs space-y-4">
                                         <div className="flex items-center justify-between">
-                                            <span className="font-black text-xs sm:text-sm text-purple-900 bg-purple-100 px-3.5 py-1.5 rounded-full">情境 ②：朋友在咖啡館喝咖啡</span>
-                                            <span className="text-xs text-gray-500">主語 + 受詞 + 動詞</span>
+                                            <span className="font-black text-xs sm:text-sm text-amber-900 bg-amber-100 px-3.5 py-1.5 rounded-full">情境 ②：主題 + 受格 + 動詞（我在喝咖啡）</span>
+                                            <span className="text-xs text-gray-500">主題 + 受詞 + 動詞</span>
                                         </div>
                                         
-                                        <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-200">
+                                        <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200">
                                             <div className="text-center mb-3">
-                                                <span className="kr-font text-xl sm:text-2xl font-black text-purple-950">친구가 커피를 마셔요.</span>
-                                                <div className="text-sm font-bold text-purple-800 mt-1">朋友在喝咖啡。</div>
+                                                <span className="kr-font text-xl sm:text-2xl font-black text-amber-950">저는 커피를 마셔요.</span>
+                                                <div className="text-sm font-bold text-amber-800 mt-1">說到我呢，我在喝咖啡。</div>
                                             </div>
                                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-3 text-xs sm:text-sm">
-                                                <div className="bg-rose-100 p-3 rounded-xl text-center border border-rose-200">
-                                                    <div className="font-black text-rose-900">친구 + 가</div>
-                                                    <div className="text-xs text-rose-700 font-bold">主語（誰在喝）</div>
+                                                <div className="bg-amber-100 p-3 rounded-xl text-center border border-amber-300">
+                                                    <div className="font-black text-amber-900">저 + 는 (전)</div>
+                                                    <div className="text-xs text-amber-700 font-bold">主題（說到我）</div>
                                                 </div>
                                                 <div className="bg-sky-100 p-3 rounded-xl text-center border border-sky-200">
                                                     <div className="font-black text-sky-900">커피 + 를</div>
@@ -1023,7 +1406,39 @@
                                                 </div>
                                             </div>
                                             <div className="mt-3 flex justify-end">
-                                                <AudioBtn text="친구가 커피를 마셔요." color="purple" size="sm" />
+                                                <AudioBtn text="저는 커피를 마셔요." color="amber" size="sm" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 情境 3: 雙重主語經典結構 */}
+                                    <div className="p-5 rounded-3xl bg-white border border-purple-100 shadow-xs space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-black text-xs sm:text-sm text-indigo-900 bg-indigo-100 px-3.5 py-1.5 rounded-full">情境 ③：大主題 은/는 + 小主語 이/가 雙重主語句（今天天氣很好）</span>
+                                            <span className="text-xs text-gray-500">大主題 + 小主語 + 形容詞</span>
+                                        </div>
+                                        
+                                        <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200">
+                                            <div className="text-center mb-3">
+                                                <span className="kr-font text-xl sm:text-2xl font-black text-indigo-950">오늘은 날씨가 좋아요.</span>
+                                                <div className="text-sm font-bold text-indigo-800 mt-1">今天天氣很好。（大主題：今天，小主語：天氣，狀態：好）</div>
+                                            </div>
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-3 text-xs sm:text-sm">
+                                                <div className="bg-amber-100 p-3 rounded-xl text-center border border-amber-300">
+                                                    <div className="font-black text-amber-900">오늘 + 은</div>
+                                                    <div className="text-xs text-amber-700 font-bold">大主題（說到今天）</div>
+                                                </div>
+                                                <div className="bg-rose-100 p-3 rounded-xl text-center border border-rose-200">
+                                                    <div className="font-black text-rose-900">날씨 + 가</div>
+                                                    <div className="text-xs text-rose-700 font-bold">小主語（天氣）</div>
+                                                </div>
+                                                <div className="bg-indigo-100 p-3 rounded-xl text-center border border-indigo-200">
+                                                    <div className="font-black text-indigo-900">좋아요</div>
+                                                    <div className="text-xs text-indigo-700 font-bold">形容詞（好）</div>
+                                                </div>
+                                            </div>
+                                            <div className="mt-3 flex justify-end">
+                                                <AudioBtn text="오늘은 날씨가 좋아요." color="indigo" size="sm" />
                                             </div>
                                         </div>
                                     </div>
@@ -1032,8 +1447,8 @@
                         </div>
                     )}
 
-                    {/* ======================= PAGE 5: 🎮 隨堂星級小測驗 ======================= */}
-                    {activeTab === 5 && (
+                    {/* ======================= PAGE 6: 🎮 隨堂星級小測驗 ======================= */}
+                    {activeTab === 6 && (
                         <div className="space-y-6 md:space-y-8 animate-fadeIn">
                             <div className="sanrio-card rounded-3xl p-6 md:p-8 border border-purple-200">
                                 <div className="flex items-center justify-between mb-6">
@@ -1043,7 +1458,7 @@
                                         </div>
                                         <div>
                                             <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-purple-950">隨堂星級助詞自我挑戰測驗</h3>
-                                            <p className="text-xs sm:text-sm text-purple-700 font-semibold mt-0.5">5 道經典助詞考題，測測你的韓語主格與受格功力！</p>
+                                            <p className="text-xs sm:text-sm text-purple-700 font-semibold mt-0.5">7 道精選助詞考題，全面檢驗主格、主題與受格助詞掌握度！</p>
                                         </div>
                                     </div>
                                     {quizSubmitted && (
@@ -1119,20 +1534,20 @@
                                             disabled={Object.keys(quizAnswers).length < quizQuestions.length}
                                             className={`w-full sm:w-auto px-9 py-3.5 rounded-2xl font-black text-sm sm:text-base transition-all shadow-lg ${
                                                 Object.keys(quizAnswers).length === quizQuestions.length
-                                                    ? 'bg-gradient-to-r from-rose-500 to-sky-600 hover:from-rose-600 hover:to-sky-700 text-white shadow-rose-200 cursor-pointer active:scale-95'
+                                                    ? 'bg-gradient-to-r from-rose-500 via-amber-500 to-sky-600 hover:from-rose-600 hover:to-sky-700 text-white shadow-rose-200 cursor-pointer active:scale-95'
                                                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                             }`}
                                         >
                                             {Object.keys(quizAnswers).length === quizQuestions.length ? '✨ 送出答案並結算成績' : `請完成所有題目 (${Object.keys(quizAnswers).length}/${quizQuestions.length})`}
                                         </button>
                                     ) : (
-                                        <div className="w-full bg-gradient-to-r from-rose-100 via-pink-100 to-sky-100 p-5 rounded-3xl border border-rose-200 flex flex-wrap items-center justify-between gap-4">
+                                        <div className="w-full bg-gradient-to-r from-rose-100 via-amber-100 to-sky-100 p-5 rounded-3xl border border-rose-200 flex flex-wrap items-center justify-between gap-4">
                                             <div>
                                                 <div className="text-xs sm:text-sm font-bold text-rose-800">🎉 測驗結算</div>
                                                 <div className="text-lg sm:text-xl md:text-2xl font-black text-rose-950">
                                                     得分：{quizQuestions.reduce((acc, q) => (quizAnswers[q.id] !== undefined && q.options[quizAnswers[q.id]]?.isCorrect ? acc + 1 : acc), 0)} / {quizQuestions.length} 題
                                                     <span className="text-sm sm:text-base font-bold text-rose-800 ml-3 block sm:inline">
-                                                        {quizQuestions.reduce((acc, q) => (quizAnswers[q.id] !== undefined && q.options[quizAnswers[q.id]]?.isCorrect ? acc + 1 : acc), 0) >= 4 ? '🌟 太棒了！您已徹底掌握主格與受格助詞！' : '💪 繼續加油！多看幾次口訣就會熟練囉！'}
+                                                        {quizQuestions.reduce((acc, q) => (quizAnswers[q.id] !== undefined && q.options[quizAnswers[q.id]]?.isCorrect ? acc + 1 : acc), 0) >= 5 ? '🌟 太棒了！您已徹底掌握主格、主題與受格助詞！' : '💪 繼續加油！多看幾次口訣就會熟練囉！'}
                                                     </span>
                                                 </div>
                                             </div>
