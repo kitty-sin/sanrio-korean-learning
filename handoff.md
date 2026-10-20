@@ -155,7 +155,7 @@
       - 以輸入句子之謂語核心（如 `어떻다`、`먹다`、`보다`、`공部하다` 等）全自動發車，整句同步變形展開！
       - 提供時態分類膠囊（🌟 全部時態 12 格 / 🌞 現在式 / ⏳ 進行式 / 🌙 過去式 / 🚀 未來式）。
       - 每一張變形卡片皆配備：敬語階層徽章（👑 最高敬語 / 🌸 日常敬語 / 🐥 熟人平語）、前綴與變形動詞高對比透視、羅馬拼音、意涵說明、0.3x/0.7x/1.0x 三段速語音發音與 `[✍️ 練寫]` 捷徑。
-    - **離線與跨端同步**：升級 Service Worker 快取至 **`v1.0.66`**，同步資源至 `www/` 並執行 `npx cap sync android`。
+    - **離線與跨端同步**：升級 Service Worker 快取至 **`v1.0.67`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
 
 26. **🎨 智慧造句透視列車排版升級：【🎨 語法螢光筆透視開關】與 6 大時態分組卡片排版**：
@@ -177,7 +177,7 @@ px cap sync android。
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.66`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.67`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
 - **最新 Git Commit**：待提交
@@ -204,7 +204,7 @@ px cap sync android。
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-19 18:30 PT
+- **時間**：2026-10-19 18:37 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：本地已修改並驗證，待提交與推送
 

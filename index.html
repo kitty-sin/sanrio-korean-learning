@@ -2784,13 +2784,13 @@
             // 實時計算自動羅馬拼音預覽
             const autoPreviewRoman = romanizeHangul(newKr);
 
-            // 智慧發音翻譯與造句透視核心處理
+            // 智慧發音翻譯與造句透視核心處理 (雙軌極速：本地語法即時釋義 + Google 雙通道高階翻譯)
             const handleTranslateKorean = (text) => {
-                const clean = (text || '').trim();
+                const clean = (text || "").trim();
                 if (!clean) {
-                    setTransResult('');
-                    setTransRoman('');
-                    setTransSOV(null);
+                    setTransResult("");
+                    setTransRoman("");
+                    setTransSOV(null)
                     setGroupedSentences(null);
                     setTransMatrix([]);
                     setDictMatch(null);
@@ -2814,50 +2814,76 @@
                 const matrix = buildSentenceMatrix(clean, sov);
                 setTransMatrix(matrix);
 
-                // 4. 本地全量詞庫 (5,757 筆) 精確檢索
+                // 5. 本地全量詞庫 (5,757 筆) 精確檢索
                 const allVocabs = [
                     ...(window.KITTY_VOCAB_KITTY_ADD || []),
                     ...(window.KOREAN_VOCAB_5666 || [])
                 ];
-                const cleanWord = clean.replace(/[.,?!~]/g, '');
+                const cleanWord = clean.replace(/[.,?!~]/g, "");
                 const found = allVocabs.find(v => (v.k || v.kr) === cleanWord);
-                if (found) {
-                    setDictMatch(found);
-                } else {
-                    setDictMatch(null);
+                setDictMatch(found || null);
+
+                // 6. 本地即時語法釋義先行墊底 (0 延遲零白屏，永遠不留白)
+                let immediateZh = "";
+                if (found && found.c) {
+                    immediateZh = found.c.split(/[,;(]/)[0].trim();
+                } else if (grouped && grouped.present && grouped.present.zh) {
+                    immediateZh = grouped.present.zh;
+                } else if (grouped && grouped.baseForm && grouped.baseForm.zh) {
+                    immediateZh = grouped.baseForm.zh.replace("（詞典原形）", "").trim();
+                }
+                if (immediateZh) {
+                    setTransResult(immediateZh);
                 }
 
-                // 5. Google Translate 免費 API 防抖呼叫 (350ms)
+                // 7. 多線程雲端高階翻譯 API (Google Chrome Ext + gtx 雙通道防抖呼叫)
                 if (transDebounceRef.current) clearTimeout(transDebounceRef.current);
                 setIsTranslating(true);
 
                 transDebounceRef.current = setTimeout(async () => {
+                    let transText = "";
+
+                    // 通道 1: Google Dictionary Chrome Extension API (極速、零頻率限制)
                     try {
-                        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=zh-TW&dt=t&q=${encodeURIComponent(clean)}`;
-                        const res = await fetch(url);
-                        if (res.ok) {
-                            const data = await res.json();
-                            if (data && data[0] && Array.isArray(data[0])) {
-                                let transText = data[0].map(item => item[0]).join('');
-                                // OpenCC s2twp 繁體臺灣正體清洗
-                                if (window.KittySearch && window.KittySearch.toTrad) {
-                                    transText = window.KittySearch.toTrad(transText);
-                                }
-                                setTransResult(transText);
-                                setIsTranslating(false);
-                                return;
+                        const url1 = `https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=ko&tl=zh-TW&q=${encodeURIComponent(clean)}`;
+                        const res1 = await fetch(url1);
+                        if (res1.ok) {
+                            const data1 = await res1.json();
+                            if (Array.isArray(data1) && data1[0]) {
+                                transText = typeof data1[0] === "string" ? data1[0] : (Array.isArray(data1[0]) ? data1[0][0] : "");
                             }
                         }
                     } catch (e) {
-                        console.warn("Translation API fetch error:", e);
+                        console.warn("Translation API Channel 1 error:", e);
                     }
 
-                    // 離線或 API 異常時若有本地詞庫匹配，取字典中文
-                    if (found) {
-                        setTransResult(found.c);
+                    // 通道 2: Google gtx Web API (備用備援通道)
+                    if (!transText) {
+                        try {
+                            const url2 = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=zh-TW&dt=t&q=${encodeURIComponent(clean)}`;
+                            const res2 = await fetch(url2);
+                            if (res2.ok) {
+                                const data2 = await res2.json();
+                                if (data2 && data2[0] && Array.isArray(data2[0])) {
+                                    transText = data2[0].map(item => item[0]).join("");
+                                }
+                            }
+                        } catch (e) {
+                            console.warn("Translation API Channel 2 error:", e);
+                        }
+                    }
+
+                    // 繁體臺灣正體嚴謹清洗 (OpenCC s2twp)
+                    if (transText) {
+                        if (window.KittySearch && window.KittySearch.toTrad) {
+                            transText = window.KittySearch.toTrad(transText);
+                        }
+                        setTransResult(transText);
+                    } else if (immediateZh) {
+                        setTransResult(immediateZh);
                     }
                     setIsTranslating(false);
-                }, 350);
+                }, 300);
             };
 
             // 讀取 URL 參數（支援從詞庫一鍵跳轉積木屋、特定分頁或翻譯查詢）
@@ -5092,8 +5118,14 @@
                                         </div>
 
                                         {/* 繁體中文釋義主文字 */}
-                                        <div className="mt-4 p-5 rounded-2xl bg-indigo-50/30 border border-indigo-100/80 min-h-[140px] flex flex-col justify-center">
-                                            {isTranslating ? (
+                                        <div className="mt-4 p-5 rounded-2xl bg-indigo-50/30 border border-indigo-100/80 min-h-[140px] flex flex-col justify-center relative">
+                                            {isTranslating && (
+                                                <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 bg-white/90 border border-indigo-200 text-indigo-500 rounded-full text-xs font-bold shadow-2xs animate-pulse">
+                                                    <i className="fas fa-circle-notch fa-spin text-xs"></i>
+                                                    <span>即時連線中...</span>
+                                                </div>
+                                            )}
+                                            {(!transResult && isTranslating) ? (
                                                 <div className="flex items-center justify-center gap-2 text-indigo-400 py-6">
                                                     <i className="fas fa-spinner fa-spin text-xl"></i>
                                                     <span className="text-sm font-bold">正在取得即時繁體翻譯...</span>
