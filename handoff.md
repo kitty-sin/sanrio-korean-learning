@@ -155,13 +155,29 @@
       - 以輸入句子之謂語核心（如 `어떻다`、`먹다`、`보다`、`공部하다` 等）全自動發車，整句同步變形展開！
       - 提供時態分類膠囊（🌟 全部時態 12 格 / 🌞 現在式 / ⏳ 進行式 / 🌙 過去式 / 🚀 未來式）。
       - 每一張變形卡片皆配備：敬語階層徽章（👑 最高敬語 / 🌸 日常敬語 / 🐥 熟人平語）、前綴與變形動詞高對比透視、羅馬拼音、意涵說明、0.3x/0.7x/1.0x 三段速語音發音與 `[✍️ 練寫]` 捷徑。
-    - **離線與跨端同步**：升級 Service Worker 快取至 **`v1.0.64`**，同步資源至 `www/` 並執行 `npx cap sync android`。
+    - **離線與跨端同步**：升級 Service Worker 快取至 **`v1.0.65`**，同步資源至 `www/` 並執行 `npx cap sync android`。
 
+
+26. **🎨 智慧造句透視列車排版升級：【🎨 語法螢光筆透視開關】與 6 大時態分組卡片排版**：
+    - **完美對齊用戶指定樣式（圖 1 與圖 2）**：深度比照《KITTY 韓語造句積木列車》（sanrio_korean_sentences.html）高階排版。
+    - **【🎨 語法螢光筆 ✨ 開啟中】切換按鈕**：提供實時螢光高亮切換開關，開啟時在韓語助詞（은/는, 이/가, 에서/에, 을/를）與語尾（다, ㅂ니다/습니다, 아/어요, 았/었어요, 을 거예요 等）以及羅馬拼音上以黃底黑字圓角徽章（g-yellow-200/95 text-amber-950 font-black）鮮明標記；關閉時平滑呈現純淨文字。
+    - **📖 詞典原形 (Dictionary Form) 頂部總覽大卡**：清楚呈現整句原型拆解、助詞與語尾標記、讀音拼音與繁中翻譯，支援 🔊 朗讀、📋 複製、✍️ 觸控練寫。
+    - **6 大語法時態分組（每列 3 欄敬語對照）**：
+      1. ☀️ **現在式 (Present Tense)**
+      2. ⏳ **現在進行式 (Continuous Tense)**
+      3. 🌙 **過去式 (Past Tense)**
+      4. 🚀 **未來式 (Future Tense)**
+      5. 🔴 **否定句 (Negative Sentences)**
+      6. ❓ **疑問句 (Questions)**
+    - **三階敬語卡片**：各時態均並排呈現 👑 最高敬語 (습니다)、🌸 日常敬語 (해요體) [最常用推薦 ⭐]、👫 平語/半語 (반말)，每張卡片皆具備獨立朗讀、複製與原稿紙練寫。
+    - **頂部分類過濾列**：支援 🌟 全部時態、☀️ 現在式、⏳ 進行式、🌙 過去式、🚀 未來式、🔴 否定句、❓ 疑問句 快速切換。
+    - **離線與跨端同步**：升級 Service Worker 快取至 **1.0.65**，同步至 www/ 並執行 
+px cap sync android。
 ---
 
 ## 🚦 目前狀態
 
-- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.64`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
+- **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.65`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
 - **最新 Git Commit**：待提交
@@ -188,7 +204,7 @@
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-19 16:25 PT
+- **時間**：2026-10-19 17:35 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
 - **Git Push 狀態**：本地已修改並驗證，待提交與推送
 

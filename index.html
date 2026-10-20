@@ -1843,6 +1843,529 @@
             return kr;
         };
 
+        // ================= 語法螢光筆透視渲染組件 (Grammar Highlight Component) =================
+        function HighlightedSentence({ formObj, isHighlight = true, isLarge = false, textColClass = "text-amber-950", romColClass = "text-amber-800", krClass, romClass }) {
+            if (!formObj) return null;
+            const { kr, rom, parts } = formObj;
+            const finalKrClass = krClass || `${isLarge ? 'text-xl sm:text-2xl' : 'text-base sm:text-lg'} font-black kr-font ${textColClass} mb-1.5 leading-relaxed`;
+            const finalRomClass = romClass || `text-xs ${romColClass} font-bold`;
+
+            if (!isHighlight || !parts) {
+                return (
+                    <div>
+                        <div className={finalKrClass}>
+                            {kr}
+                        </div>
+                        <div className={finalRomClass}>
+                            [讀音] {rom}
+                        </div>
+                    </div>
+                );
+            }
+
+            const { sub, plc, obj, verb } = parts;
+
+            // 溫潤柔和金黃螢光筆樣式（清晰醒目且不傷眼、不干擾文字閱讀，完全對齊造句積木列車）
+            const hlKrClass = "bg-yellow-200/95 text-amber-950 px-1.5 py-0.5 rounded-md font-black border border-yellow-300/90 shadow-2xs mx-0.5 inline-block";
+            const hlRomClass = "bg-yellow-200/90 text-amber-950 px-1 py-0.2 rounded font-extrabold border border-yellow-300/70 shadow-2xs inline-block";
+
+            return (
+                <div>
+                    {/* 韓文句子 */}
+                    <div className={`${finalKrClass} flex flex-wrap items-center gap-x-2 gap-y-1.5`}>
+                        {sub && sub.word && (
+                            <span className="inline-flex items-center">
+                                <span>{sub.word}</span>
+                                {sub.particle && <span className={hlKrClass}>{sub.particle}</span>}
+                            </span>
+                        )}
+                        {plc && plc.word && (
+                            <span className="inline-flex items-center">
+                                <span>{plc.word}</span>
+                                {plc.particle && <span className={hlKrClass}>{plc.particle}</span>}
+                            </span>
+                        )}
+                        {obj && obj.word && (
+                            <span className="inline-flex items-center">
+                                <span>{obj.word}</span>
+                                {obj.particle && <span className={hlKrClass}>{obj.particle}</span>}
+                            </span>
+                        )}
+                        {verb && (
+                            <span className="inline-flex items-center">
+                                {verb.prefix && <span className={`${hlKrClass} mr-1`}>{verb.prefix.trim()}</span>}
+                                <span>{verb.stem}</span>
+                                {verb.ending && (
+                                    <>
+                                        {verb.ending.startsWith(' ') && <span>&nbsp;</span>}
+                                        <span className={hlKrClass}>{verb.ending.trim()}</span>
+                                    </>
+                                )}
+                            </span>
+                        )}
+                    </div>
+
+                    {/* 羅馬拼音 */}
+                    <div className={`text-xs ${romColClass} font-bold flex flex-wrap items-center gap-x-1.5 gap-y-1`}>
+                        <span className="opacity-80 font-black mr-0.5">[讀音]</span>
+                        {sub && sub.romWord && (
+                            <span className="inline-flex items-center">
+                                <span>{sub.romWord}{sub.romParticle ? '-' : ''}</span>
+                                {sub.romParticle && <span className={hlRomClass}>{sub.romParticle.trim()}</span>}
+                            </span>
+                        )}
+                        {plc && plc.romWord && (
+                            <span className="inline-flex items-center">
+                                <span>{plc.romWord}{plc.romParticle ? '-' : ''}</span>
+                                {plc.romParticle && <span className={hlRomClass}>{plc.romParticle.trim()}</span>}
+                            </span>
+                        )}
+                        {obj && obj.romWord && (
+                            <span className="inline-flex items-center">
+                                <span>{obj.romWord}{obj.romParticle ? '-' : ''}</span>
+                                {obj.romParticle && <span className={hlRomClass}>{obj.romParticle.trim()}</span>}
+                            </span>
+                        )}
+                        {verb && (
+                            <span className="inline-flex items-center">
+                                {verb.romPrefix && <span className={`${hlRomClass} mr-1`}>{verb.romPrefix.trim()}</span>}
+                                <span>{verb.romStem}</span>
+                                {verb.romEnding && (
+                                    <>
+                                        {verb.romEnding.startsWith(' ') ? <span>&nbsp;</span> : <span>-</span>}
+                                        <span className={hlRomClass}>{verb.romEnding.trim()}</span>
+                                    </>
+                                )}
+                            </span>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // 時態分組卡片組件 (3欄對照：最高敬語、日常敬語、平語)
+        function TenseGroupSection({ icon, title, zhDesc, tag, tagColor = "bg-amber-100 text-amber-900 border-amber-300", topTag, formal, informal, casual, isGrammarHighlight, onSpeak, onCopy }) {
+            return (
+                <div className="rounded-3xl p-5 sm:p-7 space-y-5 bg-white/95 border-2 border-amber-200/90 shadow-xs">
+                    <div className="flex items-center justify-between pb-3 border-b border-amber-200 flex-wrap gap-2">
+                        <div className="flex items-center gap-2">
+                            <span className="text-2xl">{icon}</span>
+                            <div>
+                                {topTag && (
+                                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                                        <span className="text-xs font-black bg-teal-600 text-white px-2.5 py-0.5 rounded-full shadow-2xs">
+                                            {topTag}
+                                        </span>
+                                        {zhDesc && <span className="text-xs sm:text-sm text-teal-900 font-extrabold">{zhDesc}</span>}
+                                    </div>
+                                )}
+                                <h3 className="text-lg sm:text-xl font-black text-amber-950">
+                                    {title}
+                                </h3>
+                                {!topTag && zhDesc && (
+                                    <p className="text-xs text-amber-700 font-bold">
+                                        中文意思：{zhDesc}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                        {tag && (
+                            <span className={`text-xs font-black px-3 py-1 rounded-full border ${tagColor}`}>
+                                {tag}
+                            </span>
+                        )}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* 1. 最高敬語 */}
+                        {formal && (
+                            <div className="bg-indigo-50/70 rounded-2xl p-4 border border-indigo-200 flex flex-col justify-between">
+                                <div>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-xs font-black text-indigo-900 bg-indigo-100 px-2 py-0.5 rounded-full">
+                                            👑 最高敬語 (습니다)
+                                        </span>
+                                    </div>
+                                    <HighlightedSentence formObj={formal} isHighlight={isGrammarHighlight} textColClass="text-indigo-950" romColClass="text-indigo-800" />
+                                </div>
+                                <div className="flex items-center gap-2 pt-3 border-t border-indigo-200/60 mt-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => onSpeak(formal.kr)}
+                                        className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer active:scale-95 transition-transform"
+                                    >
+                                        <span>🔊</span> 朗讀
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => onCopy(formal.kr)}
+                                        className="px-2.5 py-1 bg-white hover:bg-indigo-100 text-indigo-800 rounded-lg text-xs font-bold border border-indigo-200 cursor-pointer active:scale-95 transition-transform"
+                                        title="複製句子"
+                                    >
+                                        <i className="far fa-copy"></i>
+                                    </button>
+                                    <a
+                                        href={`https://korean-writing-1ec2a.web.app/?text=${encodeURIComponent(formal.kr)}&mode=essay&from=yoda`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="px-2.5 py-1 bg-white hover:bg-orange-50 text-orange-700 rounded-lg text-xs font-bold border border-orange-300 cursor-pointer flex items-center gap-1 transition-all hover:scale-105 active:scale-95"
+                                        title="送入 BB-8 韓語書寫樂園 15格原稿紙練習"
+                                    >
+                                        <span>✍️</span> <span>練寫</span>
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 2. 日常敬語 */}
+                        {informal && (
+                            <div className="bg-amber-50/80 rounded-2xl p-4 border-2 border-amber-400 shadow-xs flex flex-col justify-between relative">
+                                <span className="absolute -top-2.5 right-4 bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs">
+                                    最常用推薦 ⭐
+                                </span>
+                                <div>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-xs font-black text-amber-950 bg-amber-200 px-2 py-0.5 rounded-full">
+                                            🌸 日常敬語 (해요體)
+                                        </span>
+                                    </div>
+                                    <HighlightedSentence formObj={informal} isHighlight={isGrammarHighlight} textColClass="text-amber-950" romColClass="text-amber-900" />
+                                </div>
+                                <div className="flex items-center gap-2 pt-3 border-t border-amber-200 mt-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => onSpeak(informal.kr)}
+                                        className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer active:scale-95 transition-transform"
+                                    >
+                                        <span>🔊</span> 朗讀
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => onCopy(informal.kr)}
+                                        className="px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-900 rounded-lg text-xs font-bold border border-amber-300 cursor-pointer active:scale-95 transition-transform"
+                                        title="複製句子"
+                                    >
+                                        <i className="far fa-copy"></i>
+                                    </button>
+                                    <a
+                                        href={`https://korean-writing-1ec2a.web.app/?text=${encodeURIComponent(informal.kr)}&mode=essay&from=yoda`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="px-2.5 py-1 bg-white hover:bg-orange-50 text-orange-700 rounded-lg text-xs font-bold border border-orange-300 cursor-pointer flex items-center gap-1 transition-all hover:scale-105 active:scale-95"
+                                        title="送入 BB-8 韓語書寫樂園 15格原稿紙練習"
+                                    >
+                                        <span>✍️</span> <span>練寫</span>
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 3. 平語/半語 */}
+                        {casual && (
+                            <div className="bg-rose-50/70 rounded-2xl p-4 border border-rose-200 flex flex-col justify-between">
+                                <div>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-xs font-black text-rose-900 bg-rose-100 px-2 py-0.5 rounded-full">
+                                            👫 平語/半語 (반말)
+                                        </span>
+                                    </div>
+                                    <HighlightedSentence formObj={casual} isHighlight={isGrammarHighlight} textColClass="text-rose-950" romColClass="text-rose-800" />
+                                </div>
+                                <div className="flex items-center gap-2 pt-3 border-t border-rose-200/60 mt-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => onSpeak(casual.kr)}
+                                        className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer active:scale-95 transition-transform"
+                                    >
+                                        <span>🔊</span> 朗讀
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => onCopy(casual.kr)}
+                                        className="px-2.5 py-1 bg-white hover:bg-rose-100 text-rose-800 rounded-lg text-xs font-bold border border-rose-200 cursor-pointer active:scale-95 transition-transform"
+                                        title="複製句子"
+                                    >
+                                        <i className="far fa-copy"></i>
+                                    </button>
+                                    <a
+                                        href={`https://korean-writing-1ec2a.web.app/?text=${encodeURIComponent(casual.kr)}&mode=essay&from=yoda`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="px-2.5 py-1 bg-white hover:bg-orange-50 text-orange-700 rounded-lg text-xs font-bold border border-orange-300 cursor-pointer flex items-center gap-1 transition-all hover:scale-105 active:scale-95"
+                                        title="送入 BB-8 韓語書寫樂園 15格原稿紙練習"
+                                    >
+                                        <span>✍️</span> <span>練寫</span>
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // 句子成分細部拆解器 (拆解主語、地點、受語與其助詞)
+        const parseSentenceTokens = (text) => {
+            if (!text || typeof text !== 'string') return null;
+            const clean = text.trim();
+            if (!clean) return null;
+            const rawTokens = clean.split(/\s+/);
+            let sub = null, plc = null, obj = null, verb = null;
+            
+            rawTokens.forEach((raw, i) => {
+                const cleanWord = raw.replace(/[.,?!~]/g, '');
+                const isLast = (i === rawTokens.length - 1);
+                
+                if (cleanWord.endsWith('께서')) {
+                    const w = cleanWord.slice(0, -2);
+                    sub = { word: w, particle: '께서', romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: 'kke-seo' };
+                    return;
+                }
+                if (['내가', '제가', '네가', '누가'].includes(cleanWord)) {
+                    const w = cleanWord === '내가' ? '내' : (cleanWord === '제가' ? '제' : (cleanWord === '네가' ? '네' : '누'));
+                    sub = { word: w, particle: '가', romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: 'ga' };
+                    return;
+                }
+                if (['나는', '저는', '너는', '당신은', '우리는'].includes(cleanWord)) {
+                    const p = cleanWord.endsWith('은') ? '은' : '는';
+                    const w = cleanWord.slice(0, -1);
+                    sub = { word: w, particle: p, romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: p === '은' ? 'eun' : 'neun' };
+                    return;
+                }
+                if (cleanWord.endsWith('은') || cleanWord.endsWith('는') || cleanWord.endsWith('이') || cleanWord.endsWith('가')) {
+                    if (!isLast || rawTokens.length === 1) {
+                        const p = cleanWord.slice(-1);
+                        const w = cleanWord.slice(0, -1);
+                        const romP = p === '은' ? 'eun' : (p === '는' ? 'neun' : (p === '이' ? 'i' : 'ga'));
+                        sub = { word: w, particle: p, romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: romP };
+                        return;
+                    }
+                }
+                if (cleanWord.endsWith('에서') || cleanWord.endsWith('에') || cleanWord.endsWith('으로') || cleanWord.endsWith('로')) {
+                    if (!isLast) {
+                        let p = '', w = cleanWord;
+                        if (cleanWord.endsWith('에서')) { p = '에서'; w = cleanWord.slice(0, -2); }
+                        else if (cleanWord.endsWith('으로')) { p = '으로'; w = cleanWord.slice(0, -2); }
+                        else { p = cleanWord.slice(-1); w = cleanWord.slice(0, -1); }
+                        const romP = p === '에서' ? 'e-seo' : (p === '에' ? 'e' : (p === '으로' ? 'eu-ro' : 'ro'));
+                        plc = { word: w, particle: p, romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: romP };
+                        return;
+                    }
+                }
+                if (cleanWord.endsWith('을') || cleanWord.endsWith('를')) {
+                    const p = cleanWord.slice(-1);
+                    const w = cleanWord.slice(0, -1);
+                    const romP = p === '을' ? 'eul' : 'reul';
+                    obj = { word: w, particle: p, romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: romP };
+                    return;
+                }
+                if (isLast) {
+                    verb = cleanWord;
+                }
+            });
+            return { sub, plc, obj, verb: verb || clean };
+        };
+
+        // 動詞結構化變形 (含 stem, ending, prefix, romStem, romEnding, romPrefix)
+        const smartConjugateDetailed = (verbObj, tense = 'present', honorific = 'informal', isQuestion = false, isNegative = false) => {
+            if (!verbObj) return { kr: '', stem: '', ending: '', prefix: '', rom: '', romStem: '', romEnding: '', romPrefix: '' };
+            const kr = verbObj.kr || verbObj;
+            const stem = verbObj.stem || (kr.endsWith('다') ? kr.slice(0, -1) : kr);
+            const prefix = isNegative ? '안 ' : '';
+            const romPrefix = isNegative ? 'an ' : '';
+
+            // ㅎ 不規則特殊處理 (如 어떻다, 그렇다)
+            if (stem === '어떻' || stem === '그렇') {
+                const isEo = (stem === '어떻');
+                const pfx = isEo ? '어' : '그';
+                const vowelChar = isEo ? '때' : '래';
+                const pastChar = isEo ? '땠' : '랬';
+                const futChar = isEo ? '떨' : '럴';
+                const romPfx = isEo ? 'eo-' : 'geu-';
+                const romVowel = isEo ? 'ttae' : 'rae';
+                const romPast = isEo ? 'ttaet' : 'raet';
+                const romFut = isEo ? 'tteol' : 'reol';
+
+                if (tense === 'base') {
+                    return { kr: prefix + kr, prefix, stem, ending: '다', rom: isEo ? 'eo-tteok-ta' : 'geu-reok-ta', romPrefix, romStem: isEo ? 'eo-tteok' : 'geu-reok', romEnding: 'da' };
+                }
+                if (tense === 'present') {
+                    if (honorific === 'formal') {
+                        const ending = isQuestion ? '습니까?' : '습니다.';
+                        return { kr: prefix + stem + ending, prefix, stem, ending, rom: isEo ? 'eo-tteo-seum-ni-kka?' : 'geu-reo-seum-ni-da', romPrefix, romStem: isEo ? 'eo-tteo' : 'geu-reo', romEnding: isQuestion ? 'seum-ni-kka?' : 'seum-ni-da' };
+                    }
+                    if (honorific === 'informal') {
+                        const ending = isQuestion ? '요?' : '요.';
+                        return { kr: prefix + pfx + vowelChar + ending, prefix, stem: pfx + vowelChar, ending, rom: romPfx + romVowel + '-' + (isQuestion ? 'yo?' : 'yo'), romPrefix, romStem: romPfx + romVowel, romEnding: isQuestion ? 'yo?' : 'yo' };
+                    }
+                    const ending = isQuestion ? '?' : '';
+                    return { kr: prefix + pfx + vowelChar + ending, prefix, stem: pfx + vowelChar, ending, rom: romPfx + romVowel + (isQuestion ? '?' : ''), romPrefix, romStem: romPfx + romVowel, romEnding: isQuestion ? '?' : '' };
+                }
+                if (tense === 'continuous') {
+                    const ending = honorific === 'formal' ? (isQuestion ? '고 있습니까?' : '고 있습니다.') : (honorific === 'informal' ? (isQuestion ? '고 있어요?' : '고 있어요.') : (isQuestion ? '고 있어?' : '고 있어.'));
+                    const romEnding = honorific === 'formal' ? 'go ik-seum-ni-da' : (honorific === 'informal' ? 'go it-seo-yo' : 'go it-seo');
+                    return { kr: prefix + stem + ending, prefix, stem, ending, rom: (isEo ? 'eo-tteok-' : 'geu-reok-') + romEnding, romPrefix, romStem: isEo ? 'eo-tteok' : 'geu-reok', romEnding };
+                }
+                if (tense === 'past') {
+                    if (honorific === 'formal') {
+                        const ending = isQuestion ? '습니까?' : '습니다.';
+                        return { kr: prefix + pfx + pastChar + ending, prefix, stem: pfx + pastChar, ending, rom: romPfx + romPast + '-seum-ni-da', romPrefix, romStem: romPfx + romPast, romEnding: isQuestion ? 'seum-ni-kka?' : 'seum-ni-da' };
+                    }
+                    if (honorific === 'informal') {
+                        const ending = isQuestion ? '어요?' : '어요.';
+                        return { kr: prefix + pfx + pastChar + ending, prefix, stem: pfx + pastChar, ending, rom: romPfx + romPast + '-eo-yo', romPrefix, romStem: romPfx + romPast, romEnding: isQuestion ? 'eo-yo?' : 'eo-yo' };
+                    }
+                    const ending = isQuestion ? '어?' : '어.';
+                    return { kr: prefix + pfx + pastChar + ending, prefix, stem: pfx + pastChar, ending, rom: romPfx + romPast + '-eo', romPrefix, romStem: romPfx + romPast, romEnding: isQuestion ? 'eo?' : 'eo' };
+                }
+                if (tense === 'future') {
+                    if (honorific === 'formal') {
+                        const ending = isQuestion ? ' 겁니까?' : ' 겁니다.';
+                        return { kr: prefix + pfx + futChar + ending, prefix, stem: pfx + futChar, ending, rom: romPfx + romFut + ' geom-ni-da', romPrefix, romStem: romPfx + romFut, romEnding: isQuestion ? 'geom-ni-kka?' : 'geom-ni-da' };
+                    }
+                    if (honorific === 'informal') {
+                        const ending = isQuestion ? ' 거예요?' : ' 거예요.';
+                        return { kr: prefix + pfx + futChar + ending, prefix, stem: pfx + futChar, ending, rom: romPfx + romFut + ' geo-ye-yo', romPrefix, romStem: romPfx + romFut, romEnding: isQuestion ? 'geo-ye-yo?' : 'geo-ye-yo' };
+                    }
+                    const ending = isQuestion ? ' 거야?' : ' 거야.';
+                    return { kr: prefix + pfx + futChar + ending, prefix, stem: pfx + futChar, ending, rom: romPfx + romFut + ' geo-ya', romPrefix, romStem: romPfx + romFut, romEnding: isQuestion ? 'geo-ya?' : 'geo-ya' };
+                }
+            }
+
+            if (window.HangulEngine && window.HangulEngine.conjugateDetailed) {
+                return window.HangulEngine.conjugateDetailed(verbObj, tense, honorific, isQuestion, isNegative);
+            }
+            return { kr, prefix, stem, ending: '', rom: '', romPrefix, romStem: '', romEnding: '' };
+        };
+
+        // 全套分組造句火車生成器 (完全對齊 KITTY 韓語造句積木列車)
+        const buildGroupedSentences = (rawText, parsedSOV) => {
+            if (!rawText || !rawText.trim()) return null;
+            const isQuestion = rawText.includes('?');
+
+            const parts = parseSentenceTokens(rawText);
+            const subPart = parts ? parts.sub : null;
+            const plcPart = parts ? parts.plc : null;
+            const objPart = parts ? parts.obj : null;
+            const rawVerb = (parts && parts.verb) ? parts.verb : rawText.trim();
+
+            const verbObj = resolveVerbObject(rawVerb, isQuestion);
+            if (!verbObj) return null;
+
+            const makeSentenceForm = (subP, plcP, objP, vDet, label = "") => {
+                const krParts = [
+                    subP && subP.word ? subP.word + (subP.particle || '') : '',
+                    plcP && plcP.word ? plcP.word + (plcP.particle || '') : '',
+                    objP && objP.word ? objP.word + (objP.particle || '') : '',
+                    vDet ? vDet.kr : ''
+                ].filter(Boolean);
+                const kr = krParts.join(" ");
+
+                const romParts = [
+                    subP && subP.romWord ? subP.romWord + (subP.romParticle ? '-' + subP.romParticle : '') : '',
+                    plcP && plcP.romWord ? plcP.romWord + (plcP.romParticle ? '-' + plcP.romParticle : '') : '',
+                    objP && objP.romWord ? objP.romWord + (objP.romParticle ? '-' + objP.romParticle : '') : '',
+                    vDet ? (vDet.romPrefix ? vDet.romPrefix + vDet.rom : vDet.rom) : ''
+                ].filter(Boolean);
+                const rom = romParts.join(" ");
+
+                return {
+                    kr,
+                    rom,
+                    label,
+                    parts: {
+                        sub: subP,
+                        plc: plcP,
+                        obj: objP,
+                        verb: {
+                            prefix: vDet ? vDet.prefix : "",
+                            stem: vDet ? vDet.stem : "",
+                            ending: vDet ? vDet.ending : "",
+                            romPrefix: vDet ? vDet.romPrefix : "",
+                            romStem: vDet ? vDet.romStem : "",
+                            romEnding: vDet ? vDet.romEnding : ""
+                        }
+                    }
+                };
+            };
+
+            const getWordZh = (word) => {
+                if (!word) return '';
+                const clean = word.replace(/[.,?!~]/g, '');
+                const s = (window.SENTENCE_SUBJECTS || []).find(x => x.kr === clean);
+                if (s) return s.zh.split('/')[0].trim();
+                const p = (window.SENTENCE_PLACES || []).find(x => x.kr === clean);
+                if (p) return p.zh.split('/')[0].trim();
+                const o = (window.SENTENCE_OBJECTS || []).find(x => x.kr === clean);
+                if (o) return o.zh.split('/')[0].trim();
+                const v = (window.SENTENCE_VERBS || []).find(x => x.kr === clean || x.kr === clean + '다');
+                if (v) return v.zh.split('/')[0].trim();
+                if (window.KOREAN_VOCAB_5666) {
+                    const f = window.KOREAN_VOCAB_5666.find(x => x.k === clean);
+                    if (f && f.c) return f.c.split(/[,;(/]/)[0].trim();
+                }
+                return clean;
+            };
+
+            const subZh = subPart ? getWordZh(subPart.word) : '';
+            const plcZh = plcPart ? getWordZh(plcPart.word) : '';
+            const objZh = objPart ? getWordZh(objPart.word) : '';
+            const verbZh = verbObj.zh || getWordZh(verbObj.kr);
+
+            const pfxPlace = plcZh ? `在${plcZh}` : '';
+            const pfxObj = objZh || '';
+
+            // 原形
+            const baseForm = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "base", "formal"));
+            baseForm.zh = subZh ? `${subZh} ${pfxPlace ? pfxPlace + ' ' : ''}${pfxObj ? pfxObj + ' ' : ''}${verbZh}（詞典原形）` : `${verbZh}（詞典原形）`;
+
+            // 現在式
+            const presFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "formal"));
+            const presInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "informal"));
+            const presCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "casual"));
+            const presZh = subZh ? `${subZh}${pfxPlace}${verbZh}${pfxObj}。` : `${verbZh}${pfxObj}。`;
+
+            // 現在進行式
+            const contFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "continuous", "formal"));
+            const contInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "continuous", "informal"));
+            const contCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "continuous", "casual"));
+            const contZh = subZh ? `${subZh}正在${pfxPlace}${verbZh}${pfxObj}。` : `正在${verbZh}${pfxObj}。`;
+
+            // 過去式
+            const pastFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "past", "formal"));
+            const pastInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "past", "informal"));
+            const pastCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "past", "casual"));
+            const pastZh = subZh ? `${subZh}${pfxPlace}${verbZh}了${pfxObj}。` : `${verbZh}了${pfxObj}。`;
+
+            // 未來式
+            const futFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "future", "formal"));
+            const futInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "future", "informal"));
+            const futCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "future", "casual"));
+            const futZh = subZh ? `${subZh}打算${pfxPlace}${verbZh}${pfxObj}。` : `打算${verbZh}${pfxObj}。`;
+
+            // 否定句
+            const negFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "formal", false, true));
+            const negInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "informal", false, true));
+            const negCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "casual", false, true));
+            const negZh = subZh ? `${subZh}${pfxPlace}不${verbZh}${pfxObj}。（否定句）` : `不${verbZh}${pfxObj}。（否定句）`;
+
+            // 疑問句
+            const qFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "formal", true));
+            const qInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "informal", true));
+            const qCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "casual", true));
+            const qZh = pfxPlace ? `${pfxPlace}要${verbZh}${pfxObj}嗎？（疑問句）` : `要${verbZh}${pfxObj}嗎？（疑問句）`;
+
+            return {
+                baseForm,
+                present: { zh: presZh, formal: presFormal, informal: presInformal, casual: presCasual },
+                continuous: { zh: contZh, formal: contFormal, informal: contInformal, casual: contCasual },
+                past: { zh: pastZh, formal: pastFormal, informal: pastInformal, casual: pastCasual },
+                future: { zh: futZh, formal: futFormal, informal: futInformal, casual: futCasual },
+                negative: { zh: negZh, formal: negFormal, informal: negInformal, casual: negCasual },
+                question: { zh: qZh, formal: qFormal, informal: qInformal, casual: qCasual }
+            };
+        };
+
         // 4大時態 ✕ 3大敬語全自動發車矩陣生成器
         const buildSentenceMatrix = (rawText, parsedSOV) => {
             if (!rawText || !rawText.trim()) return [];
@@ -1978,15 +2501,17 @@
             const [quizFinished, setQuizFinished] = useState(false);
 
             // ==================== 🌐 智慧發音翻譯與造句透視 狀態 ====================
-            const [transInput, setTransInput] = useState('서울 날씨는 어떤가요?');
-            const [transResult, setTransResult] = useState('首爾的天氣怎麼樣？');
-            const [transRoman, setTransRoman] = useState('seoul nalssineun eotteongayo?');
+            const [transInput, setTransInput] = useState('동생은 우주관에서 달을 보다');
+            const [transResult, setTransResult] = useState('弟弟在太空館看月亮。');
+            const [transRoman, setTransRoman] = useState('dong-saeng-eun u-ju-gwan-e-seo dal-eul bo-da');
             const [isTranslating, setIsTranslating] = useState(false);
             const [transCopied, setTransCopied] = useState(false);
             const [transSpeed, setTransSpeed] = useState(1.0); // 1.0, 0.7, 0.3
+            const [isGrammarHighlight, setIsGrammarHighlight] = useState(true); // 🎨 語法螢光筆透視模式 (User Image 1)
             const [transSOV, setTransSOV] = useState(null);
+            const [groupedSentences, setGroupedSentences] = useState(null);
             const [transMatrix, setTransMatrix] = useState([]);
-            const [matrixFilter, setMatrixFilter] = useState('all'); // all, present, continuous, past, future
+            const [matrixFilter, setMatrixFilter] = useState('all'); // all, present, continuous, past, future, negative, question
             const [dictMatch, setDictMatch] = useState(null);
             const transDebounceRef = useRef(null);
 
@@ -2000,6 +2525,7 @@
                     setTransResult('');
                     setTransRoman('');
                     setTransSOV(null);
+                    setGroupedSentences(null);
                     setTransMatrix([]);
                     setDictMatch(null);
                     setIsTranslating(false);
@@ -2014,7 +2540,11 @@
                 const sov = parseKoreanSOV(clean);
                 setTransSOV(sov);
 
-                // 3. 即時展開 4大時態 ✕ 3大敬語全自動發車矩陣
+                // 3. 即時展開造句火車全套時態/形態分組 (完全對齊 KITTY 韓語造句積木列車)
+                const grouped = buildGroupedSentences(clean, sov);
+                setGroupedSentences(grouped);
+
+                // 4. 即時展開 4大時態 ✕ 3大敬語全自動發車矩陣
                 const matrix = buildSentenceMatrix(clean, sov);
                 setTransMatrix(matrix);
 
@@ -2102,7 +2632,7 @@
                     setTransInput(qParam);
                     handleTranslateKorean(qParam);
                 } else {
-                    handleTranslateKorean('서울 날씨는 어떤가요?');
+                    handleTranslateKorean('동생은 우주관에서 달을 보다');
                 }
             }, []);
 
@@ -4242,6 +4772,7 @@
                                             <span className="text-[11px] font-bold text-gray-400 block mb-1.5">💡 點擊快速試玩常用短句：</span>
                                             <div className="flex flex-wrap gap-1.5">
                                                 {[
+                                                    '동생은 우주관에서 달을 보다',
                                                     '서울 날씨는 어떤가요?',
                                                     '사과를 먹어요',
                                                     '가수를 보다',
@@ -4369,128 +4900,241 @@
                                 </div>
                             </div>
 
-                            {/* ==================== 🚂 4大時態 ✕ 3大敬語全自動發車變形矩陣 ==================== */}
-                            <div className="bg-white rounded-3xl p-5 md:p-7 shadow-sm border border-amber-200 space-y-5">
-                                <div className="flex justify-between items-center flex-wrap gap-2 pb-3 border-b border-amber-100">
-                                    <div>
-                                        <h3 className="text-lg md:text-xl font-bold text-amber-900 flex items-center gap-2">
-                                            <span>🚂</span> 4大時態 ✕ 3大敬語全自動發車矩陣
-                                        </h3>
-                                        <p className="text-xs text-amber-700 mt-0.5">
-                                            {transSOV && transSOV.verb ? (
-                                                <span>以輸入句子的謂語核心【 <span className="font-extrabold text-rose-600 kr-font">{transSOV.verb.raw}</span> 】全自動同步變形發車！</span>
-                                            ) : (
-                                                <span>整句同步變形發車，掌握韓國人日常對話的四大時態與三大敬語！</span>
-                                            )}
-                                        </p>
-                                    </div>
-                                    
+                            {/* ==================== 🚂 4大時態 ✕ 3大敬語全自動發車變形區 (完全對齊造句積木列車) ==================== */}
+                            <div className="space-y-6">
+                                {/* 頂部操作工具列：時態篩選膠囊 + 🎨 語法螢光筆透視開關 (User Image 1) */}
+                                <div className="flex flex-wrap items-center justify-between gap-3 bg-amber-50/90 p-3 sm:p-4 rounded-3xl border border-amber-200 shadow-xs">
                                     {/* 時態過濾膠囊按鈕 */}
-                                    <div className="flex flex-wrap gap-1.5 bg-amber-50/80 p-1 rounded-2xl border border-amber-200">
+                                    <div className="flex flex-wrap gap-1.5">
                                         {[
-                                            { key: 'all', label: '🌟 全部時態 (12格)' },
-                                            { key: 'present', label: '🌞 現在式' },
+                                            { key: 'all', label: '🌟 全部時態' },
+                                            { key: 'present', label: '☀️ 現在式' },
                                             { key: 'continuous', label: '⏳ 進行式' },
                                             { key: 'past', label: '🌙 過去式' },
-                                            { key: 'future', label: '🚀 未來式' }
+                                            { key: 'future', label: '🚀 未來式' },
+                                            { key: 'negative', label: '🔴 否定句' },
+                                            { key: 'question', label: '❓ 疑問句' }
                                         ].map(tab => (
                                             <button
                                                 key={tab.key}
+                                                type="button"
                                                 onClick={() => setMatrixFilter(tab.key)}
-                                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                                                className={`px-3 py-1.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
                                                     matrixFilter === tab.key
                                                     ? 'bg-amber-500 text-white shadow-xs'
-                                                    : 'text-amber-800 hover:bg-amber-100'
+                                                    : 'bg-white/80 text-amber-800 hover:bg-amber-100 border border-amber-200/60'
                                                 }`}
                                             >
                                                 {tab.label}
                                             </button>
                                         ))}
                                     </div>
+
+                                    {/* 🎨 語法螢光筆透視開關 (User Image 1) */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsGrammarHighlight(!isGrammarHighlight)}
+                                        className={`px-3.5 py-1.5 rounded-2xl text-xs sm:text-sm font-black border-2 transition-all flex items-center gap-2 cursor-pointer shadow-xs shrink-0 ${
+                                            isGrammarHighlight
+                                                ? 'bg-amber-100 text-amber-950 border-amber-400 ring-2 ring-yellow-400/50'
+                                                : 'bg-white/90 text-amber-800 border-amber-200 hover:bg-amber-100'
+                                        }`}
+                                        title="切換語法助詞與語尾螢光筆透視高亮"
+                                    >
+                                        <span>🎨</span>
+                                        <span>語法螢光筆</span>
+                                        <span className={`text-[11px] px-2 py-0.5 rounded-full font-black ${
+                                            isGrammarHighlight ? 'bg-amber-900 text-yellow-300' : 'bg-amber-200 text-amber-800'
+                                        }`}>
+                                            {isGrammarHighlight ? '✨ 開啟中' : '關閉'}
+                                        </span>
+                                    </button>
                                 </div>
 
-                                {/* 12 卡片網格 */}
-                                {transMatrix && transMatrix.length > 0 ? (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-                                        {transMatrix
-                                            .filter(item => matrixFilter === 'all' || item.tenseKey === matrixFilter)
-                                            .map(item => (
-                                                <div
-                                                    key={item.id}
-                                                    className={`rounded-2xl p-4 border transition-all hover:shadow-md flex flex-col justify-between space-y-3 ${item.color}`}
-                                                >
-                                                    {/* 卡片標頭：敬語徽章 + 時態 */}
-                                                    <div className="flex justify-between items-center">
-                                                        <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-white shadow-2xs border border-gray-200">
-                                                            {item.honorificBadge}
+                                {groupedSentences ? (
+                                    <div className="space-y-6">
+                                        {/* 📖 詞典原形 (Dictionary Form) 大卡 (User Image 2) */}
+                                        {(matrixFilter === 'all' || matrixFilter === 'present') && groupedSentences.baseForm && (
+                                            <div className="rounded-3xl p-5 bg-gradient-to-r from-amber-50 to-orange-50/50 border-2 border-amber-300 shadow-xs">
+                                                <div className="flex flex-wrap items-center justify-between gap-3">
+                                                    <div className="space-y-1.5 flex-1 min-w-[280px]">
+                                                        <span className="text-xs font-black text-amber-800 bg-amber-200/80 px-2.5 py-1 rounded-full inline-block">
+                                                            📖 詞典原形 (Dictionary Form)
                                                         </span>
-                                                        <span className="text-xs font-bold flex items-center gap-1 opacity-90">
-                                                            <span>{item.tenseIcon}</span>
-                                                            <span>{item.tenseLabel.split(' ')[0]}</span>
-                                                        </span>
-                                                    </div>
-
-                                                    {/* 韓文整句大字展示 (前綴與變形動詞高亮對比) */}
-                                                    <div className="bg-white/90 p-3 rounded-xl border border-gray-100 shadow-2xs space-y-1">
-                                                        <h4 className="kr-font text-lg font-bold text-gray-800 leading-snug">
-                                                            {item.prefix && <span className="text-gray-500 font-semibold mr-1">{item.prefix}</span>}
-                                                            <span className="text-rose-600 font-black">{item.verb}</span>
-                                                        </h4>
-                                                        <p className="font-mono text-xs text-gray-400 select-all">
-                                                            [{item.rom}]
-                                                        </p>
-                                                    </div>
-
-                                                    {/* 意涵提示 */}
-                                                    <div className="flex items-center justify-between text-[11px] text-gray-600 px-1">
-                                                        <span className="font-medium">💡 {item.zhDesc}</span>
-                                                        <span className="text-gray-400 text-[10px]">{item.tip}</span>
-                                                    </div>
-
-                                                    {/* 卡片底部：三段速播放與 BB-8 原稿紙練寫 */}
-                                                    <div className="pt-2 border-t border-gray-200/50 flex items-center justify-between gap-1 flex-wrap">
-                                                        {/* 三段速發音小按鈕 */}
-                                                        <div className="flex items-center gap-1">
-                                                            <button
-                                                                onClick={() => playSound(item.fullSentence, 1.0)}
-                                                                className="px-2 py-1 rounded-lg bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 text-[11px] font-bold shadow-2xs active:scale-95"
-                                                                title="1.0x 正常速度"
-                                                            >
-                                                                🔊 1.0x
-                                                            </button>
-                                                            <button
-                                                                onClick={() => playSound(item.fullSentence, 0.7)}
-                                                                className="px-2 py-1 rounded-lg bg-white hover:bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-bold shadow-2xs active:scale-95"
-                                                                title="0.7x 慢速跟讀"
-                                                            >
-                                                                🐢 0.7x
-                                                            </button>
-                                                            <button
-                                                                onClick={() => playSound(item.fullSentence, 0.3)}
-                                                                className="px-2 py-1 rounded-lg bg-white hover:bg-purple-50 text-purple-700 border border-purple-200 text-[11px] font-bold shadow-2xs active:scale-95"
-                                                                title="0.3x 逐音拆解口型"
-                                                            >
-                                                                🦥 0.3x
-                                                            </button>
+                                                        <div className="mt-1">
+                                                            <HighlightedSentence formObj={groupedSentences.baseForm} isHighlight={isGrammarHighlight} isLarge={true} />
                                                         </div>
-
-                                                        {/* 原稿紙臨摹捷徑 */}
+                                                        {groupedSentences.baseForm.zh && (
+                                                            <div className="text-xs text-amber-700 font-bold">
+                                                                中文意思：{groupedSentences.baseForm.zh}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex items-center gap-2 shrink-0">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => playSound(groupedSentences.baseForm.kr, 1.0)}
+                                                            className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-black shadow-xs flex items-center gap-1 cursor-pointer active:scale-95 transition-transform"
+                                                        >
+                                                            <span>🔊</span> 朗讀
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                navigator.clipboard.writeText(groupedSentences.baseForm.kr);
+                                                                setTransCopied(true);
+                                                                setTimeout(() => setTransCopied(false), 2000);
+                                                            }}
+                                                            className="px-3 py-1.5 bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-xl text-xs font-black shadow-xs flex items-center gap-1 cursor-pointer active:scale-95 transition-transform"
+                                                        >
+                                                            <i className="far fa-copy"></i> 複製
+                                                        </button>
                                                         <a
-                                                            href={`https://korean-writing-1ec2a.web.app/?text=${encodeURIComponent(item.fullSentence)}&mode=essay&from=yoda`}
+                                                            href={`https://korean-writing-1ec2a.web.app/?${groupedSentences.baseForm.kr.includes(' ') ? `text=${encodeURIComponent(groupedSentences.baseForm.kr)}&mode=essay` : `word=${encodeURIComponent(groupedSentences.baseForm.kr)}&mode=vocab`}&from=yoda`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="text-[11px] px-2.5 py-1 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold border border-orange-200 flex items-center gap-1 active:scale-95"
-                                                            title="在 BB-8 原稿紙練寫此句"
+                                                            className="px-3 py-1.5 bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-300 rounded-xl text-xs font-black shadow-xs flex items-center gap-1 cursor-pointer transition-all hover:scale-105 active:scale-95"
+                                                            title="送入 BB-8 韓語書寫樂園 15格原稿紙練習觸控臨摹"
                                                         >
-                                                            <span>✍️</span> 練寫
+                                                            <span>✍️</span> <span>觸控練寫</span>
                                                         </a>
                                                     </div>
                                                 </div>
-                                            ))}
+                                            </div>
+                                        )}
+
+                                        {/* ☀️ 1. 現在式 (Present Tense) */}
+                                        {(matrixFilter === 'all' || matrixFilter === 'present') && groupedSentences.present && (
+                                            <TenseGroupSection
+                                                icon="☀️"
+                                                title="現在式 (Present Tense)"
+                                                zhDesc={groupedSentences.present.zh}
+                                                tag="日常生活 80% 必用"
+                                                tagColor="bg-amber-100 text-amber-900 border-amber-300"
+                                                formal={groupedSentences.present.formal}
+                                                informal={groupedSentences.present.informal}
+                                                casual={groupedSentences.present.casual}
+                                                isGrammarHighlight={isGrammarHighlight}
+                                                onSpeak={(t) => playSound(t, 1.0)}
+                                                onCopy={(t) => {
+                                                    navigator.clipboard.writeText(t);
+                                                    setTransCopied(true);
+                                                    setTimeout(() => setTransCopied(false), 2000);
+                                                }}
+                                            />
+                                        )}
+
+                                        {/* ⏳ 2. 現在進行式 (Continuous Tense) */}
+                                        {(matrixFilter === 'all' || matrixFilter === 'continuous') && groupedSentences.continuous && (
+                                            <TenseGroupSection
+                                                icon="⏳"
+                                                title="現在進行式 (Continuous Tense)"
+                                                topTag="現在進行式 (Continuous -ing)"
+                                                zhDesc={groupedSentences.continuous.zh}
+                                                tag="公式：動詞語幹 + -고 있다"
+                                                tagColor="bg-teal-100 text-teal-900 border-teal-300"
+                                                formal={groupedSentences.continuous.formal}
+                                                informal={groupedSentences.continuous.informal}
+                                                casual={groupedSentences.continuous.casual}
+                                                isGrammarHighlight={isGrammarHighlight}
+                                                onSpeak={(t) => playSound(t, 1.0)}
+                                                onCopy={(t) => {
+                                                    navigator.clipboard.writeText(t);
+                                                    setTransCopied(true);
+                                                    setTimeout(() => setTransCopied(false), 2000);
+                                                }}
+                                            />
+                                        )}
+
+                                        {/* 🌙 3. 過去式 (Past Tense) */}
+                                        {(matrixFilter === 'all' || matrixFilter === 'past') && groupedSentences.past && (
+                                            <TenseGroupSection
+                                                icon="🌙"
+                                                title="過去式 (Past Tense)"
+                                                zhDesc={groupedSentences.past.zh}
+                                                tag="雙收音 ㅆ 標誌"
+                                                tagColor="bg-purple-100 text-purple-900 border-purple-300"
+                                                formal={groupedSentences.past.formal}
+                                                informal={groupedSentences.past.informal}
+                                                casual={groupedSentences.past.casual}
+                                                isGrammarHighlight={isGrammarHighlight}
+                                                onSpeak={(t) => playSound(t, 1.0)}
+                                                onCopy={(t) => {
+                                                    navigator.clipboard.writeText(t);
+                                                    setTransCopied(true);
+                                                    setTimeout(() => setTransCopied(false), 2000);
+                                                }}
+                                            />
+                                        )}
+
+                                        {/* 🚀 4. 未來式 (Future Tense) */}
+                                        {(matrixFilter === 'all' || matrixFilter === 'future') && groupedSentences.future && (
+                                            <TenseGroupSection
+                                                icon="🚀"
+                                                title="未來式 (Future Tense)"
+                                                zhDesc={groupedSentences.future.zh}
+                                                tag="收音 ㄹ 標誌"
+                                                tagColor="bg-sky-100 text-sky-900 border-sky-300"
+                                                formal={groupedSentences.future.formal}
+                                                informal={groupedSentences.future.informal}
+                                                casual={groupedSentences.future.casual}
+                                                isGrammarHighlight={isGrammarHighlight}
+                                                onSpeak={(t) => playSound(t, 1.0)}
+                                                onCopy={(t) => {
+                                                    navigator.clipboard.writeText(t);
+                                                    setTransCopied(true);
+                                                    setTimeout(() => setTransCopied(false), 2000);
+                                                }}
+                                            />
+                                        )}
+
+                                        {/* 🔴 5. 否定句 (Negative Sentences) */}
+                                        {(matrixFilter === 'all' || matrixFilter === 'negative') && groupedSentences.negative && (
+                                            <TenseGroupSection
+                                                icon="🔴"
+                                                title="否定句 (Negative Sentences)"
+                                                topTag="否定句 (Negative - 안 -)"
+                                                zhDesc={groupedSentences.negative.zh}
+                                                tag="公式：안 + 動詞/形容詞"
+                                                tagColor="bg-rose-100 text-rose-900 border-rose-300"
+                                                formal={groupedSentences.negative.formal}
+                                                informal={groupedSentences.negative.informal}
+                                                casual={groupedSentences.negative.casual}
+                                                isGrammarHighlight={isGrammarHighlight}
+                                                onSpeak={(t) => playSound(t, 1.0)}
+                                                onCopy={(t) => {
+                                                    navigator.clipboard.writeText(t);
+                                                    setTransCopied(true);
+                                                    setTimeout(() => setTransCopied(false), 2000);
+                                                }}
+                                            />
+                                        )}
+
+                                        {/* ❓ 6. 疑問句 (Questions) */}
+                                        {(matrixFilter === 'all' || matrixFilter === 'question') && groupedSentences.question && (
+                                            <TenseGroupSection
+                                                icon="❓"
+                                                title="疑問句 (Questions)"
+                                                topTag="疑問句 (Question -?)"
+                                                zhDesc={groupedSentences.question.zh}
+                                                tag="語調：問句結尾升高(↗)"
+                                                tagColor="bg-blue-100 text-blue-900 border-blue-300"
+                                                formal={groupedSentences.question.formal}
+                                                informal={groupedSentences.question.informal}
+                                                casual={groupedSentences.question.casual}
+                                                isGrammarHighlight={isGrammarHighlight}
+                                                onSpeak={(t) => playSound(t, 1.0)}
+                                                onCopy={(t) => {
+                                                    navigator.clipboard.writeText(t);
+                                                    setTransCopied(true);
+                                                    setTimeout(() => setTransCopied(false), 2000);
+                                                }}
+                                            />
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="text-center py-10 bg-amber-50/50 rounded-2xl border border-dashed border-amber-200 text-amber-800 text-sm">
-                                        請在上方輸入韓文句子，系統將自動解析謂語動詞並展開 12 組全自動發車卡片！✨
+                                        請在上方輸入韓文句子，系統將自動解析謂語動詞並展開全套發車卡片！✨
                                     </div>
                                 )}
                             </div>
