@@ -1634,13 +1634,65 @@
             }).join(' ');
         };
 
-        // SOV 語法成分透視分析器
+        // 韓語文字終聲 (Batchim/收音) 判定器
+        const hasHangulBatchim = (str) => {
+            if (!str || typeof str !== "string") return false;
+            const cleanStr = str.replace(/[.,?!~]/g, "").trim();
+            if (!cleanStr) return false;
+            const code = cleanStr.charCodeAt(cleanStr.length - 1);
+            return (code >= 0xAC00 && code <= 0xD7A3) ? ((code - 0xAC00) % 28 !== 0) : false;
+        };
+
+        // 智慧韓語分詞器 (支援有空格與無空格純韓文句子自動切分 S, P, O, V)
+        const smartTokenizeKorean = (text) => {
+            if (!text || typeof text !== "string") return [];
+            const clean = text.trim();
+            if (!clean) return [];
+            let tokens = clean.split(/\s+/);
+            if (tokens.length === 1) {
+                let s = tokens[0];
+                const newToks = [];
+                // 1. 主語代名詞與專有主語
+                const subP = s.match(/^(내가|제가|네가|누가|저는|나는|너는|당신은|우리는|저희는)(.+)$/);
+                if (subP) {
+                    newToks.push(subP[1]);
+                    s = subP[2];
+                } else {
+                    const subM = s.match(/^(.+?)(께서|은|는|이|가)(.+)$/);
+                    if (subM) {
+                        newToks.push(subM[1] + subM[2]);
+                        s = subM[3];
+                    }
+                }
+                // 2. 地點 / 方向 (에서, 으로, 에, 로)
+                const plcM = s.match(/^(.+?)(에서|으로|에|로)(.+)$/);
+                if (plcM) {
+                    newToks.push(plcM[1] + plcM[2]);
+                    s = plcM[3];
+                }
+                // 3. 受語 (을, 를)
+                const objM = s.match(/^(.+?)(을|를)(.+)$/);
+                if (objM) {
+                    newToks.push(objM[1] + objM[2]);
+                    s = objM[3];
+                }
+                if (s) {
+                    newToks.push(s);
+                }
+                if (newToks.length > 1) {
+                    tokens = newToks;
+                }
+            }
+            return tokens;
+        };
+
+        // SOV 語法成分透視分析器 (支援智慧分詞、S-P-O-V 助詞細緻萃取與螢光高亮)
         const parseKoreanSOV = (text) => {
-            if (!text || typeof text !== 'string') return null;
+            if (!text || typeof text !== "string") return null;
             const clean = text.trim();
             if (!clean) return null;
 
-            const rawTokens = clean.split(/\s+/);
+            const rawTokens = smartTokenizeKorean(clean);
             const tokens = [];
             let detectedSubject = null;
             let detectedPlace = null;
@@ -1648,29 +1700,41 @@
             let detectedVerb = null;
 
             rawTokens.forEach((raw, i) => {
-                const cleanWord = raw.replace(/[.,?!~]/g, '');
+                const cleanWord = raw.replace(/[.,?!~]/g, "");
                 const isLast = (i === rawTokens.length - 1);
 
-                // 1. 代名詞特異型與專有主語
-                if (['내가', '제가', '네가', '누가', '나는', '저는', '너는', '당신은', '우리는', '저희는'].includes(cleanWord)) {
-                    const item = { raw, clean: cleanWord, role: 'S', label: '主語 (S)', color: 'bg-amber-100 text-amber-800 border-amber-300' };
+                // 1. 代名詞特異型與專有主語 (내가, 제가, 저는, 나는 등)
+                if (["내가", "제가", "네가", "누가"].includes(cleanWord)) {
+                    const w = cleanWord === "내가" ? "내" : (cleanWord === "제가" ? "제" : (cleanWord === "네가" ? "네" : "누"));
+                    const item = { raw, clean: cleanWord, word: w, particle: "가", role: "S", label: "主語 (S) • 助詞: 가", color: "bg-amber-100 text-amber-900 border-amber-300" };
+                    detectedSubject = item;
+                    tokens.push(item);
+                    return;
+                }
+                if (["나는", "저는", "너는", "당신은", "우리는", "저희는"].includes(cleanWord)) {
+                    const p = cleanWord.endsWith("은") ? "은" : "는";
+                    const w = cleanWord.slice(0, -1);
+                    const item = { raw, clean: cleanWord, word: w, particle: p, role: "S", label: `主語 (S) • 助詞: ${p}`, color: "bg-amber-100 text-amber-900 border-amber-300" };
                     detectedSubject = item;
                     tokens.push(item);
                     return;
                 }
 
                 // 2. 主語敬稱: 께서
-                if (cleanWord.length >= 2 && cleanWord.endsWith('께서')) {
-                    const item = { raw, clean: cleanWord, role: 'S', label: '主語敬稱 (S)', color: 'bg-amber-100 text-amber-800 border-amber-300' };
+                if (cleanWord.length >= 2 && cleanWord.endsWith("께서")) {
+                    const w = cleanWord.slice(0, -2);
+                    const item = { raw, clean: cleanWord, word: w, particle: "께서", role: "S", label: "主語敬稱 (S) • 助詞: 께서", color: "bg-amber-100 text-amber-900 border-amber-300" };
                     detectedSubject = item;
                     tokens.push(item);
                     return;
                 }
 
                 // 3. 一般主語助詞: 은/는, 이/가
-                if (cleanWord.length >= 2 && (cleanWord.endsWith('은') || cleanWord.endsWith('는') || cleanWord.endsWith('이') || cleanWord.endsWith('가'))) {
+                if (cleanWord.length >= 2 && (cleanWord.endsWith("은") || cleanWord.endsWith("는") || cleanWord.endsWith("이") || cleanWord.endsWith("가"))) {
                     if (!isLast || rawTokens.length === 1) {
-                        const item = { raw, clean: cleanWord, role: 'S', label: '主語 (S)', color: 'bg-amber-100 text-amber-800 border-amber-300' };
+                        const p = cleanWord.slice(-1);
+                        const w = cleanWord.slice(0, -1);
+                        const item = { raw, clean: cleanWord, word: w, particle: p, role: "S", label: `主語 (S) • 助詞: ${p}`, color: "bg-amber-100 text-amber-900 border-amber-300" };
                         detectedSubject = item;
                         tokens.push(item);
                         return;
@@ -1678,15 +1742,25 @@
                 }
 
                 // 4. 地點/方向助詞: 에서, 에, 으로, 로
-                if (cleanWord.length >= 3 && cleanWord.endsWith('에서')) {
-                    const item = { raw, clean: cleanWord, role: 'P', label: '地點 (P)', color: 'bg-sky-100 text-sky-800 border-sky-300' };
+                if (cleanWord.length >= 3 && cleanWord.endsWith("에서")) {
+                    const w = cleanWord.slice(0, -2);
+                    const item = { raw, clean: cleanWord, word: w, particle: "에서", role: "P", label: "地點 (P) • 助詞: 에서", color: "bg-sky-100 text-sky-900 border-sky-300" };
                     detectedPlace = item;
                     tokens.push(item);
                     return;
                 }
-                if (cleanWord.length >= 2 && (cleanWord.endsWith('에') || cleanWord.endsWith('으로') || cleanWord.endsWith('로'))) {
+                if (cleanWord.length >= 2 && cleanWord.endsWith("으로")) {
+                    const w = cleanWord.slice(0, -2);
+                    const item = { raw, clean: cleanWord, word: w, particle: "으로", role: "P", label: "方向/地點 (P) • 助詞: 으로", color: "bg-sky-100 text-sky-900 border-sky-300" };
+                    detectedPlace = item;
+                    tokens.push(item);
+                    return;
+                }
+                if (cleanWord.length >= 2 && (cleanWord.endsWith("에") || cleanWord.endsWith("로"))) {
                     if (!isLast) {
-                        const item = { raw, clean: cleanWord, role: 'P', label: '地點 (P)', color: 'bg-sky-100 text-sky-800 border-sky-300' };
+                        const p = cleanWord.slice(-1);
+                        const w = cleanWord.slice(0, -1);
+                        const item = { raw, clean: cleanWord, word: w, particle: p, role: "P", label: `地點 (P) • 助詞: ${p}`, color: "bg-sky-100 text-sky-900 border-sky-300" };
                         detectedPlace = item;
                         tokens.push(item);
                         return;
@@ -1694,23 +1768,81 @@
                 }
 
                 // 5. 受語助詞: 을/를
-                if (cleanWord.length >= 2 && (cleanWord.endsWith('을') || cleanWord.endsWith('를'))) {
-                    const item = { raw, clean: cleanWord, role: 'O', label: '受語 (O)', color: 'bg-rose-100 text-rose-800 border-rose-300' };
+                if (cleanWord.length >= 2 && (cleanWord.endsWith("을") || cleanWord.endsWith("를"))) {
+                    const p = cleanWord.slice(-1);
+                    const w = cleanWord.slice(0, -1);
+                    const item = { raw, clean: cleanWord, word: w, particle: p, role: "O", label: `受語 (O) • 助詞: ${p}`, color: "bg-rose-100 text-rose-900 border-rose-300" };
                     detectedObject = item;
                     tokens.push(item);
                     return;
                 }
 
-                // 6. 動詞/謂語核心: 最後一個詞或帶有動詞尾綴
-                if (isLast || cleanWord.endsWith('다') || cleanWord.endsWith('요') || cleanWord.endsWith('니다') || cleanWord.endsWith('니까') || cleanWord.endsWith('어') || cleanWord.endsWith('아') || cleanWord.endsWith('야')) {
-                    const item = { raw, clean: cleanWord, role: 'V', label: '謂語/動詞 (V)', color: 'bg-emerald-100 text-emerald-800 border-emerald-300' };
+                // 6. 謂語/動詞/繫詞 (Copula: ~이에요, ~예요, ~입니다 등)
+                if (cleanWord.endsWith("이에요") && cleanWord.length >= 4) {
+                    const w = cleanWord.slice(0, -3);
+                    const item = { raw, clean: cleanWord, word: w, particle: "이에요", role: "V", label: "謂語/動詞 (V) • 語尾: 이에요", color: "bg-emerald-100 text-emerald-900 border-emerald-300", isCopula: true };
+                    detectedVerb = item;
+                    tokens.push(item);
+                    return;
+                }
+                if (cleanWord.endsWith("예요") && cleanWord.length >= 3) {
+                    const w = cleanWord.slice(0, -2);
+                    const item = { raw, clean: cleanWord, word: w, particle: "예요", role: "V", label: "謂語/動詞 (V) • 語尾: 예요", color: "bg-emerald-100 text-emerald-900 border-emerald-300", isCopula: true };
+                    detectedVerb = item;
+                    tokens.push(item);
+                    return;
+                }
+                if (cleanWord.endsWith("입니다") && cleanWord.length >= 4 && !["합니다", "습니다", "봅니다", "마십니다", "먹습니다"].some(x => cleanWord.endsWith(x))) {
+                    const w = cleanWord.slice(0, -3);
+                    const item = { raw, clean: cleanWord, word: w, particle: "입니다", role: "V", label: "謂語/動詞 (V) • 語尾: 입니다", color: "bg-emerald-100 text-emerald-900 border-emerald-300", isCopula: true };
+                    detectedVerb = item;
+                    tokens.push(item);
+                    return;
+                }
+
+                // 一般動詞/形容詞尾綴抽取 (습니다, 어요, 아요, 해요, 요, 다 등)
+                let endingPart = "";
+                let wordStem = cleanWord;
+                if (cleanWord.endsWith("습니다") || cleanWord.endsWith("습니까")) {
+                    endingPart = cleanWord.slice(-3);
+                    wordStem = cleanWord.slice(0, -3);
+                } else if (cleanWord.endsWith("ㅂ니다") || cleanWord.endsWith("ㅂ니까")) {
+                    endingPart = cleanWord.slice(-3);
+                    wordStem = cleanWord.slice(0, -3);
+                } else if (cleanWord.endsWith("했어요") || cleanWord.endsWith("했어요?")) {
+                    endingPart = "했어요";
+                    wordStem = cleanWord.replace("했어요", "하");
+                } else if (cleanWord.endsWith("해요")) {
+                    endingPart = "해요";
+                    wordStem = cleanWord.replace("해요", "하");
+                } else if (cleanWord.endsWith("어요") || cleanWord.endsWith("아요")) {
+                    endingPart = cleanWord.slice(-2);
+                    wordStem = cleanWord.slice(0, -2);
+                } else if (cleanWord.endsWith("요")) {
+                    endingPart = "요";
+                    wordStem = cleanWord.slice(0, -1);
+                } else if (cleanWord.endsWith("다")) {
+                    endingPart = "다";
+                    wordStem = cleanWord.slice(0, -1);
+                }
+
+                if (isLast || endingPart || cleanWord.endsWith("어") || cleanWord.endsWith("아") || cleanWord.endsWith("야")) {
+                    const item = {
+                        raw,
+                        clean: cleanWord,
+                        word: wordStem,
+                        particle: endingPart,
+                        role: "V",
+                        label: `謂語/動詞 (V)${endingPart ? " • 語尾: " + endingPart : ""}`,
+                        color: "bg-emerald-100 text-emerald-900 border-emerald-300"
+                    };
                     detectedVerb = item;
                     tokens.push(item);
                     return;
                 }
 
                 // 7. 修飾詞 / 副詞
-                tokens.push({ raw, clean: cleanWord, role: 'M', label: '修飾詞', color: 'bg-purple-100 text-purple-800 border-purple-300' });
+                tokens.push({ raw, clean: cleanWord, word: cleanWord, particle: "", role: "M", label: "修飾詞", color: "bg-purple-100 text-purple-900 border-purple-300" });
             });
 
             return {
@@ -1726,56 +1858,82 @@
         // 動詞原形與語幹解析器
         const resolveVerbObject = (token, isQuestion = false) => {
             if (!token) return null;
-            let t = token.replace(/[.,?!~]/g, '').trim();
+            let t = token.replace(/[.,?!~]/g, "").trim();
             if (!t) return null;
 
+            // 名詞繫詞 Copula (~이에요, ~예요, ~입니다, ~이야, ~야, ~이다)
+            if (t.endsWith("이에요") && t.length >= 4) {
+                const noun = t.slice(0, -3);
+                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+            }
+            if (t.endsWith("예요") && t.length >= 3) {
+                const noun = t.slice(0, -2);
+                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+            }
+            if (t.endsWith("입니다") && t.length >= 4 && !["합니다", "습니다", "봅니다", "마십니다", "먹습니다"].some(x => t.endsWith(x))) {
+                const noun = t.slice(0, -3);
+                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+            }
+            if (t.endsWith("이야") && t.length >= 3) {
+                const noun = t.slice(0, -2);
+                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+            }
+            if (t.endsWith("야") && t.length >= 2 && !["가야", "봐야", "해야"].includes(t)) {
+                const noun = t.slice(0, -1);
+                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+            }
+            if (t.endsWith("이다") && t.length >= 3 && !["보이다", "먹이다"].includes(t)) {
+                const noun = t.slice(0, -2);
+                return { kr: t, stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+            }
+
             // 原形以「다」結尾
-            if (t.endsWith('다')) {
+            if (t.endsWith("다")) {
                 return { kr: t, stem: t.slice(0, -1), isQuestion };
             }
 
             // 하다 類動詞
-            if (t.includes('하') || t.endsWith('해요') || t.endsWith('합니다') || t.endsWith('합니까') || t.endsWith('했다') || t.endsWith('했어요')) {
-                const idx = t.indexOf('하');
-                const p = idx > 0 ? t.slice(0, idx) : (t.includes('해') ? t.slice(0, t.indexOf('해')) : '');
-                return { kr: p + '하다', stem: p + '하', isQuestion };
+            if (t.includes("하") || t.endsWith("해요") || t.endsWith("합니다") || t.endsWith("합니까") || t.endsWith("했다") || t.endsWith("했어요")) {
+                const idx = t.indexOf("하");
+                const p = idx > 0 ? t.slice(0, idx) : (t.includes("해") ? t.slice(0, t.indexOf("해")) : "");
+                return { kr: p + "하다", stem: p + "하", isQuestion };
             }
 
             // 特殊高頻生活動詞 / 形容詞字典對照
             const specials = {
-                '어떤가요': { kr: '어떻다', stem: '어떻', isQuestion: true, irregular: 'h', zh: '如何' },
-                '어때요': { kr: '어떻다', stem: '어떻', isQuestion: true, irregular: 'h', zh: '如何' },
-                '어때': { kr: '어떻다', stem: '어떻', isQuestion: true, irregular: 'h', zh: '如何' },
-                '어떻습니까': { kr: '어떻다', stem: '어떻', isQuestion: true, irregular: 'h', zh: '如何' },
-                '먹어요': { kr: '먹다', stem: '먹', isQuestion, zh: '吃' },
-                '먹습니다': { kr: '먹다', stem: '먹', isQuestion, zh: '吃' },
-                '먹어': { kr: '먹다', stem: '먹', isQuestion, zh: '吃' },
-                '먹었습니다': { kr: '먹다', stem: '먹', isQuestion, zh: '吃' },
-                '마셔요': { kr: '마시다', stem: '마시', isQuestion, zh: '喝' },
-                '마십니다': { kr: '마시다', stem: '마시', isQuestion, zh: '喝' },
-                '마셔': { kr: '마시다', stem: '마시', isQuestion, zh: '喝' },
-                '봐요': { kr: '보다', stem: '보', isQuestion, zh: '看' },
-                '봅니다': { kr: '보다', stem: '보', isQuestion, zh: '看' },
-                '봐': { kr: '보다', stem: '보', isQuestion, zh: '看' },
-                '들어요': { kr: '듣다', stem: '듣', irregular: 'd', isQuestion, zh: '聽' },
-                '가요': { kr: '가다', stem: '가', isQuestion, zh: '去' },
-                '와요': { kr: '오다', stem: '오', isQuestion, zh: '來' },
-                '만나요': { kr: '만나다', stem: '만나', isQuestion, zh: '見面' },
-                '좋아요': { kr: '좋다', stem: '좋', isQuestion, zh: '好' },
-                '맛있어요': { kr: '맛있다', stem: '맛있', isQuestion, zh: '美味' },
-                '예뻐요': { kr: '예쁘다', stem: '예쁘', isQuestion, zh: '漂亮' },
-                '추워요': { kr: '춥다', stem: '춥', irregular: 'b', isQuestion, zh: '冷' },
-                '더워요': { kr: '덥다', stem: '덥', irregular: 'b', isQuestion, zh: '熱' }
+                "어떤가요": { kr: "어떻다", stem: "어떻", isQuestion: true, irregular: "h", zh: "如何" },
+                "어때요": { kr: "어떻다", stem: "어떻", isQuestion: true, irregular: "h", zh: "如何" },
+                "어때": { kr: "어떻다", stem: "어떻", isQuestion: true, irregular: "h", zh: "如何" },
+                "어떻습니까": { kr: "어떻다", stem: "어떻", isQuestion: true, irregular: "h", zh: "如何" },
+                "먹어요": { kr: "먹다", stem: "먹", isQuestion, zh: "吃" },
+                "먹습니다": { kr: "먹다", stem: "먹", isQuestion, zh: "吃" },
+                "먹어": { kr: "먹다", stem: "먹", isQuestion, zh: "吃" },
+                "먹었습니다": { kr: "먹다", stem: "먹", isQuestion, zh: "吃" },
+                "마셔요": { kr: "마시다", stem: "마시", isQuestion, zh: "喝" },
+                "마십니다": { kr: "마시다", stem: "마시", isQuestion, zh: "喝" },
+                "마셔": { kr: "마시다", stem: "마시", isQuestion, zh: "喝" },
+                "봐요": { kr: "보다", stem: "보", isQuestion, zh: "看" },
+                "봅니다": { kr: "보다", stem: "보", isQuestion, zh: "看" },
+                "봐": { kr: "보다", stem: "보", isQuestion, zh: "看" },
+                "들어요": { kr: "듣다", stem: "듣", irregular: "d", isQuestion, zh: "聽" },
+                "가요": { kr: "가다", stem: "가", isQuestion, zh: "去" },
+                "와요": { kr: "오다", stem: "오", isQuestion, zh: "來" },
+                "만나요": { kr: "만나다", stem: "만나", isQuestion, zh: "見面" },
+                "좋아요": { kr: "좋다", stem: "좋", isQuestion, zh: "好" },
+                "맛있어요": { kr: "맛있다", stem: "맛있", isQuestion, zh: "美味" },
+                "예뻐요": { kr: "예쁘다", stem: "예쁘", isQuestion, zh: "漂亮" },
+                "추워요": { kr: "춥다", stem: "춥", irregular: "b", isQuestion, zh: "冷" },
+                "더워요": { kr: "덥다", stem: "덥", irregular: "b", isQuestion, zh: "熱" }
             };
             if (specials[t]) return specials[t];
 
             // 結尾常規還原
-            if (t.endsWith('습니다') || t.endsWith('습니까')) return { kr: t.slice(0, -3) + '다', stem: t.slice(0, -3), isQuestion };
-            if (t.endsWith('ㅂ니다') || t.endsWith('ㅂ니까')) return { kr: t.slice(0, -3) + '다', stem: t.slice(0, -3), isQuestion };
-            if (t.endsWith('어요') || t.endsWith('아요')) return { kr: t.slice(0, -2) + '다', stem: t.slice(0, -2), isQuestion };
-            if (t.endsWith('요')) return { kr: t.slice(0, -1) + '다', stem: t.slice(0, -1), isQuestion };
+            if (t.endsWith("습니다") || t.endsWith("습니까")) return { kr: t.slice(0, -3) + "다", stem: t.slice(0, -3), isQuestion };
+            if (t.endsWith("ㅂ니다") || t.endsWith("ㅂ니까")) return { kr: t.slice(0, -3) + "다", stem: t.slice(0, -3), isQuestion };
+            if (t.endsWith("어요") || t.endsWith("아요")) return { kr: t.slice(0, -2) + "다", stem: t.slice(0, -2), isQuestion };
+            if (t.endsWith("요")) return { kr: t.slice(0, -1) + "다", stem: t.slice(0, -1), isQuestion };
 
-            return { kr: t + '다', stem: t, isQuestion };
+            return { kr: t + "다", stem: t, isQuestion };
         };
 
         // 智慧變形函式（結合 HangulEngine 與特殊不規則規則）
@@ -2109,7 +2267,7 @@
             if (!text || typeof text !== 'string') return null;
             const clean = text.trim();
             if (!clean) return null;
-            const rawTokens = clean.split(/\s+/);
+            const rawTokens = smartTokenizeKorean(clean);
             let sub = null, plc = null, obj = null, verb = null;
             
             rawTokens.forEach((raw, i) => {
@@ -2173,6 +2331,93 @@
             const stem = verbObj.stem || (kr.endsWith('다') ? kr.slice(0, -1) : kr);
             const prefix = isNegative ? '안 ' : '';
             const romPrefix = isNegative ? 'an ' : '';
+
+            // 名詞繫詞 Copula (如 가수이다 / 학생이다)
+            if (verbObj.isCopula && verbObj.noun) {
+                const noun = verbObj.noun;
+                const batchim = hasHangulBatchim(noun);
+                const romNoun = window.HangulEngine ? window.HangulEngine.romanize(noun) : noun;
+
+                if (isNegative) {
+                    const subjP = batchim ? "이" : "가";
+                    const romSubjP = batchim ? "i" : "ga";
+                    const negStem = `${noun}${subjP} 아니`;
+                    const romNegStem = `${romNoun}-${romSubjP} a-ni`;
+                    if (tense === "base") {
+                        return { kr: `${noun}${subjP} 아니다`, stem: negStem, ending: "다", prefix: "", rom: `${romNoun}-${romSubjP} a-ni-da`, romPrefix: "", romStem: romNegStem, romEnding: "da" };
+                    }
+                    if (tense === "present") {
+                        if (honorific === "formal") {
+                            const ending = isQuestion ? "ㅂ니까?" : "ㅂ니다.";
+                            return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}m-ni-da`, romPrefix: "", romStem: romNegStem, romEnding: isQuestion ? "m-ni-kka?" : "m-ni-da" };
+                        }
+                        if (honorific === "informal") {
+                            const ending = isQuestion ? "에요?" : "에요.";
+                            return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}-e-yo`, romPrefix: "", romStem: romNegStem, romEnding: isQuestion ? "e-yo?" : "e-yo" };
+                        }
+                        const ending = isQuestion ? "야?" : "야.";
+                        return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}-ya`, romPrefix: "", romStem: romNegStem, romEnding: isQuestion ? "ya?" : "ya" };
+                    }
+                    if (tense === "past") {
+                        const pastEnd = isQuestion ? "었습니까?" : "었습니다.";
+                        return { kr: `${negStem}${pastEnd}`, stem: negStem, ending: pastEnd, prefix: "", rom: `${romNegStem}-eot-seum-ni-da`, romPrefix: "", romStem: romNegStem, romEnding: "eot-seum-ni-da" };
+                    }
+                    if (tense === "future") {
+                        const futEnd = honorific === "formal" ? (isQuestion ? "ㄹ 겁니까?" : "ㄹ 겁니다.") : (isQuestion ? "ㄹ 거예요?" : "ㄹ 거예요.");
+                        return { kr: `${negStem}${futEnd}`, stem: negStem, ending: futEnd, prefix: "", rom: `${romNegStem}l geo-ye-yo`, romPrefix: "", romStem: romNegStem, romEnding: "l geo-ye-yo" };
+                    }
+                    if (tense === "continuous") {
+                        const contEnd = honorific === "formal" ? (isQuestion ? "고 있지 않습니까?" : "고 있지 않습니다.") : (isQuestion ? "고 있지 않아요?" : "고 있지 않아요.");
+                        return { kr: `${negStem}${contEnd}`, stem: negStem, ending: contEnd, prefix: "", rom: `${romNegStem} it-ji an-a-yo`, romPrefix: "", romStem: romNegStem, romEnding: "it-ji an-a-yo" };
+                    }
+                }
+
+                if (tense === "base") {
+                    return { kr: `${noun}이다`, stem: noun, ending: "이다", prefix: "", rom: `${romNoun}-i-da`, romPrefix: "", romStem: romNoun, romEnding: "i-da" };
+                }
+                if (tense === "present") {
+                    if (honorific === "formal") {
+                        const ending = isQuestion ? "입니까?" : "입니다.";
+                        return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-${isQuestion ? "im-ni-kka?" : "im-ni-da"}`, romPrefix: "", romStem: romNoun, romEnding: isQuestion ? "im-ni-kka?" : "im-ni-da" };
+                    }
+                    if (honorific === "informal") {
+                        const ending = (batchim ? "이에요" : "예요") + (isQuestion ? "?" : ".");
+                        const romEnding = (batchim ? "i-e-yo" : "ye-yo") + (isQuestion ? "?" : "");
+                        return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-${romEnding}`, romPrefix: "", romStem: romNoun, romEnding };
+                    }
+                    const ending = (batchim ? "이야" : "야") + (isQuestion ? "?" : ".");
+                    const romEnding = (batchim ? "i-ya" : "ya") + (isQuestion ? "?" : "");
+                    return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-${romEnding}`, romPrefix: "", romStem: romNoun, romEnding };
+                }
+                if (tense === "continuous") {
+                    const ending = honorific === "formal" ? (isQuestion ? "이고 있습니까?" : "이고 있습니다.") : (honorific === "informal" ? (isQuestion ? "이고 있어요?" : "이고 있어요.") : (isQuestion ? "이고 있어?" : "이고 있어."));
+                    return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-i-go it-seo-yo`, romPrefix: "", romStem: romNoun, romEnding: "i-go it-seo-yo" };
+                }
+                if (tense === "past") {
+                    if (honorific === "formal") {
+                        const ending = (batchim ? "이었습니다" : "였습니다") + (isQuestion ? "습니까?" : ".");
+                        return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-yeot-seum-ni-da`, romPrefix: "", romStem: romNoun, romEnding: "yeot-seum-ni-da" };
+                    }
+                    if (honorific === "informal") {
+                        const ending = (batchim ? "이었어요" : "였어요") + (isQuestion ? "?" : ".");
+                        return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-yeot-seo-yo`, romPrefix: "", romStem: romNoun, romEnding: "yeot-seo-yo" };
+                    }
+                    const ending = (batchim ? "이었어" : "였어") + (isQuestion ? "?" : ".");
+                    return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-yeot-seo`, romPrefix: "", romStem: romNoun, romEnding: "yeot-seo" };
+                }
+                if (tense === "future") {
+                    if (honorific === "formal") {
+                        const ending = isQuestion ? "일 겁니까?" : "일 겁니다.";
+                        return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-il geom-ni-da`, romPrefix: "", romStem: romNoun, romEnding: "il geom-ni-da" };
+                    }
+                    if (honorific === "informal") {
+                        const ending = isQuestion ? "일 거예요?" : "일 거예요.";
+                        return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-il geo-ye-yo`, romPrefix: "", romStem: romNoun, romEnding: "il geo-ye-yo" };
+                    }
+                    const ending = isQuestion ? "일 거야?" : "일 거야.";
+                    return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-il geo-ya`, romPrefix: "", romStem: romNoun, romEnding: "il geo-ya" };
+                }
+            }
 
             // ㅎ 不規則特殊處理 (如 어떻다, 그렇다)
             if (stem === '어떻' || stem === '그렇') {
@@ -2307,53 +2552,74 @@
                 return clean;
             };
 
+            let nounZh = verbObj.isCopula ? getWordZh(verbObj.noun) : '';
+            if (verbObj.isCopula && (!nounZh || nounZh === verbObj.noun)) {
+                if (verbObj.noun === '가수') nounZh = '歌手';
+                else if (verbObj.noun === '학생') nounZh = '學生';
+                else if (verbObj.noun === '의사') nounZh = '醫生';
+                else if (verbObj.noun === '선생님') nounZh = '老師';
+            }
             const subZh = subPart ? getWordZh(subPart.word) : '';
             const plcZh = plcPart ? getWordZh(plcPart.word) : '';
             const objZh = objPart ? getWordZh(objPart.word) : '';
-            const verbZh = verbObj.zh || getWordZh(verbObj.kr);
+            const verbZh = verbObj.isCopula ? `是${nounZh}` : (verbObj.zh || getWordZh(verbObj.kr));
 
             const pfxPlace = plcZh ? `在${plcZh}` : '';
             const pfxObj = objZh || '';
 
             // 原形
             const baseForm = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "base", "formal"));
-            baseForm.zh = subZh ? `${subZh} ${pfxPlace ? pfxPlace + ' ' : ''}${pfxObj ? pfxObj + ' ' : ''}${verbZh}（詞典原形）` : `${verbZh}（詞典原形）`;
+            baseForm.zh = verbObj.isCopula
+                ? (subZh ? `${subZh}是${nounZh}（詞典原形）` : `是${nounZh}（詞典原形）`)
+                : (subZh ? `${subZh} ${pfxPlace ? pfxPlace + ' ' : ''}${pfxObj ? pfxObj + ' ' : ''}${verbZh}（詞典原形）` : `${verbZh}（詞典原形）`);
 
             // 現在式
             const presFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "formal"));
             const presInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "informal"));
             const presCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "casual"));
-            const presZh = subZh ? `${subZh}${pfxPlace}${verbZh}${pfxObj}。` : `${verbZh}${pfxObj}。`;
+            const presZh = verbObj.isCopula
+                ? (subZh ? `${subZh}是${nounZh}。` : `是${nounZh}。`)
+                : (subZh ? `${subZh}${pfxPlace}${verbZh}${pfxObj}。` : `${verbZh}${pfxObj}。`);
 
             // 現在進行式
             const contFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "continuous", "formal"));
             const contInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "continuous", "informal"));
             const contCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "continuous", "casual"));
-            const contZh = subZh ? `${subZh}正在${pfxPlace}${verbZh}${pfxObj}。` : `正在${verbZh}${pfxObj}。`;
+            const contZh = verbObj.isCopula
+                ? (subZh ? `${subZh}正擔任${nounZh}。` : `正擔任${nounZh}。`)
+                : (subZh ? `${subZh}正在${pfxPlace}${verbZh}${pfxObj}。` : `正在${verbZh}${pfxObj}。`);
 
             // 過去式
             const pastFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "past", "formal"));
             const pastInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "past", "informal"));
             const pastCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "past", "casual"));
-            const pastZh = subZh ? `${subZh}${pfxPlace}${verbZh}了${pfxObj}。` : `${verbZh}了${pfxObj}。`;
+            const pastZh = verbObj.isCopula
+                ? (subZh ? `${subZh}曾是${nounZh}。` : `曾是${nounZh}。`)
+                : (subZh ? `${subZh}${pfxPlace}${verbZh}了${pfxObj}。` : `${verbZh}了${pfxObj}。`);
 
             // 未來式
             const futFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "future", "formal"));
             const futInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "future", "informal"));
             const futCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "future", "casual"));
-            const futZh = subZh ? `${subZh}打算${pfxPlace}${verbZh}${pfxObj}。` : `打算${verbZh}${pfxObj}。`;
+            const futZh = verbObj.isCopula
+                ? (subZh ? `${subZh}將會是${nounZh}。` : `將會是${nounZh}。`)
+                : (subZh ? `${subZh}打算${pfxPlace}${verbZh}${pfxObj}。` : `打算${verbZh}${pfxObj}。`);
 
             // 否定句
             const negFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "formal", false, true));
             const negInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "informal", false, true));
             const negCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "casual", false, true));
-            const negZh = subZh ? `${subZh}${pfxPlace}不${verbZh}${pfxObj}。（否定句）` : `不${verbZh}${pfxObj}。（否定句）`;
+            const negZh = verbObj.isCopula
+                ? (subZh ? `${subZh}不是${nounZh}。（否定句）` : `不是${nounZh}。（否定句）`)
+                : (subZh ? `${subZh}${pfxPlace}不${verbZh}${pfxObj}。（否定句）` : `不${verbZh}${pfxObj}。（否定句）`);
 
             // 疑問句
             const qFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "formal", true));
             const qInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "informal", true));
             const qCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "casual", true));
-            const qZh = pfxPlace ? `${pfxPlace}要${verbZh}${pfxObj}嗎？（疑問句）` : `要${verbZh}${pfxObj}嗎？（疑問句）`;
+            const qZh = verbObj.isCopula
+                ? `是${nounZh}嗎？（疑問句）`
+                : (pfxPlace ? `${pfxPlace}要${verbZh}${pfxObj}嗎？（疑問句）` : `要${verbZh}${pfxObj}嗎？（疑問句）`);
 
             return {
                 baseForm,
@@ -4719,7 +4985,14 @@
                                                             key={ti}
                                                             className={`px-3 py-1.5 rounded-xl border text-xs font-bold shadow-2xs flex flex-col items-center transition-transform hover:scale-105 ${token.color}`}
                                                         >
-                                                            <span className="kr-font text-sm font-extrabold">{token.raw}</span>
+                                                            <div className="kr-font text-sm font-extrabold flex items-center">
+                                                                <span>{token.word || token.raw}</span>
+                                                                {token.particle && (
+                                                                    <span className="bg-yellow-200/95 text-amber-950 px-1.5 py-0.2 mx-0.5 rounded font-black border border-yellow-300/90 shadow-2xs">
+                                                                        {token.particle}
+                                                                    </span>
+                                                                )}
+                                                            </div>
                                                             <span className="text-[10px] opacity-80 mt-0.5 tracking-tighter">{token.label}</span>
                                                         </div>
                                                     ))}
