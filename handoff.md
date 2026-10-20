@@ -180,7 +180,7 @@ px cap sync android。
 - **運行狀態**：全功能正常運作，Web 端、PWA 離線快取（`v1.0.67`）與 Android 原生端（TTS 發音 + STT 麥克風跟讀評分）均已支援完畢。
 - **線上體驗 (GitHub Pages)**：[https://kitty-sin.github.io/sanrio-korean-learning/](https://kitty-sin.github.io/sanrio-korean-learning/)
 - **最新 APK 下載**：[https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk](https://github.com/kitty-sin/sanrio-korean-learning/releases/tag/v1.0.1-apk)
-- **最新 Git Commit**：待提交
+- **最新 Git Commit**：`69d5265` (main 分支)
 - **全庫總單字數**：5,757 筆 (基準 5,666 + Kitty自訂 91 筆)
 
 ---
@@ -204,8 +204,8 @@ px cap sync android。
 
 ## 🕐 最後更新
 
-- **時間**：2026-10-19 18:37 PT
+- **時間**：2026-10-19 18:53 PT
 - **更新者**：Antigravity @ DESKTOP-QROANQ2
-- **Git Push 狀態**：本地已修改並驗證，待提交與推送
+- **Git Push 狀態**：✅ 已推播至 GitHub origin/main (Commit: `69d5265`)
 
 
