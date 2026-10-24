@@ -75,6 +75,7 @@ Korean-Learning/
 ├── app_mobile_bridge.js         # 行動端 Service Worker 註冊與返回鍵智慧防誤觸橋接
 ├── sw.js                        # Service Worker 離線快取核心 (v1.0.46)
 ├── package.json                 # 專案套件管理與 Capacitor 依賴
+├── TROUBLESHOOTING_GUIDE.md    # 全技術架構排錯防禦與避坑實戰指南 (8大技術領域深度解析)
 ├── AGENTS.md                    # 專案藍圖與協同規範
 ├── handoff.md                   # 跨工作階段交接檔
 └── README.md                    # 專案公開說明文件

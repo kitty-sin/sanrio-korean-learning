@@ -22,7 +22,9 @@ Sanrio 萌趣圖像記憶 • 粵語口訣秒懂發音 • 輕鬆玩轉動詞與
   - **⚡ 自動即時羅馬拼音解析**：輸入韓文單字時自動生成標準拼音，表單極致簡化為「韓文」與「中文意思」兩欄，一鍵儲存 Firestore！
 - **⭐ 隨堂星級自我挑戰測驗**：隨堂測驗評量學習成效，即時回饋與韓文鼓勵。
 
-## 🛠️ 技術棧
+## 🛠️ 技術棧與排錯避坑指南
+- **🛡️ 避坑與架構手冊**：👉 [TROUBLESHOOTING_GUIDE.md (全技術架構排錯防禦與避坑實戰指南)](TROUBLESHOOTING_GUIDE.md) 深入拆解語法變形、名詞謂語、TTS 四級容錯、AndroidNativeSTT 原生語音橋接與多端同步等 8 大核心技術領域。
+
 - **Frontend**：HTML5, React 18 (CDN), Tailwind CSS, Font Awesome
 - **Backend / Cloud**：Google Firebase (Firestore & Anonymous Auth)
 - **Audio & AI**：Web Speech API (`ko-KR` 語音合成 SpeechSynthesis & 語音辨識 SpeechRecognition)
