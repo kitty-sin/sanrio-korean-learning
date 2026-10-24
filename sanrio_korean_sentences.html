@@ -532,17 +532,18 @@
                 if (!subKr) subKr = "동생";
                 if (!vrbKr) vrbKr = "보다";
 
-                // 查找匹配的單字物件
+                // 4. 語幹變形產生器與結構化句子組裝器
+                const engine = window.HangulEngine;
+                if (!engine) return null;
+
+                // 查找匹配的單字物件 (含名詞謂語 Copula 自動解析)
                 const matchedSub = window.SENTENCE_SUBJECTS ? window.SENTENCE_SUBJECTS.find(s => s.kr === subKr) : null;
-                const matchedVrb = (window.SENTENCE_VERBS ? window.SENTENCE_VERBS.find(v => v.kr === vrbKr) : null) || {
+                const resolvedVrb = engine.resolveVerbObject ? engine.resolveVerbObject(vrbKr) : null;
+                const matchedVrb = resolvedVrb || (window.SENTENCE_VERBS ? window.SENTENCE_VERBS.find(v => v.kr === vrbKr) : null) || {
                     kr: vrbKr,
                     stem: vrbKr.endsWith("다") ? vrbKr.slice(0, -1) : vrbKr,
                     type: "verb"
                 };
-
-                // 4. 語幹變形產生器與結構化句子組裝器
-                const engine = window.HangulEngine;
-                if (!engine) return null;
 
                 // 結構化組裝零件
                 let subFormalPart = { word: subKr, particle: "", romWord: engine.romanize(subKr), romParticle: "" };
@@ -665,48 +666,72 @@
                 const qInformal = makeSentenceForm(subFormalPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "informal", true), "日常敬語 (해요體)");
                 const qCasual = makeSentenceForm(subCasualPart, plcPartObj, objPartObj, engine.conjugateDetailed(matchedVrb, "present", "casual", true), "平語/半語 (반말)");
 
-                // 中文翻譯組裝
+                // 中文翻譯組裝 (名詞謂語句 vs 一般動詞句)
+                const isCopula = !!matchedVrb.isCopula;
+                const copulaNounZh = verbZh || (matchedVrb.nounZh || matchedVrb.noun || '');
                 const pfxPlace = placeZh ? `在${placeZh}` : '';
                 const pfxObj = objectZh || '';
+
+                const baseZh = isCopula
+                    ? `${subjectZh} 是${copulaNounZh}（詞典原形）`
+                    : `${subjectZh} ${pfxPlace ? pfxPlace + ' ' : ''}${pfxObj ? pfxObj + ' ' : ''}${verbZh}（詞典原形）`;
+                const presZh = isCopula
+                    ? `${subjectZh}是${copulaNounZh}。`
+                    : `${subjectZh}${pfxPlace}${verbZh}${pfxObj}。`;
+                const contZh = isCopula
+                    ? `${subjectZh}正是${copulaNounZh}。`
+                    : `${subjectZh}正在${pfxPlace}${verbZh}${pfxObj}。`;
+                const pastZh = isCopula
+                    ? `${subjectZh}曾是${copulaNounZh}。`
+                    : `${subjectZh}${pfxPlace}${verbZh}了${pfxObj}。`;
+                const futZh = isCopula
+                    ? `${subjectZh}將會是${copulaNounZh}。`
+                    : `${subjectZh}打算${pfxPlace}${verbZh}${pfxObj}。`;
+                const negZh = isCopula
+                    ? `${subjectZh}不是${copulaNounZh}。（否定句）`
+                    : `${subjectZh}${pfxPlace}不${verbZh}${pfxObj}。（否定句）`;
+                const qZh = isCopula
+                    ? `${subjectZh}是${copulaNounZh}嗎？（疑問句）`
+                    : `${pfxPlace}要${verbZh}${pfxObj}嗎？（疑問句）`;
 
                 return {
                     baseForm: {
                         ...baseForm,
-                        zh: `${subjectZh} ${pfxPlace ? pfxPlace + ' ' : ''}${pfxObj ? pfxObj + ' ' : ''}${verbZh}（詞典原形）`
+                        zh: baseZh
                     },
                     present: {
-                        zh: `${subjectZh}${pfxPlace}${verbZh}${pfxObj}。`,
+                        zh: presZh,
                         formal: presFormal,
                         informal: presInformal,
                         casual: presCasual
                     },
                     continuous: {
-                        zh: `${subjectZh}正在${pfxPlace}${verbZh}${pfxObj}。`,
+                        zh: contZh,
                         formal: contFormal,
                         informal: contInformal,
                         casual: contCasual
                     },
                     past: {
-                        zh: `${subjectZh}${pfxPlace}${verbZh}了${pfxObj}。`,
+                        zh: pastZh,
                         formal: pastFormal,
                         informal: pastInformal,
                         casual: pastCasual
                     },
                     future: {
-                        zh: `${subjectZh}打算${pfxPlace}${verbZh}${pfxObj}。`,
+                        zh: futZh,
                         formal: futFormal,
                         informal: futInformal,
                         casual: futCasual
                     },
                     explore: {
                         negative: {
-                            zh: `${subjectZh}${pfxPlace}不${verbZh}${pfxObj}。（否定句）`,
+                            zh: negZh,
                             formal: negFormal,
                             informal: negInformal,
                             casual: negCasual
                         },
                         question: {
-                            zh: `${pfxPlace}要${verbZh}${pfxObj}嗎？（疑問句）`,
+                            zh: qZh,
                             formal: qFormal,
                             informal: qInformal,
                             casual: qCasual

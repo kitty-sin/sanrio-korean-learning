@@ -625,9 +625,96 @@ const HangulEngine = {
         return this.hasBatchim(word) ? "을" : "를";
     },
 
+    // 動詞原形與語幹解析器 (含名詞繫詞 Copula 自動識別)
+    resolveVerbObject(token, isQuestion = false) {
+        if (!token) return null;
+        let t = token.replace(/[.,?!~]/g, "").trim();
+        if (!t) return null;
+
+        // 名詞繫詞 Copula (~이에요, ~예요, ~입니다, ~이야, ~야, ~이다, ~입니까, ~이었어요, ~였어요, ~이었습니다, ~였습니다, ~이었어, ~였어)
+        if (t.endsWith("이에요") && t.length >= 4) {
+            const noun = t.slice(0, -3);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+        }
+        if (t.endsWith("예요") && t.length >= 3) {
+            const noun = t.slice(0, -2);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+        }
+        if (t.endsWith("입니다") && t.length >= 4 && !["합니다", "습니다", "봅니다", "마십니다", "먹습니다", "갑니다", "옵니다"].some(x => t.endsWith(x))) {
+            const noun = t.slice(0, -3);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+        }
+        if (t.endsWith("입니까") && t.length >= 4 && !["합니까", "습니까", "봅니까", "마십니까", "먹습니까", "갑니까", "옵니까"].some(x => t.endsWith(x))) {
+            const noun = t.slice(0, -3);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion: true };
+        }
+        if (t.endsWith("이야") && t.length >= 3) {
+            const noun = t.slice(0, -2);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+        }
+        if (t.endsWith("야") && t.length >= 2 && !["가야", "봐야", "해야"].includes(t)) {
+            const noun = t.slice(0, -1);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+        }
+        if (t.endsWith("이다") && t.length >= 3 && !["보이다", "먹이다"].includes(t)) {
+            const noun = t.slice(0, -2);
+            return { kr: t, stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+        }
+        if (t.endsWith("이었어요") && t.length >= 5) {
+            const noun = t.slice(0, -4);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+        }
+        if (t.endsWith("였어요") && t.length >= 4) {
+            const noun = t.slice(0, -3);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+        }
+        if (t.endsWith("이었습니다") && t.length >= 6) {
+            const noun = t.slice(0, -5);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+        }
+        if (t.endsWith("였습니다") && t.length >= 5) {
+            const noun = t.slice(0, -4);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+        }
+        if (t.endsWith("이었어") && t.length >= 4) {
+            const noun = t.slice(0, -3);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+        }
+        if (t.endsWith("였어") && t.length >= 3) {
+            const noun = t.slice(0, -2);
+            return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+        }
+
+        // 原形以「다」結尾
+        if (t.endsWith("다")) {
+            return { kr: t, stem: t.slice(0, -1), isQuestion };
+        }
+
+        // 하다 類動詞
+        if (t.includes("하") || t.endsWith("해요") || t.endsWith("합니다") || t.endsWith("합니까") || t.endsWith("했다") || t.endsWith("했어요")) {
+            const idx = t.indexOf("하");
+            const p = idx > 0 ? t.slice(0, idx) : (t.includes("해") ? t.slice(0, t.indexOf("해")) : "");
+            return { kr: p + "하다", stem: p + "하", isQuestion };
+        }
+
+        // 如果在常用動詞庫 SENTENCE_VERBS 裡面找得到
+        if (typeof SENTENCE_VERBS !== 'undefined' && Array.isArray(SENTENCE_VERBS)) {
+            const found = SENTENCE_VERBS.find(v => v.kr === t || v.stem === t || v.kr === t + "다");
+            if (found) return found;
+        }
+
+        // 若不是以 다 結尾，且不是動詞庫詞彙，視為名詞謂語體言（例如 선생님, 가수, 학생, 의사）
+        return { kr: t + "이다", stem: t, noun: t, isCopula: true, zh: "是" + t, isQuestion };
+    },
+
     // 韓語語幹變形引擎 (Conjugator)
     conjugate(verbObj, tense = "present", honorific = "informal", isQuestion = false, isNegative = false) {
         if (!verbObj) return "";
+
+        // 名詞繫詞 Copula 自動委託專屬結構化變形
+        if (verbObj && verbObj.isCopula) {
+            return this.conjugateDetailed(verbObj, tense, honorific, isQuestion, isNegative).kr;
+        }
 
         const kr = verbObj.kr || verbObj;
         const stem = verbObj.stem || (kr.endsWith("다") ? kr.slice(0, -1) : kr);
@@ -731,6 +818,109 @@ const HangulEngine = {
     // 韓語語幹變形引擎 - 結構化拆解 (Conjugator with Detailed Token Parts)
     conjugateDetailed(verbObj, tense = "present", honorific = "informal", isQuestion = false, isNegative = false) {
         if (!verbObj) return { kr: "", stem: "", ending: "", prefix: "", rom: "", romStem: "", romEnding: "", romPrefix: "" };
+
+        // 名詞繫詞 Copula (如 가수이다 / 학생이다 / 선생님이다)
+        if (verbObj && verbObj.isCopula && (verbObj.noun || verbObj.stem)) {
+            const noun = verbObj.noun || verbObj.stem;
+            const batchim = this.hasBatchim(noun);
+            const romNoun = this.romanize(noun);
+
+            if (isNegative) {
+                const subjP = batchim ? "이" : "가";
+                const romSubjP = batchim ? "i" : "ga";
+                const negStem = `${noun}${subjP} `;
+                const romNegStem = `${romNoun}-${romSubjP} `;
+                if (tense === "base") {
+                    return { kr: `${noun}${subjP} 아니다`, stem: negStem, ending: "아니다", prefix: "", rom: `${romNoun}-${romSubjP} a-ni-da`, romPrefix: "", romStem: romNegStem, romEnding: "a-ni-da" };
+                }
+                if (tense === "present") {
+                    if (honorific === "formal") {
+                        const ending = isQuestion ? "아닙니까?" : "아닙니다.";
+                        return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}${isQuestion ? "a-nim-ni-kka?" : "a-nim-ni-da"}`, romPrefix: "", romStem: romNegStem, romEnding: isQuestion ? "a-nim-ni-kka?" : "a-nim-ni-da" };
+                    }
+                    if (honorific === "informal") {
+                        const ending = isQuestion ? "아니에요?" : "아니에요.";
+                        return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}${isQuestion ? "a-ni-e-yo?" : "a-ni-e-yo"}`, romPrefix: "", romStem: romNegStem, romEnding: isQuestion ? "a-ni-e-yo?" : "a-ni-e-yo" };
+                    }
+                    const ending = isQuestion ? "아니야?" : "아니야.";
+                    return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}${isQuestion ? "a-ni-ya?" : "a-ni-ya"}`, romPrefix: "", romStem: romNegStem, romEnding: isQuestion ? "a-ni-ya?" : "a-ni-ya" };
+                }
+                if (tense === "past") {
+                    if (honorific === "formal") {
+                        const ending = isQuestion ? "아니었습니까?" : "아니었습니다.";
+                        return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}a-ni-eot-seum-ni-da`, romPrefix: "", romStem: romNegStem, romEnding: "a-ni-eot-seum-ni-da" };
+                    }
+                    if (honorific === "informal") {
+                        const ending = isQuestion ? "아니었어요?" : "아니었어요.";
+                        return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}a-ni-eot-seo-yo`, romPrefix: "", romStem: romNegStem, romEnding: "a-ni-eot-seo-yo" };
+                    }
+                    const ending = isQuestion ? "아니었어?" : "아니었어.";
+                    return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}a-ni-eot-seo`, romPrefix: "", romStem: romNegStem, romEnding: "a-ni-eot-seo" };
+                }
+                if (tense === "future") {
+                    if (honorific === "formal") {
+                        const ending = isQuestion ? "아닐 겁니까?" : "아닐 겁니다.";
+                        return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}a-nil geom-ni-da`, romPrefix: "", romStem: romNegStem, romEnding: "a-nil geom-ni-da" };
+                    }
+                    if (honorific === "informal") {
+                        const ending = isQuestion ? "아닐 거예요?" : "아닐 거예요.";
+                        return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}a-nil geo-ye-yo`, romPrefix: "", romStem: romNegStem, romEnding: "a-nil geo-ye-yo" };
+                    }
+                    const ending = isQuestion ? "아닐 거야?" : "아닐 거야.";
+                    return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}a-nil geo-ya`, romPrefix: "", romStem: romNegStem, romEnding: "a-nil geo-ya" };
+                }
+                if (tense === "continuous") {
+                    const ending = honorific === "formal" ? (isQuestion ? "아니고 있습니까?" : "아니고 있습니다.") : (honorific === "informal" ? (isQuestion ? "아니고 있어요?" : "아니고 있어요.") : (isQuestion ? "아니고 있어?" : "아니고 있어."));
+                    return { kr: `${negStem}${ending}`, stem: negStem, ending, prefix: "", rom: `${romNegStem}a-ni-go it-seo-yo`, romPrefix: "", romStem: romNegStem, romEnding: "a-ni-go it-seo-yo" };
+                }
+            }
+
+            if (tense === "base") {
+                return { kr: `${noun}이다`, stem: noun, ending: "이다", prefix: "", rom: `${romNoun}-i-da`, romPrefix: "", romStem: romNoun, romEnding: "i-da" };
+            }
+            if (tense === "present") {
+                if (honorific === "formal") {
+                    const ending = isQuestion ? "입니까?" : "입니다.";
+                    return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-${isQuestion ? "im-ni-kka?" : "im-ni-da"}`, romPrefix: "", romStem: romNoun, romEnding: isQuestion ? "im-ni-kka?" : "im-ni-da" };
+                }
+                if (honorific === "informal") {
+                    const ending = (batchim ? "이에요" : "예요") + (isQuestion ? "?" : ".");
+                    const romEnding = (batchim ? "i-e-yo" : "ye-yo") + (isQuestion ? "?" : "");
+                    return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-${romEnding}`, romPrefix: "", romStem: romNoun, romEnding };
+                }
+                const ending = (batchim ? "이야" : "야") + (isQuestion ? "?" : ".");
+                const romEnding = (batchim ? "i-ya" : "ya") + (isQuestion ? "?" : "");
+                return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-${romEnding}`, romPrefix: "", romStem: romNoun, romEnding };
+            }
+            if (tense === "continuous") {
+                const ending = honorific === "formal" ? (isQuestion ? "이고 있습니까?" : "이고 있습니다.") : (honorific === "informal" ? (isQuestion ? "이고 있어요?" : "이고 있어요.") : (isQuestion ? "이고 있어?" : "이고 있어."));
+                return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-i-go it-seo-yo`, romPrefix: "", romStem: romNoun, romEnding: "i-go it-seo-yo" };
+            }
+            if (tense === "past") {
+                if (honorific === "formal") {
+                    const ending = (batchim ? (isQuestion ? "이었습니까?" : "이었습니다.") : (isQuestion ? "였습니까?" : "였습니다."));
+                    return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-yeot-seum-ni-da`, romPrefix: "", romStem: romNoun, romEnding: "yeot-seum-ni-da" };
+                }
+                if (honorific === "informal") {
+                    const ending = (batchim ? "이었어요" : "였어요") + (isQuestion ? "?" : ".");
+                    return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-yeot-seo-yo`, romPrefix: "", romStem: romNoun, romEnding: "yeot-seo-yo" };
+                }
+                const ending = (batchim ? "이었어" : "였어") + (isQuestion ? "?" : ".");
+                return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-yeot-seo`, romPrefix: "", romStem: romNoun, romEnding: "yeot-seo" };
+            }
+            if (tense === "future") {
+                if (honorific === "formal") {
+                    const ending = isQuestion ? "일 겁니까?" : "일 겁니다.";
+                    return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-il geom-ni-da`, romPrefix: "", romStem: romNoun, romEnding: "il geom-ni-da" };
+                }
+                if (honorific === "informal") {
+                    const ending = isQuestion ? "일 거예요?" : "일 거예요.";
+                    return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-il geo-ye-yo`, romPrefix: "", romStem: romNoun, romEnding: "il geo-ye-yo" };
+                }
+                const ending = isQuestion ? "일 거야?" : "일 거야.";
+                return { kr: `${noun}${ending}`, stem: noun, ending, prefix: "", rom: `${romNoun}-il geo-ya`, romPrefix: "", romStem: romNoun, romEnding: "il geo-ya" };
+            }
+        }
 
         const kr = verbObj.kr || verbObj;
         const stem = verbObj.stem || (kr.endsWith("다") ? kr.slice(0, -1) : kr);
