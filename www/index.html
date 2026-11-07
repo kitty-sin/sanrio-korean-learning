@@ -1934,6 +1934,195 @@
             };
         };
 
+        // 常用生活、稱謂、人名、地點與名詞繁體中文對照字典 (保證造句變形列車永遠正確翻譯，不留生僻韓文)
+        const COMMON_ZH_DICT = {
+            // 代名詞與稱謂
+            "제": "我的",
+            "내": "我的",
+            "우리": "我們",
+            "저희": "我們",
+            "나": "我",
+            "저": "我",
+            "너": "你",
+            "당신": "您",
+            "그": "他",
+            "그녀": "她",
+            "남자친구": "男朋友",
+            "남친": "男友",
+            "여자친구": "女朋友",
+            "여친": "女友",
+            "친구": "朋友",
+            "가족": "家人",
+            "엄마": "媽媽",
+            "어머니": "媽媽",
+            "아빠": "爸爸",
+            "아버지": "爸爸",
+            "부모님": "父母",
+            "동생": "弟弟/妹妹",
+            "남동생": "弟弟",
+            "여동생": "妹妹",
+            "형": "哥哥",
+            "오빠": "哥哥",
+            "누나": "姐姐",
+            "언니": "姐姐",
+            "선생님": "老師",
+            "교수님": "教授",
+            "학생": "學生",
+            "대학생": "大學生",
+            "고등학생": "高中生",
+            "중학생": "國中生",
+            "초등학생": "小學生",
+            "의사": "醫生",
+            "간호사": "護士",
+            "가수": "歌手",
+            "배우": "演員",
+            "아이돌": "偶像",
+            "회사원": "上班族",
+            "사람": "人",
+            "키티": "Kitty貓",
+            
+            // 國家與人民
+            "일본": "日本",
+            "한국": "韓國",
+            "대만": "臺灣",
+            "홍콩": "香港",
+            "중국": "中國",
+            "미국": "美國",
+            "영국": "英國",
+            "프랑스": "法國",
+            "독일": "德國",
+            "캐나다": "加拿大",
+            "호주": "澳洲",
+            "일본 사람": "日本人",
+            "한국 사람": "韓國人",
+            "대만 사람": "臺灣人",
+            "홍콩 사람": "香港人",
+            "중국 사람": "中國人",
+            "미국 사람": "美國人",
+            "영국 사람": "英國人",
+            "프랑스 사람": "法國人",
+            "일본인": "日本人",
+            "한국인": "韓國人",
+            "대만인": "臺灣人",
+            "중국인": "中國人",
+            "미국인": "美國人",
+            "한국어": "韓語",
+            "일본어": "日語",
+            "중국어": "中文",
+            "영어": "英語",
+            
+            // 地點
+            "서울": "首爾",
+            "도쿄": "東京",
+            "집": "家",
+            "학교": "學校",
+            "회사": "公司",
+            "식당": "餐廳",
+            "카페": "咖啡廳",
+            "도서관": "圖書館",
+            "병원": "醫院",
+            "공원": "公園",
+            "우주관": "太空館",
+            "영화관": "電影院",
+            "마트": "超市",
+            "시장": "市場",
+            "공항": "機場",
+            "역": "車站",
+            
+            // 生活常用物名
+            "날씨": "天氣",
+            "달": "月亮",
+            "해": "太陽",
+            "하늘": "天空",
+            "사과": "蘋果",
+            "밥": "飯",
+            "물": "水",
+            "커피": "咖啡",
+            "우유": "牛奶",
+            "빵": "麵包",
+            "고기": "肉",
+            "불고기": "烤肉",
+            "삼겹살": "五花肉",
+            "김치": "泡菜",
+            "라면": "拉麵",
+            "책": "書",
+            "음악": "音樂",
+            "노래": "歌曲",
+            "영화": "電影",
+            "사진": "照片",
+            "선물": "禮物",
+            "돈": "錢",
+            "시간": "時間",
+            "이름": "名字"
+        };
+
+        const getWordZh = (word) => {
+            if (!word) return "";
+            const clean = word.replace(/[.,?!~]/g, "").trim();
+            if (!clean) return "";
+
+            // 1. 常見生活與稱謂詞庫直接匹配
+            if (COMMON_ZH_DICT[clean]) return COMMON_ZH_DICT[clean];
+
+            // 2. 複合多詞片語 (如 "제 남자친구", "우리 엄마", "일본 사람") 逐詞分解轉換
+            if (clean.includes(" ")) {
+                const subWords = clean.split(/\s+/);
+                const translatedSubs = subWords.map(w => getWordZh(w));
+                const hasTranslation = translatedSubs.some((tw, idx) => tw !== subWords[idx]);
+                if (hasTranslation) {
+                    return translatedSubs.join("");
+                }
+            }
+
+            // 3. 預設情境資料集 (SENTENCE_SUBJECTS, SENTENCE_PLACES, SENTENCE_OBJECTS, SENTENCE_VERBS)
+            const s = (window.SENTENCE_SUBJECTS || []).find(x => x.kr === clean);
+            if (s && s.zh) return s.zh.split(/[/,]/)[0].trim();
+            const p = (window.SENTENCE_PLACES || []).find(x => x.kr === clean);
+            if (p && p.zh) return p.zh.split(/[/,]/)[0].trim();
+            const o = (window.SENTENCE_OBJECTS || []).find(x => x.kr === clean);
+            if (o && o.zh) return o.zh.split(/[/,]/)[0].trim();
+            const v = (window.SENTENCE_VERBS || []).find(x => x.kr === clean || x.kr === clean + "다");
+            if (v && v.zh) return v.zh.split(/[/,]/)[0].trim();
+
+            // 4. Kitty 新增自訂詞庫 (KOREAN_VOCAB_KITTY_ADD)
+            const kittyVocabs = window.KOREAN_VOCAB_KITTY_ADD || [];
+            const foundKitty = kittyVocabs.find(x => (x.k || x.kr) === clean);
+            if (foundKitty && foundKitty.c) {
+                return foundKitty.c.split(/[,;(/]/)[0].trim();
+            }
+
+            // 5. 5,666 基準詞庫 (KOREAN_VOCAB_5666)
+            if (window.KOREAN_VOCAB_5666) {
+                const f = window.KOREAN_VOCAB_5666.find(x => (x.k || x.kr) === clean);
+                if (f && f.c) return f.c.split(/[,;(/]/)[0].trim();
+            }
+
+            // 6. 國名 + 사람 / 인 後綴智慧處理 (例: "일본 사람" ➔ "日本人", "한국 사람" ➔ "韓國人")
+            if (clean.endsWith(" 사람")) {
+                const country = clean.slice(0, -3).trim();
+                const countryZh = getWordZh(country);
+                if (countryZh && countryZh !== country) {
+                    return countryZh + "人";
+                }
+            }
+            if (clean.endsWith("사람") && clean.length > 2) {
+                const country = clean.slice(0, -2).trim();
+                const countryZh = getWordZh(country);
+                if (countryZh && countryZh !== country) {
+                    return countryZh + "人";
+                }
+            }
+
+            // 7. 助詞剝離回退
+            if (clean.endsWith("의") && clean.length > 1) {
+                const base = clean.slice(0, -1);
+                const baseZh = getWordZh(base);
+                if (baseZh !== base) return baseZh + "的";
+            }
+
+            return clean;
+        };
+
         // 動詞原形與語幹解析器
         const resolveVerbObject = (token, isQuestion = false) => {
             if (!token) return null;
@@ -1943,55 +2132,68 @@
             // 名詞繫詞 Copula (~이에요, ~예요, ~입니다, ~이야, ~야, ~이다, ~입니까, ~이었어요, ~였어요, ~이었습니다, ~였습니다, ~이었어, ~였어)
             if (t.endsWith("이에요") && t.length >= 4) {
                 const noun = t.slice(0, -3);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "是" + nounZh, isQuestion };
             }
             if (t.endsWith("예요") && t.length >= 3) {
                 const noun = t.slice(0, -2);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "是" + nounZh, isQuestion };
             }
             if (t.endsWith("입니다") && t.length >= 4 && !["합니다", "습니다", "봅니다", "마십니다", "먹습니다", "갑니다", "옵니다"].some(x => t.endsWith(x))) {
                 const noun = t.slice(0, -3);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "是" + nounZh, isQuestion };
             }
             if (t.endsWith("입니까") && t.length >= 4 && !["합니까", "습니까", "봅니까", "마십니까", "먹습니까", "갑니까", "옵니까"].some(x => t.endsWith(x))) {
                 const noun = t.slice(0, -3);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion: true };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "是" + nounZh, isQuestion: true };
             }
             if (t.endsWith("이야") && t.length >= 3) {
                 const noun = t.slice(0, -2);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "是" + nounZh, isQuestion };
             }
             if (t.endsWith("야") && t.length >= 2 && !["가야", "봐야", "해야"].includes(t)) {
                 const noun = t.slice(0, -1);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "是" + nounZh, isQuestion };
             }
             if (t.endsWith("이다") && t.length >= 3 && !["보이다", "먹이다"].includes(t)) {
                 const noun = t.slice(0, -2);
-                return { kr: t, stem: noun, noun, isCopula: true, zh: "是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: t, stem: noun, noun, nounZh, isCopula: true, zh: "是" + nounZh, isQuestion };
             }
             if (t.endsWith("이었어요") && t.length >= 5) {
                 const noun = t.slice(0, -4);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "曾是" + nounZh, isQuestion };
             }
             if (t.endsWith("였어요") && t.length >= 4) {
                 const noun = t.slice(0, -3);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "曾是" + nounZh, isQuestion };
             }
             if (t.endsWith("이었습니다") && t.length >= 6) {
                 const noun = t.slice(0, -5);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "曾是" + nounZh, isQuestion };
             }
             if (t.endsWith("였습니다") && t.length >= 5) {
                 const noun = t.slice(0, -4);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "曾是" + nounZh, isQuestion };
             }
             if (t.endsWith("이었어") && t.length >= 4) {
                 const noun = t.slice(0, -3);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "曾是" + nounZh, isQuestion };
             }
             if (t.endsWith("였어") && t.length >= 3) {
                 const noun = t.slice(0, -2);
-                return { kr: noun + "이다", stem: noun, noun, isCopula: true, zh: "曾是" + noun, isQuestion };
+                const nounZh = getWordZh(noun);
+                return { kr: noun + "이다", stem: noun, noun, nounZh, isCopula: true, zh: "曾是" + nounZh, isQuestion };
             }
 
             // 原形以「다」結尾
@@ -2374,65 +2576,77 @@
             );
         }
 
-        // 句子成分細部拆解器 (拆解主語、地點、受語與其助詞)
+        // 句子成分細部拆解器 (拆解主語、地點、受語與其助詞，支援前置修飾詞多詞綁定)
         const parseSentenceTokens = (text) => {
-            if (!text || typeof text !== 'string') return null;
+            if (!text || typeof text !== "string") return null;
             const clean = text.trim();
             if (!clean) return null;
             const rawTokens = smartTokenizeKorean(clean);
             let sub = null, plc = null, obj = null, verb = null;
+            const unhandledTokens = [];
             
             rawTokens.forEach((raw, i) => {
-                const cleanWord = raw.replace(/[.,?!~]/g, '');
+                const cleanWord = raw.replace(/[.,?!~]/g, "");
                 const isLast = (i === rawTokens.length - 1);
                 
-                if (cleanWord.endsWith('께서')) {
+                if (cleanWord.endsWith("께서")) {
                     const w = cleanWord.slice(0, -2);
-                    sub = { word: w, particle: '께서', romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: 'kke-seo' };
+                    const prefix = unhandledTokens.length > 0 ? unhandledTokens.splice(0).join(" ") + " " : "";
+                    const fullW = prefix + w;
+                    sub = { word: fullW, particle: "께서", romWord: formatCleanRomanization(fullW), romParticle: "kke-seo" };
                     return;
                 }
-                if (['내가', '제가', '네가', '누가'].includes(cleanWord)) {
-                    const w = cleanWord === '내가' ? '내' : (cleanWord === '제가' ? '제' : (cleanWord === '네가' ? '네' : '누'));
-                    sub = { word: w, particle: '가', romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: 'ga' };
+                if (["내가", "제가", "네가", "누가"].includes(cleanWord)) {
+                    const w = cleanWord === "내가" ? "내" : (cleanWord === "제가" ? "제" : (cleanWord === "네가" ? "네" : "누"));
+                    const prefix = unhandledTokens.length > 0 ? unhandledTokens.splice(0).join(" ") + " " : "";
+                    const fullW = prefix + w;
+                    sub = { word: fullW, particle: "가", romWord: formatCleanRomanization(fullW), romParticle: "ga" };
                     return;
                 }
-                if (['나는', '저는', '너는', '당신은', '우리는'].includes(cleanWord)) {
-                    const p = cleanWord.endsWith('은') ? '은' : '는';
+                if (["나는", "저는", "너는", "당신은", "우리는"].includes(cleanWord)) {
+                    const p = cleanWord.endsWith("은") ? "은" : "는";
                     const w = cleanWord.slice(0, -1);
-                    sub = { word: w, particle: p, romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: p === '은' ? 'eun' : 'neun' };
+                    const prefix = unhandledTokens.length > 0 ? unhandledTokens.splice(0).join(" ") + " " : "";
+                    const fullW = prefix + w;
+                    sub = { word: fullW, particle: p, romWord: formatCleanRomanization(fullW), romParticle: p === "은" ? "eun" : "neun" };
                     return;
                 }
-                const isCopulaEnding = cleanWord.endsWith('이에요') || cleanWord.endsWith('이야') || cleanWord.endsWith('이다') || cleanWord.endsWith('이었어요') || cleanWord.endsWith('이었습니다');
-                if (!isCopulaEnding && (cleanWord.endsWith('은') || cleanWord.endsWith('는') || cleanWord.endsWith('이') || cleanWord.endsWith('가'))) {
+                const isCopulaEnding = cleanWord.endsWith("이에요") || cleanWord.endsWith("이야") || cleanWord.endsWith("이다") || cleanWord.endsWith("이었어요") || cleanWord.endsWith("이었습니다");
+                if (!isCopulaEnding && (cleanWord.endsWith("은") || cleanWord.endsWith("는") || cleanWord.endsWith("이") || cleanWord.endsWith("가"))) {
                     if (!isLast || rawTokens.length === 1) {
                         const p = cleanWord.slice(-1);
                         const w = cleanWord.slice(0, -1);
-                        const romP = p === '은' ? 'eun' : (p === '는' ? 'neun' : (p === '이' ? 'i' : 'ga'));
-                        sub = { word: w, particle: p, romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: romP };
+                        const romP = p === "은" ? "eun" : (p === "는" ? "neun" : (p === "이" ? "i" : "ga"));
+                        const prefix = unhandledTokens.length > 0 ? unhandledTokens.splice(0).join(" ") + " " : "";
+                        const fullW = prefix + w;
+                        sub = { word: fullW, particle: p, romWord: formatCleanRomanization(fullW), romParticle: romP };
                         return;
                     }
                 }
-                if (!isCopulaEnding && (cleanWord.endsWith('에서') || cleanWord.endsWith('에') || cleanWord.endsWith('으로') || cleanWord.endsWith('로'))) {
+                if (!isCopulaEnding && (cleanWord.endsWith("에서") || cleanWord.endsWith("에") || cleanWord.endsWith("으로") || cleanWord.endsWith("로"))) {
                     if (!isLast) {
-                        let p = '', w = cleanWord;
-                        if (cleanWord.endsWith('에서')) { p = '에서'; w = cleanWord.slice(0, -2); }
-                        else if (cleanWord.endsWith('으로')) { p = '으로'; w = cleanWord.slice(0, -2); }
+                        let p = "", w = cleanWord;
+                        if (cleanWord.endsWith("에서")) { p = "에서"; w = cleanWord.slice(0, -2); }
+                        else if (cleanWord.endsWith("으로")) { p = "으로"; w = cleanWord.slice(0, -2); }
                         else { p = cleanWord.slice(-1); w = cleanWord.slice(0, -1); }
-                        const romP = p === '에서' ? 'e-seo' : (p === '에' ? 'e' : (p === '으로' ? 'eu-ro' : 'ro'));
-                        plc = { word: w, particle: p, romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: romP };
+                        const romP = p === "에서" ? "e-seo" : (p === "에" ? "e" : (p === "으로" ? "eu-ro" : "ro"));
+                        plc = { word: w, particle: p, romWord: formatCleanRomanization(w), romParticle: romP };
                         return;
                     }
                 }
-                if (cleanWord.endsWith('을') || cleanWord.endsWith('를')) {
+                if (cleanWord.endsWith("을") || cleanWord.endsWith("를")) {
                     const p = cleanWord.slice(-1);
                     const w = cleanWord.slice(0, -1);
-                    const romP = p === '을' ? 'eul' : 'reul';
-                    obj = { word: w, particle: p, romWord: window.HangulEngine ? window.HangulEngine.romanize(w) : w, romParticle: romP };
+                    const romP = p === "을" ? "eul" : "reul";
+                    obj = { word: w, particle: p, romWord: formatCleanRomanization(w), romParticle: romP };
                     return;
                 }
                 if (isLast) {
-                    verb = cleanWord;
+                    const prefix = unhandledTokens.length > 0 ? unhandledTokens.splice(0).join(" ") + " " : "";
+                    verb = prefix + cleanWord;
+                    return;
                 }
+                unhandledTokens.push(cleanWord);
             });
             return { sub, plc, obj, verb: verb || clean };
         };
@@ -2612,34 +2826,102 @@
             return { kr, prefix, stem, ending: '', rom: '', romPrefix, romStem: '', romEnding: '' };
         };
 
-        // 全套分組造句火車生成器 (完全對齊 KITTY 韓語造句積木列車)
+        // 全套分組造句火車生成器 (完全對齊 KITTY 韓語造句積木列車，支援前置修飾語與精準繁中翻譯)
         const buildGroupedSentences = (rawText, parsedSOV) => {
             if (!rawText || !rawText.trim()) return null;
-            const isQuestion = rawText.includes('?');
+            const isQuestion = rawText.includes("?");
 
-            const parts = parseSentenceTokens(rawText);
-            const subPart = parts ? parts.sub : null;
-            const plcPart = parts ? parts.plc : null;
-            const objPart = parts ? parts.obj : null;
-            const rawVerb = (parts && parts.verb) ? parts.verb : rawText.trim();
+            let subPart = null;
+            let plcPart = null;
+            let objPart = null;
+            let verbObj = null;
 
-            const verbObj = resolveVerbObject(rawVerb, isQuestion);
+            // 優先利用已智慧分詞與標註的 parsedSOV tokens 進行成分萃取與前置修飾語綁定
+            if (parsedSOV && parsedSOV.tokens && parsedSOV.tokens.length > 0) {
+                const tokens = parsedSOV.tokens;
+                const sIdx = tokens.findIndex(t => t.role === "S");
+                const pIdx = tokens.findIndex(t => t.role === "P");
+                const oIdx = tokens.findIndex(t => t.role === "O");
+                const vIdx = tokens.findIndex(t => t.role === "V");
+
+                // 1. 主語與前置修飾詞 (例如 "제 남자친구는", "우리 엄마는")
+                if (sIdx !== -1) {
+                    const sToken = tokens[sIdx];
+                    const preSubTokens = tokens.slice(0, sIdx).filter(t => t.role === "M");
+                    const fullSubWord = [...preSubTokens.map(t => t.raw), sToken.word].join(" ");
+                    const p = sToken.particle || "";
+                    const romWord = formatCleanRomanization(fullSubWord);
+                    const romP = p === "은" ? "eun" : (p === "는" ? "neun" : (p === "이" ? "i" : (p === "가" ? "ga" : (p === "께서" ? "kke-seo" : ""))));
+                    subPart = { word: fullSubWord, particle: p, romWord, romParticle: romP };
+                }
+
+                // 2. 地點 (P)
+                if (pIdx !== -1) {
+                    const pToken = tokens[pIdx];
+                    const p = pToken.particle || "";
+                    const romP = p === "에서" ? "e-seo" : (p === "에" ? "e" : (p === "으로" ? "eu-ro" : "ro"));
+                    plcPart = { word: pToken.word, particle: p, romWord: formatCleanRomanization(pToken.word), romParticle: romP };
+                }
+
+                // 3. 受語 (O)
+                if (oIdx !== -1) {
+                    const oToken = tokens[oIdx];
+                    const p = oToken.particle || "";
+                    const romP = p === "을" ? "eul" : "reul";
+                    objPart = { word: oToken.word, particle: p, romWord: formatCleanRomanization(oToken.word), romParticle: romP };
+                }
+
+                // 4. 動詞 / 名詞謂語 (V) 與前置名詞修飾詞 (例如 "일본 사람이에요" ➔ 謂語名詞 "일본 사람")
+                if (vIdx !== -1) {
+                    const vToken = tokens[vIdx];
+                    if (vToken.isCopula) {
+                        const maxPrevIdx = Math.max(sIdx, pIdx, oIdx);
+                        const midTokens = tokens.slice(maxPrevIdx + 1, vIdx).filter(t => t.role === "M");
+                        const fullNoun = [...midTokens.map(t => t.raw), vToken.word].join(" ");
+                        const nounZh = getWordZh(fullNoun);
+                        verbObj = {
+                            kr: fullNoun + "이다",
+                            stem: fullNoun,
+                            noun: fullNoun,
+                            nounZh,
+                            isCopula: true,
+                            zh: "是" + nounZh,
+                            isQuestion
+                        };
+                    } else {
+                        verbObj = resolveVerbObject(vToken.raw, isQuestion);
+                    }
+                }
+            }
+
+            // 若 SOV 解析未能解析出 verbObj，使用傳統安全解析回退
+            if (!verbObj) {
+                const parts = parseSentenceTokens(rawText);
+                if (parts) {
+                    if (!subPart) subPart = parts.sub;
+                    if (!plcPart) plcPart = parts.plc;
+                    if (!objPart) objPart = parts.obj;
+                    const rawVerb = parts.verb || rawText.trim();
+                    verbObj = resolveVerbObject(rawVerb, isQuestion);
+                }
+            }
+
             if (!verbObj) return null;
 
             const makeSentenceForm = (subP, plcP, objP, vDet, label = "") => {
                 const krParts = [
-                    subP && subP.word ? subP.word + (subP.particle || '') : '',
-                    plcP && plcP.word ? plcP.word + (plcP.particle || '') : '',
-                    objP && objP.word ? objP.word + (objP.particle || '') : '',
-                    vDet ? vDet.kr : ''
+                    subP && subP.word ? subP.word + (subP.particle ? " " + subP.particle : "") : "",
+                    plcP && plcP.word ? plcP.word + (plcP.particle ? " " + plcP.particle : "") : "",
+                    objP && objP.word ? objP.word + (objP.particle ? " " + objP.particle : "") : "",
+                    vDet ? vDet.kr : ""
                 ].filter(Boolean);
                 const kr = krParts.join(" ");
 
                 const romParts = [
-                    subP && subP.romWord ? subP.romWord + (subP.romParticle ? '-' + subP.romParticle : '') : '',
-                    plcP && plcP.romWord ? plcP.romWord + (plcP.romParticle ? '-' + plcP.romParticle : '') : '',
-                    objP && objP.romWord ? objP.romWord + (objP.romParticle ? '-' + objP.romParticle : '') : '',
-                    vDet ? (vDet.romPrefix ? vDet.romPrefix + vDet.rom : vDet.rom) : ''
+                    subP && subP.romWord ? subP.romWord + (subP.romParticle ? "-" + subP.romParticle : "") : "",
+                    plcP && plcP.romWord ? plcP.romWord + (plcP.romParticle ? "-" + plcP.romParticle : "") : "",
+                    objP && objP.romWord ? objP.romWord + (objP.romParticle ? "-" + objP.romParticle : "") : "",
+                    vDet ? (vDet.romPrefix ? vDet.romPrefix + vDet.rom : vDet.rom) : ""
                 ].filter(Boolean);
                 const rom = romParts.join(" ");
 
@@ -2663,92 +2945,68 @@
                 };
             };
 
-            const getWordZh = (word) => {
-                if (!word) return '';
-                const clean = word.replace(/[.,?!~]/g, '');
-                const s = (window.SENTENCE_SUBJECTS || []).find(x => x.kr === clean);
-                if (s) return s.zh.split('/')[0].trim();
-                const p = (window.SENTENCE_PLACES || []).find(x => x.kr === clean);
-                if (p) return p.zh.split('/')[0].trim();
-                const o = (window.SENTENCE_OBJECTS || []).find(x => x.kr === clean);
-                if (o) return o.zh.split('/')[0].trim();
-                const v = (window.SENTENCE_VERBS || []).find(x => x.kr === clean || x.kr === clean + '다');
-                if (v) return v.zh.split('/')[0].trim();
-                if (window.KOREAN_VOCAB_5666) {
-                    const f = window.KOREAN_VOCAB_5666.find(x => x.k === clean);
-                    if (f && f.c) return f.c.split(/[,;(/]/)[0].trim();
-                }
-                return clean;
-            };
+            const subZh = subPart ? getWordZh(subPart.word) : "";
+            const plcZh = plcPart ? getWordZh(plcPart.word) : "";
+            const objZh = objPart ? getWordZh(objPart.word) : "";
+            const nounZh = verbObj.isCopula ? (verbObj.nounZh || getWordZh(verbObj.noun)) : "";
+            const verbZh = verbObj.isCopula ? ("是" + nounZh) : (verbObj.zh || getWordZh(verbObj.kr));
 
-            let nounZh = verbObj.isCopula ? getWordZh(verbObj.noun) : '';
-            if (verbObj.isCopula && (!nounZh || nounZh === verbObj.noun)) {
-                if (verbObj.noun === '가수') nounZh = '歌手';
-                else if (verbObj.noun === '학생') nounZh = '學生';
-                else if (verbObj.noun === '의사') nounZh = '醫生';
-                else if (verbObj.noun === '선생님') nounZh = '老師';
-            }
-            const subZh = subPart ? getWordZh(subPart.word) : '';
-            const plcZh = plcPart ? getWordZh(plcPart.word) : '';
-            const objZh = objPart ? getWordZh(objPart.word) : '';
-            const verbZh = verbObj.isCopula ? `是${nounZh}` : (verbObj.zh || getWordZh(verbObj.kr));
-
-            const pfxPlace = plcZh ? `在${plcZh}` : '';
-            const pfxObj = objZh || '';
+            const pfxPlace = plcZh ? ("在" + plcZh) : "";
+            const pfxObj = objZh || "";
 
             // 原形
             const baseForm = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "base", "formal"));
             baseForm.zh = verbObj.isCopula
-                ? (subZh ? `${subZh}是${nounZh}（詞典原形）` : `是${nounZh}（詞典原形）`)
-                : (subZh ? `${subZh} ${pfxPlace ? pfxPlace + ' ' : ''}${pfxObj ? pfxObj + ' ' : ''}${verbZh}（詞典原形）` : `${verbZh}（詞典原形）`);
+                ? (subZh ? (subZh + "是" + nounZh + "（詞典原形）") : ("是" + nounZh + "（詞典原形）"))
+                : (subZh ? (subZh + " " + (pfxPlace ? pfxPlace + " " : "") + (pfxObj ? pfxObj + " " : "") + verbZh + "（詞典原形）") : (verbZh + "（詞典原形）"));
 
             // 現在式
             const presFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "formal"));
             const presInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "informal"));
             const presCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "casual"));
             const presZh = verbObj.isCopula
-                ? (subZh ? `${subZh}是${nounZh}。` : `是${nounZh}。`)
-                : (subZh ? `${subZh}${pfxPlace}${verbZh}${pfxObj}。` : `${verbZh}${pfxObj}。`);
+                ? (subZh ? (subZh + "是" + nounZh + "。") : ("是" + nounZh + "。"))
+                : (subZh ? (subZh + pfxPlace + verbZh + pfxObj + "。") : (verbZh + pfxObj + "。"));
 
-            // 現在進行式
+            // 現在進行式 (名詞謂語變為 "正是..."，徹底消除 "正擔任人" 之語病)
             const contFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "continuous", "formal"));
             const contInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "continuous", "informal"));
             const contCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "continuous", "casual"));
             const contZh = verbObj.isCopula
-                ? (subZh ? `${subZh}正擔任${nounZh}。` : `正擔任${nounZh}。`)
-                : (subZh ? `${subZh}正在${pfxPlace}${verbZh}${pfxObj}。` : `正在${verbZh}${pfxObj}。`);
+                ? (subZh ? (subZh + "正是" + nounZh + "。") : ("正是" + nounZh + "。"))
+                : (subZh ? (subZh + (plcZh ? "正在" + plcZh : (pfxPlace || "正在")) + verbZh + pfxObj + "。") : ((plcZh ? "正在" + plcZh : (pfxPlace || "正在")) + verbZh + pfxObj + "。"));
 
             // 過去式
             const pastFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "past", "formal"));
             const pastInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "past", "informal"));
             const pastCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "past", "casual"));
             const pastZh = verbObj.isCopula
-                ? (subZh ? `${subZh}曾是${nounZh}。` : `曾是${nounZh}。`)
-                : (subZh ? `${subZh}${pfxPlace}${verbZh}了${pfxObj}。` : `${verbZh}了${pfxObj}。`);
+                ? (subZh ? (subZh + "曾是" + nounZh + "。") : ("曾是" + nounZh + "。"))
+                : (subZh ? (subZh + pfxPlace + verbZh + "了" + pfxObj + "。") : (verbZh + "了" + pfxObj + "。"));
 
             // 未來式
             const futFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "future", "formal"));
             const futInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "future", "informal"));
             const futCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "future", "casual"));
             const futZh = verbObj.isCopula
-                ? (subZh ? `${subZh}將會是${nounZh}。` : `將會是${nounZh}。`)
-                : (subZh ? `${subZh}打算${pfxPlace}${verbZh}${pfxObj}。` : `打算${verbZh}${pfxObj}。`);
+                ? (subZh ? (subZh + "將會是" + nounZh + "。") : ("將會是" + nounZh + "。"))
+                : (subZh ? (subZh + "打算" + pfxPlace + verbZh + pfxObj + "。") : ("打算" + verbZh + pfxObj + "。"));
 
             // 否定句
             const negFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "formal", false, true));
             const negInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "informal", false, true));
             const negCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "casual", false, true));
             const negZh = verbObj.isCopula
-                ? (subZh ? `${subZh}不是${nounZh}。（否定句）` : `不是${nounZh}。（否定句）`)
-                : (subZh ? `${subZh}${pfxPlace}不${verbZh}${pfxObj}。（否定句）` : `不${verbZh}${pfxObj}。（否定句）`);
+                ? (subZh ? (subZh + "不是" + nounZh + "。（否定句）") : ("不是" + nounZh + "。（否定句）"))
+                : (subZh ? (subZh + pfxPlace + "不" + verbZh + pfxObj + "。（否定句）") : ("不" + verbZh + pfxObj + "。（否定句）"));
 
             // 疑問句
             const qFormal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "formal", true));
             const qInformal = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "informal", true));
             const qCasual = makeSentenceForm(subPart, plcPart, objPart, smartConjugateDetailed(verbObj, "present", "casual", true));
             const qZh = verbObj.isCopula
-                ? `是${nounZh}嗎？（疑問句）`
-                : (pfxPlace ? `${pfxPlace}要${verbZh}${pfxObj}嗎？（疑問句）` : `要${verbZh}${pfxObj}嗎？（疑問句）`);
+                ? (subZh ? (subZh + "是" + nounZh + "嗎？（疑問句）") : ("是" + nounZh + "嗎？（疑問句）"))
+                : (pfxPlace ? (pfxPlace + "要" + verbZh + pfxObj + "嗎？（疑問句）") : ("要" + verbZh + pfxObj + "嗎？（疑問句）"));
 
             return {
                 baseForm,
@@ -3008,6 +3266,24 @@
                             transText = window.KittySearch.toTrad(transText);
                         }
                         setTransResult(transText);
+                        // 同步加固下方造句列車之中文意思（若原中文含韓文或需要更完整語意）
+                        setGroupedSentences(prev => {
+                            if (!prev) return prev;
+                            const cleanTrans = transText.replace(/[.。!！?？~]/g, "").trim();
+                            return {
+                                ...prev,
+                                baseForm: {
+                                    ...prev.baseForm,
+                                    zh: prev.baseForm && prev.baseForm.zh && prev.baseForm.zh.includes("（詞典原形）")
+                                        ? (cleanTrans + "（詞典原形）")
+                                        : prev.baseForm.zh
+                                },
+                                present: {
+                                    ...prev.present,
+                                    zh: cleanTrans + "。"
+                                }
+                            };
+                        });
                     } else if (immediateZh) {
                         setTransResult(immediateZh);
                     }

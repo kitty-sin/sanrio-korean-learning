@@ -909,5 +909,75 @@ window.KOREAN_VOCAB_KITTY_ADD = [
     "l": "B",
     "p": "名詞",
     "pd": "名詞 (Noun / 명사)，如 사람（人）、집（家）。"
+  },
+  {
+    "id": 5758,
+    "k": "남자친구",
+    "r": "namjachingu",
+    "c": "男朋友、男友（男生朋友或戀愛對象；口語簡稱為 남친）",
+    "e": "Boyfriend (male romantic partner or close male friend; colloquially shortened to namchin)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、친구（朋友）。"
+  },
+  {
+    "id": 5759,
+    "k": "여자친구",
+    "r": "yeojachingu",
+    "c": "女朋友、女友（女生朋友或戀愛對象；口語簡稱為 여친）",
+    "e": "Girlfriend (female romantic partner or close female friend; colloquially shortened to yeochin)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、친구（朋友）。"
+  },
+  {
+    "id": 5760,
+    "k": "남친",
+    "r": "namchin",
+    "c": "男友（남자친구 的口語縮寫流行語）",
+    "e": "Boyfriend (short colloquial abbreviation for namjachingu)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、친구（朋友）。"
+  },
+  {
+    "id": 5761,
+    "k": "여친",
+    "r": "yeochin",
+    "c": "女友（여자친구 的口語縮寫流行語）",
+    "e": "Girlfriend (short colloquial abbreviation for yeojachingu)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 사람（人）、친구（朋友）。"
+  },
+  {
+    "id": 5762,
+    "k": "일본 사람",
+    "r": "ilbon saram",
+    "c": "日本人（來自日本的人；亦可稱 일본인）",
+    "e": "Japanese person (person from Japan; also ilbonin)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 한국 사람（韓國人）。"
+  },
+  {
+    "id": 5763,
+    "k": "한국 사람",
+    "r": "hanguk saram",
+    "c": "韓國人（來自韓國的人；亦可稱 한국인）",
+    "e": "Korean person (person from Korea; also hangukin)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 일본 사람（日本人）。"
+  },
+  {
+    "id": 5764,
+    "k": "대만 사람",
+    "r": "daeman saram",
+    "c": "臺灣人（來自臺灣的人；亦可稱 대만인）",
+    "e": "Taiwanese person (person from Taiwan; also daemanin)",
+    "l": "A",
+    "p": "名詞",
+    "pd": "名詞 (Noun / 명사)，如 홍콩 사람（香港人）。"
   }
 ];

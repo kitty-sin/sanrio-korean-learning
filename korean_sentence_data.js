@@ -118,6 +118,48 @@ const SENTENCE_SUBJECTS = [
         emoji: "👭",
         desc: "第一人稱複數 (우리 / 저희)",
         cantoneseTip: "韓語好鍾意講「우리 (我哋)」，對長輩謙稱用「저희」！"
+    },
+    {
+        id: "sub_9",
+        zh: "男朋友/男友",
+        kr: "남자친구",
+        type: "noun",
+        batchim: false,
+        forms: {
+            topic: { formal: "남자친구는", casual: "남자친구는" },
+            subject: { formal: "남자친구가", casual: "남자친구가" }
+        },
+        emoji: "👦",
+        desc: "男女朋友 • 無收音",
+        cantoneseTip: "無收音接「는 / 가」，口語常簡稱「남친」！"
+    },
+    {
+        id: "sub_10",
+        zh: "女朋友/女友",
+        kr: "여자친구",
+        type: "noun",
+        batchim: false,
+        forms: {
+            topic: { formal: "여자친구는", casual: "여자친구는" },
+            subject: { formal: "여자친구가", casual: "여자친구가" }
+        },
+        emoji: "👧",
+        desc: "男女朋友 • 無收音",
+        cantoneseTip: "無收音接「는 / 가」，口語常簡稱「여친」！"
+    },
+    {
+        id: "sub_11",
+        zh: "爸爸",
+        kr: "아빠",
+        type: "noun",
+        batchim: false,
+        forms: {
+            topic: { formal: "아버지는", casual: "아빠는" },
+            subject: { formal: "아버지께서", casual: "아빠가" }
+        },
+        emoji: "👨",
+        desc: "親屬稱謂 (아빠 / 아버지)",
+        cantoneseTip: "平時講「아빠」，正式敬稱用「아버지」！"
     }
 ];
 
